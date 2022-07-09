@@ -1,6 +1,8 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 const router = express.Router();
 
+import { authenticate } from "../Auth";
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.send("welcome to the api!");
     res.status(200);
@@ -9,7 +11,7 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 router.get("/auth", (req: Request, res: Response, next: NextFunction) => {
     // let auth = req.headers.authorization;
 
-    res.send(req.query);
+    res.send(authenticate(req));
     res.status(200);
 });
 
