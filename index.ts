@@ -1,7 +1,7 @@
 const path = require("node:path");
 
 //setup express
-const express = require("express");
+import express, { Express, Request, Response, NextFunction } from "express";
 const app = express();
 
 //load .env
@@ -22,9 +22,13 @@ app.use("/api", api);
 // });
 
 // setup static react build
-app.use(express.static(path.join(__dirname, "client", "build")));
-app.get("/*", (req, res, next) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// app.use(express.static(path.join(__dirname, "client", "build")));
+// app.get("/*", (req: Request, res: Response, next: NextFunction) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
+
+app.get("/*", (req: Request, res: Response, next: NextFunction) => {
+    res.send("hello world")
 });
 
 app.listen(PORT, () => {
