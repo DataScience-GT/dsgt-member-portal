@@ -1,8 +1,22 @@
 #login-page {
-  display: block;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
   position: relative;
   width: 100%;
   height: 100vh;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  overflow: hidden;
+  background: teal;
 }
 
 #login-page .page-wrapper {
@@ -10,15 +24,42 @@
   display: -ms-flexbox;
   display: flex;
   position: relative;
-  width: 100%;
-  max-width: 1600px;
-  height: 100%;
+  width: 80%;
+  max-width: 1400px;
+  height: 70%;
   -webkit-box-orient: horizontal;
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
   margin: 0 auto;
-  border: 1px dashed red;
+}
+
+#login-page .page-wrapper::before {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 101px;
+  width: 100%;
+  bottom: -100px;
+  left: 50px;
+  background: -webkit-gradient(linear, left top, left bottom, from(#015c5c), to(transparent));
+  background: linear-gradient(to bottom, #015c5c, transparent);
+  -webkit-transform: skewX(45deg);
+          transform: skewX(45deg);
+}
+
+#login-page .page-wrapper::after {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 100%;
+  width: 100px;
+  right: -100px;
+  top: 50px;
+  background: -webkit-gradient(linear, left top, right top, from(#015c5c), to(transparent));
+  background: linear-gradient(to right, #015c5c, transparent);
+  -webkit-transform: skewY(45deg);
+          transform: skewY(45deg);
 }
 
 #login-page .page-wrapper > .flex-left,
@@ -39,10 +80,13 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  border: 1px solid green;
 }
 
-#login-page .page-wrapper .form {
+#login-page .page-wrapper > .flex-left {
+  background: #fff;
+}
+
+#login-page .page-wrapper > .flex-left .form {
   display: block;
   position: relative;
   width: 80%;
@@ -53,13 +97,13 @@
   border: 1px dashed aqua;
 }
 
-#login-page .page-wrapper .form > .major {
+#login-page .page-wrapper > .flex-left .form .major {
   display: block;
   position: relative;
   text-align: center;
 }
 
-#login-page .page-wrapper .form > label {
+#login-page .page-wrapper > .flex-left .form label {
   display: block;
   position: relative;
 }
