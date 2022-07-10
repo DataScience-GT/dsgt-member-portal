@@ -22,7 +22,7 @@
       "path": "src/layout",
       "withLazy": false,
       "withStory": false,
-      "withStyle": false,
+      "withStyle": true,
       "withTest": true
     }
   }

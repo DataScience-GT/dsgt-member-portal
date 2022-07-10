@@ -1,10 +1,20 @@
 import React from "react";
-import Login from "./Pages/Login1";
+
+import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+
+//import pages
+import Signup from "./Pages/Signup/Signup";
+import Docs from "./Pages/Docs/Docs.lazy";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      <Router>
+        <Routes>
+          <Route path="/*" element={<Signup />} />
+          <Route path="/Docs" element={<Docs />} />
+        </Routes>
+      </Router>
     </div>
   );
 }

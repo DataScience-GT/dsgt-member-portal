@@ -1,1 +1,43 @@
-.Docs {}
+.Docs {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: fit-content;
+
+  border: 1px dashed red;
+}
+
+.DocsHeader {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 5em;
+
+  border: 1px solid black;
+}
+
+.DocsBody {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: fit-content;
+  padding-top: 5em;
+}
+
+.DocsSidebar {
+  display: block;
+  position: fixed;
+  height: calc(100% - 5em);
+  border: 1px solid red;
+
+  width: 20%;
+}
+
+.DocsContent {
+  border: 1px solid black;
+
+  flex-grow: 1;
+  width: 80%;
+  height: 200vh;
+  margin-left: 20%;
+}
