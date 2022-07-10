@@ -22,9 +22,9 @@ app.use("/api", api);
 app.use(errorMiddleware);
 
 // setup static react build
-app.use(express.static(path.join(__dirname, "client", "build")));
+app.use(express.static(path.join(__dirname, "../client", "build")));
 app.get("/*", (req: Request, res: Response, next: NextFunction) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
 });
 
 // app.get("/*", (req: Request, res: Response, next: NextFunction) => {
@@ -32,5 +32,5 @@ app.get("/*", (req: Request, res: Response, next: NextFunction) => {
 // });
 
 app.listen(PORT, () => {
-    console.log(`App listening on port ${PORT}`);
+  console.log(`App listening on port ${PORT}`);
 });
