@@ -1,0 +1,54 @@
+#login-page {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  .page-wrapper {
+    display: flex;
+    position: relative;
+    width: 100%;
+    max-width: 1600px;
+    height: 100%;
+
+    flex-direction: row;
+
+    margin: 0 auto;
+
+    border: 1px dashed red;
+    > .flex-left,
+    > .flex-right {
+      display: flex;
+      position: relative;
+      height: 100%;
+      width: 50%;
+
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      border: 1px solid green;
+    }
+    .form {
+      display: block;
+      position: relative;
+      width: 80%;
+      height: fit-content;
+      text-align: left;
+
+      border: 1px dashed aqua;
+
+      > .major {
+        display: block;
+        position: relative;
+        text-align: center;
+      }
+
+      > label {
+        display: block;
+        position: relative;
+
+      }
+    }
+  }
+}

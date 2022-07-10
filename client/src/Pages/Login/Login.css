@@ -1,0 +1,66 @@
+#login-page {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+#login-page .page-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  height: 100%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  margin: 0 auto;
+  border: 1px dashed red;
+}
+
+#login-page .page-wrapper > .flex-left,
+#login-page .page-wrapper > .flex-right {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: relative;
+  height: 100%;
+  width: 50%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border: 1px solid green;
+}
+
+#login-page .page-wrapper .form {
+  display: block;
+  position: relative;
+  width: 80%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  text-align: left;
+  border: 1px dashed aqua;
+}
+
+#login-page .page-wrapper .form > .major {
+  display: block;
+  position: relative;
+  text-align: center;
+}
+
+#login-page .page-wrapper .form > label {
+  display: block;
+  position: relative;
+}
+/*# sourceMappingURL=Login.css.map */
