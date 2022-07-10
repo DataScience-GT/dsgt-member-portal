@@ -1,8 +1,12 @@
-import { Request } from "express";
+import { Request, Response, NextFunction } from "express";
 
 //dotenv
 
-const apiAuthenticate = (req: Request): boolean => {
+const apiAuthenticate = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): void => {
     if (req && req.headers && req.headers.authorization) {
         let auth = Buffer.from(
             req.headers.authorization.split(" ")[1],
@@ -17,10 +21,15 @@ const apiAuthenticate = (req: Request): boolean => {
             key === process.env.API_AUTH_KEY &&
             pass === process.env.API_AUTH_PASS
         ) {
-            return true;
+            next();
+        } else {
+            let err = new Error("invalid basic authorization");
+            next(err);
         }
+    } else {
+        let err = new Error("missing authorization header");
+        next(err);
     }
-    return false;
 };
 
 export { apiAuthenticate };

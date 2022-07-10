@@ -5,14 +5,17 @@ import { apiAuthenticate } from "../Auth";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
     res.send("welcome to the api!");
-    res.status(200);
 });
 
-router.get("/auth", (req: Request, res: Response, next: NextFunction) => {
-    // let auth = req.headers.authorization;
+router.get(
+    "/auth",
+    apiAuthenticate,
+    (req: Request, res: Response, next: NextFunction) => {
+        // let auth = req.headers.authorization;
 
-    res.send(apiAuthenticate(req));
-    res.status(200);
-});
+        // res.send(apiAuthenticate(req));
+        res.json({ ok: 1 });
+    }
+);
 
 module.exports = router;
