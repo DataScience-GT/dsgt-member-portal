@@ -6,7 +6,7 @@ interface LoginData {
   password: string;
 }
 
-const Login = () => {
+const Login1 = () => {
   const [loginData, setLoginData] = useState<Partial<LoginData>>({});
 
   //update state with email
@@ -62,4 +62,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login1;

@@ -3,24 +3,27 @@ const router = express.Router();
 
 import { apiAuthenticate } from "../Auth";
 
-//setup /api/user
-const user = require("./user");
-router.use("/user", user);
-
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("welcome to the api!");
+  res.send("welcome to the user api!");
 });
 
-router.get(
-  "/auth",
-  apiAuthenticate,
-  (req: Request, res: Response, next: NextFunction) => {
-    // let auth = req.headers.authorization;
+router.get("/register", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ ok: 1 });
+});
 
-    // res.send(apiAuthenticate(req));
-    res.json({ ok: 1 });
-  }
-);
+router.get("/login", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ ok: 1 });
+});
+
+router.get("/update", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ ok: 1 });
+});
+
+router.get("/remove", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ ok: 1 });
+});
+
+
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;
