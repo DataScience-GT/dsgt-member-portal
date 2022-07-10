@@ -17,5 +17,15 @@ router.get(
     res.json({ ok: 1 });
   }
 );
+router.get("/login", (req: Request, res: Response, next: NextFunction) => {
+  // let auth = req.headers.authorization;
+
+  console.log(req.body);
+  console.log(req.headers);
+  console.log(req.query);
+  console.log(req.params);
+
+  res.json({ ok: 1 });
+});
 
 module.exports = router;
