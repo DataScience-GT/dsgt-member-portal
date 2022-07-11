@@ -8,6 +8,9 @@ import DocsSidebarItem, {
   RequestType,
 } from "../../components/DocsSidebarItem/DocsSidebarItem";
 
+import { Routes, Route } from "react-router-dom";
+import DocsWelcome from "../DocsWelcome/DocsWelcome";
+
 interface DocsProps {}
 
 const Docs: FC<DocsProps> = () => {
@@ -41,7 +44,13 @@ const Docs: FC<DocsProps> = () => {
               </DocsSidebarSection>
             </FlexColumn>
           </div>
-          <div className={styles.DocsContent}>content</div>
+          <div className={styles.DocsContent}>
+            {/* DOCS CONTENT (IN PAGE FORM) */}
+            <Routes>
+              <Route path="/*" element={<DocsWelcome />} />
+              <Route path="/welcome" element={<DocsWelcome />} />
+            </Routes>
+          </div>
         </FlexRow>
       </div>
     </div>
