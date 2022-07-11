@@ -22,11 +22,22 @@ const Docs: FC<DocsProps> = () => {
         <FlexRow>
           <div className={styles.DocsSidebar}>
             <FlexColumn>
-              <DocsSidebarSection label="Welcome">
-                <DocsSidebarItem label="introduction"/>
-                <DocsSidebarItem requestType={RequestType.GET} label="/api/user" />
-                <DocsSidebarItem requestType={RequestType.POST} />
-                <DocsSidebarItem requestType={RequestType.PUT} />
+              <DocsSidebarSection label="Welcome" route="/docs/welcome">
+                <DocsSidebarItem label="introduction" />
+                <DocsSidebarItem
+                  requestType={RequestType.GET}
+                  label="/api/user"
+                />
+                <DocsSidebarItem
+                  requestType={RequestType.POST}
+                  label="a"
+                  route="#a"
+                />
+                <DocsSidebarItem
+                  requestType={RequestType.PUT}
+                  label="b"
+                  route="#b"
+                />
               </DocsSidebarSection>
             </FlexColumn>
           </div>

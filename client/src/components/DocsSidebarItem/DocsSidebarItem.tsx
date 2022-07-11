@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./DocsSidebarItem.module.scss";
+import { Link } from "react-router-dom";
 
 export enum RequestType {
   GET = "GET",
@@ -10,22 +11,40 @@ export enum RequestType {
 
 interface DocsSidebarItemProps {
   label?: string;
+  route?: string;
   requestType?: RequestType;
 }
 
 const DocsSidebarItem: FC<DocsSidebarItemProps> = ({
   label,
+  route,
   requestType,
 }: DocsSidebarItemProps) => (
   <div className={styles.DocsSidebarItem} data-testid="DocsSidebarItem">
-    <FlexRow>
-      {requestType ? (
-        <span className={styles.RequestType}>{requestType}</span>
-      ) : (
-        ""
-      )}
-      <span className={styles.ItemLabel}>{label}</span>
-    </FlexRow>
+    <Link className={styles.Link} to={route || "#"}>
+      <FlexRow>
+        {requestType ? (
+          <span
+            className={`${styles.RequestType} ${
+              requestType === RequestType.GET ? styles.ItemLabelGET : ""
+            } ${requestType === RequestType.POST ? styles.ItemLabelPOST : ""} ${
+              requestType === RequestType.PUT ? styles.ItemLabelPUT : ""
+            }`}
+          >
+            {requestType}
+          </span>
+        ) : (
+          ""
+        )}
+        <span
+          className={`${styles.ItemLabel} ${
+            !requestType ? styles.ItemLabelAlone : ""
+          }`}
+        >
+          {label}
+        </span>
+      </FlexRow>
+    </Link>
   </div>
 );
 
