@@ -23,8 +23,8 @@ const Docs: FC<DocsProps> = () => {
           <div className={styles.DocsSidebar}>
             <FlexColumn>
               <DocsSidebarSection label="Welcome">
-                <DocsSidebarItem />
-                <DocsSidebarItem requestType={RequestType.GET} />
+                <DocsSidebarItem label="introduction"/>
+                <DocsSidebarItem requestType={RequestType.GET} label="/api/user" />
                 <DocsSidebarItem requestType={RequestType.POST} />
                 <DocsSidebarItem requestType={RequestType.PUT} />
               </DocsSidebarSection>

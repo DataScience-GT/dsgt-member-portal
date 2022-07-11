@@ -1,12 +1,16 @@
-.DocsSidebarItem {}
+.DocsSidebarItem {
+    padding: 6px 0;
+}
 
 .RequestType {
     width: 20%;
-    padding: 0 5px;
     text-align: center;
     text-transform: uppercase;
+    font-size: 0.8em;
+    padding: 0.2em 0;
 }
 
 .ItemLabel {
     flex-grow: 1;
+    text-align: left;
 }
