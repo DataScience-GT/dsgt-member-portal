@@ -9,7 +9,7 @@ import DocsSidebarItem, {
 } from "../../components/Docs/DocsSidebarItem/DocsSidebarItem";
 
 import { Routes, Route } from "react-router-dom";
-import DocsWelcome from "../DocsWelcome/DocsWelcome";
+import DocsWelcome from "./DocsWelcome/DocsWelcome";
 
 interface DocsProps {}
 
