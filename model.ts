@@ -1,17 +1,77 @@
 const db = require("./data/db-config");
-//const md5 = require("md5");
+const md5 = require("md5");
 
+import { log, warning, error } from "./Logger";
 import { User, RegisterUser } from "./interfaces/User";
 
-const getUsers = () => {
+type ErrorWithMessage = {
+  message: string;
+};
+
+function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "message" in error &&
+    typeof (error as Record<string, unknown>).message === "string"
+  );
+}
+
+function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
+  if (isErrorWithMessage(maybeError)) return maybeError;
+
+  try {
+    return new Error(JSON.stringify(maybeError));
+  } catch {
+    // fallback in case there's an error stringifying the maybeError
+    // like with circular references for example.
+    return new Error(String(maybeError));
+  }
+}
+
+function getErrorMessage(error: unknown) {
+  return toErrorWithMessage(error).message;
+}
+//------------------------------------------------------------
+//-------------------- all db operations ---------------------
+//------------------------------------------------------------
+
+export const getUsers = () => {
   return db.select("*").from("user");
 };
 
-const registerUser = ({}: Required<RegisterUser>) => {
-  return true;
+/**
+ * Registers a user. It is advised to use `checkUserEmail()` to make sure the email is unique.
+ */
+export const registerUser = async ({
+  email,
+  fname,
+  lname,
+  password,
+}: Required<RegisterUser>) => {
+  try {
+    //add the user to the database
+    let hash = md5(password);
+    await db
+      .insert({ email: email, fname: fname, lname: lname, password: hash })
+      .into("user");
+  } catch (err) {
+    error(getErrorMessage(err));
+  }
 };
 
-export { getUsers, registerUser };
+/**
+ * checks whether an email has been used already.
+ * @param email string
+ * @returns `true` if email has already been used, `false` otherwise
+ */
+export const checkUserEmail = async (email: string) => {
+  let res = await db("user").count("*").where("email", email);
+  if (parseInt(res[0].count)) {
+    return true;
+  }
+  return false;
+};
 
 // /**
 //  * gets all rows in game table

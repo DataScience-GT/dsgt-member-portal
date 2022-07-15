@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 
 import { apiAuthenticate } from "../Auth";
-import { getUsers, registerUser } from "../model";
+import { getUsers, registerUser, checkUserEmail } from "../model";
 import { User, RegisterUser } from "../interfaces/User";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -19,16 +19,28 @@ router.get(
   }
 );
 
-router.post("/register", (req: Request, res: Response, next: NextFunction) => {
-  let u: RegisterUser = {
-    email: req.body.email,
-    fname: req.body.fname,
-    lname: req.body.lname,
-    password: req.body.password,
-  };
-  let x = registerUser(u);
-  res.json({ ok: 1, data: x, user: u });
-});
+router.post(
+  "/register",
+  async (req: Request, res: Response, next: NextFunction) => {
+    let u: RegisterUser = {
+      email: req.body.email,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      password: req.body.password,
+    };
+    if (!(u.email && u.fname && u.lname && u.password)) {
+      next(new Error("Missing 1 or more required fields in request body."));
+    }
+    let emailUsed = await checkUserEmail(u.email);
+    if (emailUsed) {
+      next(
+        new Error("An account with that email has already been registered.")
+      );
+    }
+    await registerUser(u);
+    res.json({ ok: 1 });
+  }
+);
 
 router.post("/login", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
