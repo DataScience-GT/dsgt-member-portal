@@ -1,11 +1,17 @@
 const db = require("./data/db-config");
 //const md5 = require("md5");
 
+import { User, RegisterUser } from "./interfaces/User";
+
 const getUsers = () => {
   return db.select("*").from("user");
 };
 
-export { getUsers };
+const registerUser = ({}: Required<RegisterUser>) => {
+  return true;
+};
+
+export { getUsers, registerUser };
 
 // /**
 //  * gets all rows in game table
