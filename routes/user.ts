@@ -7,19 +7,19 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
 });
 
-router.get("/register", (req: Request, res: Response, next: NextFunction) => {
+router.post("/register", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
 });
 
-router.get("/login", (req: Request, res: Response, next: NextFunction) => {
+router.post("/login", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
 });
 
-router.get("/update", (req: Request, res: Response, next: NextFunction) => {
+router.post("/update", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
 });
 
-router.get("/remove", (req: Request, res: Response, next: NextFunction) => {
+router.delete("/remove", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
 });
 
