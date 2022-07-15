@@ -2,14 +2,14 @@ import React, { FC } from "react";
 import styles from "./DocsContentSection.module.scss";
 
 interface DocsContentSectionProps {
-  label?: string;
+  children?: React.ReactNode;
 }
 
 const DocsContentSection: FC<DocsContentSectionProps> = ({
-  label,
+  children,
 }: DocsContentSectionProps) => (
   <div className={styles.DocsContentSection} data-testid="DocsContentSection">
-    DocsContentSection Component1
+    {children}
   </div>
 );
 

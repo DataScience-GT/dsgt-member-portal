@@ -4,13 +4,13 @@
   width: 100%;
   height: fit-content;
 
-  border: 1px dashed red;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .DocsHeader {
   display: block;
   position: fixed;
-  width: 100%;
+  width: 20%;
   height: 5em;
 
   border: 1px solid black;
@@ -21,7 +21,7 @@
   position: relative;
   width: 100%;
   height: fit-content;
-  padding-top: 5em;
+  //padding-top: 5em;
 }
 
 .DocsSidebar {
@@ -33,6 +33,7 @@
   width: 20%;
 
   overflow: scroll;
+  margin-top: 5em;
 }
 
 .DocsContent {

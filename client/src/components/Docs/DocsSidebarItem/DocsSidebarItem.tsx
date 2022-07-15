@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import FlexRow from "../../layout/FlexRow/FlexRow";
+import FlexRow from "../../../layout/FlexRow/FlexRow";
 import styles from "./DocsSidebarItem.module.scss";
 import { Link } from "react-router-dom";
 

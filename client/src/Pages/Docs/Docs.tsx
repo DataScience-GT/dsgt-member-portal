@@ -3,10 +3,10 @@ import styles from "./Docs.module.scss";
 
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
-import DocsSidebarSection from "../../components/DocsSidebarSection/DocsSidebarSection";
+import DocsSidebarSection from "../../components/Docs/DocsSidebarSection/DocsSidebarSection";
 import DocsSidebarItem, {
   RequestType,
-} from "../../components/DocsSidebarItem/DocsSidebarItem";
+} from "../../components/Docs/DocsSidebarItem/DocsSidebarItem";
 
 import { Routes, Route } from "react-router-dom";
 import DocsWelcome from "../DocsWelcome/DocsWelcome";
