@@ -29,7 +29,7 @@ router.post(
       password: req.body.password,
     };
     if (!(u.email && u.fname && u.lname && u.password)) {
-      next(new Error("Missing 1 or more required fields in request body."));
+      next(new Error("Missing 1 or more required fields."));
     }
     let emailUsed = await checkUserEmail(u.email);
     if (emailUsed) {
