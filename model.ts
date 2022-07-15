@@ -3,6 +3,7 @@ const md5 = require("md5");
 
 import { log, warning, error } from "./Logger";
 import { User, RegisterUser } from "./interfaces/User";
+import { NextFunction } from "express";
 
 type ErrorWithMessage = {
   message: string;
@@ -43,12 +44,10 @@ export const getUsers = () => {
 /**
  * Registers a user. It is advised to use `checkUserEmail()` to make sure the email is unique.
  */
-export const registerUser = async ({
-  email,
-  fname,
-  lname,
-  password,
-}: Required<RegisterUser>) => {
+export const registerUser = async (
+  { email, fname, lname, password }: Required<RegisterUser>,
+  next: NextFunction
+) => {
   try {
     //add the user to the database
     let hash = md5(password);
@@ -56,7 +55,7 @@ export const registerUser = async ({
       .insert({ email: email, fname: fname, lname: lname, password: hash })
       .into("user");
   } catch (err) {
-    error(getErrorMessage(err));
+    next(err);
   }
 };
 

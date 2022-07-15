@@ -36,9 +36,10 @@ router.post(
       next(
         new Error("An account with that email has already been registered.")
       );
+    } else {
+      await registerUser(u, next);
+      res.json({ ok: 1 });
     }
-    await registerUser(u);
-    res.json({ ok: 1 });
   }
 );
 
