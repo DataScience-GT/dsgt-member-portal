@@ -2,7 +2,7 @@ const db = require("./data/db-config");
 const md5 = require("md5");
 
 import { log, warning, error } from "./Logger";
-import { User, RegisterUser } from "./interfaces/User";
+import { User, RegisterUser, LoginUser } from "./interfaces/User";
 import { NextFunction } from "express";
 
 type ErrorWithMessage = {
@@ -66,6 +66,22 @@ export const registerUser = async (
  */
 export const checkUserEmail = async (email: string) => {
   let res = await db("user").count("*").where("email", email);
+  if (parseInt(res[0].count)) {
+    return true;
+  }
+  return false;
+};
+
+/**
+ * checks a user's login credentials
+ * @returns `true` if login worked, `false` otherwise
+ */
+export const loginUser = async ({ email, password }: Required<LoginUser>) => {
+  let hash = md5(password);
+  let res = await db("user")
+    .count("*")
+    .where("email", email)
+    .andWhere("password", hash);
   if (parseInt(res[0].count)) {
     return true;
   }

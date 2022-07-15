@@ -13,7 +13,7 @@ const errorMiddleware = (
   // console.dir(req);
   error(`'${err.message}' at ${req.url}`);
   if (!res.headersSent) {
-    res.status(500).send({ ok: 0, error: err.message });
+    res.status(400).send({ ok: 0, error: err.message });
   }
 };
 

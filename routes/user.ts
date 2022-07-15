@@ -2,8 +2,8 @@ import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 
 import { apiAuthenticate } from "../Auth";
-import { getUsers, registerUser, checkUserEmail } from "../model";
-import { User, RegisterUser } from "../interfaces/User";
+import { getUsers, registerUser, checkUserEmail, loginUser } from "../model";
+import { RegisterUser, LoginUser } from "../interfaces/User";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -28,6 +28,9 @@ router.post(
       lname: req.body.lname,
       password: req.body.password,
     };
+    u.email = u.email.toLowerCase();
+    u.fname = u.fname.toLowerCase();
+    u.lname = u.lname.toLowerCase();
     if (!(u.email && u.fname && u.lname && u.password)) {
       next(new Error("Missing 1 or more required fields."));
     }
@@ -43,9 +46,26 @@ router.post(
   }
 );
 
-router.post("/login", (req: Request, res: Response, next: NextFunction) => {
-  res.json({ ok: 1 });
-});
+router.post(
+  "/login",
+  async (req: Request, res: Response, next: NextFunction) => {
+    let u: LoginUser = {
+      email: req.body.email,
+      password: req.body.password,
+    };
+    u.email = u.email.toLowerCase();
+    if (!(u.email && u.password)) {
+      next(new Error("Missing 1 or more required fields."));
+    }
+    let emailUsed = await checkUserEmail(u.email);
+    if (!emailUsed) {
+      next(new Error("An account with that email does not exist."));
+    } else {
+      let x = await loginUser(u);
+      res.json({ ok: 1, result: x });
+    }
+  }
+);
 
 router.post("/update", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
