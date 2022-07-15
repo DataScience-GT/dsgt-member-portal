@@ -4,7 +4,7 @@
   width: 100%;
   height: fit-content;
 
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .DocsHeader {
@@ -32,7 +32,8 @@
 
   width: 20%;
 
-  overflow: scroll;
+  overflow-x: auto;
+  overflow-y: scroll;
   margin-top: 5em;
 }
 

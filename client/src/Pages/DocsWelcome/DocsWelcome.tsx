@@ -3,14 +3,19 @@ import DocsContentSection from "../../components/Docs/DocsContentSection/DocsCon
 import styles from "./DocsWelcome.module.scss";
 
 import Header from "../../components/Docs/Header/Header";
+import MiniHeader from "../../components/Docs/MiniHeader/MiniHeader";
 
 interface DocsWelcomeProps {}
 
 const DocsWelcome: FC<DocsWelcomeProps> = () => (
   <div className={styles.DocsWelcome} data-testid="DocsWelcome">
     <DocsContentSection>
-      <Header id="a" path="#a">Welcome</Header>
-      <Header id="b" path="#b">Welcome</Header>
+      <Header id="a" hash="#a">
+        Welcome
+      </Header>
+      <MiniHeader id="b" hash="#b">
+        test123
+      </MiniHeader>
     </DocsContentSection>
   </div>
 );

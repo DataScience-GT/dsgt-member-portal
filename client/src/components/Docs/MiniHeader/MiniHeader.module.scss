@@ -1,1 +1,23 @@
-.MiniHeader {}
+.MiniHeader {
+  width: 100%;
+  height: fit-content;
+  margin-bottom: 4px;
+  > h2 {
+    display: inline-block;
+    width: fit-content;
+    margin-right: 10px;
+  }
+  > a {
+    color: inherit;
+    text-decoration: none;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  > h2,
+  > a {
+    font-size: 1.5em;
+    font-weight: 500;
+  }
+}
