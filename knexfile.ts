@@ -1,4 +1,4 @@
-const Knex = require("knex");
+import type { Knex } from "knex";
 require("dotenv").config();
 const pg = require("pg");
 
@@ -29,3 +29,4 @@ module.exports = {
     pool: { min: 2, max: 10 },
   },
 };
+
