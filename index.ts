@@ -5,6 +5,8 @@ import express, { Request, Response, NextFunction } from "express";
 import errorMiddleware from "./ErrorMiddleware";
 const app = express();
 
+app.use(express.json());
+
 //load .env
 require("dotenv").config();
 
