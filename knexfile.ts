@@ -1,4 +1,3 @@
-import type { Knex } from "knex";
 require("dotenv").config();
 const pg = require("pg");
 
