@@ -7,7 +7,9 @@
     "heroku-prebuild": "cd client && npm install && npm run build",
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "db:migrate:latest": "cd build && env DOTENV_CONFIG_PATH=../.env node --require dotenv/config ../node_modules/.bin/knex migrate:latest",
+    "db:migrate:rollback": "cd build && env DOTENV_CONFIG_PATH=../.env node --require dotenv/config ../node_modules/.bin/knex migrate:rollback"
   },
   "repository": {
     "type": "git",
