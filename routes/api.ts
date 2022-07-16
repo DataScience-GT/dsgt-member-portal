@@ -5,7 +5,11 @@ import { apiAuthenticate } from "../Auth";
 
 //setup /api/user
 const user = require("./user");
-router.use("/user", user);
+router.use("/user", apiAuthenticate, user);
+
+//setup /api/session
+const session = require("./session");
+router.use("/session", apiAuthenticate, session);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");

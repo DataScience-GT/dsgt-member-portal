@@ -3,6 +3,7 @@ const md5 = require("md5");
 
 import { log, warning, error } from "./Logger";
 import { User, RegisterUser, LoginUser } from "./interfaces/User";
+import { NewSession } from "./interfaces/Session";
 import { NextFunction } from "express";
 
 type ErrorWithMessage = {
@@ -54,6 +55,16 @@ export const registerUser = async (
     await db
       .insert({ email: email, fname: fname, lname: lname, password: hash })
       .into("user");
+    let res = await db
+      .select("user_inc")
+      .from("user")
+      .where("email", email)
+      .andWhere("password", hash);
+    if (res.length <= 0) {
+      return false;
+    } else {
+      return res[0].user_inc;
+    }
   } catch (err) {
     next(err);
   }
@@ -74,19 +85,60 @@ export const checkUserEmail = async (email: string) => {
 
 /**
  * checks a user's login credentials
- * @returns `true` if login worked, `false` otherwise
+ * @returns user_inc `number>0` if login worked, `false` otherwise
  */
 export const loginUser = async ({ email, password }: Required<LoginUser>) => {
   let hash = md5(password);
-  let res = await db("user")
-    .count("*")
+  let res = await db
+    .select("user_inc")
+    .from("user")
     .where("email", email)
     .andWhere("password", hash);
-  if (parseInt(res[0].count)) {
-    return true;
+  if (res.length <= 0) {
+    return false;
+  } else {
+    return res[0].user_inc;
   }
-  return false;
 };
+
+export const getSessions = async () => {
+  return db.select("*").from("session");
+};
+
+/**
+ * creates a new login session
+ */
+export const createSession = async ({
+  user_id,
+  session_id,
+}: Required<NewSession>) => {
+  //add session to db
+  await db.insert({ user_id: user_id, session_id: session_id }).into("session");
+};
+
+export const validateSession = async (session_id: string) => {
+  let res = await db
+    .select("created_at")
+    .from("session")
+    .where("session_id", session_id);
+  if (res.length <= 0) {
+    return false;
+  } else {
+    return res[0].created_at;
+  }
+};
+
+// export const loginUser = async ({ email, password }: Required<LoginUser>) => {
+//   let hash = md5(password);
+//   let res = await db("user")
+//     .count("*")
+//     .where("email", email)
+//     .andWhere("password", hash);
+//   if (parseInt(res[0].count)) {
+//     return true;
+//   }
+//   return false;
+// };
 
 // /**
 //  * gets all rows in game table
