@@ -1,6 +1,7 @@
 import fs from "fs";
 
 const log = (message: string): void => {
+  folder();
   const now = new Date();
 
   let today = now.toDateString().replaceAll(" ", "-");
@@ -17,6 +18,7 @@ const log = (message: string): void => {
 };
 
 const warning = (message: string): void => {
+  folder();
   const now = new Date();
 
   let today = now.toDateString().replaceAll(" ", "-");
@@ -33,6 +35,7 @@ const warning = (message: string): void => {
 };
 
 const error = (message: string): void => {
+  folder();
   const now = new Date();
 
   let today = now.toDateString().replaceAll(" ", "-");
@@ -46,6 +49,12 @@ const error = (message: string): void => {
       // done
     }
   });
+};
+
+const folder = () => {
+  if (!fs.existsSync("./logs")) {
+    fs.mkdirSync("./logs");
+  }
 };
 
 export { log, warning, error };
