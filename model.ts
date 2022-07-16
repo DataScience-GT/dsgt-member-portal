@@ -117,14 +117,19 @@ export const createSession = async ({
 };
 
 export const validateSession = async (session_id: string) => {
-  let res = await db
-    .select("created_at")
-    .from("session")
+  let res = await db("session")
+    .join("user", "user.user_inc", "=", "session.user_id")
+    .select(
+      "session.created_at",
+      "session.user_id",
+      "user.fname",
+      "session.enabled"
+    )
     .where("session_id", session_id);
   if (res.length <= 0) {
     return false;
   } else {
-    return res[0].created_at;
+    return res[0];
   }
 };
 
