@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
     .createTable("session", function (table) {
       table
         .integer("user_id")
-        .references("user_id")
+        .references("user_inc")
         .inTable("user")
         .onDelete("CASCADE");
       table.string("session_id", 255).unique();
