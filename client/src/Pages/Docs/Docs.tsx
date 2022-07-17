@@ -10,6 +10,7 @@ import DocsSidebarItem, {
 
 import { Routes, Route } from "react-router-dom";
 import DocsWelcome from "./DocsWelcome/DocsWelcome";
+import DocsApi from "./DocsApi/DocsApi";
 
 interface DocsProps {}
 
@@ -25,7 +26,7 @@ const Docs: FC<DocsProps> = () => {
         <FlexRow>
           <div className={styles.DocsSidebar}>
             <FlexColumn>
-              <DocsSidebarSection label="Welcome" route="/docs/welcome">
+              <DocsSidebarSection label="Welcome" route="/docs/welcome#0">
                 <DocsSidebarItem
                   label="Introduction"
                   route="/docs/welcome#introduction"
@@ -39,6 +40,10 @@ const Docs: FC<DocsProps> = () => {
                   route="/docs/welcome#api-stack"
                 />
                 <DocsSidebarItem
+                  label="Getting Started"
+                  route="/docs/welcome#getting-started"
+                />
+                <DocsSidebarItem
                   label="Authentication"
                   route="/docs/welcome#authentication"
                 />
@@ -46,19 +51,17 @@ const Docs: FC<DocsProps> = () => {
                   label="Credits"
                   route="/docs/welcome#credits"
                 />
+              </DocsSidebarSection>
+              <DocsSidebarSection label="/api" route="/docs/api#0">
                 <DocsSidebarItem
                   requestType={RequestType.GET}
-                  label="/api/user"
+                  label="/api/"
+                  route="/docs/api#api"
                 />
                 <DocsSidebarItem
-                  requestType={RequestType.POST}
-                  label="a"
-                  route="#a"
-                />
-                <DocsSidebarItem
-                  requestType={RequestType.PUT}
-                  label="b"
-                  route="#b"
+                  requestType={RequestType.GET}
+                  label="/api/auth"
+                  route="/docs/api#auth"
                 />
               </DocsSidebarSection>
             </FlexColumn>
@@ -68,6 +71,7 @@ const Docs: FC<DocsProps> = () => {
             <Routes>
               <Route path="/*" element={<DocsWelcome />} />
               <Route path="/welcome" element={<DocsWelcome />} />
+              <Route path="/api" element={<DocsApi />} />
             </Routes>
           </div>
         </FlexRow>

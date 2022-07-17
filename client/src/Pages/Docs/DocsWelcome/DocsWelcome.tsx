@@ -10,12 +10,12 @@ import Divider from "../../../components/Docs/Divider/Divider";
 
 interface DocsWelcomeProps {}
 
+const baseUrl = window.location.href.split("//")[1].split("/")[0];
+
 const DocsWelcome: FC<DocsWelcomeProps> = () => (
   <div className={styles.DocsWelcome} data-testid="DocsWelcome">
     <DocsContentSection>
-      <Header id="0" hash="#0">
-        Welcome
-      </Header>
+      <Header id="0">Welcome</Header>
       <MiniHeader id="introduction">Introduction</MiniHeader>
       <MiniText>
         Welcome to the api docs for the DSGT membership portal. This api allows
@@ -38,6 +38,15 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         API is using postres with Knex in order to work on a heroku server. The
         actual portal (where these docs are) is served through express as a
         built React app using React-Router
+      </MiniText>
+      <MiniHeader id="getting-started">Getting Started</MiniHeader>
+      <MiniText>
+        All http requests are made through the url this site is running on (
+        {baseUrl} currently, subject to change) combined with the api suffix.
+        For example, if you wanted to call /api/auth, you would make your
+        request to {baseUrl}/api/auth. All http requests go through /api, so if
+        something mentions /user/login, then the link will be {baseUrl}
+        /api/user/login
       </MiniText>
       <MiniHeader id="authentication">Authentication</MiniHeader>
       <MiniText>

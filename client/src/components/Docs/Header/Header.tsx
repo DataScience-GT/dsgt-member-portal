@@ -5,15 +5,14 @@ import { HashScroll } from "react-hash-scroll";
 
 interface HeaderProps {
   id?: string;
-  hash?: string;
   children?: React.ReactNode;
 }
 
-const Header: FC<HeaderProps> = ({ id, hash, children }: HeaderProps) => (
-  <HashScroll hash={hash || "#"} position="start">
+const Header: FC<HeaderProps> = ({ id, children }: HeaderProps) => (
+  <HashScroll hash={"#" + id} position="start">
     <div id={id} className={styles.Header} data-testid="Header">
       <h1>{children}</h1>
-      <a href={hash}>#</a>
+      <a href={"#" + id}>#</a>
     </div>
   </HashScroll>
 );
