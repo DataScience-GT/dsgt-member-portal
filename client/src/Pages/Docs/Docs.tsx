@@ -26,7 +26,26 @@ const Docs: FC<DocsProps> = () => {
           <div className={styles.DocsSidebar}>
             <FlexColumn>
               <DocsSidebarSection label="Welcome" route="/docs/welcome">
-                <DocsSidebarItem label="introduction" />
+                <DocsSidebarItem
+                  label="Introduction"
+                  route="/docs/welcome#introduction"
+                />
+                <DocsSidebarItem
+                  label="API Info"
+                  route="/docs/welcome#api-info"
+                />
+                <DocsSidebarItem
+                  label="API Stack"
+                  route="/docs/welcome#api-stack"
+                />
+                <DocsSidebarItem
+                  label="Authentication"
+                  route="/docs/welcome#authentication"
+                />
+                <DocsSidebarItem
+                  label="Credits"
+                  route="/docs/welcome#credits"
+                />
                 <DocsSidebarItem
                   requestType={RequestType.GET}
                   label="/api/user"
