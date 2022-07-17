@@ -79,7 +79,7 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         (.ENV file if hosting locally) and access with process.env
       </MiniText>
       <MiniHeader id="data">Input/Output Data</MiniHeader>
-      <FlexRow gap={20} spacing="space-between" padding="10px 0">
+      <FlexRow gap={20} spacing="space-between">
         <MiniText>
           Input and output data for the API is in JSON format. When inputting
           data, it must be in raw JSON format, and sent via the{" "}

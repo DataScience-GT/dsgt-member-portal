@@ -162,12 +162,12 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
         </FlexColumn>
         <JsonBlock jsonData={user_login_input} input sticky nomargin />
       </FlexRow>
-      <FlexRow gap={20} spacing="space-between" padding="10px 0">
+      <FlexRow gap={20} spacing="space-between">
         <MiniText>
           The most common error is when the email or password combo is
           incorrect:
         </MiniText>
-        <JsonBlock jsonData={user_login_0} success={false} nomargin />
+        <JsonBlock jsonData={user_login_0} success={false} />
       </FlexRow>
       <MiniText>
         If the email and password combo exist, then the response will look like:
