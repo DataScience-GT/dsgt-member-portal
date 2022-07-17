@@ -1,7 +1,7 @@
 import React, { FC } from "react";
+import Divider from "../../../components/Docs/Divider/Divider";
 import DocsContentSection from "../../../components/Docs/DocsContentSection/DocsContentSection";
 import Header from "../../../components/Docs/Header/Header";
-import InlineTextBlock from "../../../components/Docs/InlineTextBlock/InlineTextBlock";
 import JsonBlock from "../../../components/Docs/JsonBlock/JsonBlock";
 import MiniHeader from "../../../components/Docs/MiniHeader/MiniHeader";
 import MiniText from "../../../components/Docs/MiniText/MiniText";
@@ -9,7 +9,7 @@ import Parameter from "../../../components/Docs/Parameter/Parameter";
 import RequestLink, {
   RequestType,
 } from "../../../components/Docs/RequestLink/RequestLink";
-import Tag, { Color, TagPreset } from "../../../components/Docs/Tag/Tag";
+import Tag, { TagPreset } from "../../../components/Docs/Tag/Tag";
 import TextBlock from "../../../components/Docs/TextBlock/TextBlock";
 import FlexColumn from "../../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../../layout/FlexRow/FlexRow";
@@ -67,6 +67,10 @@ const user_register_input = {
 const DocsApiUser: FC<DocsApiUserProps> = () => (
   <div className={styles.DocsApiUser} data-testid="DocsApiUser">
     <DocsContentSection>
+      <MiniText>
+        <a href="/docs/api">← Return to previous section</a>
+      </MiniText>
+      <Divider />
       <Header id="0">/api/user</Header>
       <MiniText>This is the starting point for all user API requests.</MiniText>
 

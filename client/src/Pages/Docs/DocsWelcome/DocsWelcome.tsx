@@ -64,6 +64,7 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         <a
           href="https://en.wikipedia.org/wiki/Basic_access_authentication"
           target="_blank"
+          rel="noreferrer"
         >
           here
         </a>{" "}
@@ -91,14 +92,22 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
       <MiniHeader id="credits">Credits</MiniHeader>
       <MiniText>
         This API was created by{" "}
-        <a href="https://github.com/JohnRamberger" target="_blank">
+        <a
+          href="https://github.com/JohnRamberger"
+          target="_blank"
+          rel="noreferrer"
+        >
           John Ramberger
         </a>{" "}
         for{" "}
-        <a href="https://datasciencegt.org" target="_blank">
+        <a href="https://datasciencegt.org" target="_blank" rel="noreferrer">
           Data Science @ Georgia Tech
         </a>
         , and is maintained by the DSGT Tech Team.
+      </MiniText>
+      <Divider />
+      <MiniText>
+        <a href="/docs/api">Continue to next section →</a>
       </MiniText>
     </DocsContentSection>
   </div>

@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import Divider from "../../../components/Docs/Divider/Divider";
 import DocsContentSection from "../../../components/Docs/DocsContentSection/DocsContentSection";
 import Header from "../../../components/Docs/Header/Header";
 import InlineTextBlock from "../../../components/Docs/InlineTextBlock/InlineTextBlock";
@@ -8,7 +9,7 @@ import MiniText from "../../../components/Docs/MiniText/MiniText";
 import RequestLink, {
   RequestType,
 } from "../../../components/Docs/RequestLink/RequestLink";
-import Tag, { Color, TagPreset } from "../../../components/Docs/Tag/Tag";
+import Tag, { TagPreset } from "../../../components/Docs/Tag/Tag";
 import TextBlock from "../../../components/Docs/TextBlock/TextBlock";
 import FlexRow from "../../../layout/FlexRow/FlexRow";
 import styles from "./DocsApi.module.scss";
@@ -24,6 +25,10 @@ const auth_result_1 = { ok: 1 };
 const DocsApi: FC<DocsApiProps> = () => (
   <div className={styles.DocsApi} data-testid="DocsApi">
     <DocsContentSection>
+      <MiniText>
+        <a href="/docs/welcome">← Return to previous section</a>
+      </MiniText>
+      <Divider />
       <Header id="0">/api</Header>
       <MiniText>
         This is the starting point for all API requests. The two requests below
@@ -58,6 +63,10 @@ const DocsApi: FC<DocsApiProps> = () => (
         <InlineTextBlock>"ok": 0</InlineTextBlock>
         being an error and <InlineTextBlock>"ok": 1</InlineTextBlock> being a
         success.
+      </MiniText>
+      <Divider />
+      <MiniText>
+        <a href="/docs/api/user">Continue to next section →</a>
       </MiniText>
     </DocsContentSection>
   </div>
