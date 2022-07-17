@@ -9,7 +9,7 @@ import Parameter from "../../../components/Docs/Parameter/Parameter";
 import RequestLink, {
   RequestType,
 } from "../../../components/Docs/RequestLink/RequestLink";
-import Tag, { Color } from "../../../components/Docs/Tag/Tag";
+import Tag, { Color, TagPreset } from "../../../components/Docs/Tag/Tag";
 import TextBlock from "../../../components/Docs/TextBlock/TextBlock";
 import FlexColumn from "../../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../../layout/FlexRow/FlexRow";
@@ -38,6 +38,17 @@ const user_login_input = {
   password: "password123",
 };
 
+const user_login_0 = {
+  ok: 0,
+  error: "Invalid login credentials.",
+};
+
+const user_login_1 = {
+  ok: 1,
+  session_key:
+    "e8f9407a21b31bb2684cf6e63908d5e331d4af9228bcab4550429df98de855ce",
+};
+
 const DocsApiUser: FC<DocsApiUserProps> = () => (
   <div className={styles.DocsApiUser} data-testid="DocsApiUser">
     <DocsContentSection>
@@ -45,19 +56,20 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       <MiniText>This is the starting point for all user API requests.</MiniText>
 
       <MiniHeader id="user">/api/user</MiniHeader>
-      <Tag color={Color.Blue}>Requires Authorization</Tag>
+      <Tag preset={TagPreset.Auth} />
       <RequestLink requestType={RequestType.GET}>
         {baseUrl}/api/user
       </RequestLink>
       <MiniText>
         This request serves as an control to make sure you are on the right url.
-        Unlike the control with /api, this request requires authorization.
+        Unlike the control with /api, this request requires authorization. The
+        result should look like:
       </MiniText>
       <TextBlock>welcome to the user api!</TextBlock>
 
       <MiniHeader id="get">/api/user/get</MiniHeader>
-      <Tag color={Color.Blue}>Requires Authorization</Tag>
-      <Tag color={Color.Green}>Returns Data</Tag>
+      <Tag preset={TagPreset.Auth} />
+      <Tag preset={TagPreset.Output} />
       <RequestLink requestType={RequestType.GET}>
         {baseUrl}/api/user/get
       </RequestLink>
@@ -106,9 +118,9 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
 
       <MiniHeader id="login">/api/user/login</MiniHeader>
 
-      <Tag color={Color.Blue}>Requires Authorization</Tag>
-      <Tag color={Color.Gray}>Requires Input Data</Tag>
-      <Tag color={Color.Green}>Returns Data</Tag>
+      <Tag preset={TagPreset.Auth} />
+      <Tag preset={TagPreset.Input} />
+      <Tag preset={TagPreset.Output} />
       <RequestLink requestType={RequestType.POST}>
         {baseUrl}/api/user/login
       </RequestLink>
@@ -126,7 +138,25 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
         </FlexColumn>
         <JsonBlock jsonData={user_login_input} input sticky nomargin />
       </FlexRow>
-      <MiniText>The </MiniText>
+      <MiniText>
+        The most common error is when the email or password combo is incorrect:
+      </MiniText>
+      <JsonBlock jsonData={user_login_0} success={false} sticky nomargin />
+      <MiniText>
+        If the email and password combo exist, then the response will look like:
+      </MiniText>
+      <FlexRow spacing="space-between" gap={20}>
+        <FlexColumn>
+          <Parameter
+            id="session_key"
+            type="string"
+            desc="the session key that allows a user to stay logged in"
+          >
+            session_key
+          </Parameter>
+        </FlexColumn>
+        <JsonBlock jsonData={user_login_1} success sticky nomargin />
+      </FlexRow>
     </DocsContentSection>
   </div>
 );

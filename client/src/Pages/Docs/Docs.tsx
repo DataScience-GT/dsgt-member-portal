@@ -49,6 +49,10 @@ const Docs: FC<DocsProps> = () => {
                   route="/docs/welcome#authentication"
                 />
                 <DocsSidebarItem
+                  label="Input/Output Data"
+                  route="/docs/welcome#data"
+                />
+                <DocsSidebarItem
                   label="Credits"
                   route="/docs/welcome#credits"
                 />

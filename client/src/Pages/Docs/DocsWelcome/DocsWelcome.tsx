@@ -7,10 +7,18 @@ import MiniHeader from "../../../components/Docs/MiniHeader/MiniHeader";
 import JsonBlock from "../../../components/Docs/JsonBlock/JsonBlock";
 import MiniText from "../../../components/Docs/MiniText/MiniText";
 import Divider from "../../../components/Docs/Divider/Divider";
+import InlineTextBlock from "../../../components/Docs/InlineTextBlock/InlineTextBlock";
 
 interface DocsWelcomeProps {}
 
 const baseUrl = window.location.href.split("//")[1].split("/")[0];
+
+const example_data = {
+  fname: "John",
+  lname: "Ramberger",
+  age: 19,
+  teams: ["Exec", "Tech"],
+};
 
 const DocsWelcome: FC<DocsWelcomeProps> = () => (
   <div className={styles.DocsWelcome} data-testid="DocsWelcome">
@@ -65,6 +73,14 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         requests (this is a security issue, but can be tested during
         development).
       </MiniText>
+      <MiniHeader id="data">Input/Output Data</MiniHeader>
+      <MiniText>
+        Input and output data for the API is in JSON format. When inputting
+        data, it must be in raw JSON format, and sent via the{" "}
+        <InlineTextBlock>Body</InlineTextBlock> of the request. Example data:
+      </MiniText>
+      <JsonBlock jsonData={example_data} />
+
       <MiniHeader id="credits">Credits</MiniHeader>
       <MiniText>
         This API was created by{" "}
