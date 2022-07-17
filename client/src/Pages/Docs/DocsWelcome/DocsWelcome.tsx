@@ -5,6 +5,8 @@ import styles from "./DocsWelcome.module.scss";
 import Header from "../../../components/Docs/Header/Header";
 import MiniHeader from "../../../components/Docs/MiniHeader/MiniHeader";
 import JsonBlock from "../../../components/Docs/JsonBlock/JsonBlock";
+import MiniText from "../../../components/Docs/MiniText/MiniText";
+import Divider from "../../../components/Docs/Divider/Divider";
 
 interface DocsWelcomeProps {}
 
@@ -23,7 +25,12 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
       <MiniHeader id="b" hash="#b">
         test123
       </MiniHeader>
+      <MiniText>
+        jk dhfjhds jkfhsdkf hdsjkhf jdshfjkhds jkfhsdjkhfj dshfdh fdjf kdsjf
+        sdlfj
+      </MiniText>
       <JsonBlock jsonData={data1} />
+      <Divider />
     </DocsContentSection>
   </div>
 );
