@@ -39,7 +39,16 @@ function getErrorMessage(error: unknown) {
 //------------------------------------------------------------
 
 export const getUsers = () => {
-  return db.select("*").from("user");
+  return db
+    .select(
+      "user_inc as user_id",
+      "email",
+      "fname",
+      "lname",
+      "enabled",
+      "created_at"
+    )
+    .from("user");
 };
 
 /**

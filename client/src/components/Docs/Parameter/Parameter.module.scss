@@ -46,15 +46,15 @@
     padding: 0;
     border: none;
     transition: 0.3s height ease;
-    background: rgb(87, 89, 167);
-    color: #000;
+    // background: rgb(87, 89, 167);
+    background: rgb(45, 49, 100);
     font-size: 18px;
   }
 }
 
 .Parameter:nth-child(2n) {
   label {
-    background: rgb(45, 49, 100);
+    // background: rgb(45, 49, 100);
   }
 }
 

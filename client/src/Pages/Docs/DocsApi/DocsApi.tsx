@@ -8,6 +8,7 @@ import MiniText from "../../../components/Docs/MiniText/MiniText";
 import RequestLink, {
   RequestType,
 } from "../../../components/Docs/RequestLink/RequestLink";
+import Tag, { Color } from "../../../components/Docs/Tag/Tag";
 import TextBlock from "../../../components/Docs/TextBlock/TextBlock";
 import FlexRow from "../../../layout/FlexRow/FlexRow";
 import styles from "./DocsApi.module.scss";
@@ -38,7 +39,7 @@ const DocsApi: FC<DocsApiProps> = () => (
       </MiniText>
       <TextBlock>welcome to the api!</TextBlock>
       <MiniHeader id="auth">/api/auth</MiniHeader>
-      <TextBlock>Requires Authorization</TextBlock>
+      <Tag color={Color.Blue}>Requires Authorization</Tag>
       <RequestLink requestType={RequestType.GET}>
         {baseUrl}/api/auth
       </RequestLink>
