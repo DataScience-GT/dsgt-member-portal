@@ -1,4 +1,4 @@
-import React, { ChangeEventHandler, FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./Docs.module.scss";
 
 import FlexRow from "../../layout/FlexRow/FlexRow";
@@ -17,17 +17,42 @@ interface DocsProps {}
 
 const Docs: FC<DocsProps> = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [headerHidden, setHeaderHidden] = useState(false);
+  const [scrollY, setScrollY] = useState(0);
+
   useEffect(() => {
     document.title = "Api Docs";
   }, []);
+
+  useEffect(() => {
+    document.addEventListener("scroll", handleScroll);
+    return () => document.removeEventListener("scroll", handleScroll);
+  }, [scrollY]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMenuOpen(e.target.checked);
   };
 
+  const handleScroll = (e: Event) => {
+    let newScroll = window.scrollY;
+
+    let dy = newScroll - scrollY;
+    console.log(dy);
+    if (dy > 0 && !menuOpen) {
+      setHeaderHidden(true);
+    } else {
+      setHeaderHidden(false);
+    }
+    setScrollY(newScroll);
+  };
+
   return (
     <div className={styles.Docs} data-testid="Docs">
-      <div className={styles.DocsHeader}>
+      <div
+        className={`${styles.DocsHeader} ${
+          headerHidden ? styles._headerHidden : ""
+        }`}
+      >
         <div className={styles.hamburger}>
           <input
             id="nav-menu-checkbox"
@@ -44,7 +69,7 @@ const Docs: FC<DocsProps> = () => {
         DSGT Member Portal API
       </div>
       <div className={styles.DocsBody}>
-        <FlexRow>
+        <FlexRow padding="5em 0 0 0">
           <div
             className={`${styles.DocsSidebar} ${
               menuOpen ? styles._menuOpen : ""

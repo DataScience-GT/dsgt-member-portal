@@ -24,6 +24,7 @@
   // border: 1px solid black;
   border-right: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  transition: 0.3s all ease;
 }
 
 .DocsBody {
@@ -44,7 +45,7 @@
 
   overflow-x: auto;
   overflow-y: auto;
-  margin-top: 5em;
+  // margin-top: 5em;
   border-right: 1px solid #fff;
 
   transition: 0.3s left ease;
@@ -119,6 +120,7 @@
     border-right: none;
     background: rgb(17, 18, 49);
     z-index: 100;
+    top: 0;
   }
   .DocsSidebar {
     font-size: 10px;
@@ -127,12 +129,17 @@
     width: 200px;
     background: rgb(17, 18, 49);
     z-index: 99;
+    margin-top: 5em;
   }
   .DocsContent {
     width: 100%;
     margin-left: 0;
+    // margin-top: 5em;
   }
   .hamburger {
     display: block;
+  }
+  ._headerHidden {
+    top: -5em;
   }
 }
