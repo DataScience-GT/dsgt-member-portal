@@ -14,7 +14,7 @@
   display: flex;
   position: fixed;
   width: 20%;
-  height: 5em;
+  height: calc(5em - 1.3em - 2px);
 
   font-size: 1.4em;
 
@@ -22,6 +22,8 @@
   padding-top: 1.3em;
 
   // border: 1px solid black;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
 }
 
 .DocsBody {
@@ -41,8 +43,9 @@
   width: 20%;
 
   overflow-x: auto;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin-top: 5em;
+  border-right: 1px solid #fff;
 }
 
 .DocsContent {

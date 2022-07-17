@@ -1,0 +1,36 @@
+.RequestLink {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba($color: #fff, $alpha: 1);
+  border-radius: 10px;
+  // padding: 10px 20px;
+  background: rgb(24, 26, 68);
+  margin: 10px 0;
+}
+
+.RequestType {
+  // width: 100px;
+  padding: 10px 20px;
+  border-right: 1px solid white;
+  text-align: center;
+}
+
+.ItemLabel {
+  padding: 10px 20px;
+  flex-grow: 1;
+}
+
+//the .RequestType label for GET requests
+.ItemLabelGET {
+  color: rgb(17, 179, 17);
+}
+
+//the .RequestType label for post requests
+.ItemLabelPOST {
+  color: rgb(211, 211, 61);
+}
+
+//the .RequestType label for PUT requests
+.ItemLabelPUT {
+  color: gray;
+}

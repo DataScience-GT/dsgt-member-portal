@@ -1,10 +1,27 @@
 .JsonBlock {
   background: rgb(24, 26, 68);
-  color: rgb(255, 255, 255);
-  padding: 20px;
+  // padding: 10px 20px;
   width: fit-content;
   height: fit-content;
   border-radius: 10px;
-  border: 1px solid rgba($color: #686868, $alpha: 1.0);
-  margin: 6px 0;
+  border: 1px solid rgba($color: #fff, $alpha: 1);
+  margin: 10px 0;
+  overflow: hidden;
+  > pre {
+    margin: 10px 20px;
+  }
+}
+
+.SuccessHeader {
+  background: green;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.FailHeader {
+  background: red;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
 }
