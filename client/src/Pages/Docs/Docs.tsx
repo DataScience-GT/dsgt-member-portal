@@ -73,7 +73,7 @@ const Docs: FC<DocsProps> = () => {
         DSGT Member Portal API
       </div>
       <div className={styles.DocsBody}>
-        <FlexRow padding="5em 0 0 0">
+        <FlexRow>
           <div
             className={`${styles.DocsSidebar} ${
               menuOpen ? styles._menuOpen : ""
