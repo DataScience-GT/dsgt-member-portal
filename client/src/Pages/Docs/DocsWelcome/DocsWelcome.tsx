@@ -8,6 +8,7 @@ import JsonBlock from "../../../components/Docs/JsonBlock/JsonBlock";
 import MiniText from "../../../components/Docs/MiniText/MiniText";
 import Divider from "../../../components/Docs/Divider/Divider";
 import InlineTextBlock from "../../../components/Docs/InlineTextBlock/InlineTextBlock";
+import FlexRow from "../../../layout/FlexRow/FlexRow";
 
 interface DocsWelcomeProps {}
 
@@ -73,13 +74,19 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         requests (this is a security issue, but can be tested during
         development).
       </MiniText>
-      <MiniHeader id="data">Input/Output Data</MiniHeader>
       <MiniText>
-        Input and output data for the API is in JSON format. When inputting
-        data, it must be in raw JSON format, and sent via the{" "}
-        <InlineTextBlock>Body</InlineTextBlock> of the request. Example data:
+        DO NOT store api keys in code, store them in the environmental variables
+        (.ENV file if hosting locally) and access with process.env
       </MiniText>
-      <JsonBlock jsonData={example_data} />
+      <MiniHeader id="data">Input/Output Data</MiniHeader>
+      <FlexRow gap={20} spacing="space-between" padding="10px 0">
+        <MiniText>
+          Input and output data for the API is in JSON format. When inputting
+          data, it must be in raw JSON format, and sent via the{" "}
+          <InlineTextBlock>Body</InlineTextBlock> of the request. Example data:
+        </MiniText>
+        <JsonBlock jsonData={example_data} />
+      </FlexRow>
 
       <MiniHeader id="credits">Credits</MiniHeader>
       <MiniText>
