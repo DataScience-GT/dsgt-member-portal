@@ -31,6 +31,9 @@ const Docs: FC<DocsProps> = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMenuOpen(e.target.checked);
+    if (!e.target.checked) {
+      setHeaderHidden(true);
+    }
   };
 
   const handleScroll = (e: Event) => {
