@@ -25,8 +25,22 @@ const Docs: FC<DocsProps> = () => {
   }, []);
 
   useEffect(() => {
-    document.addEventListener("scroll", handleScroll);
-    return () => document.removeEventListener("scroll", handleScroll);
+    const handleScroll = (e: Event) => {
+      let newScroll = window.scrollY;
+
+      let dy = newScroll - scrollY;
+      // console.log(dy);
+      if (dy > 0 && !menuOpen) {
+        setHeaderHidden(true);
+      } else {
+        setHeaderHidden(false);
+      }
+      setScrollY(newScroll);
+    };
+    if (window.innerWidth < 1000) {
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
   }, [scrollY]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -34,19 +48,6 @@ const Docs: FC<DocsProps> = () => {
     if (!e.target.checked) {
       setHeaderHidden(true);
     }
-  };
-
-  const handleScroll = (e: Event) => {
-    let newScroll = window.scrollY;
-
-    let dy = newScroll - scrollY;
-    console.log(dy);
-    if (dy > 0 && !menuOpen) {
-      setHeaderHidden(true);
-    } else {
-      setHeaderHidden(false);
-    }
-    setScrollY(newScroll);
   };
 
   return (

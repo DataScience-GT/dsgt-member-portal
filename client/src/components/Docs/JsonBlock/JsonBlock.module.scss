@@ -2,11 +2,13 @@
   background: rgb(24, 26, 68);
   // padding: 10px 20px;
   width: fit-content;
-  max-width: 100%;
+  max-width: 50%;
   height: fit-content;
   border-radius: 10px;
   border: 1px solid rgba($color: #fff, $alpha: 1);
   margin: 10px 0;
+
+  overflow: auto;
   // overflow: hidden;
   > pre {
     margin: 10px 20px;
@@ -42,4 +44,10 @@
 
 .InputHeader {
   background: gray;
+}
+
+@media only screen and (max-width: 1000px) {
+  .JsonBlock { 
+    max-width: 100%;
+  }
 }
