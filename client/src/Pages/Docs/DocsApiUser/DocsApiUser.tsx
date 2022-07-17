@@ -30,6 +30,14 @@ const user_get_1 = {
       enabled: true,
       created_at: "2022-07-16T19:48:41.592Z",
     },
+    {
+      user_id: 2,
+      email: "rambergerjohn2@gmail.com",
+      fname: "john",
+      lname: "ramberger",
+      enabled: true,
+      created_at: "2022-07-16T19:48:41.592Z",
+    },
   ],
 };
 
@@ -47,6 +55,13 @@ const user_login_1 = {
   ok: 1,
   session_key:
     "e8f9407a21b31bb2684cf6e63908d5e331d4af9228bcab4550429df98de855ce",
+};
+
+const user_register_input = {
+  email: "something@email.com",
+  password: "password123",
+  fname: "John",
+  lname: "Ramberger",
 };
 
 const DocsApiUser: FC<DocsApiUserProps> = () => (
@@ -117,7 +132,6 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       </FlexRow>
 
       <MiniHeader id="login">/api/user/login</MiniHeader>
-
       <Tag preset={TagPreset.Auth} />
       <Tag preset={TagPreset.Input} />
       <Tag preset={TagPreset.Output} />
@@ -129,10 +143,20 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       </MiniText>
       <FlexRow spacing="space-between" gap={20}>
         <FlexColumn>
-          <Parameter id="email1" type="string" desc="the user's email">
+          <Parameter
+            id="email1"
+            type="string"
+            optional={false}
+            desc="the user's email"
+          >
             email
           </Parameter>
-          <Parameter id="password1" type="string" desc="the user's password">
+          <Parameter
+            id="password1"
+            type="string"
+            optional={false}
+            desc="the user's password"
+          >
             password
           </Parameter>
         </FlexColumn>
@@ -141,9 +165,73 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       <MiniText>
         The most common error is when the email or password combo is incorrect:
       </MiniText>
-      <JsonBlock jsonData={user_login_0} success={false} sticky nomargin />
+      <JsonBlock jsonData={user_login_0} success={false} nomargin />
       <MiniText>
         If the email and password combo exist, then the response will look like:
+      </MiniText>
+      <FlexRow spacing="space-between" gap={20}>
+        <FlexColumn>
+          <Parameter
+            id="session_key"
+            type="string"
+            desc="the session key that allows a user to stay logged in"
+          >
+            session_key
+          </Parameter>
+        </FlexColumn>
+        <JsonBlock jsonData={user_login_1} success sticky nomargin />
+      </FlexRow>
+
+      <MiniHeader id="register">/api/user/register</MiniHeader>
+      <Tag preset={TagPreset.Auth} />
+      <Tag preset={TagPreset.Input} />
+      <Tag preset={TagPreset.Output} />
+      <RequestLink requestType={RequestType.POST}>
+        {baseUrl}/api/user/login
+      </RequestLink>
+      <MiniText>
+        This request attempts to register a user. Input parameters:
+      </MiniText>
+      <FlexRow spacing="space-between" gap={20}>
+        <FlexColumn>
+          <Parameter
+            id="email2"
+            type="string"
+            optional={false}
+            desc="the user's email"
+          >
+            email
+          </Parameter>
+          <Parameter
+            id="password2"
+            type="string"
+            optional={false}
+            desc="the user's password"
+          >
+            password
+          </Parameter>
+          <Parameter
+            id="fname2"
+            type="string"
+            optional={false}
+            desc="the user's first name"
+          >
+            fname
+          </Parameter>
+          <Parameter
+            id="lname2"
+            type="string"
+            optional={false}
+            desc="the user's last name"
+          >
+            lname
+          </Parameter>
+        </FlexColumn>
+        <JsonBlock jsonData={user_register_input} input sticky nomargin />
+      </FlexRow>
+      <MiniText>
+        If the email is unique and all other parameters are valid, then the
+        response will look like:
       </MiniText>
       <FlexRow spacing="space-between" gap={20}>
         <FlexColumn>
