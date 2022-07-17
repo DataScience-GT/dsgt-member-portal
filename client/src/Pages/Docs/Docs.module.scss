@@ -11,12 +11,17 @@
 }
 
 .DocsHeader {
-  display: block;
+  display: flex;
   position: fixed;
   width: 20%;
   height: 5em;
 
-  border: 1px solid black;
+  font-size: 1.4em;
+
+  justify-content: center;
+  padding-top: 1.3em;
+
+  // border: 1px solid black;
 }
 
 .DocsBody {
@@ -31,7 +36,7 @@
   display: block;
   position: fixed;
   height: calc(100% - 5em);
-  border: 1px solid red;
+  // border: 1px solid red;
 
   width: 20%;
 
@@ -41,7 +46,7 @@
 }
 
 .DocsContent {
-  border: 1px solid black;
+  // border: 1px solid black;
 
   flex-grow: 1;
   width: 80%;

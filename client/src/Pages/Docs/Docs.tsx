@@ -20,7 +20,7 @@ const Docs: FC<DocsProps> = () => {
 
   return (
     <div className={styles.Docs} data-testid="Docs">
-      <div className={styles.DocsHeader}>test1</div>
+      <div className={styles.DocsHeader}>DSGT Member Portal API</div>
       <div className={styles.DocsBody}>
         <FlexRow>
           <div className={styles.DocsSidebar}>
