@@ -6,9 +6,10 @@
   border-radius: 10px;
   border: 1px solid rgba($color: #fff, $alpha: 1);
   margin: 10px 0;
-  overflow: hidden;
+  // overflow: hidden;
   > pre {
     margin: 10px 20px;
+    overflow-x: auto;
   }
 }
 
@@ -17,6 +18,7 @@
   width: 100%;
   text-align: center;
   margin-bottom: 10px;
+  border-radius: 10px 10px 0 0;
 }
 
 .FailHeader {
@@ -24,4 +26,5 @@
   width: 100%;
   text-align: center;
   margin-bottom: 10px;
+  border-radius: 10px 10px 0 0;
 }

@@ -11,6 +11,7 @@ import DocsSidebarItem, {
 import { Routes, Route } from "react-router-dom";
 import DocsWelcome from "./DocsWelcome/DocsWelcome";
 import DocsApi from "./DocsApi/DocsApi";
+import DocsApiUser from "./DocsApiUser/DocsApiUser";
 
 interface DocsProps {}
 
@@ -64,6 +65,28 @@ const Docs: FC<DocsProps> = () => {
                   route="/docs/api#auth"
                 />
               </DocsSidebarSection>
+              <DocsSidebarSection label="/api/user" route="/docs/api/user#0">
+                <DocsSidebarItem
+                  requestType={RequestType.GET}
+                  label="/api/user"
+                  route="/docs/api/user#user"
+                />
+                <DocsSidebarItem
+                  requestType={RequestType.GET}
+                  label="/api/user/get"
+                  route="/docs/api/user#get"
+                />
+                <DocsSidebarItem
+                  requestType={RequestType.POST}
+                  label="/api/user/login"
+                  route="/docs/api/user#login"
+                />
+                <DocsSidebarItem
+                  requestType={RequestType.POST}
+                  label="/api/user/register"
+                  route="/docs/api/user#register"
+                />
+              </DocsSidebarSection>
             </FlexColumn>
           </div>
           <div className={styles.DocsContent}>
@@ -72,6 +95,7 @@ const Docs: FC<DocsProps> = () => {
               <Route path="/*" element={<DocsWelcome />} />
               <Route path="/welcome" element={<DocsWelcome />} />
               <Route path="/api" element={<DocsApi />} />
+              <Route path="/api/user" element={<DocsApiUser />} />
             </Routes>
           </div>
         </FlexRow>

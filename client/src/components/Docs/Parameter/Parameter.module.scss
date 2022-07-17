@@ -1,0 +1,77 @@
+.Parameter {
+  font-size: 1.2em;
+  width: 100%;
+  height: fit-content;
+  margin: 0;
+  position: relative;
+
+  input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    // transform: translate(-20px, -20px);
+    &:checked {
+      //   visibility: visible;
+    }
+    &:checked ~ label {
+      // color: red;
+      &:after {
+        transform: rotate(180deg);
+      }
+    }
+    &:checked ~ p {
+      height: fit-content;
+      padding: 5px 10px;
+      border: 1px solid rgba($color: #fff, $alpha: 1);
+    }
+  }
+  label {
+    display: block;
+    width: 100%;
+    height: fit-content;
+    background: rgb(24, 26, 68);
+    border: 1px solid rgba($color: #fff, $alpha: 1);
+    padding: 5px 10px;
+    &:after {
+      content: "↑";
+      float: right;
+      transition: 0.3s all ease;
+    }
+  }
+  p {
+    height: 0px;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+    border: none;
+    transition: 0.3s height ease;
+    background: rgb(87, 89, 167);
+    color: #000;
+    font-size: 18px;
+  }
+}
+
+.Parameter:nth-child(2n) {
+  label {
+    background: rgb(45, 49, 100);
+  }
+}
+
+.Optional {
+  color: rgb(154, 154, 154);
+  text-transform: capitalize;
+}
+
+.Type {
+  color: rgb(205, 125, 35);
+  text-transform: capitalize;
+}
+
+.Hash {
+  color: inherit;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}

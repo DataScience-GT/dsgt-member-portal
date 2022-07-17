@@ -16,12 +16,9 @@ interface DocsApiProps {}
 
 const baseUrl = window.location.href.split("//")[1].split("/")[0];
 
-const auth_result_0 = {
-  ok: 0,
-};
-const auth_result_1 = {
-  ok: 1,
-};
+const auth_result_0 = { ok: 0, error: "missing authorization header" };
+const auth_result_0_5 = { ok: 0, error: "invalid basic authorization" };
+const auth_result_1 = { ok: 1 };
 
 const DocsApi: FC<DocsApiProps> = () => (
   <div className={styles.DocsApi} data-testid="DocsApi">
@@ -41,6 +38,7 @@ const DocsApi: FC<DocsApiProps> = () => (
       </MiniText>
       <TextBlock>welcome to the api!</TextBlock>
       <MiniHeader id="auth">/api/auth</MiniHeader>
+      <TextBlock>Requires Authorization</TextBlock>
       <RequestLink requestType={RequestType.GET}>
         {baseUrl}/api/auth
       </RequestLink>
@@ -51,6 +49,7 @@ const DocsApi: FC<DocsApiProps> = () => (
       </MiniText>
       <FlexRow gap={20}>
         <JsonBlock jsonData={auth_result_0} success={false} />
+        <JsonBlock jsonData={auth_result_0_5} success={false} />
         <JsonBlock jsonData={auth_result_1} success={true} />
       </FlexRow>
       <MiniText>
