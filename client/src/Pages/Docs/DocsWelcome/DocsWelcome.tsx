@@ -10,12 +10,6 @@ import Divider from "../../../components/Docs/Divider/Divider";
 
 interface DocsWelcomeProps {}
 
-const data1 = {
-  ok: 1,
-  valid: true,
-  fname: "john",
-};
-
 const DocsWelcome: FC<DocsWelcomeProps> = () => (
   <div className={styles.DocsWelcome} data-testid="DocsWelcome">
     <DocsContentSection>
@@ -74,8 +68,6 @@ const DocsWelcome: FC<DocsWelcomeProps> = () => (
         </a>
         , and is maintained by the DSGT Tech Team.
       </MiniText>
-      {/* <JsonBlock jsonData={data1} /> */}
-      <Divider />
     </DocsContentSection>
   </div>
 );
