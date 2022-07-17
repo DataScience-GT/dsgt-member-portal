@@ -46,6 +46,8 @@
   overflow-y: auto;
   margin-top: 5em;
   border-right: 1px solid #fff;
+
+  transition: 0.3s left ease;
 }
 
 .DocsContent {
@@ -58,4 +60,79 @@
   // height: 300vh;
   margin-left: 20%;
   padding-bottom: 100vh;
+}
+
+//nav
+
+.hamburger {
+  display: none;
+  > label {
+    display: flex;
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    // border: 1px solid red;
+    top: 0;
+    left: 0;
+    margin: 10px;
+
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    > span {
+      display: block;
+      height: 1px;
+      width: 100%;
+      border-bottom: 1px solid #fff;
+      transition: 0.3s all ease;
+    }
+  }
+}
+
+.NavCheckbox {
+  display: none;
+  &:checked ~ label {
+    > span {
+      &:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      &:nth-child(2) {
+        opacity: 0;
+      }
+      &:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
+    }
+  }
+}
+
+._menuOpen {
+  left: 0 !important;
+}
+
+@media only screen and (max-width: 1000px) {
+  .Docs {
+    font-size: 10px;
+  }
+  .DocsHeader {
+    width: 100vw;
+    border-right: none;
+    background: rgb(17, 18, 49);
+    z-index: 100;
+  }
+  .DocsSidebar {
+    font-size: 10px;
+    top: -1px;
+    left: -200px;
+    width: 200px;
+    background: rgb(17, 18, 49);
+    z-index: 99;
+  }
+  .DocsContent {
+    width: 100%;
+    margin-left: 0;
+  }
+  .hamburger {
+    display: block;
+  }
 }

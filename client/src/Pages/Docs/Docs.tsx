@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { ChangeEventHandler, FC, useEffect, useState } from "react";
 import styles from "./Docs.module.scss";
 
 import FlexRow from "../../layout/FlexRow/FlexRow";
@@ -16,16 +16,40 @@ import DocsApiUser from "./DocsApiUser/DocsApiUser";
 interface DocsProps {}
 
 const Docs: FC<DocsProps> = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
   useEffect(() => {
     document.title = "Api Docs";
   }, []);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMenuOpen(e.target.checked);
+  };
+
   return (
     <div className={styles.Docs} data-testid="Docs">
-      <div className={styles.DocsHeader}>DSGT Member Portal API</div>
+      <div className={styles.DocsHeader}>
+        <div className={styles.hamburger}>
+          <input
+            id="nav-menu-checkbox"
+            className={styles.NavCheckbox}
+            type="checkbox"
+            onChange={handleChange}
+          />
+          <label htmlFor="nav-menu-checkbox">
+            <span></span>
+            <span></span>
+            <span></span>
+          </label>
+        </div>
+        DSGT Member Portal API
+      </div>
       <div className={styles.DocsBody}>
         <FlexRow>
-          <div className={styles.DocsSidebar}>
+          <div
+            className={`${styles.DocsSidebar} ${
+              menuOpen ? styles._menuOpen : ""
+            }`}
+          >
             <FlexColumn>
               <DocsSidebarSection label="Welcome" route="/docs/welcome#0">
                 <DocsSidebarItem
