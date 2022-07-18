@@ -70,18 +70,21 @@ const Signup: FC<SignupProps> = () => {
                 placeholder="First Name"
                 width="100%"
                 onChange={handleChange_fname}
+                validIndication
               />
               <InputField
                 type="text"
                 placeholder="Last Name"
                 width="100%"
                 onChange={handleChange_lname}
+                validIndication
               />
               <InputField
                 type="email"
                 placeholder="Email"
                 width="100%"
                 onChange={handleChange_email}
+                validIndication
               />
               <InputField
                 type="password"
@@ -90,6 +93,7 @@ const Signup: FC<SignupProps> = () => {
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 width="100%"
                 helper={<InputHelper lines={passwordHelperLines} />}
+                validIndication
               />
               <InputField type="submit" placeholder="Sign Up" width="100%" />
               <div className={styles.Divider}></div>

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import styles from "./InputField.module.scss";
 
 interface InputFieldProps {
@@ -9,6 +9,7 @@ interface InputFieldProps {
   onChange?: React.KeyboardEventHandler<HTMLInputElement>;
   pattern?: string;
   helper?: React.ReactNode;
+  validIndication?: boolean;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -19,7 +20,9 @@ const InputField: FC<InputFieldProps> = ({
   onChange,
   pattern,
   helper,
+  validIndication,
 }: InputFieldProps) => {
+  const [passwordOpen, setPasswordOpen] = useState(false);
   if (type === "submit") {
     return (
       <div
@@ -36,6 +39,49 @@ const InputField: FC<InputFieldProps> = ({
         />
       </div>
     );
+  } else if (type === "password") {
+    const handleChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+      let checked = e.target.checked;
+      setPasswordOpen(checked);
+    };
+
+    return (
+      <div
+        className={`${styles.InputField} ${styles.PasswordInputField}`}
+        data-testid="InputField"
+        style={{ width: width || "300px" }}
+      >
+        <input
+          id={"input-" + placeholder?.replaceAll(" ", "-")}
+          className={`${helper !== undefined ? styles._hasHelper : ""} ${
+            validIndication ? styles.validIndicater : ""
+          }`}
+          type={passwordOpen ? "text" : "password"}
+          placeholder=" "
+          name={placeholder}
+          required
+          onChange={onChange}
+          pattern={pattern}
+        />
+        <label htmlFor={"input-" + placeholder}>
+          {placeholder}
+          <span>✓</span>
+        </label>
+        <div className={styles.eye}>
+          <input
+            type="checkbox"
+            id={"input-" + placeholder?.replaceAll(" ", "-") + "-password-eye"}
+            onChange={handleChanged}
+          />
+          <label
+            htmlFor={
+              "input-" + placeholder?.replaceAll(" ", "-") + "-password-eye"
+            }
+          ></label>
+        </div>
+        {helper}
+      </div>
+    );
   } else {
     return (
       <div
@@ -45,7 +91,9 @@ const InputField: FC<InputFieldProps> = ({
       >
         <input
           id={"input-" + placeholder?.replaceAll(" ", "-")}
-          className={`${helper !== undefined ? styles._hasHelper : ""}`}
+          className={`${helper !== undefined ? styles._hasHelper : ""} ${
+            validIndication ? styles.validIndicater : ""
+          }`}
           type={type}
           placeholder=" "
           name={placeholder}

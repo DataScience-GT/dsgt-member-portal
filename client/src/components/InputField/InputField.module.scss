@@ -59,8 +59,38 @@ $fill: #445379;
       // color: inherit;
       font-size: 1em;
     }
-    &:valid ~ label > span {
-      display: inline-block;
+  }
+}
+
+.validIndicater {
+  &:valid ~ label > span {
+    display: inline-block;
+  }
+}
+
+.eye {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  right: 12px;
+  top: 50%;
+  height: 26px;
+  transform: translate(0, -50%);
+  width: 26px;
+  > input[type="checkbox"] {
+    display: none;
+    &:checked + label {
+      background: url("../../assets/icons/eye1.svg");
+    }
+  }
+  > label {
+    height: 100%;
+    width: 100%;
+    background: url("../../assets/icons/eye2.svg");
+    cursor: pointer;
+    &:active {
+      transform: scale(0.95);
     }
   }
 }
@@ -98,5 +128,12 @@ $fill: #445379;
 ._hasHelper {
   &:focus ~ div {
     visibility: visible;
+  }
+}
+
+
+.PasswordInputField {
+  > input {
+    padding-right: 50px;
   }
 }
