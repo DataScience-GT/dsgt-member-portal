@@ -53,20 +53,30 @@ const Signup: FC<SignupProps> = () => {
         <FlexRow height="100%">
           <div className={`${styles.PanelHalf} ${styles.PanelLeft}`}></div>
           <div className={`${styles.PanelHalf}`}>
-            <FlexColumn spacing="center" align="center" height="100%" width="100%">
+            <FlexColumn
+              spacing="center"
+              align="center"
+              height="100%"
+              width="100%"
+              padding="0 20%"
+            >
+              <h1 className={styles.Header}>Sign Up</h1>
               <InputField
                 type="text"
                 placeholder="First Name"
+                width="100%"
                 onChange={handleChange_fname}
               />
               <InputField
                 type="text"
                 placeholder="Last Name"
+                width="100%"
                 onChange={handleChange_lname}
               />
               <InputField
                 type="email"
                 placeholder="Email"
+                width="100%"
                 onChange={handleChange_email}
               />
               <InputField
@@ -74,9 +84,24 @@ const Signup: FC<SignupProps> = () => {
                 placeholder="Password"
                 onChange={handleChange_password}
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                width="100%"
                 helper={<InputHelper lines={passwordHelperLines} />}
               />
-              <InputField type="submit" />
+              <InputField type="submit" placeholder="Sign Up" width="100%" />
+              <div className={styles.Divider}></div>
+              <div className={styles.bottom}>
+                <FlexRow
+                  spacing="space-between"
+                  align="center"
+                  height="fit-content"
+                  width="100%"
+                >
+                  <h3 className={styles.mini}>I already have an account:</h3>
+                  <a className={styles.InlineButton} href="/login">
+                    Login
+                  </a>
+                </FlexRow>
+              </div>
             </FlexColumn>
           </div>
         </FlexRow>

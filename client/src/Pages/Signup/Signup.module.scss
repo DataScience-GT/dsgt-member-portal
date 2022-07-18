@@ -1,7 +1,8 @@
 $bg: #dce5f2;
-$fill: #1a2554;
+// $fill: #1a2554;
 $borders: #c4ccd7;
-$text: #7C8297;
+$text: #7c8297;
+$fill: #445379;
 
 .Signup {
   display: flex;
@@ -10,6 +11,9 @@ $text: #7C8297;
   flex-direction: column;
   height: 100vh;
   flex-direction: column;
+  a {
+    text-decoration: none;
+  }
 }
 
 .Panel {
@@ -32,7 +36,7 @@ $text: #7C8297;
 }
 
 .PanelLeft {
-  background: red;
+  background: linear-gradient(to bottom, #21244a, #62749c);
   height: calc(100% - 40px);
   width: calc(50% - 40px);
   margin: 20px;
@@ -41,4 +45,47 @@ $text: #7C8297;
 .PanelRight {
   color: $text;
   border-color: $borders;
+}
+
+.Header {
+  font-size: 2em;
+  color: #525D85;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+.Divider {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 3px;
+  border-bottom: 3px solid $borders;
+  margin: 1.5em 0;
+}
+
+.mini {
+  color: #525D85;
+  display: inline-block;
+  width: fit-content;
+}
+.InlineButton {
+  display: inline-block;
+  border: 2px solid $borders;
+  background: #fff;
+  padding: 4px 12px;
+  padding-top: 2px;
+  width: fit-content;
+  color: $text;
+  font-weight: 500;
+  border-radius: 12px;
+  transition: 0.3s all ease;
+  &:hover {
+    filter: brightness(0.8);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+}
+.bottom {
+  width: 100%;
 }

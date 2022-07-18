@@ -31,7 +31,8 @@ const InputField: FC<InputFieldProps> = ({
           id={"input-" + placeholder?.replaceAll(" ", "-")}
           type="submit"
           onClick={onClick}
-          name="submit"
+          name={placeholder || "Submit"}
+          value={placeholder || "Submit"}
         />
       </div>
     );
