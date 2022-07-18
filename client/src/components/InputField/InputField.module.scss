@@ -1,0 +1,37 @@
+.InputField {
+  width: fit-content;
+  height: 42px;
+  //   border: 1px solid red;
+  position: relative;
+  margin-top: 1.2em;
+  margin-bottom: 10px;
+  > label {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    top: 10px;
+    left: 10px;
+    font-size: 1.2em;
+    line-height: 1em;
+    // border: 1px dashed blue;
+    transition: 0.3s all ease;
+    text-transform: capitalize;
+    z-index: -1;
+  }
+  > input {
+    height: 100%;
+    padding: 0 10px;
+    border: 2px solid rgb(32 163 158);
+    border-radius: 5px;
+    outline-offset: 2px;
+    font-size: 1.2em;
+    background: none;
+    &:valid ~ label,
+    &:focus ~ label {
+      top: -1.2em;
+      left: 0;
+      color: rgb(32 163 158);
+      font-size: 1em;
+    }
+  }
+}
