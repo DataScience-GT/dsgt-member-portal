@@ -5,7 +5,7 @@ import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./Signup.module.scss";
 
-import DSGTLogo from "../../assets/images/logos-20.png";
+import DSGTLogo from "../../assets/branding/logos-20.png";
 
 interface SignupProps {}
 
