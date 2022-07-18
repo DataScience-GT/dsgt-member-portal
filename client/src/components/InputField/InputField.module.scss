@@ -1,22 +1,35 @@
+$bg: #dce5f2;
+// $fill: #1a2554;
+$borders: #c4ccd7;
+$text: #7c8297;
+$fill: #445379;
+
 .InputField {
-  height: 42px;
+  height: 52px;
   //   border: 1px solid red;
   position: relative;
   margin-top: 1.2em;
   margin-bottom: 10px;
   overflow: visible;
+  z-index: 3;
   > label {
     display: block;
     position: absolute;
     z-index: 1;
-    top: 10px;
-    left: 10px;
-    font-size: 1.2em;
+    top: 17px;
+    left: 20px;
+    font-size: 1em;
     line-height: 1em;
     // border: 1px dashed blue;
     transition: 0.3s all ease;
     text-transform: capitalize;
-    z-index: -1;
+    z-index: 1;
+    user-select: none;
+    pointer-events: none;
+    font-weight: 500;
+
+    color: rgba($color: $text, $alpha: 0.7);
+
     > span {
       display: none;
       position: relative;
@@ -29,17 +42,19 @@
     position: relative;
     height: 100%;
     width: 100%;
-    padding: 0 10px;
-    border: 2px solid rgb(32 163 158);
-    border-radius: 5px;
+    padding: 4px 20px;
+    border: 2px solid $borders;
+    // border: 2px solid rgb(32 163 158);
+    border-radius: 15px;
     outline-offset: 2px;
-    font-size: 1.2em;
-    background: none;
+    font-size: 1em;
+    background: #fff;
     &:not(:placeholder-shown) ~ label,
     &:focus ~ label {
-      top: -1.2em;
-      left: 0;
-      color: rgb(32 163 158);
+      top: -1.3em;
+      // left: 0;
+      // color: rgb(32 163 158);
+      // color: inherit;
       font-size: 1em;
     }
     &:valid ~ label > span {

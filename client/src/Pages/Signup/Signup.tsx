@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import InputField from "../../components/InputField/InputField";
 import InputHelper from "../../components/InputHelper/InputHelper";
+import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./Signup.module.scss";
 
@@ -51,7 +52,33 @@ const Signup: FC<SignupProps> = () => {
       <div className={styles.Panel}>
         <FlexRow height="100%">
           <div className={`${styles.PanelHalf} ${styles.PanelLeft}`}></div>
-          <div className={`${styles.PanelHalf}`}></div>
+          <div className={`${styles.PanelHalf}`}>
+            <FlexColumn spacing="center" align="center" height="100%" width="100%">
+              <InputField
+                type="text"
+                placeholder="First Name"
+                onChange={handleChange_fname}
+              />
+              <InputField
+                type="text"
+                placeholder="Last Name"
+                onChange={handleChange_lname}
+              />
+              <InputField
+                type="email"
+                placeholder="Email"
+                onChange={handleChange_email}
+              />
+              <InputField
+                type="password"
+                placeholder="Password"
+                onChange={handleChange_password}
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                helper={<InputHelper lines={passwordHelperLines} />}
+              />
+              <InputField type="submit" />
+            </FlexColumn>
+          </div>
         </FlexRow>
       </div>
     </div>
@@ -59,29 +86,7 @@ const Signup: FC<SignupProps> = () => {
 };
 
 {
-  /* <InputField
-        type="text"
-        placeholder="First Name"
-        onChange={handleChange_fname}
-      />
-      <InputField
-        type="text"
-        placeholder="Last Name"
-        onChange={handleChange_lname}
-      />
-      <InputField
-        type="email"
-        placeholder="Email"
-        onChange={handleChange_email}
-      />
-      <InputField
-        type="password"
-        placeholder="Password"
-        onChange={handleChange_password}
-        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-        helper={<InputHelper lines={passwordHelperLines} />}
-      />
-      <InputField type="submit" /> */
+  /*  */
 }
 
 export default Signup;

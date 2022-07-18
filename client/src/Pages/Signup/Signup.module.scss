@@ -1,7 +1,7 @@
 $bg: #dce5f2;
 $fill: #1a2554;
-$borders: #a5b3d4;
-$text: #08091c;
+$borders: #c4ccd7;
+$text: #7C8297;
 
 .Signup {
   display: flex;
@@ -16,6 +16,7 @@ $text: #08091c;
   display: block;
   position: relative;
   width: 80%;
+  max-width: 1200px;
   height: 80%;
   // border: 1px solid black;
   background: $bg;
@@ -35,4 +36,9 @@ $text: #08091c;
   height: calc(100% - 40px);
   width: calc(50% - 40px);
   margin: 20px;
+}
+
+.PanelRight {
+  color: $text;
+  border-color: $borders;
 }
