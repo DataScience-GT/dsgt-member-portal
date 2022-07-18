@@ -1,23 +1,12 @@
 import React, { FC, useEffect, useState } from "react";
 import InputField from "../../components/InputField/InputField";
-import InputHelper from "../../components/InputHelper/InputHelper";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
-import styles from "./Signup.module.scss";
+import styles from "./Login.module.scss";
 
-import DSGTLogo from "../../assets/images/logos-20.png";
+interface LoginProps {}
 
-interface SignupProps {}
-
-const passwordHelperLines = [
-  "Requires:",
-  "1 Capital Letter",
-  "1 Lowercase Letter",
-  "1 Number",
-  "8 Total Characters",
-];
-
-const Signup: FC<SignupProps> = () => {
+const Login: FC<LoginProps> = () => {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
@@ -47,15 +36,10 @@ const Signup: FC<SignupProps> = () => {
   useEffect(() => {
     console.log(password);
   }, [password]);
-
   return (
-    //introduce states for each value and prevent/allow certain chars
-    <div className={styles.Signup} data-testid="Signup">
+    <div className={styles.Login} data-testid="Login">
       <div className={styles.Panel}>
         <FlexRow height="100%">
-          <div className={`${styles.PanelHalf} ${styles.PanelLeft}`}>
-            <img src={DSGTLogo} alt="DSGT Logo" />
-          </div>
           <div className={`${styles.PanelHalf}`}>
             <FlexColumn
               spacing="center"
@@ -64,19 +48,7 @@ const Signup: FC<SignupProps> = () => {
               width="100%"
               padding="0 20%"
             >
-              <h1 className={styles.Header}>Sign Up</h1>
-              <InputField
-                type="text"
-                placeholder="First Name"
-                width="100%"
-                onChange={handleChange_fname}
-              />
-              <InputField
-                type="text"
-                placeholder="Last Name"
-                width="100%"
-                onChange={handleChange_lname}
-              />
+              <h1 className={styles.Header}>Welcome Back!</h1>
               <InputField
                 type="email"
                 placeholder="Email"
@@ -89,9 +61,8 @@ const Signup: FC<SignupProps> = () => {
                 onChange={handleChange_password}
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 width="100%"
-                helper={<InputHelper lines={passwordHelperLines} />}
               />
-              <InputField type="submit" placeholder="Sign Up" width="100%" />
+              <InputField type="submit" placeholder="Login" width="100%" />
               <div className={styles.Divider}></div>
               <div className={styles.bottom}>
                 <FlexRow
@@ -100,22 +71,19 @@ const Signup: FC<SignupProps> = () => {
                   height="fit-content"
                   width="100%"
                 >
-                  <h3 className={styles.mini}>I already have an account:</h3>
-                  <a className={styles.InlineButton} href="/login">
-                    Login
+                  <h3 className={styles.mini}>I need an account:</h3>
+                  <a className={styles.InlineButton} href="/signup">
+                    Sign Up
                   </a>
                 </FlexRow>
               </div>
             </FlexColumn>
           </div>
+          <div className={`${styles.PanelHalf} ${styles.PanelRight}`}></div>
         </FlexRow>
       </div>
     </div>
   );
 };
 
-{
-  /*  */
-}
-
-export default Signup;
+export default Login;

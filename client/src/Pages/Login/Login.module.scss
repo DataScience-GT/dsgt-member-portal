@@ -4,7 +4,7 @@ $borders: #c4ccd7;
 $text: #7c8297;
 $fill: #445379;
 
-.Signup {
+.Login {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,20 +35,13 @@ $fill: #445379;
   border-radius: 30px;
 }
 
-.PanelLeft {
+.PanelRight {
   background: linear-gradient(to bottom, #21244a, #62749c);
   height: calc(100% - 40px);
   width: calc(50% - 40px);
   margin: 20px;
   // transform: translateX(calc(100% + 40px));
   z-index: 4;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  > img {
-    width: 90%;
-    height: auto;
-  }
 }
 
 .Header {
