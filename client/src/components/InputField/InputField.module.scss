@@ -59,10 +59,13 @@
     position: relative;
 
     height: 100%;
+    width: 100%;
     padding: 10px 20px;
-    border-radius: 10px;
+    margin-top: 1em;
+    border-radius: 5px;
     transition: 0.3s all ease;
     cursor: pointer;
+
     border: none;
     &:hover {
       filter: brightness(0.8);
@@ -70,5 +73,11 @@
     &:active {
       transform: scale(0.95);
     }
+  }
+}
+
+._hasHelper {
+  &:focus ~ div {
+    visibility: visible;
   }
 }

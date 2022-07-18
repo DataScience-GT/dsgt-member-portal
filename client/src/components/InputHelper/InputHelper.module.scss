@@ -1,0 +1,33 @@
+.InputHelper {
+  display: block;
+  position: absolute;
+  //   width: 200px;
+  width: fit-content;
+  height: fit-content;
+  background: rgb(56, 56, 56);
+  top: 50%;
+  //   right: -225px;
+  right: 0;
+  visibility: hidden;
+  transform: translate(calc(100% + 24px), -50%);
+  padding: 10px;
+  border-radius: 5px;
+  > p {
+    width: 100%;
+    display: block;
+    color: #fff;
+  }
+
+  &::before {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translate(-24px, -50%);
+
+    border: 15px solid transparent;
+    border-right: 20px solid rgb(56, 56, 56);
+  }
+}

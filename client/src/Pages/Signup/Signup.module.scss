@@ -1,3 +1,8 @@
+$bg: #dce5f2;
+$fill: #1a2554;
+$borders: #a5b3d4;
+$text: #08091c;
+
 .Signup {
   display: flex;
   justify-content: center;
@@ -5,4 +10,29 @@
   flex-direction: column;
   height: 100vh;
   flex-direction: column;
+}
+
+.Panel {
+  display: block;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  // border: 1px solid black;
+  background: $bg;
+  border-radius: 40px;
+}
+
+.PanelHalf {
+  display: block;
+  position: relative;
+  width: 50%;
+  height: 100%;
+  border-radius: 30px;
+}
+
+.PanelLeft {
+  background: red;
+  height: calc(100% - 40px);
+  width: calc(50% - 40px);
+  margin: 20px;
 }

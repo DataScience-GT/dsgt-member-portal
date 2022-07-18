@@ -7,6 +7,8 @@ interface InputFieldProps {
   width?: string;
   onClick?: React.MouseEventHandler<HTMLInputElement>;
   onChange?: React.KeyboardEventHandler<HTMLInputElement>;
+  pattern?: string;
+  helper?: React.ReactNode;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -15,6 +17,8 @@ const InputField: FC<InputFieldProps> = ({
   width,
   onClick,
   onChange,
+  pattern,
+  helper,
 }: InputFieldProps) => {
   if (type === "submit") {
     return (
@@ -27,6 +31,7 @@ const InputField: FC<InputFieldProps> = ({
           id={"input-" + placeholder?.replaceAll(" ", "-")}
           type="submit"
           onClick={onClick}
+          name="submit"
         />
       </div>
     );
@@ -39,15 +44,19 @@ const InputField: FC<InputFieldProps> = ({
       >
         <input
           id={"input-" + placeholder?.replaceAll(" ", "-")}
+          className={`${helper !== undefined ? styles._hasHelper : ""}`}
           type={type}
           placeholder=" "
+          name={placeholder}
           required
           onChange={onChange}
+          pattern={pattern}
         />
         <label htmlFor={"input-" + placeholder}>
           {placeholder}
           <span>✓</span>
         </label>
+        {helper}
       </div>
     );
   }

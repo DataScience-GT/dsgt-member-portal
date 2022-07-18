@@ -6,6 +6,7 @@ interface FlexRowProps {
   gap?: number;
   spacing?: string;
   padding?: string;
+  height?: string;
 }
 
 const FlexRow: FC<FlexRowProps> = ({
@@ -13,10 +14,16 @@ const FlexRow: FC<FlexRowProps> = ({
   gap,
   spacing,
   padding,
+  height,
 }: FlexRowProps) => (
   <div
     className={styles.FlexRow}
-    style={{ gap: `${gap}px`, justifyContent: spacing, padding: padding }}
+    style={{
+      gap: `${gap}px`,
+      justifyContent: spacing,
+      padding: padding,
+      height: height,
+    }}
     data-testid="FlexRow"
   >
     {children}
