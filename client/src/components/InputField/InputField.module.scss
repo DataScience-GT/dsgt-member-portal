@@ -1,10 +1,10 @@
 .InputField {
-  width: fit-content;
   height: 42px;
   //   border: 1px solid red;
   position: relative;
   margin-top: 1.2em;
   margin-bottom: 10px;
+  overflow: visible;
   > label {
     display: block;
     position: absolute;
@@ -17,21 +17,58 @@
     transition: 0.3s all ease;
     text-transform: capitalize;
     z-index: -1;
+    > span {
+      display: none;
+      position: relative;
+      font-size: inherit;
+      color: green;
+      margin-left: 6px;
+    }
   }
   > input {
+    position: relative;
     height: 100%;
+    width: 100%;
     padding: 0 10px;
     border: 2px solid rgb(32 163 158);
     border-radius: 5px;
     outline-offset: 2px;
     font-size: 1.2em;
     background: none;
-    &:valid ~ label,
+    &:not(:placeholder-shown) ~ label,
     &:focus ~ label {
       top: -1.2em;
       left: 0;
       color: rgb(32 163 158);
       font-size: 1em;
+    }
+    &:valid ~ label > span {
+      display: inline-block;
+    }
+  }
+}
+
+.InputFieldSubmit {
+  height: 42px;
+  width: auto;
+  > input {
+    background: rgb(32 163 158);
+    color: #fff;
+    font-size: 1.2em;
+    float: right;
+    position: relative;
+
+    height: 100%;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: 0.3s all ease;
+    cursor: pointer;
+    border: none;
+    &:hover {
+      filter: brightness(0.8);
+    }
+    &:active {
+      transform: scale(0.95);
     }
   }
 }
