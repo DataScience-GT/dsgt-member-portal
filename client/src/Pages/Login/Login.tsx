@@ -36,13 +36,10 @@ const Login: FC<LoginProps> = () => {
 
   //handle form submission
   const handleSubmit = async () => {
-    const response = await fetch("/api", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    await fetch("/api").then(async (res) => {
+      const json = await res.text();
+      console.log(json);
     });
-    console.log(response);
   };
 
   return (
