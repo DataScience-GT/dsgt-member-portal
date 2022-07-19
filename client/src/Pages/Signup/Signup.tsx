@@ -44,10 +44,6 @@ const Signup: FC<SignupProps> = () => {
     setPassword(e.target.value);
   };
 
-  useEffect(() => {
-    console.log(password);
-  }, [password]);
-
   return (
     //introduce states for each value and prevent/allow certain chars
     <div className={styles.Signup} data-testid="Signup">
