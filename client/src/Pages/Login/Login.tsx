@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
@@ -7,20 +8,12 @@ import styles from "./Login.module.scss";
 interface LoginProps {}
 
 const Login: FC<LoginProps> = () => {
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
+  const [error, setError] = useState("");
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //handle all of the form elements updating (save input to state)
-  const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
-    setFname(e.target.value);
-  };
-  const handleChange_lname = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
-    setLname(e.target.value);
-  };
   const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@. ]/g, "");
     setEmail(e.target.value);
@@ -36,9 +29,22 @@ const Login: FC<LoginProps> = () => {
 
   //handle form submission
   const handleSubmit = async () => {
-    await fetch("/api").then(async (res) => {
-      const json = await res.text();
-      console.log(json);
+    await fetch("/api/user/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({ email: email, password: password }),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!json.ok && json.error) {
+        setError(json.error);
+      } else {
+        setError("");
+        //save session key to localstorage
+        localStorage.setItem("dsgt-portal-session-key", json.session_key);
+      }
     });
   };
 
@@ -74,6 +80,7 @@ const Login: FC<LoginProps> = () => {
                 width="100%"
                 onClick={handleSubmit}
               />
+              <ErrorText>{error}</ErrorText>
               <div className={styles.Divider}></div>
               <div className={styles.bottom}>
                 <FlexRow
