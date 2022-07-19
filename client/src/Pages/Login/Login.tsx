@@ -29,6 +29,7 @@ const Login: FC<LoginProps> = () => {
 
   //handle form submission
   const handleSubmit = async () => {
+    setError("");
     await fetch("/api/user/login", {
       method: "POST",
       headers: {
@@ -41,7 +42,6 @@ const Login: FC<LoginProps> = () => {
       if (!json.ok && json.error) {
         setError(json.error);
       } else {
-        setError("");
         //save session key to localstorage
         localStorage.setItem("dsgt-portal-session-key", json.session_key);
       }
