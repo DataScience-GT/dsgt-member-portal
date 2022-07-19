@@ -12,45 +12,57 @@ import {
   getCountUserRequestsWithinTimeframe,
 } from "../model";
 
-const RateLimit = async (req: Request, res: Response, next: NextFunction) => {
-  const clientIp = requestIp.getClientIp(req);
-  //save the request
-  const path = req.originalUrl as string;
+/**
+ * allows or blocks requests based on rate limiting. Set both parameters to undefined to only log the request, but not ratelimit.
+ * @param rate_limit the number of requests allowed within the timeframe
+ * @param rate_timeframe the timeframe in MS to check for recent requests
+ * @returns middleware
+ */
+const RateLimit = (
+  rate_limit: number | undefined,
+  rate_timeframe: number | undefined
+) => {
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const clientIp = requestIp.getClientIp(req);
+    res.locals.clientIp = clientIp;
+    //save the request
+    const path = req.originalUrl as string;
 
-  //get the rate limiting data
-  let rate = rates.find((x) => x.path == path);
-  if (path && rate) {
-    let x = await getCountUserRequestsWithinTimeframe(
-      clientIp,
-      path,
-      rate.timeframe
-    );
-    let countRecent = x[0].count;
-    if (countRecent >= rate.limit) {
-      //block the request
-      next(new Error("Too many requests. Please wait between requests."));
+    //get the rate limiting data
+    if (path && rate_limit && rate_timeframe) {
+      let x = await getCountUserRequestsWithinTimeframe(
+        clientIp,
+        path,
+        rate_timeframe
+      );
+      let countRecent = x[0].count;
+      if (countRecent >= rate_limit) {
+        //block the request
+        next(new Error("Too many requests. Please wait between requests."));
+      } else {
+        await insertApiRequest(clientIp, path);
+        next();
+      }
     } else {
       await insertApiRequest(clientIp, path);
       next();
     }
-  } else {
-    await insertApiRequest(clientIp, path);
     next();
-  }
+  };
 };
 
 export default RateLimit;
 
-interface Rate {
-  path: string;
-  limit: number;
-  timeframe: number;
-}
+// interface Rate {
+//   path: string;
+//   limit: number;
+//   timeframe: number;
+// }
 
-const rates: Rate[] = [
-  {
-    path: "/api/ip",
-    limit: 1,
-    timeframe: 1000 * 60,
-  },
-];
+// const rates: Rate[] = [
+//   {
+//     path: "/api/ip",
+//     limit: 1,
+//     timeframe: 1000 * 60,
+//   },
+// ];

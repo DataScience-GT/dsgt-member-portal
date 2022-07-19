@@ -33,9 +33,9 @@ router.get(
 
 router.get(
   "/ip",
-  RateLimit,
+  RateLimit(1, 1000),
   (req: Request, res: Response, next: NextFunction) => {
-    res.json({ ok: 1 });
+    res.json({ ok: 1, ip: res.locals.clientIp });
   }
 );
 
