@@ -1,7 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
 const router = express.Router();
 
-import { apiAuthenticate } from "../Auth";
+import apiAuthenticate from "../middleware/Auth";
+import RateLimit from "../middleware/RateLimiting";
 
 //setup /api/user
 const user = require("./user");
@@ -25,6 +26,11 @@ router.get(
     res.json({ ok: 1 });
   }
 );
+
+router.get("/ip", RateLimit, (req: Request, res: Response, next: NextFunction) => {
+  // res.send("welcome to the api!");
+  res.json(req.socket.remoteAddress);
+});
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;

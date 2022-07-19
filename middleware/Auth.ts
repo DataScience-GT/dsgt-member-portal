@@ -56,4 +56,4 @@ const apiAuthenticate = (
 //   }
 // };
 
-export { apiAuthenticate };
+export default apiAuthenticate;

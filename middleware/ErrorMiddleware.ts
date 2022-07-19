@@ -2,7 +2,7 @@
 import { Request, Response, NextFunction } from "express";
 
 //setup logger
-import { log, warning, error } from "./Logger";
+import { log, warning, error } from "../Logger";
 
 const errorMiddleware = (
   err: Error,

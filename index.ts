@@ -2,7 +2,7 @@ const path = require("node:path");
 
 //setup express
 import express, { Request, Response, NextFunction } from "express";
-import errorMiddleware from "./ErrorMiddleware";
+import errorMiddleware from "./middleware/ErrorMiddleware";
 const app = express();
 
 app.use(express.json());
