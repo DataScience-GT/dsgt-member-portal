@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import InputField from "../../components/InputField/InputField";
 import InputHelper from "../../components/InputHelper/InputHelper";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
@@ -23,6 +23,7 @@ const Signup: FC<SignupProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //handle all of the form elements updating (save input to state)
   const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
     setFname(e.target.value);
