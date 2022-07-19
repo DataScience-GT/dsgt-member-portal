@@ -33,9 +33,8 @@ const Login: FC<LoginProps> = () => {
     setPassword(e.target.value);
   };
 
-  useEffect(() => {
-    console.log(password);
-  }, [password]);
+  
+
   return (
     <div className={styles.Login} data-testid="Login">
       <div className={styles.Panel}>
