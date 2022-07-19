@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import InputField from "../../components/InputField/InputField";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
@@ -12,6 +12,7 @@ const Login: FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  //handle all of the form elements updating (save input to state)
   const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
     setFname(e.target.value);
@@ -33,7 +34,16 @@ const Login: FC<LoginProps> = () => {
     setPassword(e.target.value);
   };
 
-  
+  //handle form submission
+  const handleSubmit = async () => {
+    const response = await fetch("/api", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    console.log(response);
+  };
 
   return (
     <div className={styles.Login} data-testid="Login">
@@ -61,7 +71,12 @@ const Login: FC<LoginProps> = () => {
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 width="100%"
               />
-              <InputField type="submit" placeholder="Login" width="100%" />
+              <InputField
+                type="submit"
+                placeholder="Login"
+                width="100%"
+                onClick={handleSubmit}
+              />
               <div className={styles.Divider}></div>
               <div className={styles.bottom}>
                 <FlexRow
