@@ -14,9 +14,10 @@ import {
 
 /**
  * allows or blocks requests based on rate limiting. Set both parameters to undefined to only log the request, but not ratelimit.
+ * @Note If combined with ApiAuthenticate, do this middleware 2nd. Check auth first.
  * @param rate_limit the number of requests allowed within the timeframe
  * @param rate_timeframe the timeframe in MS to check for recent requests
- * @returns middleware
+ * @returns middleware function
  */
 const RateLimit = (
   rate_limit: number | undefined,

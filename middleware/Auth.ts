@@ -2,7 +2,10 @@ import { Request, Response, NextFunction } from "express";
 
 //dotenv
 
-const apiAuthenticate = (
+/**
+ * Authenticates the reqeust by a bearer api token.
+ */
+const ApiAuthenticate = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -59,4 +62,4 @@ const apiAuthenticate = (
 //   }
 // };
 
-export default apiAuthenticate;
+export default ApiAuthenticate;
