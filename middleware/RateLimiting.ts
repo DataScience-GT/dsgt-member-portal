@@ -1,3 +1,5 @@
+const requestIp = require("request-ip");
+
 //express
 import { Request, Response, NextFunction } from "express";
 
@@ -5,9 +7,9 @@ import { Request, Response, NextFunction } from "express";
 import { log, warning, error } from "../Logger";
 
 const RateLimit = (req: Request, res: Response, next: NextFunction) => {
-  var ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-  console.log(ip);
-  
+  const clientIp = requestIp.getClientIp(req);
+  //save the request
+  const path = req.originalUrl;
   next();
 };
 

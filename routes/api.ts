@@ -27,10 +27,13 @@ router.get(
   }
 );
 
-router.get("/ip", RateLimit, (req: Request, res: Response, next: NextFunction) => {
-  // res.send("welcome to the api!");
-  res.json(req.socket.remoteAddress);
-});
+router.get(
+  "/ip",
+  RateLimit,
+  (req: Request, res: Response, next: NextFunction) => {
+    res.json({ ok: 1 });
+  }
+);
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;
