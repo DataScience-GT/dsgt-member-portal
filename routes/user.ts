@@ -98,3 +98,5 @@ const generateSessionKey = (length: number): string => {
 };
 
 module.exports = router;
+export default router;
+

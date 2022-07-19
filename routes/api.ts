@@ -5,12 +5,16 @@ import apiAuthenticate from "../middleware/Auth";
 import RateLimit from "../middleware/RateLimiting";
 
 //setup /api/user
-const user = require("./user");
+import user from "./user";
 router.use("/user", apiAuthenticate, user);
 
 //setup /api/session
-const session = require("./session");
+import session from "./session";
 router.use("/session", apiAuthenticate, session);
+
+//setup /api/rates
+import rates from "./rates";
+router.use("/rates", apiAuthenticate, rates);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");

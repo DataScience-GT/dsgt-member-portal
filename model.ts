@@ -142,6 +142,42 @@ export const validateSession = async (session_id: string) => {
   }
 };
 
+// --------------- rate limiting ---------------
+/**
+ * gets all api requests
+ * @returns json object
+ */
+export const getApiRequests = async () => {
+  return await db.select("*").from("ratelimiting");
+};
+
+/**
+ * inserts an api request into the ratelimiting table
+ * @param user_ip the ip of the user making the request
+ * @param pathname the path of the request (ex: /api/auth )
+ */
+export const insertApiRequest = async (user_ip: string, pathname: string) => {
+  await db("ratelimiting").insert({ from_ip: user_ip, pathname: pathname });
+};
+
+/**
+ * gets the count of requests made by a user of a specific path in the last period of time.
+ * @param user_ip
+ * @param pathname
+ * @param time the last x milliseconds to check for requests
+ */
+export const getCountUserRequestsWithinTimeframe = async (
+  user_ip: string,
+  pathname: string,
+  time: number
+) => {
+  let now = new Date();
+  let t1 = new Date(now.getTime() - time);
+  return await db("ratelimiting")
+    .count("*")
+    .where("created_at", ">=", t1.toISOString());
+};
+
 // export const loginUser = async ({ email, password }: Required<LoginUser>) => {
 //   let hash = md5(password);
 //   let res = await db("user")

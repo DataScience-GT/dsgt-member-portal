@@ -1,0 +1,6 @@
+{
+    "/api/ip": {
+        "limit": 10,
+        "timeframe": 60000
+    }
+}

@@ -18,9 +18,12 @@ const apiAuthenticate = (
         next(err);
       }
     } else {
-      let err = new Error("missing authorization header");
+      let err = new Error("authorization must be in the form of bearer token");
       next(err);
     }
+  } else {
+    let err = new Error("missing authorization header");
+    next(err);
   }
 };
 
