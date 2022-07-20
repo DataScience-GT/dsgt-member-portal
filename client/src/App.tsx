@@ -28,13 +28,21 @@ function App() {
           body: JSON.stringify({ session_id: session_key }),
         }).then(async (res) => {
           const json = await res.json();
+          console.log(json);
           if (!json.ok && json.error) {
             //error -- invalidate session
             localStorage.removeItem("dsgt-portal-session-key");
             setLoading(false);
           } else {
             //success -- allow movement to accessable pages
-            setUserRole("member");
+            setUserRole(json.role);
+
+            if (
+              window.location.pathname.toLowerCase() == "/login" ||
+              window.location.pathname.toLowerCase() == "/signup"
+            ) {
+              window.location.href = "/portal";
+            }
             setLoading(false);
           }
         });
@@ -66,7 +74,10 @@ function App() {
             <Route path="/*" element={<Login />} />
             <Route path="/Signup" element={<Signup />} />
             <Route path="/Docs/*" element={<Docs />} />
-            {userRole === "member" ? (
+            {userRole === "member" ||
+            userRole === "moderator" ||
+            userRole === "administrator" ||
+            userRole === "owner" ? (
               <Route path="/Portal" element={<Portal />} />
             ) : (
               ""
