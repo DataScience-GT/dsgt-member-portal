@@ -20,22 +20,23 @@ router.post(
     if (!sessionKey) {
       next(new Error("Missing 1 or more required fields."));
       return;
-    }
-    let x = await validateSession(sessionKey);
-    if (!x) {
-      next(new Error("Session not found"));
     } else {
-      let session_created_at = new Date(x.created_at);
-      let now = new Date();
-      let dif_ms = now.getTime() - session_created_at.getTime();
-      let dif_s = dif_ms / 1000;
-      let dif_m = dif_s / 60;
-      let dif_h = dif_m / 60;
-      let timeout = process.env.SESSION_TIMEOUT_H;
-      if (x.enabled && dif_h < parseFloat(timeout || "2")) {
-        res.json({ ok: 1, valid: true, fname: x.fname });
+      let x = await validateSession(sessionKey);
+      if (!x) {
+        next(new Error("Session not found"));
       } else {
-        res.json({ ok: 1, valid: false, fname: x.fname });
+        let session_created_at = new Date(x.created_at);
+        let now = new Date();
+        let dif_ms = now.getTime() - session_created_at.getTime();
+        let dif_s = dif_ms / 1000;
+        let dif_m = dif_s / 60;
+        let dif_h = dif_m / 60;
+        let timeout = process.env.SESSION_TIMEOUT_H;
+        if (x.enabled && dif_h < parseFloat(timeout || "2")) {
+          res.json({ ok: 1, valid: true, fname: x.fname });
+        } else {
+          res.json({ ok: 1, valid: false, fname: x.fname });
+        }
       }
     }
   }
@@ -43,4 +44,3 @@ router.post(
 
 module.exports = router;
 export default router;
-

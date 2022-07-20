@@ -4,17 +4,19 @@ const router = express.Router();
 import ApiAuthenticate from "../middleware/Auth";
 import RateLimit from "../middleware/RateLimiting";
 
+//, RateLimit(5, 1000 * 60)
+
 //setup /api/user
 import user from "./user";
-router.use("/user", ApiAuthenticate, RateLimit(5, 1000 * 60), user);
+router.use("/user", ApiAuthenticate, RateLimit(10, 1000 * 60), user);
 
 //setup /api/session
 import session from "./session";
-router.use("/session", ApiAuthenticate, RateLimit(5, 1000 * 60), session);
+router.use("/session", ApiAuthenticate, session);
 
 //setup /api/rates
 import rates from "./rates";
-router.use("/rates", ApiAuthenticate, RateLimit(5, 1000 * 60), rates);
+router.use("/rates", ApiAuthenticate, rates);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
@@ -35,7 +37,7 @@ router.get(
 router.get(
   "/ip",
   ApiAuthenticate,
-  RateLimit(10, 1000 * 60), // 10 per minute
+  RateLimit(100, 1000 * 60), // 10 per minute
   (req: Request, res: Response, next: NextFunction) => {
     res.json({ ok: 1, ip: res.locals.clientIp });
   }

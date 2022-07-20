@@ -32,12 +32,12 @@ router.post(
       lname: req.body.lname,
       password: req.body.password,
     };
-    u.email = u.email.toLowerCase();
-    u.fname = u.fname.toLowerCase();
-    u.lname = u.lname.toLowerCase();
     if (!(u.email && u.fname && u.lname && u.password)) {
       next(new Error("Missing 1 or more required fields."));
     }
+    u.email = u.email.toLowerCase();
+    u.fname = u.fname.toLowerCase();
+    u.lname = u.lname.toLowerCase();
     let emailUsed = await checkUserEmail(u.email);
     if (emailUsed) {
       next(
@@ -60,11 +60,11 @@ router.post(
       email: req.body.email,
       password: req.body.password,
     };
-    u.email = u.email.toLowerCase();
     if (!(u.email && u.password)) {
       next(new Error("Missing 1 or more required fields."));
       return;
     }
+    u.email = u.email.toLowerCase();
     let emailUsed = await checkUserEmail(u.email);
     if (!emailUsed) {
       next(new Error("An account with that email does not exist."));
@@ -99,4 +99,3 @@ const generateSessionKey = (length: number): string => {
 
 module.exports = router;
 export default router;
-

@@ -48,7 +48,6 @@ const RateLimit = (
       await insertApiRequest(clientIp, path);
       next();
     }
-    next();
   };
 };
 
