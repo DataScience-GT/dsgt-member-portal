@@ -44,6 +44,7 @@ const Login: FC<LoginProps> = () => {
       } else {
         //save session key to localstorage
         localStorage.setItem("dsgt-portal-session-key", json.session_key);
+        window.location.href = "/portal";
       }
     });
   };
@@ -60,41 +61,43 @@ const Login: FC<LoginProps> = () => {
               width="100%"
               padding="0 20%"
             >
-              <h1 className={styles.Header}>Welcome Back!</h1>
-              <InputField
-                type="email"
-                placeholder="Email"
-                width="100%"
-                onChange={handleChange_email}
-              />
-              <InputField
-                type="password"
-                placeholder="Password"
-                onChange={handleChange_password}
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                width="100%"
-              />
-              <InputField
-                type="submit"
-                placeholder="Login"
-                width="100%"
-                onClick={handleSubmit}
-              />
-              <ErrorText>{error}</ErrorText>
-              <div className={styles.Divider}></div>
-              <div className={styles.bottom}>
-                <FlexRow
-                  spacing="space-between"
-                  align="center"
-                  height="fit-content"
+              <form>
+                <h1 className={styles.Header}>Welcome Back!</h1>
+                <InputField
+                  type="email"
+                  placeholder="Email"
                   width="100%"
-                >
-                  <h3 className={styles.mini}>I need an account:</h3>
-                  <a className={styles.InlineButton} href="/signup">
-                    Sign Up
-                  </a>
-                </FlexRow>
-              </div>
+                  onChange={handleChange_email}
+                />
+                <InputField
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleChange_password}
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  width="100%"
+                />
+                <InputField
+                  type="submit"
+                  placeholder="Login"
+                  width="100%"
+                  onClick={handleSubmit}
+                />
+                <ErrorText>{error}</ErrorText>
+                <div className={styles.Divider}></div>
+                <div className={styles.bottom}>
+                  <FlexRow
+                    spacing="space-between"
+                    align="center"
+                    height="fit-content"
+                    width="100%"
+                  >
+                    <h3 className={styles.mini}>I need an account:</h3>
+                    <a className={styles.InlineButton} href="/signup">
+                      Sign Up
+                    </a>
+                  </FlexRow>
+                </div>
+              </form>
             </FlexColumn>
           </div>
           <div className={`${styles.PanelHalf} ${styles.PanelRight}`}></div>
