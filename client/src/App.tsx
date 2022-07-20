@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 
@@ -10,12 +10,14 @@ import Portal from "./Pages/Portal/Portal";
 import { json } from "stream/consumers";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState("");
+
   useEffect(() => {
     //check if logged in --
     let session_key = localStorage.getItem("dsgt-portal-session-key");
     if (session_key) {
       //validate session
-      console.log("validate");
       const validateSession = async () => {
         await fetch("/api/session/validate", {
           method: "POST",
@@ -23,17 +25,18 @@ function App() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
           },
-          body: JSON.stringify({ session_key: session_key }),
+          body: JSON.stringify({ session_id: session_key }),
         }).then(async (res) => {
-          // const json = await res.json();
-          // if (!json.ok && json.error) {
-          //   //error -- invalidate session
-          //   localStorage.removeItem("dsgt-portal-session-key");
-          // } else {
-          //   //save session key to localstorage
-          //   console.log("validate success");
-          // }
-          console.log(await res.text());
+          const json = await res.json();
+          if (!json.ok && json.error) {
+            //error -- invalidate session
+            localStorage.removeItem("dsgt-portal-session-key");
+            setLoading(false);
+          } else {
+            //success -- allow movement to accessable pages
+            setUserRole("member");
+            setLoading(false);
+          }
         });
       };
 
@@ -41,6 +44,7 @@ function App() {
       //if so, move to portal home page
     } else {
       //if not, move to logged in page
+      setLoading(false);
       if (
         window.location.pathname.toLowerCase() !== "/login" &&
         window.location.pathname.toLowerCase() !== "/signup" &&
@@ -51,18 +55,27 @@ function App() {
     }
   }, []);
 
-  return (
-    <div className="App">
-      <Router>
-        <Routes>
-          <Route path="/*" element={<Login />} />
-          <Route path="/Signup" element={<Signup />} />
-          <Route path="/Docs/*" element={<Docs />} />
-          <Route path="/Portal" element={<Portal />} />
-        </Routes>
-      </Router>
-    </div>
-  );
+  if (loading) {
+    //make a nice loading page in the future
+    return <div>loading...</div>;
+  } else {
+    return (
+      <div className="App">
+        <Router>
+          <Routes>
+            <Route path="/*" element={<Login />} />
+            <Route path="/Signup" element={<Signup />} />
+            <Route path="/Docs/*" element={<Docs />} />
+            {userRole === "member" ? (
+              <Route path="/Portal" element={<Portal />} />
+            ) : (
+              ""
+            )}
+          </Routes>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;
