@@ -33,9 +33,9 @@ router.post(
         let dif_h = dif_m / 60;
         let timeout = process.env.SESSION_TIMEOUT_H;
         if (x.enabled && dif_h < parseFloat(timeout || "2")) {
-          res.json({ ok: 1, valid: true, fname: x.fname });
+          res.json({ ok: 1, valid: true, fname: x.fname, role: x.role });
         } else {
-          res.json({ ok: 1, valid: false, fname: x.fname });
+          res.json({ ok: 1, valid: false, fname: x.fname, role: x.role });
         }
       }
     }

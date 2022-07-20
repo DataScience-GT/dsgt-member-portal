@@ -4,6 +4,8 @@ export interface User {
   fname?: string;
   lname?: string;
   password?: string;
+  enabled?: boolean;
+  role?: string;
   created_at?: Date;
 }
 

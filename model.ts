@@ -46,6 +46,7 @@ export const getUsers = () => {
       "fname",
       "lname",
       "enabled",
+      "role",
       "created_at"
     )
     .from("user");
@@ -80,6 +81,37 @@ export const registerUser = async (
 };
 
 /**
+ * updates a user based on their email
+ * @param param0 User
+ */
+export const updateUser = async ({
+  email,
+  fname,
+  lname,
+  password,
+  enabled,
+  role,
+}: User) => {
+  //update each if defined
+  if (fname) {
+    await db("user").update({ fname: fname }).where("email", email);
+  }
+  if (lname) {
+    await db("user").update({ lname: lname }).where("email", email);
+  }
+  if (password) {
+    let hash = md5(password);
+    await db("user").update({ password: hash }).where("email", email);
+  }
+  if (role) {
+    await db("user").update({ role: role }).where("email", email);
+  }
+  if (enabled !== undefined) {
+    await db("user").update({ enabled: enabled }).where("email", email);
+  }
+};
+
+/**
  * checks whether an email has been used already.
  * @param email string
  * @returns `true` if email has already been used, `false` otherwise
@@ -99,14 +131,29 @@ export const checkUserEmail = async (email: string) => {
 export const loginUser = async ({ email, password }: Required<LoginUser>) => {
   let hash = md5(password);
   let res = await db
-    .select("user_inc")
+    .select("user_inc", "role")
     .from("user")
     .where("email", email)
     .andWhere("password", hash);
   if (res.length <= 0) {
     return false;
   } else {
-    return res[0].user_inc;
+    return res[0];
+  }
+};
+
+/**
+ * gets whether a user account in enabled or not.
+ * @Note pair with checkUserEmail() to make sure the email exists first.
+ * @param email user's email
+ * @returns enabled: boolean, or false if the email doesn't exist.
+ */
+export const getUserEnabled = async (email: string) => {
+  let res = await db("user").select("enabled").where("email", email);
+  if (!res.length) {
+    return false;
+  } else {
+    return res[0].enabled;
   }
 };
 
@@ -132,7 +179,9 @@ export const validateSession = async (session_id: string) => {
       "session.created_at",
       "session.user_id",
       "user.fname",
-      "session.enabled"
+      "session.enabled",
+      "user.role",
+      "user.email"
     )
     .where("session_id", session_id);
   if (res.length <= 0) {
@@ -176,6 +225,20 @@ export const getCountUserRequestsWithinTimeframe = async (
   return await db("ratelimiting")
     .count("*")
     .where("created_at", ">=", t1.toISOString());
+};
+
+/**
+ * gets the role of the user
+ * @param email the user's email
+ * @returns the user's role, or false if email not found
+ */
+export const getUserRole = async (email: string) => {
+  let res = await db("user").select("role").where("email", email.toLowerCase());
+  if (!res.length) {
+    return false;
+  } else {
+    return res[0].role;
+  }
 };
 
 // export const loginUser = async ({ email, password }: Required<LoginUser>) => {

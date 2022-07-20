@@ -10,8 +10,12 @@ import {
   checkUserEmail,
   loginUser,
   createSession,
+  validateSession,
+  getUserRole,
+  updateUser,
+  getUserEnabled,
 } from "../model";
-import { RegisterUser, LoginUser } from "../interfaces/User";
+import { RegisterUser, LoginUser, User } from "../interfaces/User";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -48,7 +52,7 @@ router.post(
       //login success -- generate session key
       let sessionKey = generateSessionKey(32);
       await createSession({ user_id: x, session_id: sessionKey });
-      res.json({ ok: 1, session_key: sessionKey });
+      res.json({ ok: 1, session_key: sessionKey, role: "member" });
     }
   }
 );
@@ -69,13 +73,19 @@ router.post(
     if (!emailUsed) {
       next(new Error("An account with that email does not exist."));
     } else {
+      //check if account enabled
+      if (!(await getUserEnabled(u.email))) {
+        //disabled
+        next(new Error("This account has been disabled."));
+        return;
+      }
       let x = await loginUser(u);
 
       if (x) {
         //login success -- generate session key
         let sessionKey = generateSessionKey(32);
-        await createSession({ user_id: x, session_id: sessionKey });
-        res.json({ ok: 1, session_key: sessionKey });
+        await createSession({ user_id: x.user_inc, session_id: sessionKey });
+        res.json({ ok: 1, session_key: sessionKey, role: x.role });
       } else {
         next(new Error("Invalid login credentials."));
       }
@@ -83,9 +93,96 @@ router.post(
   }
 );
 
-router.post("/update", (req: Request, res: Response, next: NextFunction) => {
-  res.json({ ok: 1 });
-});
+router.post(
+  "/update",
+  async (req: Request, res: Response, next: NextFunction) => {
+    //check body for props
+    let session_key = req.body.session_id;
+    let u_email = req.body.user_email;
+    let u_role = req.body.user_role;
+    let u_password = req.body.user_password;
+    let u_fname = req.body.user_fname;
+    let u_lname = req.body.user_lname;
+    let u_enabled = req.body.user_enabled;
+    if (!u_email || !session_key) {
+      //required fields
+      next(new Error("Missing 1 or more required fields"));
+      return;
+    }
+    let count_changed = 0;
+    if (u_role !== undefined) count_changed++;
+    if (u_password !== undefined) count_changed++;
+    if (u_fname !== undefined) count_changed++;
+    if (u_lname !== undefined) count_changed++;
+    if (u_enabled !== undefined) count_changed++;
+    if (count_changed <= 0) {
+      //missing fields to change
+      next(new Error("Missing field(s) to update"));
+      return;
+    }
+    //check if authorized to edit user
+    let session_valid = await validateSession(session_key);
+    let session_role = session_valid.role;
+    //validateSession() returns user role -- compare to other user role
+    if (!(await checkUserEmail(u_email.toLowerCase()))) {
+      next(new Error("User with that email does not exist"));
+    }
+    let user_role = await getUserRole(u_email);
+    let valid = compareUserRoles(session_role, user_role);
+    if (valid > 0) {
+      //valid
+      //check if new role is valid
+      if (u_role && compareUserRoles(session_role, u_role) < 0) {
+        //attempting to make the new role higher than current
+        next(new Error("Cannot set user's role higher than own role"));
+        return;
+      }
+      //update their info
+      let u: User = {
+        email: u_email,
+        fname: u_fname,
+        lname: u_lname,
+        password: u_password,
+        role: u_role,
+        enabled: u_enabled,
+      };
+      await updateUser(u);
+      res.json({
+        ok: 1,
+      });
+    } else {
+      //not valid
+      //check if modifying self
+      if (session_valid.email === u_email) {
+        //we are modifying ourselves
+        if (u_role) {
+          next(new Error("Cannot modify own role."));
+          return;
+        }
+        if (u_enabled) {
+          next(new Error("Cannot re-enable own account."));
+          return;
+        }
+        //update self info
+        let u: User = {
+          email: u_email,
+          fname: u_fname,
+          lname: u_lname,
+          password: u_password,
+          enabled: u_enabled,
+        };
+        await updateUser(u);
+        res.json({
+          ok: 1,
+        });
+      } else {
+        next(new Error("You do not have permission to update this user."));
+        return;
+      }
+    }
+    //update user
+  }
+);
 
 router.delete("/remove", (req: Request, res: Response, next: NextFunction) => {
   res.json({ ok: 1 });
@@ -95,6 +192,47 @@ const generateSessionKey = (length: number): string => {
   //create session token
   let session_id: string = crypto.randomBytes(length).toString("hex");
   return session_id;
+};
+
+/**
+ * compares 2 user's roles to see who is above who
+ * @param role1 {string}
+ * @param role2 {string}
+ * @returns 1 if role1>role2, 0 if role1=role2, -1 if role1<role2
+ */
+const compareUserRoles = (role1: string, role2: string) => {
+  let a = getRoleValue(role1);
+  let b = getRoleValue(role2);
+  if (a > b) {
+    //role1 > role2
+    return 1;
+  } else if (a == b) {
+    //equal
+    return 0;
+  } else {
+    //role2 > role1
+    return -1;
+  }
+};
+
+const getRoleValue = (role: string) => {
+  if (role) {
+    role = role.toLowerCase();
+  }
+  switch (role) {
+    case "member":
+      return 0;
+    case "moderator" || "mod":
+      return 3;
+    case "administrator" || "admin":
+      return 6;
+    case "developer" || "dev":
+      return 9;
+    case "owner":
+      return 999;
+    default:
+      return 0;
+  }
 };
 
 module.exports = router;
