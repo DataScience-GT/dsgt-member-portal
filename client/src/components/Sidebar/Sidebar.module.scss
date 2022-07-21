@@ -1,0 +1,56 @@
+.Sidebar {
+  display: block;
+  position: relative;
+  width: 300px;
+  height: 100%;
+  // border: 1px solid red;
+  border-right: 1px solid var(--borderColor);
+  background: var(--background);
+}
+
+.Header {
+  display: flex;
+  position: relative;
+  height: 5em;
+  width: 100%;
+  border-bottom: 1px solid var(--borderColor);
+
+  justify-content: center;
+  align-items: center;
+
+  > h1 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--foreground);
+  }
+}
+
+.Footer {
+  display: flex;
+  height: 5em;
+  width: 100%;
+  border-top: 1px solid var(--borderColor);
+
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+//manage themes
+.Light {
+  --background: #fff;
+  --foreground: #000;
+}
+.Dark {
+  --background: #222;
+  --foreground: #fff;
+  --hover: #444;
+}
+.Black {
+  --background: #000;
+  --foreground: #fff;
+  --hover: #222;
+}

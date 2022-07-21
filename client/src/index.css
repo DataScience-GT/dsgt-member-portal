@@ -1,3 +1,11 @@
+/* define theme variables */
+:root {
+  --background: #fff;
+  --foreground: #000;
+  --borderColor: #ccc;
+  --hover: #ccc;
+}
+
 * {
   margin: 0;
   padding: 0;

@@ -1,19 +1,39 @@
 import React, { useEffect, useState } from "react";
 
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import { Theme, ThemeContext } from "./Context/ThemeContext";
 
 //import pages
 import Signup from "./Pages/Signup/Signup";
 import Login from "./Pages/Login/Login";
 import Docs from "./Pages/Docs/Docs.lazy";
 import Portal from "./Pages/Portal/Portal";
-import { json } from "stream/consumers";
 
 function App() {
+  //theme -- use for context
+  const [theme, setTheme] = useState(Theme.Light);
+
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
+    //check for theme
+    let theme_stored = localStorage.getItem("dsgt-portal-theme");
+    switch (theme_stored) {
+      case "Light":
+        setTheme(Theme.Light);
+        break;
+      case "Dark":
+        setTheme(Theme.Dark);
+        break;
+      case "Black":
+        setTheme(Theme.Black);
+        break;
+      default:
+        setTheme(Theme.Dark);
+        localStorage.setItem("dsgt-portal-theme", Theme.Dark);
+        break;
+    }
     //check if logged in --
     let session_key = localStorage.getItem("dsgt-portal-session-key");
     if (session_key) {
@@ -36,10 +56,10 @@ function App() {
           } else {
             //success -- allow movement to accessable pages
             setUserRole(json.role);
-
             if (
               window.location.pathname.toLowerCase() == "/login" ||
-              window.location.pathname.toLowerCase() == "/signup"
+              window.location.pathname.toLowerCase() == "/signup" ||
+              window.location.pathname.toLowerCase() == "/"
             ) {
               window.location.href = "/portal";
             }
@@ -69,21 +89,23 @@ function App() {
   } else {
     return (
       <div className="App">
-        <Router>
-          <Routes>
-            <Route path="/*" element={<Login />} />
-            <Route path="/Signup" element={<Signup />} />
-            <Route path="/Docs/*" element={<Docs />} />
-            {userRole === "member" ||
-            userRole === "moderator" ||
-            userRole === "administrator" ||
-            userRole === "owner" ? (
-              <Route path="/Portal" element={<Portal />} />
-            ) : (
-              ""
-            )}
-          </Routes>
-        </Router>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+          <Router>
+            <Routes>
+              {/* <Route path="/*" element={<Login />} /> */}
+              <Route path="/Signup" element={<Signup />} />
+              <Route path="/Docs/*" element={<Docs />} />
+              {userRole === "member" ||
+              userRole === "moderator" ||
+              userRole === "administrator" ||
+              userRole === "owner" ? (
+                <Route path="/Portal" element={<Portal />} />
+              ) : (
+                ""
+              )}
+            </Routes>
+          </Router>
+        </ThemeContext.Provider>
       </div>
     );
   }
