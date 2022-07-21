@@ -4,12 +4,16 @@ import styles from "./SidebarItem.module.scss";
 interface SidebarItemProps {
   children?: React.ReactNode;
   active?: boolean;
+  imgsrc?: string;
+  open?: boolean;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
 const SidebarItem: FC<SidebarItemProps> = ({
   children,
   active,
+  imgsrc,
+  open,
   onClick,
 }: SidebarItemProps) => (
   <div
@@ -19,11 +23,16 @@ const SidebarItem: FC<SidebarItemProps> = ({
     data-testid="SidebarItem"
   >
     <div
-      className={styles.SidebarItemWrapper}
+      className={`${styles.Wrapper} ${open ? styles.Open : styles.Closed}`}
       onClick={onClick}
       data-active={active}
     >
-      {children}
+      {imgsrc !== undefined ? (
+        <img className={styles.Icon} src={imgsrc} alt={children?.toString()} />
+      ) : (
+        ""
+      )}
+      <p className={styles.ItemText}>{children}</p>
     </div>
   </div>
 );

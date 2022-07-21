@@ -4,6 +4,9 @@
   --foreground: #000;
   --borderColor: #ccc;
   --hover: #ccc;
+  --svgFilter: none;
+
+  --animDuration: 0.3s;
 }
 
 * {

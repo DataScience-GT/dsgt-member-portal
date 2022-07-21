@@ -7,6 +7,9 @@
   // border: 1px solid red;
   border-right: 1px solid var(--borderColor);
   background: var(--background);
+  z-index: 6;
+
+  transition: var(--animDuration) width ease;
 }
 
 .Header {
@@ -24,6 +27,33 @@
     font-weight: 700;
     color: var(--foreground);
   }
+}
+
+.User {
+  display: flex;
+  height: 5em;
+  width: 100%;
+  border-top: 1px solid var(--borderColor);
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
+  bottom: 5em;
+  left: 0;
+}
+.Fname {
+  font-size: 1.3em;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: var(--foreground);
+}
+.Role {
+  font-size: 1em;
+  font-weight: 500;
+  text-transform: capitalize;
+  color: var(--foreground);
 }
 
 .Footer {
@@ -44,14 +74,60 @@
 .Light {
   --background: #fff;
   --foreground: #000;
+  --svgFilter: none;
 }
 .Dark {
   --background: #222;
   --foreground: #fff;
   --hover: #444;
+  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
+    brightness(113%) contrast(100%);
 }
 .Black {
   --background: #000;
   --foreground: #fff;
   --hover: #222;
+  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
+    brightness(113%) contrast(100%);
+}
+
+.OpenClose {
+  display: flex;
+  position: absolute;
+  top: 5em;
+  right: 0;
+  height: 30px;
+  width: 30px;
+  transform: translate(50%, -50%);
+  z-index: 3;
+
+  background: var(--background);
+  border: 1px solid var(--borderColor);
+  border-radius: 50%;
+
+  justify-content: center;
+  align-items: center;
+
+  > img {
+    display: block;
+    position: relative;
+    height: 60%;
+    width: 60%;
+    filter: var(--svgFilter);
+    transform: none;
+
+    transition: var(--animDuration) transform ease;
+
+    &[data-open="true"] {
+      //open
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.Open {
+  width: 300px;
+}
+.Closed {
+  width: 90px;
 }

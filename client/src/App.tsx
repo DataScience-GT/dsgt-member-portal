@@ -49,13 +49,15 @@ function App() {
         }).then(async (res) => {
           const json = await res.json();
           console.log(json);
-          if (!json.ok && json.error) {
+          if ((!json.ok && json.error) || !json.valid) {
             //error -- invalidate session
             localStorage.removeItem("dsgt-portal-session-key");
             setLoading(false);
           } else {
             //success -- allow movement to accessable pages
             setUserRole(json.role);
+            localStorage.setItem("dsgt-portal-fname", json.fname);
+            localStorage.setItem("dsgt-portal-role", json.role);
             if (
               window.location.pathname.toLowerCase() == "/login" ||
               window.location.pathname.toLowerCase() == "/signup" ||
@@ -92,7 +94,7 @@ function App() {
         <ThemeContext.Provider value={{ theme, setTheme }}>
           <Router>
             <Routes>
-              {/* <Route path="/*" element={<Login />} /> */}
+              <Route path="/*" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
               <Route path="/Docs/*" element={<Docs />} />
               {userRole === "member" ||

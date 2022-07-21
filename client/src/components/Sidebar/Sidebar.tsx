@@ -1,13 +1,20 @@
-import React, { FC, useContext } from "react";
+import React, { FC, useContext, useState } from "react";
 import SidebarItem from "../SidebarItem/SidebarItem";
 import styles from "./Sidebar.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 
+//import all icons
+import right_arrow_icon from "../../assets/icons/angle-right.svg";
+
+import home_icon from "../../assets/icons/home.svg";
+import settings_icon from "../../assets/icons/settings.svg";
+
 interface SidebarProps {}
 
 const Sidebar: FC<SidebarProps> = () => {
   const { theme, setTheme } = useContext(ThemeContext);
+  const [open, setOpen] = useState(true);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     let active = e.currentTarget.getAttribute("data-active");
@@ -16,6 +23,14 @@ const Sidebar: FC<SidebarProps> = () => {
       let x = document.querySelector(`div[data-active=true`);
       x?.removeAttribute("data-active");
       e.currentTarget.setAttribute("data-active", "true");
+    }
+  };
+
+  const toggleOpen = () => {
+    if (open) {
+      setOpen(false);
+    } else {
+      setOpen(true);
     }
   };
 
@@ -33,14 +48,37 @@ const Sidebar: FC<SidebarProps> = () => {
   };
 
   return (
-    <div className={`${styles.Sidebar} ${styles[theme]}`} data-testid="Sidebar">
+    <div
+      className={`${styles.Sidebar} ${styles[theme]} ${
+        open ? styles.Open : styles.Closed
+      }`}
+      data-testid="Sidebar"
+    >
+      <div className={styles.OpenClose} onClick={toggleOpen}>
+        <img
+          src={right_arrow_icon}
+          data-open={open}
+          alt={open ? "Close Menu" : "Open Menu"}
+          title={open ? "Close Menu" : "Open Menu"}
+        />
+      </div>
       <div className={styles.Header}>
         <h1>DSGT</h1>
       </div>
-      <SidebarItem onClick={handleClick} active>
-        test
+      <SidebarItem onClick={handleClick} imgsrc={home_icon} open={open} active>
+        home
       </SidebarItem>
-      <SidebarItem onClick={handleClick}>test1</SidebarItem>
+      <SidebarItem onClick={handleClick} imgsrc={settings_icon} open={open}>
+        settings
+      </SidebarItem>
+      <div className={styles.User}>
+        <h1 className={styles.Fname}>
+          {localStorage.getItem("dsgt-portal-fname")}
+        </h1>
+        <h2 className={styles.Role}>
+          {localStorage.getItem("dsgt-portal-role")}
+        </h2>
+      </div>
       <div className={styles.Footer}>
         <button onClick={toggleTheme}>change theme</button>
       </div>
