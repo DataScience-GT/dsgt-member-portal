@@ -99,7 +99,7 @@ function App() {
               userRole === "moderator" ||
               userRole === "administrator" ||
               userRole === "owner" ? (
-                <Route path="/Portal" element={<Portal />} />
+                <Route path="/Portal/*" element={<Portal />} />
               ) : (
                 ""
               )}
