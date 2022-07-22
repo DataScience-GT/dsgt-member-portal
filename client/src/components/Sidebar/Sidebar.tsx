@@ -14,7 +14,7 @@ interface SidebarProps {}
 
 const Sidebar: FC<SidebarProps> = () => {
   const { theme, setTheme } = useContext(ThemeContext);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     let active = e.currentTarget.getAttribute("data-active");

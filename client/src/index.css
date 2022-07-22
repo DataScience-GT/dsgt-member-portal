@@ -2,7 +2,7 @@
 :root {
   --background: #fff;
   --foreground: #000;
-  --borderColor: #ccc;
+  --borderColor: rgb(142, 142, 142);
   --hover: #ccc;
   --svgFilter: none;
 

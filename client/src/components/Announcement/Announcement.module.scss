@@ -1,0 +1,20 @@
+.Announcement {
+    display: block;
+    // border-bottom: 1px solid var(--borderColor);
+    padding-bottom: 5px;
+    margin-bottom: 1em;
+
+    &:hover {
+        background: var(--hover);
+    }
+}
+
+.Title {
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+.Date {
+    font-size: 1em;
+    font-weight: 500;
+}

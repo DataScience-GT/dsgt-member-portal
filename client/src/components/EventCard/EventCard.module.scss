@@ -1,0 +1,65 @@
+.EventCard {
+  display: flex;
+  position: relative;
+  height: 20em;
+  width: 20em;
+  border: 1px solid var(--borderColor);
+
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-radius: 10px;
+
+  transition: var(--animDuration) all ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.BigEventCard {
+  width: calc(40em + 20px);
+  flex-direction: row;
+  .Image {
+    height: 100%;
+    width: 30%;
+    border-radius: 10px 0 0 10px;
+  }
+  .Content {
+    height: 100%;
+    width: 70%;
+    padding: 10px 20px;
+  }
+}
+
+.Image {
+  display: block;
+  width: 100%;
+  height: 35%;
+  border-bottom: 1px solid var(--borderColor);
+  background: teal;
+
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+
+  //   border: 1px solid blue;
+}
+
+.Content {
+  flex-grow: 1;
+  width: 100%;
+  display: block;
+
+  padding: 10px;
+
+  //   border: 1px solid yellow;
+}
+
+//the heading
+.Major {
+  font-size: 1.5em;
+}
+
+.Description {
+  font-size: 1em;
+}

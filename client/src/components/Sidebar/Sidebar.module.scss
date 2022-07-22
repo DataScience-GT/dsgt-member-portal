@@ -1,7 +1,9 @@
 .Sidebar {
   display: block;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+
   width: 300px;
   height: 100%;
   // border: 1px solid red;
@@ -126,8 +128,8 @@
 }
 
 .Open {
-  width: 300px;
+  width: 20em;
 }
 .Closed {
-  width: 90px;
+  width: 5.5em;
 }
