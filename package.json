@@ -4,7 +4,7 @@
   "description": "the member portal for dsgt 202",
   "main": "index.js",
   "scripts": {
-    "heroku-prebuild": "cd client && npm install && npm run build",
+    "heroku-prebuild": "cd client && npm install && npm run build A=123",
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
