@@ -29,7 +29,6 @@ const Login: FC<LoginProps> = () => {
 
   //handle form submission
   const handleSubmit = async () => {
-    console.log(process.env);
     setError("");
     await fetch("/api/user/login", {
       method: "POST",
