@@ -8,6 +8,7 @@ import Signup from "./Pages/Signup/Signup";
 import Login from "./Pages/Login/Login";
 import Docs from "./Pages/Docs/Docs.lazy";
 import Portal from "./Pages/Portal/Portal";
+import Loader from "./components/Loader/Loader";
 
 function App() {
   //theme -- use for context
@@ -87,7 +88,11 @@ function App() {
 
   if (loading) {
     //make a nice loading page in the future
-    return <div>loading...</div>;
+    return (
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <Loader height="100vh" />
+      </ThemeContext.Provider>
+    );
   } else {
     return (
       <div className="App">
