@@ -7,6 +7,7 @@ import PortalSettings from "../PortalSettings/PortalSettings";
 import styles from "./Portal.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import PortalMembers from "../PortalMembers/PortalMembers";
 
 interface PortalProps {}
 
@@ -19,6 +20,7 @@ const Portal: FC<PortalProps> = () => {
         <div className={styles.PortalBody}>
           <Routes>
             <Route path="/*" element={<PortalHome />} />
+            <Route path="/members" element={<PortalMembers />} />
             <Route path="/settings" element={<PortalSettings />} />
           </Routes>
         </div>

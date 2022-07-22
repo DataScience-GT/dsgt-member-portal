@@ -1,0 +1,51 @@
+.MemberActionMenu {
+  position: relative;
+}
+
+.ThreeDotsContainer {
+  width: fit-content;
+  padding: 0 3px;
+  margin: 0 auto;
+  cursor: pointer;
+
+  transition: var(--animDuration) background ease;
+
+  &:hover {
+    background: var(--hover);
+  }
+
+  .ThreeDots {
+    height: 1.7em;
+    width: 1.7em;
+    padding: 5px;
+    transform: translateY(2px);
+    filter: var(--svgFilter);
+  }
+}
+
+.ActionMenu {
+  position: absolute;
+  display: flex;
+  height: 3em;
+  width: 3em;
+  top: -3px;
+  right: 10px;
+  background: var(--background);
+  border: 1px solid var(--borderColor);
+  border-radius: 10px;
+
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  .CloseContainer {
+    position: absolute;
+    top: 1px;
+    right: 1px;
+    .Cross {
+      height: 2em;
+      width: 2em;
+      filter: var(--svgFilter);
+      cursor: pointer;
+    }
+  }
+}

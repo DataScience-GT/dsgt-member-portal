@@ -9,6 +9,7 @@ import right_arrow_icon from "../../assets/icons/angle-right.svg";
 
 import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
+import members_icon from "../../assets/icons/users-alt.svg";
 
 interface SidebarProps {}
 
@@ -98,6 +99,14 @@ const Sidebar: FC<SidebarProps> = () => {
         path="/portal/settings"
       >
         settings
+      </SidebarItem>
+      <SidebarItem
+        onClick={handleClick}
+        imgsrc={members_icon}
+        open={open}
+        path="/portal/members"
+      >
+        members
       </SidebarItem>
       <div className={styles.User}>
         <h1 className={styles.Fname}>
