@@ -29,7 +29,7 @@ const Login: FC<LoginProps> = () => {
 
   //handle form submission
   const handleSubmit = async () => {
-    console.log(process.env.API_KEY);
+    console.log(process.env.REACT_APP_API_KEY);
     setError("");
     await fetch("/api/user/login", {
       method: "POST",
