@@ -6,6 +6,7 @@ interface SidebarItemProps {
   active?: boolean;
   imgsrc?: string;
   open?: boolean;
+  path?: string;
   onClick?: React.MouseEventHandler<HTMLDivElement>;
 }
 
@@ -14,6 +15,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
   active,
   imgsrc,
   open,
+  path,
   onClick,
 }: SidebarItemProps) => (
   <div
@@ -26,6 +28,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
       className={`${styles.Wrapper} ${open ? styles.Open : styles.Closed}`}
       onClick={onClick}
       data-active={active}
+      data-path={path}
     >
       {imgsrc !== undefined ? (
         <img className={styles.Icon} src={imgsrc} alt={children?.toString()} />
