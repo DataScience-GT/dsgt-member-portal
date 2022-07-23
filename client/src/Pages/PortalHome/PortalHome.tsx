@@ -48,7 +48,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
     <div className={styles.PortalHome} data-testid="PortalHome">
       <FlexRow spacing="space-between">
         <div className={styles.FlexLeft}>
-          <h1 className={styles.Major}>
+          <h1 className={styles.Major} style={{ textTransform: "capitalize" }}>
             {messages[Math.floor(Math.random() * messages.length)].replaceAll(
               "{name}",
               localStorage.getItem("dsgt-portal-fname") || "User"
@@ -68,13 +68,28 @@ const PortalHome: FC<PortalHomeProps> = () => {
         <div className={styles.Announcements}>
           <div className={styles.Minor}>Announcements</div>
           <FlexColumn>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement when={new Date()}>Something something bruh</Announcement>
-            <Announcement>Something something bruh dsad jkasjd klasjdkjas lkjdklasjdl jksadjkla</Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement when={new Date()}>
+              Something something bruh
+            </Announcement>
+            <Announcement>
+              Something something bruh dsad jkasjd klasjdkjas lkjdklasjdl
+              jksadjkla
+            </Announcement>
           </FlexColumn>
         </div>
       </FlexRow>
