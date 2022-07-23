@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 
-import { getRoleValue } from "../../Scripts/RoleManagement";
+import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
 
 //import all icons
 import right_arrow_icon from "../../assets/icons/angle-right.svg";
@@ -12,6 +12,7 @@ import right_arrow_icon from "../../assets/icons/angle-right.svg";
 import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
 import members_icon from "../../assets/icons/users-alt.svg";
+import megaphone_icon from "../../assets/icons/megaphone.svg";
 
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 
@@ -90,7 +91,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       >
         Home
       </SidebarItem>
-      {getRoleValue(role) >= 6 ? (
+      {compareUserRoles(role || "guest", "moderator") >= 0 ? (
         <SidebarItem
           onClick={handleClick}
           imgsrc={members_icon}
@@ -98,6 +99,18 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           path="/portal/members"
         >
           Members
+        </SidebarItem>
+      ) : (
+        ""
+      )}
+      {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={megaphone_icon}
+          open={open}
+          path="/portal/announce"
+        >
+          Announce
         </SidebarItem>
       ) : (
         ""
