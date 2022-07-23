@@ -4,6 +4,8 @@ import styles from "./Sidebar.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 
+import { getRoleValue } from "../../Scripts/RoleManagement";
+
 //import all icons
 import right_arrow_icon from "../../assets/icons/angle-right.svg";
 
@@ -13,9 +15,11 @@ import members_icon from "../../assets/icons/users-alt.svg";
 
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 
-interface SidebarProps {}
+interface SidebarProps {
+  role?: string;
+}
 
-const Sidebar: FC<SidebarProps> = () => {
+const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
   const { theme, setTheme } = useContext(ThemeContext);
   const [open, setOpen] = useState(false);
 
@@ -86,14 +90,18 @@ const Sidebar: FC<SidebarProps> = () => {
       >
         Home
       </SidebarItem>
-      <SidebarItem
-        onClick={handleClick}
-        imgsrc={members_icon}
-        open={open}
-        path="/portal/members"
-      >
-        Members
-      </SidebarItem>
+      {getRoleValue(role) >= 6 ? (
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={members_icon}
+          open={open}
+          path="/portal/members"
+        >
+          Members
+        </SidebarItem>
+      ) : (
+        ""
+      )}
       <SidebarItem
         onClick={handleClick}
         imgsrc={settings_icon}

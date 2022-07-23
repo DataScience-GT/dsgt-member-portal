@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { Theme, ThemeContext } from "./Context/ThemeContext";
 
+import { getRoleValue } from "./Scripts/RoleManagement";
+
 //import pages
 import Signup from "./Pages/Signup/Signup";
 import Login from "./Pages/Login/Login";
@@ -102,11 +104,8 @@ function App() {
               <Route path="/*" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
               <Route path="/Docs/*" element={<Docs />} />
-              {userRole === "member" ||
-              userRole === "moderator" ||
-              userRole === "administrator" ||
-              userRole === "owner" ? (
-                <Route path="/Portal/*" element={<Portal />} />
+              {getRoleValue(userRole) >= 0 ? (
+                <Route path="/Portal/*" element={<Portal role={userRole} />} />
               ) : (
                 ""
               )}

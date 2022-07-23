@@ -220,18 +220,20 @@ const getRoleValue = (role: string) => {
     role = role.toLowerCase();
   }
   switch (role) {
-    case "member":
+    case "guest":
       return 0;
-    case "moderator" || "mod":
+    case "member":
       return 3;
-    case "administrator" || "admin":
+    case "moderator" || "mod":
       return 6;
-    case "developer" || "dev":
+    case "administrator" || "admin":
       return 9;
+    case "developer" || "dev":
+      return 12;
     case "owner":
       return 999;
     default:
-      return 0;
+      return -1;
   }
 };
 

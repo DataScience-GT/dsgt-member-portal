@@ -8,20 +8,27 @@ import styles from "./Portal.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
+import { getRoleValue } from "../../Scripts/RoleManagement";
 
-interface PortalProps {}
+interface PortalProps {
+  role?: string;
+}
 
-const Portal: FC<PortalProps> = () => {
+const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
   const { theme, setTheme } = useContext(ThemeContext);
   return (
     <div className={`${styles.Portal} ${styles[theme]}`} data-testid="Portal">
       <FlexRow height="100vh">
-        <Sidebar />
+        <Sidebar role={role} />
         <div className={styles.PortalBody}>
           <Routes>
             <Route path="/*" element={<PortalHome />} />
-            <Route path="/members" element={<PortalMembers />} />
             <Route path="/settings" element={<PortalSettings />} />
+            {role && getRoleValue(role) >= 6 ? (
+              <Route path="/members" element={<PortalMembers />} />
+            ) : (
+              ""
+            )}
           </Routes>
         </div>
       </FlexRow>
