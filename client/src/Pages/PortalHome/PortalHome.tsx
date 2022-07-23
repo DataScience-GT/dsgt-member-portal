@@ -46,7 +46,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
 
     //get last ~5 announcements
     const getAnnouncements = async () => {
-      await fetch("/api/announcement/get?count=5", {
+      await fetch("/api/announcement/get?count=10", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -100,6 +100,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
               : announcements.map((a, i) => {
                   return (
                     <Announcement
+                      key={i}
                       when={new Date(a["created_at"])}
                       from={`${a["fname"]} ${a["lname"]}`}
                     >
