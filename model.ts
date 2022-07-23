@@ -172,6 +172,11 @@ export const createSession = async ({
   await db.insert({ user_id: user_id, session_id: session_id }).into("session");
 };
 
+/**
+ * validates a user's session token
+ * @param session_id {string} the user's session id
+ * @returns session.created_at, user_id, fname, session.enabled, role, email
+ */
 export const validateSession = async (session_id: string) => {
   let res = await db("session")
     .join("user", "user.user_inc", "=", "session.user_id")
@@ -239,6 +244,45 @@ export const getUserRole = async (email: string) => {
   } else {
     return res[0].role;
   }
+};
+
+// ------------------------ Announcements ------------------------
+export const getAnnouncements = async (count?: number) => {
+  if (count) {
+    return await db("announcement")
+      .join("user", "user.user_inc", "=", "announcement.from_user")
+      .select(
+        "announcement.ann_id",
+        "announcement.message",
+        "announcement.created_at",
+        "user.fname",
+        "user.lname"
+      )
+      .orderBy("created_at", "desc")
+      .limit(count);
+  } else {
+    return await db("announcement")
+      .join("user", "user.user_inc", "=", "announcement.from_user")
+      .select(
+        "announcement.ann_id",
+        "announcement.message",
+        "announcement.created_at",
+        "user.fname",
+        "user.lname"
+      )
+      .orderBy("created_at", "desc");
+  }
+};
+
+/**
+ * creates a new announcement
+ * @param message {string} message
+ * @param user_id {number} the user's (who wrote the announcement) id
+ */
+export const insertAnnouncement = async (message: string, user_id: number) => {
+  await db
+    .insert({ message: message, from_user: user_id })
+    .into("announcement");
 };
 
 // export const loginUser = async ({ email, password }: Required<LoginUser>) => {

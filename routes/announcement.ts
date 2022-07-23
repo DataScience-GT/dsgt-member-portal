@@ -1,0 +1,59 @@
+import express, { Request, Response, NextFunction } from "express";
+const router = express.Router();
+
+import {
+  getAnnouncements,
+  insertAnnouncement,
+  validateSession,
+} from "../model";
+import { checkSessionValid } from "../SessionManagement";
+
+router.get("/", (req: Request, res: Response, next: NextFunction) => {
+  res.send("welcome to the announcement api!");
+});
+
+router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
+  let session_id = req.body.session_id;
+  if (!session_id) {
+    next(new Error("Missing 1 or more required fields in body."));
+    return;
+  }
+  //check for count
+  let count = req.query.count?.toString();
+
+  let valid = await checkSessionValid(session_id, next);
+  if (valid && valid.valid) {
+    if (count) {
+      let anns = await getAnnouncements(parseInt(count));
+      res.json({ ok: 1, data: anns });
+    } else {
+      let anns = await getAnnouncements();
+      res.json({ ok: 1, data: anns });
+    }
+  } else {
+    next(new Error("Session not valid."));
+  }
+});
+
+router.post(
+  "/create",
+  async (req: Request, res: Response, next: NextFunction) => {
+    let session_id = req.body.session_id;
+    let message = req.body.announcement;
+    if (!session_id || !message) {
+      next(new Error("Missing 1 or more required fields in body."));
+      return;
+    }
+    let valid = await checkSessionValid(session_id, next);
+    if (valid && valid.valid) {
+      //create ann announcement
+      await insertAnnouncement(message, valid.user_id);
+      res.json({ ok: 1 });
+    } else {
+      next(new Error("Session not valid."));
+    }
+  }
+);
+
+module.exports = router;
+export default router;

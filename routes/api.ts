@@ -18,6 +18,10 @@ router.use("/session", ApiAuthenticate, session);
 import rates from "./rates";
 router.use("/rates", ApiAuthenticate, rates);
 
+//setup /api/announcement
+import announcement from "./announcement";
+router.use("/announcement", ApiAuthenticate, announcement);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   // res.send("welcome to the api!");
   res.json(process.env);

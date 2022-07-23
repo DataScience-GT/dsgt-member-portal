@@ -16,6 +16,8 @@ import {
   getUserEnabled,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
+import { compareUserRoles } from "../RoleManagement";
+import { checkSessionValid } from "../SessionManagement";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -121,8 +123,8 @@ router.post(
       return;
     }
     //check if authorized to edit user
-    let session_valid = await validateSession(session_key);
-    let session_role = session_valid.role;
+    let session_valid = await checkSessionValid(session_key, next);
+    let session_role = session_valid?.role || "Guest";
     //validateSession() returns user role -- compare to other user role
     if (!(await checkUserEmail(u_email.toLowerCase()))) {
       next(new Error("User with that email does not exist"));
@@ -153,7 +155,7 @@ router.post(
     } else {
       //not valid
       //check if modifying self
-      if (session_valid.email === u_email) {
+      if (session_valid?.email === u_email) {
         //we are modifying ourselves
         if (u_role) {
           next(new Error("Cannot modify own role."));
@@ -192,49 +194,6 @@ const generateSessionKey = (length: number): string => {
   //create session token
   let session_id: string = crypto.randomBytes(length).toString("hex");
   return session_id;
-};
-
-/**
- * compares 2 user's roles to see who is above who
- * @param role1 {string}
- * @param role2 {string}
- * @returns 1 if role1>role2, 0 if role1=role2, -1 if role1<role2
- */
-const compareUserRoles = (role1: string, role2: string) => {
-  let a = getRoleValue(role1);
-  let b = getRoleValue(role2);
-  if (a > b) {
-    //role1 > role2
-    return 1;
-  } else if (a == b) {
-    //equal
-    return 0;
-  } else {
-    //role2 > role1
-    return -1;
-  }
-};
-
-const getRoleValue = (role: string) => {
-  if (role) {
-    role = role.toLowerCase();
-  }
-  switch (role) {
-    case "guest":
-      return 0;
-    case "member":
-      return 3;
-    case "moderator" || "mod":
-      return 6;
-    case "administrator" || "admin":
-      return 9;
-    case "developer" || "dev":
-      return 12;
-    case "owner":
-      return 999;
-    default:
-      return -1;
-  }
 };
 
 module.exports = router;
