@@ -10,6 +10,7 @@ interface InputFieldProps {
   pattern?: string;
   helper?: React.ReactNode;
   validIndication?: boolean;
+  originalValue?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -21,6 +22,7 @@ const InputField: FC<InputFieldProps> = ({
   pattern,
   helper,
   validIndication,
+  originalValue,
 }: InputFieldProps) => {
   const [passwordOpen, setPasswordOpen] = useState(false);
   if (type === "submit") {
@@ -100,6 +102,8 @@ const InputField: FC<InputFieldProps> = ({
           required
           onChange={onChange}
           pattern={pattern}
+          data-original-value={originalValue}
+          value={originalValue}
         />
         <label htmlFor={"input-" + placeholder}>
           {placeholder}

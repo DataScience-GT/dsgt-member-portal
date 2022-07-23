@@ -1,0 +1,16 @@
+.ThemeDropdown {
+  height: 52px;
+  select {
+    height: 100%;
+    padding: 4px 20px;
+    border: 2px solid var(--borderColor);
+    border-radius: 15px;
+    outline-offset: 2px;
+    font-size: 1em;
+    font-weight: 500;
+    text-align: center;
+  }
+  option {
+    text-align: left;
+  }
+}
