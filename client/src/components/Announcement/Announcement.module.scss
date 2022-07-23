@@ -1,20 +1,24 @@
 .Announcement {
-    display: block;
-    // border-bottom: 1px solid var(--borderColor);
-    padding-bottom: 5px;
-    margin-bottom: 1em;
+  display: block;
+  // border-bottom: 1px solid var(--borderColor);
+  padding-bottom: 5px;
+  margin-bottom: 1em;
 
-    &:hover {
-        background: var(--hover);
-    }
+  &:hover {
+    background: var(--hover);
+  }
 }
 
 .Title {
-    font-size: 1.3em;
-    font-weight: 500;
+  font-size: 1.3em;
+  font-weight: 500;
 }
 
 .Date {
-    font-size: 1em;
-    font-weight: 500;
+  font-size: 1em;
+  font-weight: 400;
+}
+
+.From {
+  text-transform: capitalize;
 }

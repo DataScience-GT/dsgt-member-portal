@@ -12,8 +12,10 @@ const PortalHome: FC<PortalHomeProps> = () => {
     "Hello, {name}.",
     "Welcome back, {name}.",
   ]);
-
   const [secondaryMessage, setSecondaryMessage] = useState("");
+
+  const [loading, setLoading] = useState(true);
+  const [announcements, setAnnouncements] = useState([]);
 
   const addWelcomeMessage = (message: string) => {
     const list = messages.concat(message);
@@ -41,6 +43,30 @@ const PortalHome: FC<PortalHomeProps> = () => {
       //15-24
       addWelcomeMessage("Good Evening, {name}.");
     }
+
+    //get last ~5 announcements
+    const getAnnouncements = async () => {
+      await fetch("/api/announcement/get?count=5", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+        },
+        body: JSON.stringify({
+          session_id: localStorage.getItem("dsgt-portal-session-key"),
+        }),
+      }).then(async (res) => {
+        const json = await res.json();
+        if (!json.ok && json.error) {
+          console.error(json.error);
+        } else {
+          //use data
+          setAnnouncements(json.data);
+        }
+        setLoading(false);
+      });
+    };
+    getAnnouncements();
   }, []);
 
   return (
@@ -67,28 +93,20 @@ const PortalHome: FC<PortalHomeProps> = () => {
         <div className={styles.Announcements}>
           <div className={styles.Minor}>Announcements</div>
           <FlexColumn>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement when={new Date()}>
-              Something something bruh
-            </Announcement>
-            <Announcement>
-              Something something bruh dsad jkasjd klasjdkjas lkjdklasjdl
-              jksadjkla
-            </Announcement>
+            {loading
+              ? "loading..."
+              : announcements.length <= 0
+              ? "No announcements found."
+              : announcements.map((a, i) => {
+                  return (
+                    <Announcement
+                      when={new Date(a["created_at"])}
+                      from={`${a["fname"]} ${a["lname"]}`}
+                    >
+                      {a["message"]}
+                    </Announcement>
+                  );
+                })}
           </FlexColumn>
         </div>
       </FlexRow>

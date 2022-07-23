@@ -4,11 +4,13 @@ import styles from "./Announcement.module.scss";
 interface AnnouncementProps {
   children?: React.ReactNode;
   when?: Date;
+  from?: string;
 }
 
 const Announcement: FC<AnnouncementProps> = ({
   children,
   when,
+  from,
 }: AnnouncementProps) => (
   <div className={styles.Announcement} data-testid="Announcement">
     {when !== undefined ? (
@@ -19,8 +21,10 @@ const Announcement: FC<AnnouncementProps> = ({
           month: "long",
           day: "numeric",
           hour: "2-digit",
-          minute: "2-digit"
+          minute: "2-digit",
         })}
+        {from !== undefined ? ` by ` : ""}
+        <span className={styles.From}>{from !== undefined ? from : ""}</span>
       </h2>
     ) : (
       ""
