@@ -25,12 +25,11 @@ const PortalHome: FC<PortalHomeProps> = () => {
     const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60 * 1000);
     const offset = -300;
     const est = new Date(utc.getTime() + offset * 60 * 1000);
-    // const hours = est.getHours();
-    const hours = 3;
+    const hours = est.getHours();
 
     if (hours >= 0 && hours < 8) {
       //0-8
-      // addWelcomeMessage("test");
+      addWelcomeMessage("Good Morning, {name}.");
       setSecondaryMessage("Up early or staying up late?");
     } else if (hours >= 8 && hours < 12) {
       //8-12
