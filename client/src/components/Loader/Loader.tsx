@@ -9,7 +9,6 @@ interface LoaderProps {
 
 const Loader: FC<LoaderProps> = ({ width, height }) => {
   const { theme, setTheme } = useContext(ThemeContext);
-  console.log(theme)
   return (
     <div
       className={`${styles.Loader} ${styles[theme]}`}
