@@ -52,19 +52,6 @@ const Sidebar: FC<SidebarProps> = () => {
     }
   };
 
-  const toggleTheme = () => {
-    if (theme === Theme.Light) {
-      setTheme(Theme.Dark);
-      localStorage.setItem("dsgt-portal-theme", Theme.Dark);
-    } else if (theme === Theme.Dark) {
-      setTheme(Theme.Black);
-      localStorage.setItem("dsgt-portal-theme", Theme.Black);
-    } else {
-      setTheme(Theme.Light);
-      localStorage.setItem("dsgt-portal-theme", Theme.Light);
-    }
-  };
-
   return (
     <div
       className={`${styles.Sidebar} ${styles[theme]} ${
@@ -115,9 +102,6 @@ const Sidebar: FC<SidebarProps> = () => {
         <h2 className={styles.Role}>
           {localStorage.getItem("dsgt-portal-role")}
         </h2>
-      </div>
-      <div className={styles.Footer}>
-        <button onClick={toggleTheme}>change theme</button>
       </div>
     </div>
   );
