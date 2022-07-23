@@ -81,19 +81,19 @@ const Sidebar: FC<SidebarProps> = () => {
       </SidebarItem>
       <SidebarItem
         onClick={handleClick}
-        imgsrc={settings_icon}
-        open={open}
-        path="/portal/settings"
-      >
-        settings
-      </SidebarItem>
-      <SidebarItem
-        onClick={handleClick}
         imgsrc={members_icon}
         open={open}
         path="/portal/members"
       >
         members
+      </SidebarItem>
+      <SidebarItem
+        onClick={handleClick}
+        imgsrc={settings_icon}
+        open={open}
+        path="/portal/settings"
+      >
+        settings
       </SidebarItem>
       <div className={styles.User}>
         <h1 className={styles.Fname}>
