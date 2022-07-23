@@ -29,6 +29,7 @@ const SidebarItem: FC<SidebarItemProps> = ({
       onClick={onClick}
       data-active={active}
       data-path={path}
+      title={children?.toString()}
     >
       {imgsrc !== undefined ? (
         <img className={styles.Icon} src={imgsrc} alt={children?.toString()} />

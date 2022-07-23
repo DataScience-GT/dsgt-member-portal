@@ -11,6 +11,8 @@ import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
 import members_icon from "../../assets/icons/users-alt.svg";
 
+import logout_icon from "../../assets/icons/sign-out-alt.svg";
+
 interface SidebarProps {}
 
 const Sidebar: FC<SidebarProps> = () => {
@@ -52,6 +54,11 @@ const Sidebar: FC<SidebarProps> = () => {
     }
   };
 
+  const Logout = () => {
+    localStorage.removeItem("dsgt-portal-session-key");
+    window.location.href = "/";
+  };
+
   return (
     <div
       className={`${styles.Sidebar} ${styles[theme]} ${
@@ -77,7 +84,7 @@ const Sidebar: FC<SidebarProps> = () => {
         path="/portal/home"
         active
       >
-        home
+        Home
       </SidebarItem>
       <SidebarItem
         onClick={handleClick}
@@ -85,7 +92,7 @@ const Sidebar: FC<SidebarProps> = () => {
         open={open}
         path="/portal/members"
       >
-        members
+        Members
       </SidebarItem>
       <SidebarItem
         onClick={handleClick}
@@ -93,7 +100,7 @@ const Sidebar: FC<SidebarProps> = () => {
         open={open}
         path="/portal/settings"
       >
-        settings
+        Settings
       </SidebarItem>
       <div className={styles.User}>
         <h1 className={styles.Fname}>
@@ -102,6 +109,18 @@ const Sidebar: FC<SidebarProps> = () => {
         <h2 className={styles.Role}>
           {localStorage.getItem("dsgt-portal-role")}
         </h2>
+      </div>
+      <div className={styles.Logout}>
+        <div
+          className={`${styles.LogoutWrapper} ${
+            open ? styles.Open : styles.Closed
+          }`}
+          onClick={Logout}
+          title="Logout"
+        >
+          <img className={styles.Icon} src={logout_icon} alt="Logout Icon" />
+          <p className={styles.ItemText}>Logout</p>
+        </div>
       </div>
     </div>
   );

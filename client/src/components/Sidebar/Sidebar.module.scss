@@ -42,20 +42,83 @@
   align-items: center;
 
   position: absolute;
+  bottom: 5em;
+  left: 0;
+
+  .Fname {
+    font-size: 1.3em;
+    font-weight: 700;
+    text-transform: capitalize;
+    color: var(--foreground);
+  }
+  .Role {
+    font-size: 1em;
+    font-weight: 500;
+    text-transform: capitalize;
+    color: var(--foreground);
+  }
+}
+
+.Logout {
+  display: flex;
+  height: 5em;
+  width: 100%;
+  border-top: 1px solid var(--borderColor);
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  position: absolute;
   bottom: 0;
   left: 0;
-}
-.Fname {
-  font-size: 1.3em;
-  font-weight: 700;
-  text-transform: capitalize;
-  color: var(--foreground);
-}
-.Role {
-  font-size: 1em;
-  font-weight: 500;
-  text-transform: capitalize;
-  color: var(--foreground);
+  padding: 10px 1em;
+  .LogoutWrapper {
+    display: flex;
+    position: relative;
+    border-radius: 15px;
+    padding: 1em 1.1em;
+    user-select: none;
+    cursor: pointer;
+    align-items: center;
+    width: 100%;
+
+    color: var(--foreground);
+    &:hover {
+      // background: red;
+      background: var(--hover);
+      .Icon {
+        filter: invert(13%) sepia(57%) saturate(7498%) hue-rotate(358deg)
+          brightness(109%) contrast(119%);
+      }
+      .ItemText {
+        color: red;
+      }
+    }
+
+    .Icon {
+      height: 20px;
+      width: 20px;
+      filter: var(--svgFilter);
+    }
+
+    .ItemText {
+      font-size: 1em;
+      font-weight: 500;
+      text-transform: capitalize;
+      margin-left: 10px;
+    }
+  }
+  .Open {
+    .ItemText {
+      display: block;
+    }
+  }
+  .Closed {
+    .ItemText {
+      display: none;
+    }
+  }
 }
 
 .Footer {
