@@ -33,6 +33,10 @@ $fill: #445379;
   width: 50%;
   height: 100%;
   border-radius: 30px;
+  > form {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .PanelRight {
@@ -48,7 +52,7 @@ $fill: #445379;
   font-size: 2em;
   color: #525d85;
   width: fit-content;
-  margin-bottom: 20px;
+  margin-bottom: 1em;
 }
 
 .Divider {

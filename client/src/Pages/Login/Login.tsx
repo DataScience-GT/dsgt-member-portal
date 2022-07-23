@@ -54,14 +54,14 @@ const Login: FC<LoginProps> = () => {
       <div className={styles.Panel}>
         <FlexRow height="100%">
           <div className={`${styles.PanelHalf}`}>
-            <FlexColumn
-              spacing="center"
-              align="center"
-              height="100%"
-              width="100%"
-              padding="0 20%"
-            >
-              <form>
+            <form>
+              <FlexColumn
+                spacing="center"
+                align="center"
+                height="100%"
+                width="100%"
+                padding="0 20%"
+              >
                 <h1 className={styles.Header}>Welcome Back!</h1>
                 <InputField
                   type="email"
@@ -97,8 +97,8 @@ const Login: FC<LoginProps> = () => {
                     </a>
                   </FlexRow>
                 </div>
-              </form>
-            </FlexColumn>
+              </FlexColumn>
+            </form>
           </div>
           <div className={`${styles.PanelHalf} ${styles.PanelRight}`}></div>
         </FlexRow>
