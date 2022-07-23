@@ -33,11 +33,11 @@ export const getRoleValue = (role?: string): number => {
       return 0;
     case "member":
       return 3;
-    case "moderator":
+    case "moderator" || "mod":
       return 6;
-    case "administrator":
+    case "administrator" || "admin":
       return 9;
-    case "developer":
+    case "developer" || "dev":
       return 12;
     case "owner":
       return 999;

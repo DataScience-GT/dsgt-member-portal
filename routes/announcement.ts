@@ -6,6 +6,7 @@ import {
   insertAnnouncement,
   validateSession,
 } from "../model";
+import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -46,9 +47,14 @@ router.post(
     }
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
-      //create ann announcement
-      await insertAnnouncement(message, valid.user_id);
-      res.json({ ok: 1 });
+      //check if proper perms
+      if (compareUserRoles(valid.role, "moderator") >= 0) {
+        //create ann announcement
+        await insertAnnouncement(message, valid.user_id);
+        res.json({ ok: 1 });
+      } else {
+        next(new Error("You do not have permission to complete this action."));
+      }
     } else {
       next(new Error("Session not valid."));
     }
