@@ -1,8 +1,7 @@
 import { Knex } from "knex";
 
 export async function seed(knex: Knex): Promise<void> {
-  // update role
   await knex("user")
-    .update({ role: "owner" })
+    .update({ role: "developer" })
     .where("email", "rambergerjohn@gmail.com");
 }
