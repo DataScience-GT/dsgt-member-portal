@@ -2,6 +2,13 @@ import React, { FC, useEffect, useState } from "react";
 import MemberActionMenu from "../../components/MemberActionMenu/MemberActionMenu";
 import styles from "./PortalMembers.module.scss";
 
+//import icons
+import user_icon from "../../assets/icons/user.svg";
+import email_icon from "../../assets/icons/at.svg";
+import dice_icon from "../../assets/icons/dice-d20.svg";
+import shield_icon from "../../assets/icons/shield-check.svg";
+import list_icon from "../../assets/icons/list.svg";
+
 interface PortalMembersProps {}
 
 type member = {
@@ -48,11 +55,26 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         <table className={styles.Table}>
           <thead>
             <tr>
-              <th>Full Name</th>
-              <th>Email</th>
-              <th>Role</th>
-              <th>Enabled</th>
-              <th>Actions</th>
+              <th>
+                <img src={user_icon} alt="User Icon" />
+                Full Name
+              </th>
+              <th>
+                <img src={email_icon} alt="Email Icon" />
+                Email
+              </th>
+              <th>
+                <img src={dice_icon} alt="Role Icon" />
+                Role
+              </th>
+              <th>
+                <img src={shield_icon} alt="Enabled Icon" />
+                Enabled
+              </th>
+              <th>
+                <img src={list_icon} alt="Actions Icon" />
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -64,7 +86,11 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   </td>
                   <td className={styles.Email}>{member["email"]}</td>
                   <td className={styles.Role}>{member["role"]}</td>
-                  <td className={styles.Enabled}>
+                  <td
+                    className={`${styles.Enabled} ${
+                      member["enabled"] ? styles._Enabled : styles._Disabled
+                    }`}
+                  >
                     {member["enabled"] ? "yes" : "no"}
                   </td>
                   <td className={styles.Actions}>

@@ -12,6 +12,7 @@
   .Name,
   th:nth-child(1) {
     padding: 10px 2em;
+    text-transform: capitalize;
   }
 
   .Email,
@@ -22,11 +23,13 @@
   .Role,
   th:nth-child(3) {
     padding: 10px 5em;
+    text-transform: capitalize;
   }
 
   .Enabled,
   th:nth-child(4) {
     padding: 10px 5em;
+    text-transform: capitalize;
   }
 
   .Actions,
@@ -54,7 +57,18 @@
     font-size: 1em;
     font-weight: 500;
     padding-bottom: 1.5em !important;
-    color: var(--borderColor);
+    color: #7d7d7d;
+    > img {
+      height: 1em;
+      padding-right: 0.25em;
+      transform: translateY(2px);
+      width: auto;
+      // color match text
+      filter: var(--svgFilter);
+      // color match heading
+      // filter: invert(54%) sepia(0%) saturate(123%) hue-rotate(174deg)
+      //   brightness(91%) contrast(86%);
+    }
   }
 
   tbody {
@@ -65,5 +79,16 @@
     //     // background: rgba($color: #ccc, $alpha: 0.2);
     //   }
     // }
+  }
+
+  ._Enabled {
+    color: green;
+  }
+  ._Disabled {
+    color: red;
+  }
+
+  ._Enabled, ._Disabled {
+    font-weight: 700;
   }
 }
