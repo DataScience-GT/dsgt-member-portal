@@ -45,7 +45,7 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
               onChange={handleLnameChange}
             />
           </FlexRow>
-          <InputField placeholder="Save" type="submit" />
+          <InputField placeholder="Save" type="submit" width="auto"/>
         </FlexColumn>
       </form>
       <h2 className={styles.Minor}>Portal Settings</h2>
