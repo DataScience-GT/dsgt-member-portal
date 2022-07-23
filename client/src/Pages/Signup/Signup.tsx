@@ -6,6 +6,7 @@ import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./Signup.module.scss";
 
 import DSGTLogo from "../../assets/branding/logos-20.png";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 interface SignupProps {}
 
@@ -18,6 +19,8 @@ const passwordHelperLines = [
 ];
 
 const Signup: FC<SignupProps> = () => {
+  const [error, setError] = useState("");
+
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
@@ -45,6 +48,34 @@ const Signup: FC<SignupProps> = () => {
     setPassword(e.target.value);
   };
 
+  //handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    await fetch("/api/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+        fname: fname,
+        lname: lname,
+      }),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!json.ok && json.error) {
+        setError(json.error);
+      } else {
+        //save session key to localstorage
+        localStorage.setItem("dsgt-portal-session-key", json.session_key);
+        window.location.href = "/portal";
+      }
+    });
+  };
+
   return (
     //introduce states for each value and prevent/allow certain chars
     <div className={styles.Signup} data-testid="Signup">
@@ -54,60 +85,63 @@ const Signup: FC<SignupProps> = () => {
             <img src={DSGTLogo} alt="DSGT Logo" />
           </div>
           <div className={`${styles.PanelHalf}`}>
-            <FlexColumn
-              spacing="center"
-              align="center"
-              height="100%"
-              width="100%"
-              padding="0 20%"
-            >
-              <h1 className={styles.Header}>Sign Up</h1>
-              <InputField
-                type="text"
-                placeholder="First Name"
+            <form onSubmit={handleSubmit}>
+              <FlexColumn
+                spacing="center"
+                align="center"
+                height="100%"
                 width="100%"
-                onChange={handleChange_fname}
-                validIndication
-              />
-              <InputField
-                type="text"
-                placeholder="Last Name"
-                width="100%"
-                onChange={handleChange_lname}
-                validIndication
-              />
-              <InputField
-                type="email"
-                placeholder="Email"
-                width="100%"
-                onChange={handleChange_email}
-                validIndication
-              />
-              <InputField
-                type="password"
-                placeholder="Password"
-                onChange={handleChange_password}
-                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                width="100%"
-                helper={<InputHelper lines={passwordHelperLines} />}
-                validIndication
-              />
-              <InputField type="submit" placeholder="Sign Up" width="100%" />
-              <div className={styles.Divider}></div>
-              <div className={styles.bottom}>
-                <FlexRow
-                  spacing="space-between"
-                  align="center"
-                  height="fit-content"
+                padding="0 20%"
+              >
+                <h1 className={styles.Header}>Sign Up</h1>
+                <InputField
+                  type="text"
+                  placeholder="First Name"
                   width="100%"
-                >
-                  <h3 className={styles.mini}>I already have an account:</h3>
-                  <a className={styles.InlineButton} href="/login">
-                    Login
-                  </a>
-                </FlexRow>
-              </div>
-            </FlexColumn>
+                  onChange={handleChange_fname}
+                  validIndication
+                />
+                <InputField
+                  type="text"
+                  placeholder="Last Name"
+                  width="100%"
+                  onChange={handleChange_lname}
+                  validIndication
+                />
+                <InputField
+                  type="email"
+                  placeholder="Email"
+                  width="100%"
+                  onChange={handleChange_email}
+                  validIndication
+                />
+                <InputField
+                  type="password"
+                  placeholder="Password"
+                  onChange={handleChange_password}
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                  width="100%"
+                  helper={<InputHelper lines={passwordHelperLines} />}
+                  validIndication
+                />
+                <InputField type="submit" placeholder="Sign Up" width="100%" />
+                <ErrorText>{error}</ErrorText>
+                <div className={styles.Divider}></div>
+                <div className={styles.bottom}>
+                  <FlexRow
+                    spacing="space-between"
+                    align="center"
+                    height="fit-content"
+                    width="100%"
+                  >
+                    <h3 className={styles.mini}>I already have an account:</h3>
+                    <a className={styles.InlineButton} href="/login">
+                      Login
+                    </a>
+                  </FlexRow>
+                </div>
+              </FlexColumn>
+            </form>
           </div>
         </FlexRow>
       </div>

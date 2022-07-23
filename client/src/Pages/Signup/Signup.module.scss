@@ -33,6 +33,10 @@ $fill: #445379;
   width: 50%;
   height: 100%;
   border-radius: 30px;
+  > form {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .PanelLeft {
