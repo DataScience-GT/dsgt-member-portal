@@ -4,7 +4,7 @@ const router = express.Router();
 import ApiAuthenticate from "../middleware/Auth";
 import RateLimit from "../middleware/RateLimiting";
 
-//, RateLimit(5, 1000 * 60)
+import { sendEmail } from "../email";
 
 //setup /api/user
 import user from "./user";
@@ -45,6 +45,15 @@ router.get(
   RateLimit(100, 1000 * 60), // 10 per minute
   (req: Request, res: Response, next: NextFunction) => {
     res.json({ ok: 1, ip: res.locals.clientIp });
+  }
+);
+
+router.get(
+  "/test",
+  ApiAuthenticate,
+  (req: Request, res: Response, next: NextFunction) => {
+    sendEmail("hello world!", "rambergerjohn@gmail.com");
+    res.json({ ok: 1 });
   }
 );
 
