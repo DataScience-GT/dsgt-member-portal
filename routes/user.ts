@@ -262,6 +262,12 @@ router.post(
       next(new Error("Missing 1 or more required fields."));
       return;
     }
+    //check if email exists
+    let exists = await checkUserEmail(email);
+    if (!exists) {
+      next(new Error("Account with that email does not exist."));
+      return;
+    }
     //intitiate a password reset
     //generate a random code
     let x = await initiatePasswordReset(email);

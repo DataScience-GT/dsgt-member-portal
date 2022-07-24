@@ -82,6 +82,14 @@ const Login: FC<LoginProps> = () => {
                   width="100%"
                   onClick={handleSubmit}
                 />
+                <div style={{ width: "100%" }}>
+                  <FlexRow height="fit-content" width="100%" spacing="flex-end">
+                    <a className={styles.mini} href="/passwordreset">
+                      forgot password?
+                    </a>
+                  </FlexRow>
+                </div>
+
                 <ErrorText>{error}</ErrorText>
                 <div className={styles.Divider}></div>
                 <div className={styles.bottom}>

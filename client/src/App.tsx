@@ -11,6 +11,7 @@ import Login from "./Pages/Login/Login";
 import Docs from "./Pages/Docs/Docs.lazy";
 import Portal from "./Pages/Portal/Portal";
 import Loader from "./components/Loader/Loader";
+import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 
 function App() {
   //theme -- use for context
@@ -81,7 +82,8 @@ function App() {
       if (
         window.location.pathname.toLowerCase() !== "/login" &&
         window.location.pathname.toLowerCase() !== "/signup" &&
-        !window.location.pathname.toLowerCase().includes("/docs")
+        !window.location.pathname.toLowerCase().includes("/docs") &&
+        !window.location.pathname.toLowerCase().includes("/passwordreset")
       ) {
         window.location.href = "/login";
       }
@@ -103,6 +105,7 @@ function App() {
             <Routes>
               <Route path="/*" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
+              <Route path="/Passwordreset/*" element={<ResetPassword />} />
               <Route path="/Docs/*" element={<Docs />} />
               {getRoleValue(userRole) >= 0 ? (
                 <Route path="/Portal/*" element={<Portal role={userRole} />} />

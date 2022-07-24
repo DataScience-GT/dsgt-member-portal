@@ -122,6 +122,7 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
           </FlexColumn>
         </form>
       )}
+      <a className={styles.Link} href="/passwordreset">Reset Password</a>
       <h2 className={styles.Minor}>Portal Settings</h2>
       <p className={styles.Mini}>Theme</p>
       <ThemeDropdown />
