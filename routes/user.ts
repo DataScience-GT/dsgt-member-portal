@@ -138,7 +138,7 @@ router.post(
     let u_fname = req.body.user_fname;
     let u_lname = req.body.user_lname;
     let u_enabled = req.body.user_enabled;
-    if (!u_email || !session_key) {
+    if (!session_key) {
       //required fields
       next(new Error("Missing 1 or more required fields"));
       return;
@@ -159,6 +159,10 @@ router.post(
     if (!session_valid || !session_valid.valid) {
       next(new Error("Session not valid."));
       return;
+    }
+
+    if (!u_email) {
+      u_email = session_valid.email;
     }
 
     let session_role = session_valid?.role || "Guest";
