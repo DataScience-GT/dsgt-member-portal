@@ -103,6 +103,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
                       key={i}
                       when={new Date(a["created_at"])}
                       from={`${a["fname"]} ${a["lname"]}`}
+                      id={a["ann_id"]}
                     >
                       {a["message"]}
                     </Announcement>
