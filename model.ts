@@ -287,6 +287,14 @@ export const insertAnnouncement = async (message: string, user_id: number) => {
     .into("announcement");
 };
 
+/**
+ * deletes an announcement
+ * @param announcement_id the id of the announcement
+ */
+export const deleteAnnouncement = async (announcement_id: number) => {
+  await db("announcement").where("ann_id", announcement_id).del();
+};
+
 // export const loginUser = async ({ email, password }: Required<LoginUser>) => {
 //   let hash = md5(password);
 //   let res = await db("user")

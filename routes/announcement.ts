@@ -3,6 +3,7 @@ const router = express.Router();
 
 import RateLimit from "../middleware/RateLimiting";
 import {
+  deleteAnnouncement,
   getAnnouncements,
   insertAnnouncement,
   validateSession,
@@ -57,6 +58,32 @@ router.post(
       if (compareUserRoles(valid.role, "moderator") >= 0) {
         //create ann announcement
         await insertAnnouncement(message, valid.user_id);
+        res.json({ ok: 1 });
+      } else {
+        next(new Error("You do not have permission to complete this action."));
+      }
+    } else {
+      next(new Error("Session not valid."));
+    }
+  }
+);
+
+router.delete(
+  "/remove",
+  RateLimit(10, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let session_id = req.body.session_id;
+    let announcement_id = req.body.announcement_id;
+    if (!session_id || !announcement_id) {
+      next(new Error("Missing 1 or more required fields in body."));
+      return;
+    }
+    let valid = await checkSessionValid(session_id, next);
+    if (valid && valid.valid) {
+      //check if proper perms
+      if (compareUserRoles(valid.role, "moderator") >= 0) {
+        //delete announcement
+        await deleteAnnouncement(announcement_id);
         res.json({ ok: 1 });
       } else {
         next(new Error("You do not have permission to complete this action."));

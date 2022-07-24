@@ -8,6 +8,16 @@
     background: var(--hover);
   }
 }
+.AnnouncementManage {
+  display: block;
+  // border-bottom: 1px solid var(--borderColor);
+  padding-bottom: 5px;
+  margin-bottom: 1em;
+}
+
+.Content {
+  width: calc(100% - 3em);
+}
 
 .Title {
   font-size: 1.3em;
@@ -22,4 +32,23 @@
 
 .From {
   text-transform: capitalize;
+}
+
+.TrashContainer {
+  height: 2em;
+  width: 2em;
+
+  padding: 0.25em;
+  cursor: pointer;
+  border-radius: 10px;
+
+  .Trash {
+    height: 100%;
+    width: 100%;
+    filter: var(--svgFilter);
+    margin-right: 1em;
+  }
+  &:hover {
+    background: var(--hover);
+  }
 }

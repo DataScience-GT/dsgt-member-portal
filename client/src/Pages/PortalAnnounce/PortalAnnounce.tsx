@@ -1,17 +1,28 @@
 import React, { FC, useEffect, useState } from "react";
+import Announcement from "../../components/Announcement/Announcement";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
+import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./PortalAnnounce.module.scss";
 
 interface PortalAnnounceProps {}
 
 const PortalAnnounce: FC<PortalAnnounceProps> = () => {
+  //new announcement
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [message, setMessage] = useState("");
-  const [showModal, setShowModal] = useState(false);
+  const [showSendModal, setShowSendModal] = useState(false);
+
+  //existing announcements
+  const [loading, setLoading] = useState(true);
+  const [announcements, setAnnouncements] = useState([]);
+  const [showDelModal, setShowDelModal] = useState(false);
+  const [currentAnnouncementId, setCurrentAnnouncementId] = useState(-1);
+  const [error2, setError2] = useState("");
+  const [success2, setSuccess2] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,14 +31,15 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       setError("Announcement too short.");
       return;
     }
-    setShowModal(true);
+    setShowSendModal(true);
   };
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
   };
 
-  const handleModalConfirm = async () => {
+  const handleSendModalConfirm = async () => {
     setSuccess("");
+    setError("");
     await fetch("/api/announcement/create", {
       method: "POST",
       headers: {
@@ -49,9 +61,65 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
+  const handleDelModalConfirm = async () => {
+    setSuccess2("");
+    setError2("");
+    await fetch("/api/announcement/remove", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({
+        session_id: localStorage.getItem("dsgt-portal-session-key"),
+        announcement_id: currentAnnouncementId,
+      }),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!json.ok && json.error) {
+        setError2(json.error);
+      } else {
+        //announcement sent
+        setSuccess2("Announcement has been deleted!");
+        document
+          .querySelector(`[data-announcement-id="${currentAnnouncementId}"]`)
+          ?.remove();
+        setCurrentAnnouncementId(-1);
+      }
+    });
+  };
+
+  //get all announcements
+  useEffect(() => {
+    //get all announcements
+    const getAnnouncements = async () => {
+      await fetch("/api/announcement/get", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+        },
+        body: JSON.stringify({
+          session_id: localStorage.getItem("dsgt-portal-session-key"),
+        }),
+      }).then(async (res) => {
+        const json = await res.json();
+        if (!json.ok && json.error) {
+          console.error(json.error);
+        } else {
+          //use data
+          setAnnouncements(json.data);
+        }
+        setLoading(false);
+      });
+    };
+    getAnnouncements();
+  }, []);
+
   return (
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
-      <h1 className={styles.Major}>Announce</h1>
+      <h1 className={styles.Major}>Announcements</h1>
+      <h2 className={styles.Minor}>Send Announcement</h2>
       <form onSubmit={handleSubmit}>
         <textarea
           className={styles.TextBox}
@@ -63,13 +131,51 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         <InputField placeholder="Send" type={"submit"} width="fit-content" />
       </form>
       <Modal
-        open={showModal}
-        setOpen={setShowModal}
+        open={showSendModal}
+        setOpen={setShowSendModal}
         preset={ModalPreset.Confirm}
-        handleConfirmed={handleModalConfirm}
+        handleConfirmed={handleSendModalConfirm}
       >
         Are you sure you would like to send the following announcement?
         <span className={styles.AnnConfirm}>{message}</span>
+      </Modal>
+
+      <h2 className={styles.Minor}>Existing Announcements</h2>
+      <ErrorText>{error2}</ErrorText>
+      <SuccessText>{success2}</SuccessText>
+      {loading ? (
+        <div>loading...</div>
+      ) : (
+        <FlexColumn>
+          {announcements.length <= 0
+            ? "No announcements found."
+            : announcements.map((a, i) => {
+                return (
+                  <Announcement
+                    key={i}
+                    when={new Date(a["created_at"])}
+                    from={`${a["fname"]} ${a["lname"]}`}
+                    id={a["ann_id"]}
+                    deletable={true}
+                    onDelete={(announcement_id?: number) => {
+                      setShowDelModal(true);
+                      if (announcement_id)
+                        setCurrentAnnouncementId(announcement_id);
+                    }}
+                  >
+                    {a["message"]}
+                  </Announcement>
+                );
+              })}
+        </FlexColumn>
+      )}
+      <Modal
+        open={showDelModal}
+        setOpen={setShowDelModal}
+        preset={ModalPreset.Confirm}
+        handleConfirmed={handleDelModalConfirm}
+      >
+        Are you sure you would like to delete this announcement?
       </Modal>
     </div>
   );
