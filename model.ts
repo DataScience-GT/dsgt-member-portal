@@ -230,7 +230,8 @@ export const getCountUserRequestsWithinTimeframe = async (
   let t1 = new Date(now.getTime() - time);
   return await db("ratelimiting")
     .count("*")
-    .where("created_at", ">=", t1.toISOString());
+    .where("created_at", ">=", t1.toISOString())
+    .andWhere("pathname", pathname);
 };
 
 /**

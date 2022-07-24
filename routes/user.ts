@@ -3,7 +3,7 @@ const router = express.Router();
 
 //get crypto
 const crypto = require("crypto");
-
+import RateLimit from "../middleware/RateLimiting";
 import {
   getUsers,
   registerUser,
@@ -23,28 +23,33 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
 });
 
-router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
-  let session_id = req.body.session_id;
-  if (!session_id) {
-    next(new Error("Missing 1 or more required fields in body."));
-    return;
-  }
-  let valid = await checkSessionValid(session_id, next);
-  if (valid && valid.valid) {
-    //check if has enough perms
-    if (compareUserRoles(valid.role, "administrator") >= 0) {
-      const x = await getUsers();
-      res.json({ ok: 1, data: x });
-    } else {
-      next(new Error("You do not have permission to complete this action."));
+router.post(
+  "/get",
+  RateLimit(20, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let session_id = req.body.session_id;
+    if (!session_id) {
+      next(new Error("Missing 1 or more required fields in body."));
+      return;
     }
-  } else {
-    next(new Error("Session not valid."));
+    let valid = await checkSessionValid(session_id, next);
+    if (valid && valid.valid) {
+      //check if has enough perms
+      if (compareUserRoles(valid.role, "administrator") >= 0) {
+        const x = await getUsers();
+        res.json({ ok: 1, data: x });
+      } else {
+        next(new Error("You do not have permission to complete this action."));
+      }
+    } else {
+      next(new Error("Session not valid."));
+    }
   }
-});
+);
 
 router.post(
   "/self",
+  RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
@@ -63,6 +68,7 @@ router.post(
 
 router.post(
   "/register",
+  RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let u: RegisterUser = {
       email: req.body.email,
@@ -93,6 +99,7 @@ router.post(
 
 router.post(
   "/login",
+  RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let u: LoginUser = {
       email: req.body.email,
@@ -129,6 +136,7 @@ router.post(
 
 router.post(
   "/update",
+  RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     //check body for props
     let session_key = req.body.session_id;

@@ -3,6 +3,8 @@ const router = express.Router();
 
 import { getSessions, validateSession } from "../model";
 
+import RateLimit from "../middleware/RateLimiting";
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the session api!");
 });
@@ -15,6 +17,7 @@ router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   "/validate",
+  RateLimit(100, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let sessionKey = req.body.session_id;
     if (!sessionKey) {

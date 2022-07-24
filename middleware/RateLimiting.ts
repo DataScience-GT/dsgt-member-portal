@@ -41,7 +41,7 @@ const RateLimit = (
         //block the request
         next(
           new Error(
-            "Too many requests for " + path + ". Please wait between requests."
+            "Too many requests. Please wait between requests."
           )
         );
       } else {

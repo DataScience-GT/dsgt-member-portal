@@ -8,7 +8,7 @@ import RateLimit from "../middleware/RateLimiting";
 
 //setup /api/user
 import user from "./user";
-router.use("/user", ApiAuthenticate, RateLimit(10, 1000 * 60), user);
+router.use("/user", ApiAuthenticate, user);
 
 //setup /api/session
 import session from "./session";
