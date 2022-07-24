@@ -412,7 +412,7 @@ export const attemptPasswordReset = async (
   }
   let user_email = res1[0].user_email;
   let created_at = new Date(res1[0].created_at);
-  let completed = res1[0].completedF;
+  let completed = res1[0].completed;
   //check if already completed
   if (completed) {
     next(new Error("Reset has already been completed."));
