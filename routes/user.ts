@@ -286,7 +286,9 @@ router.post(
     }
     //complete the password reset
     let x = await attemptPasswordReset(reset_code, new_password, next);
-    res.json({ ok: 1 });
+    if (!res.headersSent) {
+      res.json({ ok: 1 });
+    }
   }
 );
 
