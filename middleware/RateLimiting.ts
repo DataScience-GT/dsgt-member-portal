@@ -39,7 +39,11 @@ const RateLimit = (
       let countRecent = x[0].count;
       if (countRecent >= rate_limit) {
         //block the request
-        next(new Error("Too many requests. Please wait between requests."));
+        next(
+          new Error(
+            "Too many requests for " + path + ". Please wait between requests."
+          )
+        );
       } else {
         await insertApiRequest(clientIp, path);
         next();
