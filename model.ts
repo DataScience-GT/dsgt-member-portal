@@ -38,18 +38,38 @@ function getErrorMessage(error: unknown) {
 //-------------------- all db operations ---------------------
 //------------------------------------------------------------
 
-export const getUsers = () => {
-  return db
-    .select(
-      "user_inc as user_id",
-      "email",
-      "fname",
-      "lname",
-      "enabled",
-      "role",
-      "created_at"
-    )
-    .from("user");
+export type Sort = {
+  column: string;
+  order: string;
+};
+
+export const getUsers = (sorts?: Sort[] | Sort) => {
+  if (sorts) {
+    return db
+      .select(
+        "user_inc as user_id",
+        "email",
+        "fname",
+        "lname",
+        "enabled",
+        "role",
+        "created_at"
+      )
+      .from("user")
+      .orderBy(sorts);
+  } else {
+    return db
+      .select(
+        "user_inc as user_id",
+        "email",
+        "fname",
+        "lname",
+        "enabled",
+        "role",
+        "created_at"
+      )
+      .from("user");
+  }
 };
 
 /**

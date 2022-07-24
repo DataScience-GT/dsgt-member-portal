@@ -14,6 +14,7 @@ import {
   getUserRole,
   updateUser,
   getUserEnabled,
+  Sort,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -25,18 +26,21 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   "/get",
-  RateLimit(20, 1000 * 60),
+  RateLimit(40, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
       next(new Error("Missing 1 or more required fields in body."));
       return;
     }
+
+    let sorts = JSON.parse(req.body.sorts) as Sort[];
+
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
       //check if has enough perms
       if (compareUserRoles(valid.role, "administrator") >= 0) {
-        const x = await getUsers();
+        const x = await getUsers(sorts);
         res.json({ ok: 1, data: x });
       } else {
         next(new Error("You do not have permission to complete this action."));

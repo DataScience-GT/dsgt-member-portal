@@ -58,6 +58,14 @@
     font-weight: 500;
     padding-bottom: 1.5em !important;
     color: #7d7d7d;
+
+    &:nth-child(-n + 4) {
+      cursor: pointer;
+      transition: var(--animDuration) color ease;
+      &:hover {
+        color: var(--foreground);
+      }
+    }
     > img {
       height: 1em;
       padding-right: 0.25em;
@@ -68,6 +76,9 @@
       // color match heading
       // filter: invert(54%) sepia(0%) saturate(123%) hue-rotate(174deg)
       //   brightness(91%) contrast(86%);
+    }
+    .SortIcon {
+      padding-left: 0.4em;
     }
   }
 
@@ -88,7 +99,8 @@
     color: red;
   }
 
-  ._Enabled, ._Disabled {
+  ._Enabled,
+  ._Disabled {
     font-weight: 700;
   }
 }

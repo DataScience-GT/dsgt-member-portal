@@ -8,6 +8,10 @@ import email_icon from "../../assets/icons/at.svg";
 import dice_icon from "../../assets/icons/dice-d20.svg";
 import shield_icon from "../../assets/icons/shield-check.svg";
 import list_icon from "../../assets/icons/list.svg";
+
+import sort_up from "../../assets/icons/sort-amount-up.svg";
+import sort_down from "../../assets/icons/sort-amount-down.svg";
+
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import ErrorText from "../../components/ErrorText/ErrorText";
 
@@ -19,6 +23,11 @@ type member = {
   email: string;
   role: string;
   enabled: boolean;
+};
+
+type Sort = {
+  column: string;
+  order: string;
 };
 
 const PortalMembers: FC<PortalMembersProps> = () => {
@@ -35,6 +44,16 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     role: "",
   });
   const [enable, setEnable] = useState(false);
+
+  const [currentSort, setCurrentSort] = useState(
+    JSON.parse(localStorage.getItem("dsgt-portal-member-sorts") || "") || [
+      { column: "", order: "" },
+    ]
+  );
+  const [currentOrder, setCurrentOrder] = useState(
+    currentSort[0].order == "asc" || false
+  );
+  const [reload, setReload] = useState(0);
 
   const handleEnableDisable = (
     user_id: number,
@@ -92,6 +111,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         },
         body: JSON.stringify({
           session_id: localStorage.getItem("dsgt-portal-session-key"),
+          sorts: localStorage.getItem("dsgt-portal-member-sorts"),
         }),
       }).then(async (res) => {
         const json = await res.json();
@@ -100,13 +120,69 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           console.log(json.error);
         } else {
           setMembers(json.data);
-          console.log(json.data);
+          // console.log(json.data);
           setLoading(false);
         }
       });
     };
     callDB();
-  }, []);
+  }, [reload]);
+
+  // --------------- handle sorting of table ---------------
+  const handleSort = (type: number) => {
+    let o = currentOrder;
+    if (type === 1) {
+      //full name
+      if (currentSort[0].column.includes("name")) {
+        //resort in opposite direction
+        setCurrentOrder(!currentOrder);
+        o = !o;
+      }
+      let order = o ? "asc" : "desc";
+      setCurrentSort([
+        { column: "fname", order: order },
+        { column: "lname", order: order },
+      ]);
+    } else if (type === 2) {
+      //email
+      if (currentSort[0].column === "email") {
+        //resort in opposite direction
+        setCurrentOrder(!currentOrder);
+        o = !o;
+      }
+      let order = o ? "asc" : "desc";
+      setCurrentSort([{ column: "email", order: order }]);
+    } else if (type === 3) {
+      //role
+      if (currentSort[0].column === "role") {
+        //resort in opposite direction
+        setCurrentOrder(!currentOrder);
+        o = !o;
+      }
+      let order = o ? "asc" : "desc";
+      setCurrentSort([{ column: "role", order: order }]);
+    } else if (type === 4) {
+      //enabled
+      if (currentSort[0].column === "enabled") {
+        //resort in opposite direction
+        setCurrentOrder(!currentOrder);
+        o = !o;
+      }
+      let order = o ? "asc" : "desc";
+      setCurrentSort([{ column: "enabled", order: order }]);
+    }
+    setReload(reload + 1);
+  };
+
+  useEffect(() => {
+    // console.log(currentSort, currentOrder);
+    if (currentSort.length && currentSort[0].column && currentSort[0].order) {
+      localStorage.setItem(
+        "dsgt-portal-member-sorts",
+        JSON.stringify(currentSort)
+      );
+    }
+  }, [currentSort]);
 
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
@@ -117,21 +193,105 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         <table className={styles.Table}>
           <thead>
             <tr>
-              <th>
+              <th
+                onClick={() => {
+                  handleSort(1);
+                }}
+              >
                 <img src={user_icon} alt="User Icon" />
                 Full Name
+                {currentSort[0].column.includes("name") ? (
+                  currentOrder ? (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_up}
+                      alt="Sort Icon"
+                    />
+                  ) : (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_down}
+                      alt="Sort Icon"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
               </th>
-              <th>
+              <th
+                onClick={() => {
+                  handleSort(2);
+                }}
+              >
                 <img src={email_icon} alt="Email Icon" />
                 Email
+                {currentSort[0].column === "email" ? (
+                  currentOrder ? (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_up}
+                      alt="Sort Icon"
+                    />
+                  ) : (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_down}
+                      alt="Sort Icon"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
               </th>
-              <th>
+              <th
+                onClick={() => {
+                  handleSort(3);
+                }}
+              >
                 <img src={dice_icon} alt="Role Icon" />
                 Role
+                {currentSort[0].column === "role" ? (
+                  currentOrder ? (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_up}
+                      alt="Sort Icon"
+                    />
+                  ) : (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_down}
+                      alt="Sort Icon"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
               </th>
-              <th>
+              <th
+                onClick={() => {
+                  handleSort(4);
+                }}
+              >
                 <img src={shield_icon} alt="Enabled Icon" />
                 Enabled
+                {currentSort[0].column === "enabled" ? (
+                  currentOrder ? (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_up}
+                      alt="Sort Icon"
+                    />
+                  ) : (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_down}
+                      alt="Sort Icon"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
               </th>
               <th>
                 <img src={list_icon} alt="Actions Icon" />
