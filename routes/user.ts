@@ -15,6 +15,9 @@ import {
   updateUser,
   getUserEnabled,
   Sort,
+  initiatePasswordReset,
+  getPasswordResets,
+  attemptPasswordReset,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -236,6 +239,54 @@ router.post(
       }
     }
     //update user
+  }
+);
+
+router.post(
+  "/resetpassword/get",
+  RateLimit(3, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    //intitiate a password reset
+    //generate a random code
+    let x = await getPasswordResets();
+    res.json({ ok: 1, data: x });
+  }
+);
+
+router.post(
+  "/resetpassword/initiate",
+  RateLimit(10, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let email = req.body.email;
+    if (!email) {
+      next(new Error("Missing 1 or more required fields."));
+      return;
+    }
+    //intitiate a password reset
+    //generate a random code
+    let x = await initiatePasswordReset(email);
+    if (!x) {
+      next(new Error("Failed to generate reset code. Try again later."));
+      return;
+    }
+    //DO NOT SEND THIS CODE BACK TO THE REQEUST -- EMAIL TO THE EMAIL GIVEN
+    res.json({ ok: 1, reset_code: x });
+  }
+);
+
+router.post(
+  "/resetpassword/complete",
+  RateLimit(3, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let reset_code = req.body.reset_code;
+    let new_password = req.body.new_password;
+    if (!reset_code || !new_password) {
+      next(new Error("Missing 1 or more required fields."));
+      return;
+    }
+    //complete the password reset
+    let x = await attemptPasswordReset(reset_code, new_password, next);
+    res.json({ ok: 1 });
   }
 );
 

@@ -4,7 +4,9 @@ const md5 = require("md5");
 import { log, warning, error } from "./Logger";
 import { User, RegisterUser, LoginUser } from "./interfaces/User";
 import { NewSession } from "./interfaces/Session";
-import { NextFunction } from "express";
+import e, { NextFunction } from "express";
+
+const crypto = require("crypto");
 
 type ErrorWithMessage = {
   message: string;
@@ -163,6 +165,34 @@ export const loginUser = async ({ email, password }: Required<LoginUser>) => {
 };
 
 /**
+ * changes a user's password
+ * @returns true if succeeded, false otherwise
+ */
+export const changeUserPassword = async (
+  email: string,
+  current_password: string,
+  new_password: string
+) => {
+  let curr_hash = md5(current_password);
+  let new_hash = md5(new_password);
+  //check if current password is correct
+  let res = await db("user")
+    .count("*")
+    .where("email", email)
+    .andWhere("password", curr_hash);
+  if (res.length <= 0) {
+    return false;
+  } else {
+    //update password
+    await db("user")
+      .update({ password: new_hash })
+      .where("email", email)
+      .andWhere("password", curr_hash);
+    return true;
+  }
+};
+
+/**
  * gets whether a user account in enabled or not.
  * @Note pair with checkUserEmail() to make sure the email exists first.
  * @param email user's email
@@ -315,181 +345,91 @@ export const deleteAnnouncement = async (announcement_id: number) => {
   await db("announcement").where("ann_id", announcement_id).del();
 };
 
-// export const loginUser = async ({ email, password }: Required<LoginUser>) => {
-//   let hash = md5(password);
-//   let res = await db("user")
-//     .count("*")
-//     .where("email", email)
-//     .andWhere("password", hash);
-//   if (parseInt(res[0].count)) {
-//     return true;
-//   }
-//   return false;
-// };
+// ---------------------- password reset ----------------------
 
-// /**
-//  * gets all rows in game table
-//  * @returns json
-//  */
-// const getGames = () => {
-//     return db.select("*").from("game");
-// };
+export const getPasswordResets = async () => {
+  return await db("passwordreset").select(
+    "reset_id",
+    "user_email",
+    "reset_code",
+    "completed",
+    "created_at"
+  );
+};
 
-// /**
-//  * checks whether the game_code exists in the table
-//  * @param {string} game_code the code for the game
-//  * @returns the game_id if found
-//  */
-// const gameCodeExists = async (game_code) => {
-//     let res = await db("game").select("game_id").where("game_code", game_code);
-//     //let res = await db("game").count("*").where("game_code", game_code);
-//     if (!res[0]) {
-//         return null;
-//     } else if (res[0].game_id) {
-//         return res[0].game_id;
-//     }
-//     return null;
-// };
+/**
+ * checks whether a reset code exists
+ * @param reset_code {string}
+ * @returns true if unique, false otherwise
+ */
+export const checkResetCode = async (reset_code: string) => {
+  let res = await db("passwordreset")
+    .count("*")
+    .where("reset_code", reset_code);
+  if (res.length <= 0 || res[0].count <= 0) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
-// /**
-//  * creates a new game
-//  * @param {string} game_code code of the game
-//  * @param {string} game_type type of game (trivia, etc)
-//  * @returns db result
-//  */
-// const createGame = async (game_code, game_type) => {
-//     await db
-//         .insert({ game_code: game_code, game_type: game_type })
-//         .into("game");
+export const initiatePasswordReset = async (user_email: string) => {
+  let reset_code;
+  let unique = false;
+  let count = 0;
+  while (!unique && count < 15) {
+    reset_code = crypto.randomBytes(24).toString("hex");
+    let x = await checkResetCode(reset_code);
+    if (x) {
+      unique = true;
+    } else {
+      count++;
+    }
+  }
+  if (count >= 15) {
+    return false;
+  } else {
+    //insert
+    await db("passwordreset").insert({
+      user_email: user_email,
+      reset_code: reset_code,
+    });
+    return reset_code;
+  }
+};
 
-//     let res = await db
-//         .select("game_id")
-//         .from("game")
-//         .where("game_code", game_code);
-//     return res[0].game_id;
-// };
-
-// const getGameType = async (game_id) => {
-//     let res = await db
-//         .select("game_type")
-//         .from("game")
-//         .where("game_id", game_id);
-
-//     if (res) {
-//         if (res[0]) {
-//             if (res[0].game_type) {
-//                 return res[0].game_type;
-//             }
-//         }
-//     }
-//     return null;
-// };
-
-// const getGameCode = async (game_id) => {
-//     let res = await db
-//         .select("game_code")
-//         .from("game")
-//         .where("game_id", game_id);
-
-//     if (res) {
-//         if (res[0]) {
-//             if (res[0].game_code) {
-//                 return res[0].game_code;
-//             }
-//         }
-//     }
-//     return null;
-// };
-
-// const startGame = (game_id) => {
-//     return db("game").update({ started: true }).where("game_id", game_id);
-// };
-
-// const getStarted = async (game_id) => {
-//     let res = await db.select("started").from("game").where("game_id", game_id);
-
-//     if (res) {
-//         if (res[0]) {
-//             if (res[0].started) {
-//                 return res[0].started;
-//             }
-//         }
-//     }
-//     return false;
-// };
-
-// /**
-//  * gets all rows in session table
-//  * @returns json
-//  */
-// const getSessions = () => {
-//     return db.select("*").from("session");
-// };
-
-// /**
-//  * creates a new session (player joining a game)
-//  * @param {string} game_id the id of the game the player is joining
-//  * @param {string} username the username of the player
-//  * @param {string} session_id the session token
-//  * @returns vip? boolean
-//  */
-// const createSession = async (game_id, username, session_id) => {
-//     let res = await db("session")
-//         .count("*")
-//         .where("game_id", game_id)
-//         .andWhere("vip", true);
-
-//     var vip = false;
-//     if (parseInt(res[0].count) <= 0) {
-//         //no vip yet
-//         vip = true;
-//     }
-
-//     //vip already exists
-//     await db
-//         .insert({
-//             game_id: game_id,
-//             username: username,
-//             session_id: session_id,
-//             vip: vip,
-//         })
-//         .into("session");
-
-//     return vip;
-// };
-
-// /**
-//  * gets all players for a game
-//  * @param {String} game_id the id of the game
-//  * @returns json
-//  */
-// const getPlayers = (game_id:string) => {
-//     //return db.select("*").from("session");
-//     return db.select("*").from("session").where("game_id", game_id);
-// };
-
-// /**
-//  * removes all rows from a table
-//  * @param {String} table name of the table to wipe
-//  * @returns db result
-//  */
-// const wipeTable = (table:string) => {
-//     return db(table).del();
-// };
-
-// module.exports = {
-//     getGames,
-//     createGame,
-//     gameCodeExists,
-//     getGameType,
-//     getGameCode,
-//     startGame,
-//     getStarted,
-
-//     getSessions,
-//     createSession,
-
-//     getPlayers,
-
-//     wipeTable,
-// };
+export const attemptPasswordReset = async (
+  reset_code: string,
+  new_password: string,
+  next: NextFunction
+) => {
+  let res1 = await db("passwordreset")
+    .select("user_email", "created_at", "completed")
+    .where("reset_code", reset_code);
+  if (res1.length <= 0) {
+    next(new Error("Invalid reset code."));
+    return;
+  }
+  let user_email = res1[0].user_email;
+  let created_at = new Date(res1[0].created_at);
+  let completed = res1[0].completedF;
+  //check if already completed
+  if (completed) {
+    next(new Error("Reset has already been completed."));
+    return;
+  }
+  //check if reset code is valid
+  let now = new Date();
+  let time_diff_ms = now.getTime() - created_at.getTime();
+  let time_diff_s = time_diff_ms / 1000;
+  let time_diff_m = time_diff_s / 60;
+  if (time_diff_m > 10) {
+    next(new Error("Password reset expired."));
+    return;
+  }
+  let new_hash = md5(new_password);
+  await db("user").update({ password: new_hash }).where("email", user_email);
+  await db("passwordreset")
+    .update({ completed: true })
+    .where("reset_code", reset_code);
+};
