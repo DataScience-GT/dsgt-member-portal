@@ -26,7 +26,7 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   "/get",
-  RateLimit(40, 1000 * 60),
+  RateLimit(100, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
