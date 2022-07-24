@@ -184,6 +184,7 @@ export const validateSession = async (session_id: string) => {
       "session.created_at",
       "session.user_id",
       "user.fname",
+      "user.lname",
       "session.enabled",
       "user.role",
       "user.email"

@@ -44,6 +44,24 @@ router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post(
+  "/self",
+  async (req: Request, res: Response, next: NextFunction) => {
+    let session_id = req.body.session_id;
+    if (!session_id) {
+      next(new Error("Missing 1 or more required fields in body."));
+      return;
+    }
+    let valid = await checkSessionValid(session_id, next);
+    if (valid && valid.valid) {
+      //check if has enough perms
+      res.json({ ok: 1, data: valid });
+    } else {
+      next(new Error("Session not valid."));
+    }
+  }
+);
+
+router.post(
   "/register",
   async (req: Request, res: Response, next: NextFunction) => {
     let u: RegisterUser = {

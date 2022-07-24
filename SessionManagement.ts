@@ -5,6 +5,7 @@ type SessionValidation = {
   ok: number;
   valid: boolean;
   fname: string;
+  lname: string;
   email: string;
   user_id: number;
   role: string;
@@ -30,6 +31,7 @@ export const checkSessionValid = async (
         ok: 1,
         valid: true,
         fname: x.fname,
+        lname: x.lname,
         email: x.email,
         user_id: x.user_id,
         role: x.role,
@@ -40,6 +42,7 @@ export const checkSessionValid = async (
         ok: 1,
         valid: false,
         fname: x.fname,
+        lname: x.lname,
         email: x.email,
         user_id: x.user_id,
         role: x.role,
