@@ -23,10 +23,24 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
 });
 
-router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
-  const x = await getUsers();
-  res.json({ ok: 1, data: x });
-  // res.json(x);
+router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
+  let session_id = req.body.session_id;
+  if (!session_id) {
+    next(new Error("Missing 1 or more required fields in body."));
+    return;
+  }
+  let valid = await checkSessionValid(session_id, next);
+  if (valid && valid.valid) {
+    //check if has enough perms
+    if (compareUserRoles(valid.role, "administrator") >= 0) {
+      const x = await getUsers();
+      res.json({ ok: 1, data: x });
+    } else {
+      next(new Error("You do not have permission to complete this action."));
+    }
+  } else {
+    next(new Error("Session not valid."));
+  }
 });
 
 router.post(
@@ -124,6 +138,11 @@ router.post(
     }
     //check if authorized to edit user
     let session_valid = await checkSessionValid(session_key, next);
+    if (!session_valid || !session_valid.valid) {
+      next(new Error("Session not valid."));
+      return;
+    }
+
     let session_role = session_valid?.role || "Guest";
     //validateSession() returns user role -- compare to other user role
     if (!(await checkUserEmail(u_email.toLowerCase()))) {
