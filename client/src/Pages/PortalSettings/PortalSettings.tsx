@@ -51,6 +51,7 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     //make sure the new value is different than the original value
     console.log(fname, o_fname, lname, o_lname);
     if (fname !== o_fname || lname !== o_lname) {
