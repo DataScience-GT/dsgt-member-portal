@@ -18,6 +18,7 @@ import {
   initiatePasswordReset,
   getPasswordResets,
   attemptPasswordReset,
+  deleteUser,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -36,8 +37,10 @@ router.post(
       next(new Error("Missing 1 or more required fields in body."));
       return;
     }
-
-    let sorts = JSON.parse(req.body.sorts) as Sort[];
+    let sorts;
+    if (req.body.sorts) {
+      sorts = JSON.parse(req.body.sorts) as Sort[];
+    }
 
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
@@ -298,9 +301,18 @@ router.post(
   }
 );
 
-router.delete("/remove", (req: Request, res: Response, next: NextFunction) => {
-  res.json({ ok: 1 });
-});
+router.delete(
+  "/remove",
+  async (req: Request, res: Response, next: NextFunction) => {
+    let user_email = req.body.email;
+    if (!user_email) {
+      next(new Error("missing 1 or more required fields."));
+      return;
+    }
+    await deleteUser(user_email);
+    res.json({ ok: 1 });
+  }
+);
 
 const generateSessionKey = (length: number): string => {
   //create session token

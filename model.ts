@@ -83,9 +83,20 @@ export const registerUser = async (
 ) => {
   try {
     //add the user to the database
+    let uuid = crypto.randomBytes(24).toString("hex");
+    while (await checkUUIDExists(uuid)) {
+      //regenerate new uuid until unique
+      uuid = crypto.randomBytes(24).toString("hex");
+    }
     let hash = md5(password);
     await db
-      .insert({ email: email, fname: fname, lname: lname, password: hash })
+      .insert({
+        email: email,
+        fname: fname,
+        lname: lname,
+        password: hash,
+        uuid: uuid,
+      })
       .into("user");
     let res = await db
       .select("user_inc")
@@ -104,7 +115,7 @@ export const registerUser = async (
 
 /**
  * updates a user based on their email
- * @param param0 User
+ * @param param0 {User}
  */
 export const updateUser = async ({
   email,
@@ -207,6 +218,16 @@ export const getUserEnabled = async (email: string) => {
   }
 };
 
+/**
+ * removes a user from the database
+ * @param email {string}
+ */
+export const deleteUser = async (email: string) => {
+  await db("user").where("email", email).del();
+};
+
+// ------------------- session -------------------
+
 export const getSessions = async () => {
   return db.select("*").from("session");
 };
@@ -225,7 +246,7 @@ export const createSession = async ({
 /**
  * validates a user's session token
  * @param session_id {string} the user's session id
- * @returns session.created_at, user_id, fname, session.enabled, role, email
+ * @returns session.created_at, user_id, fname, session.enabled, role, email, uuid
  */
 export const validateSession = async (session_id: string) => {
   let res = await db("session")
@@ -237,7 +258,8 @@ export const validateSession = async (session_id: string) => {
       "user.lname",
       "session.enabled",
       "user.role",
-      "user.email"
+      "user.email",
+      "user.uuid"
     )
     .where("session_id", session_id);
   if (res.length <= 0) {
@@ -373,6 +395,11 @@ export const checkResetCode = async (reset_code: string) => {
   }
 };
 
+/**
+ * attempts to intiate a password reset
+ * @param user_email {string}
+ * @returns reset_code or false if fails
+ */
 export const initiatePasswordReset = async (user_email: string) => {
   let reset_code;
   let unique = false;
@@ -398,6 +425,12 @@ export const initiatePasswordReset = async (user_email: string) => {
   }
 };
 
+/**
+ * attmepts a password reset
+ * @param reset_code {string}
+ * @param new_password {string}
+ * @param next {NextFunction}
+ */
 export const attemptPasswordReset = async (
   reset_code: string,
   new_password: string,
@@ -432,4 +465,18 @@ export const attemptPasswordReset = async (
   await db("passwordreset")
     .update({ completed: true })
     .where("reset_code", reset_code);
+};
+
+/**
+ * checks whether a user uuid exists
+ * @param uuid {string}
+ * @returns true if exists, false otherwise
+ */
+export const checkUUIDExists = async (uuid: string) => {
+  let res = await db("user").count("*").where("uuid", uuid);
+  if (res.length <= 0 || res[0].count <= 0) {
+    return false;
+  } else {
+    return true;
+  }
 };
