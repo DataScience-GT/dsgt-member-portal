@@ -28,7 +28,8 @@ const Login: FC<LoginProps> = () => {
   };
 
   //handle form submission
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setError("");
     await fetch("/api/user/login", {
       method: "POST",
@@ -54,7 +55,7 @@ const Login: FC<LoginProps> = () => {
       <div className={styles.Panel}>
         <FlexRow height="100%">
           <div className={`${styles.PanelHalf}`}>
-            <form>
+            <form onSubmit={handleSubmit}>
               <FlexColumn
                 spacing="center"
                 align="center"
@@ -76,12 +77,7 @@ const Login: FC<LoginProps> = () => {
                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                   width="100%"
                 />
-                <InputField
-                  type="submit"
-                  placeholder="Login"
-                  width="100%"
-                  onClick={handleSubmit}
-                />
+                <InputField type="submit" placeholder="Login" width="100%" />
                 <div style={{ width: "100%" }}>
                   <FlexRow height="fit-content" width="100%" spacing="flex-end">
                     <a className={styles.mini} href="/passwordreset">
