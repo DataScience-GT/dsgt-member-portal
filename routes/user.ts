@@ -3,6 +3,10 @@ const router = express.Router();
 
 //get crypto
 const crypto = require("crypto");
+
+//get qrcode
+const qrcode = require("qrcode");
+
 import RateLimit from "../middleware/RateLimiting";
 import {
   getUsers,
@@ -311,6 +315,32 @@ router.delete(
     }
     await deleteUser(user_email);
     res.json({ ok: 1 });
+  }
+);
+
+router.post(
+  "/qrcode",
+  RateLimit(20, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let session_id = req.body.session_id;
+    if (!session_id) {
+      next(new Error("Missing 1 or more required fields."));
+      return;
+    }
+    //generate a qrcode img
+    let session = await checkSessionValid(session_id, next);
+    if (session && session.valid) {
+      //check if has enough perms
+      qrcode.toDataURL(session.uuid, function (err: Error, url: string) {
+        if (err) {
+          next(err);
+          return;
+        }
+        res.json({ ok: 1, qrcode: url });
+      });
+    } else {
+      next(new Error("Session not valid."));
+    }
   }
 );
 
