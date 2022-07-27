@@ -13,6 +13,7 @@ import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
 import members_icon from "../../assets/icons/users-alt.svg";
 import megaphone_icon from "../../assets/icons/megaphone.svg";
+import account_icon from "../../assets/icons/portrait.svg";
 
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 
@@ -115,6 +116,14 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       ) : (
         ""
       )}
+      <SidebarItem
+        onClick={handleClick}
+        imgsrc={account_icon}
+        open={open}
+        path="/portal/account"
+      >
+        Account
+      </SidebarItem>
       <SidebarItem
         onClick={handleClick}
         imgsrc={settings_icon}

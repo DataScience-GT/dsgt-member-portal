@@ -10,6 +10,7 @@ import { Theme, ThemeContext } from "../../Context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
 import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
+import PortalAccount from "../PortalAccount/PortalAccount";
 
 interface PortalProps {
   role?: string;
@@ -25,6 +26,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
           <Routes>
             <Route path="/*" element={<PortalHome />} />
             <Route path="/settings" element={<PortalSettings />} />
+            <Route path="/account" element={<PortalAccount />} />
             {compareUserRoles(role || "guest", "moderator") >= 0 ? (
               <Route path="/members" element={<PortalMembers />} />
             ) : (
