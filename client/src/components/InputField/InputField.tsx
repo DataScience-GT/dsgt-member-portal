@@ -105,7 +105,7 @@ const InputField: FC<InputFieldProps> = ({
           data-original-value={originalValue}
           value={originalValue}
         />
-        <label htmlFor={"input-" + placeholder}>
+        <label htmlFor={"input-" + placeholder?.replaceAll(" ", "-")}>
           {placeholder}
           <span>✓</span>
         </label>
