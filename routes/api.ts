@@ -22,9 +22,12 @@ router.use("/rates", ApiAuthenticate, rates);
 import announcement from "./announcement";
 router.use("/announcement", ApiAuthenticate, announcement);
 
+//setup /api/webhook -- for payment webhooks
+import webhook from "./webhook";
+router.use("/webhook", webhook);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  // res.send("welcome to the api!");
-  res.json(process.env);
+  res.send("welcome to the api!");
 });
 
 router.get(

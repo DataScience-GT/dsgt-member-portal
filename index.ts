@@ -5,6 +5,7 @@ import express, { Request, Response, NextFunction } from "express";
 import errorMiddleware from "./middleware/ErrorMiddleware";
 const app = express();
 
+app.use('/api/webhook', express.raw({type: "*/*"}));
 app.use(express.json());
 
 //load .env
