@@ -12,6 +12,7 @@ import Docs from "./Pages/Docs/Docs.lazy";
 import Portal from "./Pages/Portal/Portal";
 import Loader from "./components/Loader/Loader";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
+import Register from "./Pages/Register/Register";
 
 function App() {
   //theme -- use for context
@@ -65,6 +66,7 @@ function App() {
             if (
               window.location.pathname.toLowerCase() == "/login" ||
               window.location.pathname.toLowerCase() == "/signup" ||
+              window.location.pathname.toLowerCase() == "/register" ||
               window.location.pathname.toLowerCase() == "/"
             ) {
               window.location.href = "/portal";
@@ -82,6 +84,7 @@ function App() {
       if (
         window.location.pathname.toLowerCase() !== "/login" &&
         window.location.pathname.toLowerCase() !== "/signup" &&
+        window.location.pathname.toLowerCase() !== "/register" &&
         !window.location.pathname.toLowerCase().includes("/docs") &&
         !window.location.pathname.toLowerCase().includes("/passwordreset")
       ) {
@@ -99,12 +102,13 @@ function App() {
     );
   } else {
     return (
-      <div className="App">
+      <div className={`App ${theme}`}>
         <ThemeContext.Provider value={{ theme, setTheme }}>
           <Router>
             <Routes>
               <Route path="/*" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
+              <Route path="/Register" element={<Register />} />
               <Route path="/Passwordreset/*" element={<ResetPassword />} />
               <Route path="/Docs/*" element={<Docs />} />
               {getRoleValue(userRole) >= 0 ? (

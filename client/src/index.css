@@ -33,3 +33,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.Light {
+  --background: #fff;
+  --foreground: #000;
+  --svgFilter: none;
+}
+.Dark {
+  --background: #222;
+  --foreground: #fff;
+  --hover: #444;
+  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
+    brightness(113%) contrast(100%);
+}
+.Black {
+  --background: #000;
+  --foreground: #fff;
+  --hover: #222;
+  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
+    brightness(113%) contrast(100%);
+}
