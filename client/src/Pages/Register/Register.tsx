@@ -58,6 +58,7 @@ const Register: FC<RegisterProps> = () => {
                 helper={<InputHelper lines={passwordHelperLines} />}
                 validIndication
               />
+              <InputField type={"submit"} placeholder="submit" />
             </FlexColumn>
           </div>
         </FlexRow>

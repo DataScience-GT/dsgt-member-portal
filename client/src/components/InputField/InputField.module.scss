@@ -1,8 +1,8 @@
-$bg: #dce5f2;
-// $fill: #1a2554;
-$borders: #c4ccd7;
-$text: #7c8297;
-$fill: #445379;
+// $bg: #dce5f2;
+// // $fill: #1a2554;
+// $borders: #c4ccd7;
+// $text: #7c8297;
+// $fill: #445379;
 
 .InputField {
   height: 52px;
@@ -28,7 +28,8 @@ $fill: #445379;
     pointer-events: none;
     font-weight: 500;
 
-    color: rgba($color: $text, $alpha: 0.7);
+    // color: rgba($color: $text, $alpha: 0.7);
+    color: var(--foreground);
 
     > span {
       display: none;
@@ -43,13 +44,16 @@ $fill: #445379;
     height: 100%;
     width: 100%;
     padding: 4px 20px;
-    border: 2px solid $borders;
+    // border: 2px solid $borders;
+    border: 2px solid var(--borderColor);
     // border: 2px solid rgb(32 163 158);
     border-radius: 15px;
     outline-offset: 2px;
     font-size: 1em;
-    background: #fff;
-    color: $text;
+    // background: #fff;
+    background: var(--background);
+    // color: $text;
+    color: var(--foreground);
     font-weight: 500;
     &:not(:placeholder-shown) ~ label,
     &:focus ~ label {
@@ -78,6 +82,9 @@ $fill: #445379;
   height: 26px;
   transform: translate(0, -50%);
   width: 26px;
+
+  filter: var(--svgFilter);
+
   > input[type="checkbox"] {
     display: none;
     &:checked + label {
@@ -101,8 +108,10 @@ $fill: #445379;
   margin: 1em 0;
   > input {
     // background: rgb(32 163 158);
-    background: $fill;
-    color: #fff;
+    // background: $fill;
+    background: var(--foreground);
+    // color: #fff;
+    color: var(--background);
     font-size: 1.2em;
     float: right;
     position: relative;
@@ -130,7 +139,6 @@ $fill: #445379;
     visibility: visible;
   }
 }
-
 
 .PasswordInputField {
   > input {
