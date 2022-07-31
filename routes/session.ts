@@ -4,6 +4,11 @@ const router = express.Router();
 import { getSessions, validateSession } from "../model";
 
 import RateLimit from "../middleware/RateLimiting";
+import {
+  ErrorPreset,
+  StatusError,
+  StatusErrorPreset,
+} from "../Classes/StatusError";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the session api!");
@@ -21,12 +26,12 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let sessionKey = req.body.session_id;
     if (!sessionKey) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     } else {
       let x = await validateSession(sessionKey);
       if (!x) {
-        next(new Error("Session not found"));
+        next(new StatusError("Session not found", 404));
       } else {
         let session_created_at = new Date(x.created_at);
         let now = new Date();

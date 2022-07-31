@@ -27,6 +27,11 @@ import {
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
+import {
+  ErrorPreset,
+  StatusError,
+  StatusErrorPreset,
+} from "../Classes/StatusError";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -38,7 +43,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
-      next(new Error("Missing 1 or more required fields in body."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     let sorts;
@@ -53,10 +58,10 @@ router.post(
         const x = await getUsers(sorts);
         res.json({ ok: 1, data: x });
       } else {
-        next(new Error("You do not have permission to complete this action."));
+        next(new StatusErrorPreset(ErrorPreset.NoPermission));
       }
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );
@@ -67,7 +72,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
-      next(new Error("Missing 1 or more required fields in body."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     let valid = await checkSessionValid(session_id, next);
@@ -75,7 +80,7 @@ router.post(
       //check if has enough perms
       res.json({ ok: 1, data: valid });
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );
@@ -91,7 +96,7 @@ router.post(
       password: req.body.password,
     };
     if (!(u.email && u.fname && u.lname && u.password)) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
     }
     u.email = u.email.toLowerCase();
     u.fname = u.fname.toLowerCase();
@@ -99,7 +104,10 @@ router.post(
     let emailUsed = await checkUserEmail(u.email);
     if (emailUsed) {
       next(
-        new Error("An account with that email has already been registered.")
+        new StatusError(
+          "An account with that email has already been registered.",
+          400
+        )
       );
     } else {
       let x = await registerUser(u, next);
@@ -120,18 +128,18 @@ router.post(
       password: req.body.password,
     };
     if (!(u.email && u.password)) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     u.email = u.email.toLowerCase();
     let emailUsed = await checkUserEmail(u.email);
     if (!emailUsed) {
-      next(new Error("An account with that email does not exist."));
+      next(new StatusError("An account with that email does not exist.", 404));
     } else {
       //check if account enabled
       if (!(await getUserEnabled(u.email))) {
         //disabled
-        next(new Error("This account has been disabled."));
+        next(new StatusError("This account has been disabled.", 401));
         return;
       }
       let x = await loginUser(u);
@@ -142,7 +150,7 @@ router.post(
         await createSession({ user_id: x.user_inc, session_id: sessionKey });
         res.json({ ok: 1, session_key: sessionKey, role: x.role });
       } else {
-        next(new Error("Invalid login credentials."));
+        next(new StatusError("Invalid login credentials.", 401));
       }
     }
   }
@@ -162,7 +170,7 @@ router.post(
     let u_enabled = req.body.user_enabled;
     if (!session_key) {
       //required fields
-      next(new Error("Missing 1 or more required fields"));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     let count_changed = 0;
@@ -173,13 +181,13 @@ router.post(
     if (u_enabled !== undefined) count_changed++;
     if (count_changed <= 0) {
       //missing fields to change
-      next(new Error("Missing field(s) to update"));
+      next(new StatusError("Missing field(s) to update", 400));
       return;
     }
     //check if authorized to edit user
     let session_valid = await checkSessionValid(session_key, next);
     if (!session_valid || !session_valid.valid) {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
       return;
     }
 
@@ -190,7 +198,7 @@ router.post(
     let session_role = session_valid?.role || "Guest";
     //validateSession() returns user role -- compare to other user role
     if (!(await checkUserEmail(u_email.toLowerCase()))) {
-      next(new Error("User with that email does not exist"));
+      next(new StatusError("User with that email does not exist", 404));
     }
     let user_role = await getUserRole(u_email);
     let valid = compareUserRoles(session_role, user_role);
@@ -199,7 +207,9 @@ router.post(
       //check if new role is valid
       if (u_role && compareUserRoles(session_role, u_role) < 0) {
         //attempting to make the new role higher than current
-        next(new Error("Cannot set user's role higher than own role"));
+        next(
+          new StatusError("Cannot set user's role higher than own role", 401)
+        );
         return;
       }
       //update their info
@@ -221,11 +231,11 @@ router.post(
       if (session_valid?.email === u_email) {
         //we are modifying ourselves
         if (u_role) {
-          next(new Error("Cannot modify own role."));
+          next(new StatusError("Cannot modify own role.", 401));
           return;
         }
         if (u_enabled) {
-          next(new Error("Cannot re-enable own account."));
+          next(new StatusError("Cannot re-enable own account.", 401));
           return;
         }
         //update self info
@@ -241,7 +251,12 @@ router.post(
           ok: 1,
         });
       } else {
-        next(new Error("You do not have permission to update this user."));
+        next(
+          new StatusError(
+            "You do not have permission to update this user.",
+            401
+          )
+        );
         return;
       }
     }
@@ -266,20 +281,22 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let email = req.body.email;
     if (!email) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     //check if email exists
     let exists = await checkUserEmail(email);
     if (!exists) {
-      next(new Error("Account with that email does not exist."));
+      next(new StatusError("Account with that email does not exist.", 404));
       return;
     }
     //intitiate a password reset
     //generate a random code
     let x = await initiatePasswordReset(email);
     if (!x) {
-      next(new Error("Failed to generate reset code. Try again later."));
+      next(
+        new StatusError("Failed to generate reset code. Try again later.", 500)
+      );
       return;
     }
     //DO NOT SEND THIS CODE BACK TO THE REQEUST -- EMAIL TO THE EMAIL GIVEN
@@ -294,7 +311,7 @@ router.post(
     let reset_code = req.body.reset_code;
     let new_password = req.body.new_password;
     if (!reset_code || !new_password) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     //complete the password reset
@@ -310,7 +327,7 @@ router.delete(
   async (req: Request, res: Response, next: NextFunction) => {
     let user_email = req.body.email;
     if (!user_email) {
-      next(new Error("missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     await deleteUser(user_email);
@@ -324,7 +341,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
-      next(new Error("Missing 1 or more required fields."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     //generate a qrcode img
@@ -339,7 +356,7 @@ router.post(
         res.json({ ok: 1, qrcode: url });
       });
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );

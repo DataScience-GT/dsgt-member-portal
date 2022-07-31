@@ -6,6 +6,7 @@ import { User, RegisterUser, LoginUser } from "./interfaces/User";
 import { NewSession } from "./interfaces/Session";
 import e, { NextFunction } from "express";
 import { BillingDetails } from "./interfaces/Stripe";
+import { StatusError } from "./Classes/StatusError";
 
 const crypto = require("crypto");
 
@@ -441,7 +442,7 @@ export const attemptPasswordReset = async (
     .select("user_email", "created_at", "completed")
     .where("reset_code", reset_code);
   if (res1.length <= 0) {
-    next(new Error("Invalid reset code."));
+    next(new StatusError("Invalid reset code.", 401));
     return;
   }
   let user_email = res1[0].user_email;
@@ -449,7 +450,7 @@ export const attemptPasswordReset = async (
   let completed = res1[0].completed;
   //check if already completed
   if (completed) {
-    next(new Error("Reset has already been completed."));
+    next(new StatusError("Reset has already been completed.", 401));
     return;
   }
   //check if reset code is valid
@@ -458,7 +459,7 @@ export const attemptPasswordReset = async (
   let time_diff_s = time_diff_ms / 1000;
   let time_diff_m = time_diff_s / 60;
   if (time_diff_m > 10) {
-    next(new Error("Password reset expired."));
+    next(new StatusError("Password reset expired.", 401));
     return;
   }
   let new_hash = md5(new_password);

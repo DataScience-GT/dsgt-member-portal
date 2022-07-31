@@ -26,6 +26,10 @@ router.use("/announcement", ApiAuthenticate, announcement);
 import webhook from "./webhook";
 router.use("/webhook", webhook);
 
+//setup /api/billing -- for billing details
+import billing from "./billing";
+router.use("/billing", ApiAuthenticate, billing);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
 });

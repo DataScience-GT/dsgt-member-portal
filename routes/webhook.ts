@@ -5,6 +5,7 @@ import { log, error } from "../Logger";
 
 import { BillingDetails } from "../interfaces/Stripe";
 import { createBillingDetails } from "../model";
+import { StatusError } from "../Classes/StatusError";
 
 const stripe = require("stripe");
 const endpointSecret =
@@ -19,7 +20,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     let error: Error = err as Error;
-    next(new Error(`stripe webhook error: ${error.message}`));
+    next(new StatusError(`stripe webhook error: ${error.message}`, 500));
     return;
   }
 

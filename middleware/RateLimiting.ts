@@ -2,6 +2,7 @@ const requestIp = require("request-ip");
 
 //express
 import { Request, Response, NextFunction } from "express";
+import { StatusError } from "../Classes/StatusError";
 
 //setup logger
 import { log, warning, error } from "../Logger";
@@ -40,8 +41,9 @@ const RateLimit = (
       if (countRecent >= rate_limit) {
         //block the request
         next(
-          new Error(
-            "Too many requests. Please wait between requests."
+          new StatusError(
+            "Too many requests. Please wait between requests.",
+            429
           )
         );
       } else {

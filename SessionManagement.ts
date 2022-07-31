@@ -1,4 +1,5 @@
 import { NextFunction } from "express";
+import { StatusError } from "./Classes/StatusError";
 import { validateSession } from "./model";
 
 type SessionValidation = {
@@ -18,7 +19,7 @@ export const checkSessionValid = async (
 ) => {
   let x = await validateSession(session_id);
   if (!x) {
-    next(new Error("Session not found"));
+    next(new StatusError("Session not found", 404));
   } else {
     let session_created_at = new Date(x.created_at);
     let now = new Date();

@@ -1,4 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
+import {
+  ErrorPreset,
+  StatusError,
+  StatusErrorPreset,
+} from "../Classes/StatusError";
 const router = express.Router();
 
 import RateLimit from "../middleware/RateLimiting";
@@ -21,7 +26,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     if (!session_id) {
-      next(new Error("Missing 1 or more required fields in body."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     //check for count
@@ -37,7 +42,7 @@ router.post(
         res.json({ ok: 1, data: anns });
       }
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );
@@ -49,7 +54,7 @@ router.post(
     let session_id = req.body.session_id;
     let message = req.body.announcement;
     if (!session_id || !message) {
-      next(new Error("Missing 1 or more required fields in body."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     let valid = await checkSessionValid(session_id, next);
@@ -60,10 +65,10 @@ router.post(
         await insertAnnouncement(message, valid.user_id);
         res.json({ ok: 1 });
       } else {
-        next(new Error("You do not have permission to complete this action."));
+        next(new StatusErrorPreset(ErrorPreset.NoPermission));
       }
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );
@@ -75,7 +80,7 @@ router.delete(
     let session_id = req.body.session_id;
     let announcement_id = req.body.announcement_id;
     if (!session_id || !announcement_id) {
-      next(new Error("Missing 1 or more required fields in body."));
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
     let valid = await checkSessionValid(session_id, next);
@@ -86,10 +91,10 @@ router.delete(
         await deleteAnnouncement(announcement_id);
         res.json({ ok: 1 });
       } else {
-        next(new Error("You do not have permission to complete this action."));
+        next(new StatusErrorPreset(ErrorPreset.NoPermission));
       }
     } else {
-      next(new Error("Session not valid."));
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
   }
 );

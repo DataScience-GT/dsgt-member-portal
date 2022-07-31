@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { StatusError } from "../Classes/StatusError";
 
 //dotenv
 
@@ -17,15 +18,18 @@ const ApiAuthenticate = (
       if (auth === process.env.API_KEY) {
         next();
       } else {
-        let err = new Error("invalid bearer token");
+        let err = new StatusError("invalid bearer token", 401);
         next(err);
       }
     } else {
-      let err = new Error("authorization must be in the form of bearer token");
+      let err = new StatusError(
+        "authorization must be in the form of bearer token",
+        400
+      );
       next(err);
     }
   } else {
-    let err = new Error("missing authorization header");
+    let err = new StatusError("missing authorization header", 400);
     next(err);
   }
 };
