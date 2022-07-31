@@ -4,12 +4,13 @@ const router = express.Router();
 import { log, error } from "../Logger";
 
 import { BillingDetails } from "../interfaces/Stripe";
+import { createBillingDetails } from "../model";
 
 const stripe = require("stripe");
 const endpointSecret =
   "whsec_7684b0c6ca4fcdaa6a511e4855af592342bef4911ccbedc3eaeb4e38e3f38e64";
 
-router.post("/", (req: Request, res: Response, next: NextFunction) => {
+router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const sig = req.headers["stripe-signature"];
 
   let event;
@@ -33,6 +34,7 @@ router.post("/", (req: Request, res: Response, next: NextFunction) => {
       let payment_details = paymentIntent.charges.data[0]
         .billing_details as BillingDetails;
       //add the payment data to the db
+      await createBillingDetails(payment_details);
       break;
     // ... handle other event types
     default:

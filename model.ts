@@ -5,6 +5,7 @@ import { log, warning, error } from "./Logger";
 import { User, RegisterUser, LoginUser } from "./interfaces/User";
 import { NewSession } from "./interfaces/Session";
 import e, { NextFunction } from "express";
+import { BillingDetails } from "./interfaces/Stripe";
 
 const crypto = require("crypto");
 
@@ -479,4 +480,55 @@ export const checkUUIDExists = async (uuid: string) => {
   } else {
     return true;
   }
+};
+
+// ----------------------- billing details -----------------------
+
+/**
+ * gets all the billing details from the db
+ * @returns all billing details
+ */
+export const getBillingDetails = async () => {
+  return await db("billing_details").select("*");
+};
+
+/**
+ * checks whether billing details exist for given email
+ * @param email user's email
+ * @returns true if billing details exists under email given, false otherwise
+ */
+export const checkBillingDetailsExists = async (email: string) => {
+  let res = await db("billing_details").count("*").where("email", email);
+  if (!res || res[0].count <= 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+/**
+ * inserts the given billing details into the db
+ * @param billing_details the billing details returned from the stripe webhook
+ */
+export const createBillingDetails = async (billing_details: BillingDetails) => {
+  // table.string("city");
+  // table.string("country");
+  // table.string("line1");
+  // table.string("line2");
+  // table.string("postal_code");
+  // table.string("state");
+  // table.string("email");
+  // table.string("name");
+  // table.string("phone");
+  await db("billing_details").insert({
+    city: billing_details.address.city,
+    country: billing_details.address.country,
+    line1: billing_details.address.line1,
+    line2: billing_details.address.line2,
+    postal_code: billing_details.address.postal_code,
+    state: billing_details.address.state,
+    email: billing_details.email,
+    name: billing_details.name,
+    phone: billing_details.phone,
+  });
 };
