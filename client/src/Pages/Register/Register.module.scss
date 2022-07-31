@@ -1,4 +1,25 @@
 .Register {
-    background: var(--background);
-    color: var(--foreground);
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.Major {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Minor {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Mini {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
 }
