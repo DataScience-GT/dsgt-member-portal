@@ -1,6 +1,8 @@
 .Register {
   background: var(--background);
   color: var(--foreground);
+  height: 100%;
+  overflow: auto;
 }
 
 .Major {
@@ -88,8 +90,30 @@
   }
 }
 
-.Radio {
+.Radio, .Checkbox {
+  margin-bottom: 10px;
+  width: 100%;
   input {
     margin-right: 0.5em;
+    margin-bottom: 10px;
   }
+}
+
+
+
+.Required {
+  display: inline-block;
+  position: relative;
+  font-size: inherit;
+  color: orange;
+  margin-left: 2px;
+}
+
+.InlineInput {
+  border: none;
+  border-bottom: 2px solid var(--borderColor);
+  color: var(--foreground);
+  background-color: var(--background);
+  width: auto;
+  margin-left: 10px;
 }

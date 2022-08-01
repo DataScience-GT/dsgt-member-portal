@@ -73,6 +73,7 @@ const InputField: FC<InputFieldProps> = ({
         />
         <label htmlFor={placeholder}>
           {placeholder}
+          <i className={required ? styles.Required : ""}>*</i>
           <span>✓</span>
         </label>
         <div className={styles.eye}>
@@ -112,6 +113,7 @@ const InputField: FC<InputFieldProps> = ({
         />
         <label htmlFor={name || placeholder?.replaceAll(" ", "")}>
           {placeholder}
+          <i className={required ? styles.Required : ""}>*</i>
           <span>✓</span>
         </label>
         {helper}

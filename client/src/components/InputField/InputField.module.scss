@@ -5,6 +5,7 @@
 // $fill: #445379;
 
 .InputField {
+  display: inline-block;
   height: 52px;
   //   border: 1px solid red;
   position: relative;
@@ -37,6 +38,13 @@
       font-size: inherit;
       color: green;
       margin-left: 6px;
+    }
+    > i {
+      display: none;
+      position: relative;
+      font-size: inherit;
+      color: orange;
+      margin-left: 2px;
     }
   }
   > input {
@@ -72,6 +80,10 @@
   &:valid ~ label > span {
     display: inline-block;
   }
+}
+
+.Required {
+  display: inline-block !important;
 }
 
 .eye {
