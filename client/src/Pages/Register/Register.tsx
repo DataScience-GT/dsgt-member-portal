@@ -20,40 +20,28 @@ const passwordHelperLines = [
 ];
 
 const Register: FC<RegisterProps> = () => {
+  //generic states (used for most/all forms)
   const [searchParams, setSearchParams] = useSearchParams();
   const payment_status = searchParams.get("payment_status");
   const [loading, setLoading] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [error, setError] = useState("");
-
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  //handle all of the form elements updating (save input to state)
-  const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
-    setFname(e.target.value);
-  };
-  const handleChange_lname = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9 ]/g, "");
-    setLname(e.target.value);
-  };
-  const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  //--------------- ---------------
+  //--------------- First Form (Payment mail) ---------------
+  const [paymentEmail, setPaymentEmail] = useState("");
+  const handleChange_paymentemail = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@. ]/g, "");
-    setEmail(e.target.value);
+    setPaymentEmail(e.target.value);
   };
-  const handleChange_password = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
+  //handle form submission
   const handleFormSubmitEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     setError("");
     setLoading(true);
     e.preventDefault();
     //check if billing data found
-    await checkBillingDetailsExists(email, (data: Object) => {
+    await checkBillingDetailsExists(paymentEmail, (data: Object) => {
       console.log(data);
       setEmailVerified(true);
     })
@@ -63,6 +51,91 @@ const Register: FC<RegisterProps> = () => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  //--------------- Second Form (Personal/Academic info) ---------------
+  const [fname, setFname] = useState("");
+  const [lname, setLname] = useState("");
+  const [password, setPassword] = useState("");
+  const [major, setMajor] = useState("");
+  const [minor, setMinor] = useState("");
+  const [gtemail, setGtemail] = useState("");
+  const [personalEmail, setPersonalEmail] = useState("");
+  const [newMember, setNewMember] = useState("");
+  const [studyYear, setStudyYear] = useState("");
+  const [gender, setGender] = useState("");
+
+  //handle all of the form elements updating (save input to state)
+  const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.target.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, "");
+    setFname(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+  const handleChange_lname = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.target.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, "");
+    setLname(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_password = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setPassword(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_major = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setMajor(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_minor = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setMinor(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_gtemail = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    setGtemail(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_personalemail = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    setPersonalEmail(e.currentTarget.value);
+    console.log(e.currentTarget.value);
+  };
+
+  const handleChange_newmember = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //radio input -- get value of label (next element)
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setNewMember(newValue);
+    console.log(newValue);
+  };
+
+  const handleChange_studyyear = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //radio input -- get value of label (next element)
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setStudyYear(newValue);
+    console.log(newValue);
+  };
+
+  const handleChange_genderRadio = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setGender(newValue);
+    console.log(newValue);
   };
 
   const handleFormSubmitRegister = async (
@@ -95,7 +168,7 @@ const Register: FC<RegisterProps> = () => {
                     type="email"
                     placeholder="Email"
                     width="100%"
-                    onChange={handleChange_email}
+                    onChange={handleChange_paymentemail}
                   />
                   <ErrorText>{error}</ErrorText>
                   <FlexRow spacing="flex-end" width="100%">
@@ -150,6 +223,7 @@ const Register: FC<RegisterProps> = () => {
                       id="major-choice"
                       name="major-choice"
                       placeholder=" "
+                      onChange={handleChange_major}
                     />
                     <label htmlFor="major-choice">
                       What is your major?
@@ -260,6 +334,7 @@ const Register: FC<RegisterProps> = () => {
                       id="minor-choice"
                       name="minor-choice"
                       placeholder=" "
+                      onChange={handleChange_minor}
                     />
                     <label htmlFor="minor-choice">
                       What is your minor (if applicable)?
@@ -366,10 +441,12 @@ const Register: FC<RegisterProps> = () => {
                   <InputField
                     type={"email"}
                     placeholder="What is your GT email address?"
-                    name="GtEmail"
+                    name="Email"
                     width="100%"
+                    pattern="\S+@gatech.edu"
                     validIndication
                     required
+                    onChange={handleChange_gtemail}
                   />
                   <InputField
                     type={"email"}
@@ -378,43 +455,83 @@ const Register: FC<RegisterProps> = () => {
                     width="100%"
                     validIndication
                     required
+                    onChange={handleChange_personalemail}
                   />
+                  {/* new member? */}
                   <div className={styles.Radio}>
                     <p className={styles.Mini}>
                       Are you a new member?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="radio" name="member" id="new-member" />
+                    <input
+                      type="radio"
+                      name="member"
+                      id="new-member"
+                      data-value={true}
+                      onChange={handleChange_newmember}
+                    />
                     <label htmlFor="new-member">Yes</label>
                     <br />
 
-                    <input type="radio" name="member" id="existing-member" />
+                    <input
+                      type="radio"
+                      name="member"
+                      id="existing-member"
+                      data-value={false}
+                      onChange={handleChange_newmember}
+                    />
                     <label htmlFor="existing-member">
                       No, I'm already a member of DSGT
                     </label>
                   </div>
+                  {/* what year of study? */}
                   <div className={styles.Radio}>
                     <p className={styles.Mini}>
                       What is your current year of study?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="radio" name="study-year" id="year-one" />
+                    <input
+                      type="radio"
+                      name="study-year"
+                      id="year-one"
+                      onChange={handleChange_studyyear}
+                    />
                     <label htmlFor="year-one">1st Year</label>
                     <br />
 
-                    <input type="radio" name="study-year" id="year-two" />
+                    <input
+                      type="radio"
+                      name="study-year"
+                      id="year-two"
+                      onChange={handleChange_studyyear}
+                    />
                     <label htmlFor="year-two">2nd Year</label>
                     <br />
 
-                    <input type="radio" name="study-year" id="year-three" />
+                    <input
+                      type="radio"
+                      name="study-year"
+                      id="year-three"
+                      onChange={handleChange_studyyear}
+                    />
                     <label htmlFor="year-three">3rd Year</label>
                     <br />
 
-                    <input type="radio" name="study-year" id="year-four" />
+                    <input
+                      type="radio"
+                      name="study-year"
+                      id="year-four"
+                      onChange={handleChange_studyyear}
+                    />
                     <label htmlFor="year-four">4th Year</label>
                     <br />
 
-                    <input type="radio" name="study-year" id="year-five" />
+                    <input
+                      type="radio"
+                      name="study-year"
+                      id="year-five"
+                      onChange={handleChange_studyyear}
+                    />
                     <label htmlFor="year-five">5th Year+</label>
                     <br />
 
@@ -422,6 +539,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="study-year"
                       id="year-masters-phd"
+                      onChange={handleChange_studyyear}
                     />
                     <label htmlFor="year-masters-phd">
                       Masters/PhD Student
@@ -434,21 +552,41 @@ const Register: FC<RegisterProps> = () => {
                       What is your gender?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="radio" name="gender" id="gender-female" />
+                    <input
+                      type="radio"
+                      name="gender"
+                      id="gender-female"
+                      onChange={handleChange_genderRadio}
+                    />
                     <label htmlFor="gender-female">Female</label>
                     <br />
 
-                    <input type="radio" name="gender" id="gender-male" />
+                    <input
+                      type="radio"
+                      name="gender"
+                      id="gender-male"
+                      onChange={handleChange_genderRadio}
+                    />
                     <label htmlFor="gender-male">Male</label>
                     <br />
 
-                    <input type="radio" name="gender" id="gender-prefer-none" />
+                    <input
+                      type="radio"
+                      name="gender"
+                      id="gender-prefer-none"
+                      onChange={handleChange_genderRadio}
+                    />
                     <label htmlFor="gender-prefer-none">
                       Prefer not to say
                     </label>
                     <br />
 
-                    <input type="radio" name="gender" id="gender-other" />
+                    <input
+                      type="radio"
+                      name="gender"
+                      id="gender-other"
+                      onChange={handleChange_genderRadio}
+                    />
                     <label htmlFor="gender-other">
                       Other:{" "}
                       <input
