@@ -4,7 +4,7 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
-import { checkBillingDetailsExists } from "../model";
+import { checkBillingDetailsExists, getBillingDetails } from "../model";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +21,18 @@ router.post(
       return;
     }
     let check = await checkBillingDetailsExists(email);
-    res.json({ ok: 1, data: check });
+    if (!check) {
+      //billing data doesnt exist
+      next(
+        new StatusError(
+          "Could not find payment made through this email. Try again or contact hello@datasciencegt.org for help.",
+          404
+        )
+      );
+      return;
+    }
+    let data = await getBillingDetails(email);
+    res.json({ ok: 1, data: data });
   }
 );
 

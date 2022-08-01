@@ -4,6 +4,8 @@ import styles from "./InputField.module.scss";
 interface InputFieldProps {
   type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
+  name?: string;
+  required?: boolean;
   width?: string;
   onClick?: React.MouseEventHandler<HTMLInputElement>;
   onChange?: React.KeyboardEventHandler<HTMLInputElement>;
@@ -16,6 +18,8 @@ interface InputFieldProps {
 const InputField: FC<InputFieldProps> = ({
   type,
   placeholder,
+  name,
+  required,
   width,
   onClick,
   onChange,
@@ -33,10 +37,11 @@ const InputField: FC<InputFieldProps> = ({
         style={{ width: width || "300px" }}
       >
         <input
-          id={"input-" + placeholder?.replaceAll(" ", "-")}
+          id={name || placeholder?.replaceAll(" ", "")}
           type="submit"
           onClick={onClick}
-          name={placeholder || "Submit"}
+          name={name || placeholder?.replaceAll(" ", "") || "submit"}
+          autoComplete={name || placeholder?.replaceAll(" ", "") || "submit"}
           value={placeholder || "Submit"}
         />
       </div>
@@ -54,31 +59,30 @@ const InputField: FC<InputFieldProps> = ({
         style={{ width: width || "300px" }}
       >
         <input
-          id={"input-" + placeholder?.replaceAll(" ", "-")}
+          id={name || placeholder?.replaceAll(" ", "")}
           className={`${helper !== undefined ? styles._hasHelper : ""} ${
             validIndication ? styles.validIndicater : ""
           }`}
           type={passwordOpen ? "text" : "password"}
           placeholder=" "
-          name={placeholder}
-          required
+          name={name || placeholder?.replaceAll(" ", "")}
+          autoComplete={name || placeholder?.replaceAll(" ", "")}
+          required={required || true}
           onChange={onChange}
           pattern={pattern}
         />
-        <label htmlFor={"input-" + placeholder}>
+        <label htmlFor={placeholder}>
           {placeholder}
           <span>✓</span>
         </label>
         <div className={styles.eye}>
           <input
             type="checkbox"
-            id={"input-" + placeholder?.replaceAll(" ", "-") + "-password-eye"}
+            id={placeholder?.replaceAll(" ", "") + "Passwordeye"}
             onChange={handleChanged}
           />
           <label
-            htmlFor={
-              "input-" + placeholder?.replaceAll(" ", "-") + "-password-eye"
-            }
+            htmlFor={placeholder?.replaceAll(" ", "") + "Passwordeye"}
           ></label>
         </div>
         {helper}
@@ -92,20 +96,21 @@ const InputField: FC<InputFieldProps> = ({
         style={{ width: width || "300px" }}
       >
         <input
-          id={"input-" + placeholder?.replaceAll(" ", "-")}
+          id={name || placeholder?.replaceAll(" ", "")}
           className={`${helper !== undefined ? styles._hasHelper : ""} ${
             validIndication ? styles.validIndicater : ""
           }`}
           type={type}
           placeholder=" "
-          name={placeholder}
-          required
+          name={name || placeholder?.replaceAll(" ", "")}
+          autoComplete={name || placeholder?.replaceAll(" ", "")}
+          required={required || true}
           onChange={onChange}
           pattern={pattern}
           data-original-value={originalValue}
           value={originalValue}
         />
-        <label htmlFor={"input-" + placeholder?.replaceAll(" ", "-")}>
+        <label htmlFor={name || placeholder?.replaceAll(" ", "")}>
           {placeholder}
           <span>✓</span>
         </label>

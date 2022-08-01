@@ -487,10 +487,15 @@ export const checkUUIDExists = async (uuid: string) => {
 
 /**
  * gets all the billing details from the db
+ * @param email {string}
  * @returns all billing details
  */
-export const getBillingDetails = async () => {
-  return await db("billing_details").select("*");
+export const getBillingDetails = async (email?: string) => {
+  if (!email) {
+    return await db("billing_details").select("*");
+  } else {
+    return await db("billing_details").select("*").where("email", email);
+  }
 };
 
 /**

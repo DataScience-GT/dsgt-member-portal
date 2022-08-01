@@ -57,11 +57,13 @@
     font-weight: 500;
     &:not(:placeholder-shown) ~ label,
     &:focus ~ label {
-      top: -1.3em;
+      // top: -1.3em;
+      top: -1.15em;
       // left: 0;
       // color: rgb(32 163 158);
       // color: inherit;
       font-size: 1em;
+      // background-color: var(--background);
     }
   }
 }
