@@ -25,6 +25,7 @@ const Register: FC<RegisterProps> = () => {
   const payment_status = searchParams.get("payment_status");
   const [loading, setLoading] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
+  const [screen, setScreen] = useState(0);
   const [error, setError] = useState("");
   //--------------- ---------------
   //--------------- First Form (Payment mail) ---------------
@@ -64,44 +65,50 @@ const Register: FC<RegisterProps> = () => {
   const [newMember, setNewMember] = useState("");
   const [studyYear, setStudyYear] = useState("");
   const [gender, setGender] = useState("");
+  const [ethnicity, setEthnicity] = useState("");
+  const [location, setLocation] = useState("");
+  const [experience, setExperience] = useState("");
+  const [interests, setInterests] = useState([""]);
+  const [interestsOtherChecked, setInterestsOtherChecked] = useState(false);
+  const [interestsOther, setInterestsOther] = useState("");
 
   //handle all of the form elements updating (save input to state)
   const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, "");
     setFname(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
   const handleChange_lname = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.currentTarget.value.replace(/[^a-zA-Z0-9 ]/g, "");
     setLname(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_password = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setPassword(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_major = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setMajor(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_minor = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setMinor(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_gtemail = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setGtemail(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_personalemail = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     setPersonalEmail(e.currentTarget.value);
-    console.log(e.currentTarget.value);
+    // console.log(e.currentTarget.value);
   };
 
   const handleChange_newmember = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -111,7 +118,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setNewMember(newValue);
-    console.log(newValue);
+    //console.log(newValue);
   };
 
   const handleChange_studyyear = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -121,7 +128,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setStudyYear(newValue);
-    console.log(newValue);
+    //console.log(newValue);
   };
 
   const handleChange_genderRadio = (
@@ -134,21 +141,194 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.getAttribute("data-value") ||
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
+    if (e.currentTarget.getAttribute("data-value")?.toLowerCase() === "other") {
+      //set value to input value
+      let input = e.currentTarget.nextElementSibling
+        ?.lastChild as HTMLInputElement;
+      newValue = input.value;
+    }
     setGender(newValue);
-    console.log(newValue);
+    //console.log(newValue);
+  };
+  const handleChange_genderOther = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //other input
+    let newValue = e.currentTarget.value;
+    (
+      e.currentTarget.parentElement?.previousElementSibling as HTMLInputElement
+    ).checked = true;
+    setGender(newValue);
+    //console.log(newValue);
+  };
+
+  const handleChange_ethnicityRadio = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.getAttribute("data-value")?.toLowerCase() === "other") {
+      //set value to input value
+      let input = e.currentTarget.nextElementSibling
+        ?.lastChild as HTMLInputElement;
+      newValue = input.value;
+    }
+    setEthnicity(newValue);
+    //console.log(newValue);
+  };
+  const handleChange_ethnicityOther = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //other input
+    let newValue = e.currentTarget.value;
+    (
+      e.currentTarget.parentElement?.previousElementSibling as HTMLInputElement
+    ).checked = true;
+    setEthnicity(newValue);
+    //console.log(newValue);
+  };
+
+  const handleChange_location = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setLocation(newValue);
+    //console.log(newValue);
+  };
+
+  const handleChange_experience = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setExperience(newValue);
+    //console.log(newValue);
+  };
+
+  const handleChange_interestsCheckbox = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.checked) {
+      //add to list
+      let newInterests = [...interests, newValue];
+      if (interests.length === 1 && interests[0] === "") {
+        newInterests = [newValue];
+      }
+      setInterests(newInterests);
+      // console.log(newInterests);
+    } else {
+      //remove from list
+      let index = interests.indexOf(newValue);
+      let newInterests;
+      if (interests.length === 1 && interests[0] === newValue) {
+        newInterests = [""];
+      } else if (index > -1) {
+        newInterests = interests;
+        newInterests.splice(index, 1);
+      }
+
+      if (newInterests) {
+        setInterests(newInterests);
+        // console.log(newInterests);
+      }
+    }
+  };
+
+  const handleChange_interestsOtherCheckbox = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    setInterestsOtherChecked(e.currentTarget.checked);
+    // console.log(e.currentTarget.checked);
+  };
+  const handleChange_interestsOtherInput = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //other input
+    let newValue = e.currentTarget.value;
+    (
+      e.currentTarget.parentElement?.previousElementSibling as HTMLInputElement
+    ).checked = true;
+    setInterestsOther(newValue);
+    // //console.log(newValue);
   };
 
   const handleFormSubmitRegister = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
     setError("");
-    setLoading(true);
+    // setLoading(true);
     e.preventDefault();
+    //confirm ALL data
+    if (
+      !(
+        fname &&
+        lname &&
+        password &&
+        gtemail &&
+        major &&
+        newMember &&
+        studyYear &&
+        gender &&
+        ethnicity &&
+        location &&
+        experience
+      )
+    ) {
+      setError("Missing one or more required fields.");
+      return;
+    }
+    if (
+      (interests.length <= 0 ||
+        (interests.length === 1 && interests[0] === "")) &&
+      (!interestsOtherChecked || (interestsOtherChecked && !interestsOther))
+    ) {
+      //no interests selected
+      setError("You must select at least one interest.");
+      return;
+    }
+    setScreen(1);
+
     //attempt to register user
-    console.log("1");
   };
 
-  if (payment_status === "completed") {
+  // ------------------------- screen 1 -------------------------------
+  const [interestedProjects, setInterestedProjects] = useState(false);
+  const handleFormSubmitScreen1 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+
+    //save data
+
+    //change screens
+    setScreen(1);
+  };
+
+  if (payment_status === "completed" && screen === 0) {
     //show the register form with all of the questions
     return (
       <div className={styles.Register} data-testid="Register">
@@ -454,7 +634,7 @@ const Register: FC<RegisterProps> = () => {
                     name="PersonalEmail"
                     width="100%"
                     validIndication
-                    required
+                    required={false}
                     onChange={handleChange_personalemail}
                   />
                   {/* new member? */}
@@ -586,6 +766,7 @@ const Register: FC<RegisterProps> = () => {
                       name="gender"
                       id="gender-other"
                       onChange={handleChange_genderRadio}
+                      data-value="other"
                     />
                     <label htmlFor="gender-other">
                       Other:{" "}
@@ -594,6 +775,7 @@ const Register: FC<RegisterProps> = () => {
                         type={"text"}
                         placeholder=" "
                         autoComplete="gender"
+                        onChange={handleChange_genderOther}
                       />
                     </label>
                     <br />
@@ -604,19 +786,34 @@ const Register: FC<RegisterProps> = () => {
                       What is your ethnicity?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="radio" name="ethnicity" id="ethnicity-AIAN" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-AIAN"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-AIAN">
                       American Indian or Alaska Native
                     </label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-AA" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-AA"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-AA">
                       Black or African American
                     </label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-EA" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-EA"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-EA">East Asian</label>
                     <br />
 
@@ -624,11 +821,17 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="ethnicity"
                       id="ethnicity-Latino"
+                      onChange={handleChange_ethnicityRadio}
                     />
                     <label htmlFor="ethnicity-Latino">Hispanic or Latino</label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-ME" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-ME"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-ME">Middle Eastern</label>
                     <br />
 
@@ -636,21 +839,37 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="ethnicity"
                       id="ethnicity-Hawaii"
+                      onChange={handleChange_ethnicityRadio}
                     />
                     <label htmlFor="ethnicity-Hawaii">
                       Native Hawaiian or Other Pacific Islander
                     </label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-SA" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-SA"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-SA">South Asian</label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-SEA" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-SEA"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-SEA">Southeast Asian</label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-white" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-white"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-white">White</label>
                     <br />
 
@@ -658,13 +877,20 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="ethnicity"
                       id="ethnicity-prefer-none"
+                      onChange={handleChange_ethnicityRadio}
                     />
                     <label htmlFor="ethnicity-prefer-none">
                       Prefer not to say
                     </label>
                     <br />
 
-                    <input type="radio" name="ethnicity" id="ethnicity-other" />
+                    <input
+                      type="radio"
+                      name="ethnicity"
+                      id="ethnicity-other"
+                      data-value="other"
+                      onChange={handleChange_ethnicityRadio}
+                    />
                     <label htmlFor="ethnicity-other">
                       Other:{" "}
                       <input
@@ -672,6 +898,7 @@ const Register: FC<RegisterProps> = () => {
                         type={"text"}
                         placeholder=" "
                         autoComplete="ethnicity"
+                        onChange={handleChange_ethnicityOther}
                       />
                     </label>
                     <br />
@@ -683,11 +910,21 @@ const Register: FC<RegisterProps> = () => {
                       student?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="radio" name="location" id="location-IS" />
+                    <input
+                      type="radio"
+                      name="location"
+                      id="location-IS"
+                      onChange={handleChange_location}
+                    />
                     <label htmlFor="location-IS">In-state</label>
                     <br />
 
-                    <input type="radio" name="location" id="location-OOS" />
+                    <input
+                      type="radio"
+                      name="location"
+                      id="location-OOS"
+                      onChange={handleChange_location}
+                    />
                     <label htmlFor="location-OOS">Out-of-state</label>
                     <br />
 
@@ -695,6 +932,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="location"
                       id="location-International"
+                      onChange={handleChange_location}
                     />
                     <label htmlFor="location-International">
                       International
@@ -711,6 +949,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="experience"
                       id="experience-none"
+                      onChange={handleChange_experience}
                     />
                     <label htmlFor="experience-none">No experience</label>
                     <br />
@@ -719,6 +958,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="experience"
                       id="experience-beginner"
+                      onChange={handleChange_experience}
                     />
                     <label htmlFor="experience-beginner">
                       Beginner (familiar with Data Science/just started learning
@@ -730,6 +970,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="experience"
                       id="experience-intermediate"
+                      onChange={handleChange_experience}
                     />
                     <label htmlFor="experience-intermediate">
                       Intermediate (have worked with/taken a class in least one
@@ -741,6 +982,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="experience"
                       id="experience-advanced"
+                      onChange={handleChange_experience}
                     />
                     <label htmlFor="experience-advanced">
                       Advanced (have professional experience or worked with
@@ -752,6 +994,7 @@ const Register: FC<RegisterProps> = () => {
                       type="radio"
                       name="experience"
                       id="experience-expert"
+                      onChange={handleChange_experience}
                     />
                     <label htmlFor="experience-expert">
                       Expert (have multiple/many years of experience with Data
@@ -766,21 +1009,41 @@ const Register: FC<RegisterProps> = () => {
                       about (you may choose more than one)?
                       <span className={styles.Required}>*</span>
                     </p>
-                    <input type="checkbox" name="interests" id="interests-CS" />
+                    <input
+                      type="checkbox"
+                      name="interests"
+                      id="interests-CS"
+                      onChange={handleChange_interestsCheckbox}
+                    />
                     <label htmlFor="interests-CS">
                       Computer Science/Programming
                     </label>
                     <br />
 
-                    <input type="checkbox" name="interests" id="interests-DA" />
+                    <input
+                      type="checkbox"
+                      name="interests"
+                      id="interests-DA"
+                      onChange={handleChange_interestsCheckbox}
+                    />
                     <label htmlFor="interests-DA">Data Analysis</label>
                     <br />
 
-                    <input type="checkbox" name="interests" id="interests-DV" />
+                    <input
+                      type="checkbox"
+                      name="interests"
+                      id="interests-DV"
+                      onChange={handleChange_interestsCheckbox}
+                    />
                     <label htmlFor="interests-DV">Data Visualization</label>
                     <br />
 
-                    <input type="checkbox" name="interests" id="interests-ML" />
+                    <input
+                      type="checkbox"
+                      name="interests"
+                      id="interests-ML"
+                      onChange={handleChange_interestsCheckbox}
+                    />
                     <label htmlFor="interests-ML">Machine Learning</label>
                     <br />
 
@@ -788,6 +1051,7 @@ const Register: FC<RegisterProps> = () => {
                       type="checkbox"
                       name="interests"
                       id="interests-Stats"
+                      onChange={handleChange_interestsCheckbox}
                     />
                     <label htmlFor="interests-Stats">Statistics</label>
                     <br />
@@ -796,6 +1060,7 @@ const Register: FC<RegisterProps> = () => {
                       type="checkbox"
                       name="interests"
                       id="interests-other"
+                      onChange={handleChange_interestsOtherCheckbox}
                     />
                     <label htmlFor="interests-other">
                       Other:{" "}
@@ -804,6 +1069,7 @@ const Register: FC<RegisterProps> = () => {
                         type={"text"}
                         placeholder=" "
                         autoComplete="interests"
+                        onChange={handleChange_interestsOtherInput}
                       />
                     </label>
                     <br />
@@ -816,54 +1082,68 @@ const Register: FC<RegisterProps> = () => {
                       width="fit-content"
                     />
                   </FlexRow>
-                  {/* list of opportunities */}
-                  <div className={styles.ContentBlock}>
-                    <h1 className={"Major"}>Get Involved!</h1>
-                    <p>
-                      Which DSGT opportunities are you interested in for this
-                      semester? You must participate in at least one opportunity
-                      below to be an active member in the club:
-                      <br />
-                      <br />
-                      - Projects <br />
-                      - Bootcamp <br />
-                      - Leadership team <br />
-                      <br />
-                      You'll have the chance to select multiple opportunities if
-                      you're interested!
-                    </p>
-                  </div>
-                  {/* Projects */}
-                  <div className={styles.Radio}>
-                    <p className={styles.Mini}>
-                      Are you interested in projects?
-                      <span className={styles.Required}>*</span>
-                    </p>
-                    <input type="radio" name="projects" id="projects-yes" />
-                    <label htmlFor="projects-yes">Yes</label>
-                    <br />
-
-                    <input type="radio" name="projects" id="projects-no" />
-                    <label htmlFor="projects-no">No</label>
-                    <br />
-                  </div>
-                  {/* Bootcamp */}
-                  <div className={styles.Radio}>
-                    <p className={styles.Mini}>
-                      Are you interested in bootcamp?
-                      <span className={styles.Required}>*</span>
-                    </p>
-                    <input type="radio" name="bootcamp" id="bootcamp-yes" />
-                    <label htmlFor="bootcamp-yes">Yes</label>
-                    <br />
-
-                    <input type="radio" name="bootcamp" id="bootcamp-no" />
-                    <label htmlFor="bootcamp-no">No</label>
-                    <br />
-                  </div>
                 </FlexColumn>
               </form>
             )}
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 1) {
+    //---------------------------- screen 1 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitEmail}>
+              <FlexColumn width="100%">
+                {/* list of opportunities */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Get Involved!</h1>
+                  <p>
+                    Which DSGT opportunities are you interested in for this
+                    semester? You must participate in at least one opportunity
+                    below to be an active member in the club:
+                    <br />
+                    <br />
+                    - Projects <br />
+                    - Bootcamp <br />
+                    - Leadership team <br />
+                    <br />
+                    You'll have the chance to select multiple opportunities if
+                    you're interested!
+                  </p>
+                </div>
+                {/* Projects */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you interested in projects?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input type="radio" name="projects" id="projects-yes" />
+                  <label htmlFor="projects-yes">Yes</label>
+                  <br />
+
+                  <input type="radio" name="projects" id="projects-no" />
+                  <label htmlFor="projects-no">No</label>
+                  <br />
+                </div>
+                {/* Bootcamp */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you interested in bootcamp?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input type="radio" name="bootcamp" id="bootcamp-yes" />
+                  <label htmlFor="bootcamp-yes">Yes</label>
+                  <br />
+
+                  <input type="radio" name="bootcamp" id="bootcamp-no" />
+                  <label htmlFor="bootcamp-no">No</label>
+                  <br />
+                </div>
+              </FlexColumn>
+            </form>
           </div>
         </FlexRow>
       </div>
