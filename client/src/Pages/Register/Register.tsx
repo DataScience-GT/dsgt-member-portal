@@ -24,8 +24,8 @@ const Register: FC<RegisterProps> = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const payment_status = searchParams.get("payment_status");
   const [loading, setLoading] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
-  const [screen, setScreen] = useState(0);
+  const [emailVerified, setEmailVerified] = useState(true);
+  const [screen, setScreen] = useState(1);
   const [error, setError] = useState("");
   //--------------- ---------------
   //--------------- First Form (Payment mail) ---------------
@@ -313,7 +313,21 @@ const Register: FC<RegisterProps> = () => {
   };
 
   // ------------------------- screen 1 -------------------------------
-  const [interestedProjects, setInterestedProjects] = useState(false);
+  const [interestedProjects, setInterestedProjects] = useState("");
+
+  const handleChange_interestedprojects = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setInterestedProjects(newValue);
+    // console.log(newValue);
+  };
   const handleFormSubmitScreen1 = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -321,11 +335,148 @@ const Register: FC<RegisterProps> = () => {
     // setLoading(true);
     e.preventDefault();
     //confirm ALL data
-
+    if (interestedProjects === "") {
+      setError("Missing one or more required fields.");
+      return;
+    }
     //save data
 
     //change screens
-    setScreen(1);
+    if (interestedProjects === "true") {
+      setScreen(2); // projects info page
+    } else {
+      setScreen(3); // bootcamp info page
+    }
+  };
+
+  // ------------------------- screen 2 -------------------------------
+  const [partOfProject, setPartOfProject] = useState("");
+  const [interestedParticipatingProject, setInterestedParticipatingProject] =
+    useState("");
+  const [interestsProjects, setInterestsProjects] = useState([""]);
+  const [hoursProjects, setHoursProjects] = useState("");
+  const [projectsMeetings, setProjectsMeetings] = useState("");
+  const [projectsResume, setProjectsResume] = useState("");
+
+  const handleChange_partproject = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setPartOfProject(newValue);
+    console.log(newValue);
+  };
+
+  const handleChange_interestedparticipatingprojects = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setInterestedParticipatingProject(newValue);
+    console.log(newValue);
+  };
+
+  const handleChange_interestsProjectsCheckbox = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.checked) {
+      //add to list
+      let newInterests = [...interestsProjects, newValue];
+      if (interestsProjects.length === 1 && interestsProjects[0] === "") {
+        newInterests = [newValue];
+      }
+      setInterestsProjects(newInterests);
+      console.log(newInterests);
+    } else {
+      //remove from list
+      let index = interestsProjects.indexOf(newValue);
+      let newInterests;
+      if (interestsProjects.length === 1 && interestsProjects[0] === newValue) {
+        newInterests = [""];
+      } else if (index > -1) {
+        newInterests = interestsProjects;
+        newInterests.splice(index, 1);
+      }
+
+      if (newInterests) {
+        setInterestsProjects(newInterests);
+        console.log(newInterests);
+      }
+    }
+  };
+
+  const handleChange_hoursprojects = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setHoursProjects(newValue);
+    console.log(newValue);
+  };
+
+  const handleChange_projectsmeetings = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setProjectsMeetings(newValue);
+    console.log(newValue);
+  };
+  const handleChange_projectsresume = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setProjectsResume(newValue);
+    console.log(newValue);
+  };
+
+  const handleFormSubmitScreen2 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+    if (interestedProjects === "") {
+      setError("Missing one or more required fields.");
+      return;
+    }
+    //save data
+
+    console.log(1);
   };
 
   if (payment_status === "completed" && screen === 0) {
@@ -1095,7 +1246,7 @@ const Register: FC<RegisterProps> = () => {
       <div className={styles.Register} data-testid="Register">
         <FlexRow spacing="center" align="center" height="100vh" padding="1em">
           <div style={{ width: "100%", maxWidth: "500px" }}>
-            <form onSubmit={handleFormSubmitEmail}>
+            <form onSubmit={handleFormSubmitScreen1}>
               <FlexColumn width="100%">
                 {/* list of opportunities */}
                 <div className={styles.ContentBlock}>
@@ -1112,6 +1263,7 @@ const Register: FC<RegisterProps> = () => {
                     <br />
                     You'll have the chance to select multiple opportunities if
                     you're interested!
+                    <br />
                   </p>
                 </div>
                 {/* Projects */}
@@ -1120,14 +1272,34 @@ const Register: FC<RegisterProps> = () => {
                     Are you interested in projects?
                     <span className={styles.Required}>*</span>
                   </p>
-                  <input type="radio" name="projects" id="projects-yes" />
+                  <input
+                    type="radio"
+                    name="projects"
+                    id="projects-yes"
+                    data-value={"true"}
+                    onChange={handleChange_interestedprojects}
+                  />
                   <label htmlFor="projects-yes">Yes</label>
                   <br />
 
-                  <input type="radio" name="projects" id="projects-no" />
+                  <input
+                    type="radio"
+                    name="projects"
+                    id="projects-no"
+                    data-value={"false"}
+                    onChange={handleChange_interestedprojects}
+                  />
                   <label htmlFor="projects-no">No</label>
                   <br />
                 </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
                 {/* Bootcamp */}
                 <div className={styles.Radio}>
                   <p className={styles.Mini}>
@@ -1142,6 +1314,290 @@ const Register: FC<RegisterProps> = () => {
                   <label htmlFor="bootcamp-no">No</label>
                   <br />
                 </div>
+              </FlexColumn>
+            </form>
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 2) {
+    //---------------------------- screen 2 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitScreen1}>
+              <FlexColumn width="100%">
+                {/* list of opportunities */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Projects</h1>
+                  <p>
+                    Please answer the questions below if you would like to apply
+                    to join a DSGT project! There are two avenues for projects:
+                    1. Application oriented Projects 2. Research Projects.
+                    Application oriented Projects are those that focus on
+                    exploring a dataset or collect data and attempt to create
+                    something that solves a problem in a way that faces a user
+                    directly. Research projects attempt to tackle unanswered
+                    questions that are actively being researched or try to
+                    develop new ways different from the current standard of
+                    solving a problem.
+                    <br />
+                    <br />
+                    Our typical member is passionate about the project they are
+                    on, and willing to put in effort and learn new skills.
+                    <br />
+                    <br />
+                    We currently have four active projects:
+                    <br />
+                    <br />
+                    1. Mentra: Mentra is a startup looking to build a hiring
+                    platform for neurodiverse talent. Our data science team
+                    focuses on using natural language processing and statistical
+                    techniques to connect neurodiverse individuals with suitable
+                    jobs.
+                    <br />
+                    2. Stormalytics
+                    <br />
+                    3. Audio Segmentation Team
+                    <br />
+                    4. Marketing Campaign Analysis
+                    <br />
+                    <br />
+                    We are open to you starting your own projects as well! If
+                    you are willing to start your own project, please indicate
+                    in the form below and reach out to Pulak Agarwal on the DSGT
+                    Slack workspace.
+                    <br />
+                    <br />
+                    We will be conducting interviews based on your responses and
+                    observe what team you would be a suitable fit for!
+                    <br />
+                  </p>
+                </div>
+                {/* Part of Projects */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Have you been part of a DSGT project before?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="part-projects"
+                    id="part-projects-yes"
+                    data-value={"true"}
+                    onChange={handleChange_partproject}
+                  />
+                  <label htmlFor="part-projects-yes">Yes</label>
+                  <br />
+
+                  <input
+                    type="radio"
+                    name="part-projects"
+                    id="part-projects-no"
+                    data-value={"false"}
+                    onChange={handleChange_partproject}
+                  />
+                  <label htmlFor="part-projects-no">No</label>
+                  <br />
+                </div>
+                {/* interested in participating in a project? */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you interested in participating in a DSGT Project?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="interested-participating-projects"
+                    id="interested-participating-projects-yes"
+                    data-value={"true"}
+                    onChange={handleChange_interestedparticipatingprojects}
+                  />
+                  <label htmlFor="interested-participating-projects-yes">
+                    Yes
+                  </label>
+                  <br />
+
+                  <input
+                    type="radio"
+                    name="interested-participating-projects"
+                    id="interested-participating-projects-no"
+                    data-value={"false"}
+                    onChange={handleChange_interestedparticipatingprojects}
+                  />
+                  <label htmlFor="interested-participating-projects-no">
+                    No
+                  </label>
+                  <br />
+                </div>
+                {/* what projects interested in */}
+                <div className={styles.Checkbox}>
+                  <p className={styles.Mini}>
+                    What project(s) are you interested in?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="checkbox"
+                    name="interests-projects"
+                    id="interests-projects-mentra"
+                    onChange={handleChange_interestsProjectsCheckbox}
+                  />
+                  <label htmlFor="interests-projects-mentra">Mentra</label>
+                  <br />
+
+                  <input
+                    type="checkbox"
+                    name="interests-projects"
+                    id="interests-projects-Stormalytics"
+                    onChange={handleChange_interestsProjectsCheckbox}
+                  />
+                  <label htmlFor="interests-projects-Stormalytics">
+                    Stormalytics
+                  </label>
+                  <br />
+
+                  <input
+                    type="checkbox"
+                    name="interests-projects"
+                    id="interests-projects-AS"
+                    onChange={handleChange_interestsProjectsCheckbox}
+                  />
+                  <label htmlFor="interests-projects-AS">
+                    Audio Segmentation
+                  </label>
+                  <br />
+
+                  <input
+                    type="checkbox"
+                    name="interests-projects"
+                    id="interests-projects-MCA"
+                    onChange={handleChange_interestsProjectsCheckbox}
+                  />
+                  <label htmlFor="interests-projects-MCA">
+                    Marketing Campaign Analysis
+                  </label>
+                  <br />
+
+                  <input
+                    type="checkbox"
+                    name="interests-projects"
+                    id="interests-projects-own"
+                    onChange={handleChange_interestsProjectsCheckbox}
+                  />
+                  <label htmlFor="interests-projects-own">
+                    Make your own project!
+                  </label>
+                  <br />
+                </div>
+                {/* hours for projects? */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Realistically, in an average week, how much time would you
+                    be willing to dedicate to a DSGT project?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-1"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-1">{"<1 hour"}</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-2"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-2">{"1-2 hours"}</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-3"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-3">{"2-4 hours"}</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-4"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-4">{"4-6 hours"}</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-5"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-5">{"6-10 hours"}</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="hours-projects"
+                    id="hours-projects-6"
+                    onChange={handleChange_hoursprojects}
+                  />
+                  <label htmlFor="hours-projects-6">{">10 hours"}</label>
+                  <br />
+                </div>
+                {/* meetings */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    We have meetings Wednesdays at 6pm. Are you available at
+                    this time? Attendance is required
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="projects-meetings"
+                    id="projects-meetings-yes"
+                    data-value={"true"}
+                    onChange={handleChange_projectsmeetings}
+                  />
+                  <label htmlFor="projects-meetings-yes">yes</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="projects-meetings"
+                    id="projects-meetings-no"
+                    data-value={"false"}
+                    onChange={handleChange_projectsmeetings}
+                  />
+                  <label htmlFor="projects-meetings-no">no</label>
+                  <br />
+                </div>
+                {/* uploaded resume */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Please upload your resume{" "}
+                    <a href="https://forms.gle/7nWcCpimq6x291vD8">here</a>.
+                    <br /> Did you submit your resume?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="projects-resume"
+                    id="projects-resume-yes"
+                    data-value={"true"}
+                    onChange={handleChange_projectsresume}
+                  />
+                  <label htmlFor="projects-resume-yes">yes</label>
+                  <br />
+                </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
               </FlexColumn>
             </form>
           </div>
