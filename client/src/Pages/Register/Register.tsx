@@ -369,7 +369,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setPartOfProject(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
 
   const handleChange_interestedparticipatingprojects = (
@@ -383,7 +383,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setInterestedParticipatingProject(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
 
   const handleChange_interestsProjectsCheckbox = (
@@ -403,7 +403,7 @@ const Register: FC<RegisterProps> = () => {
         newInterests = [newValue];
       }
       setInterestsProjects(newInterests);
-      console.log(newInterests);
+      // console.log(newInterests);
     } else {
       //remove from list
       let index = interestsProjects.indexOf(newValue);
@@ -417,7 +417,7 @@ const Register: FC<RegisterProps> = () => {
 
       if (newInterests) {
         setInterestsProjects(newInterests);
-        console.log(newInterests);
+        // console.log(newInterests);
       }
     }
   };
@@ -433,7 +433,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setHoursProjects(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
 
   const handleChange_projectsmeetings = (
@@ -447,7 +447,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setProjectsMeetings(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
   const handleChange_projectsresume = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -460,7 +460,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setProjectsResume(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
 
   const handleFormSubmitScreen2 = async (
@@ -470,13 +470,104 @@ const Register: FC<RegisterProps> = () => {
     // setLoading(true);
     e.preventDefault();
     //confirm ALL data
-    if (interestedProjects === "") {
+    if (
+      !(
+        partOfProject &&
+        interestedParticipatingProject &&
+        hoursProjects &&
+        projectsMeetings &&
+        projectsResume
+      )
+    ) {
+      setError("Missing one or more required fields.");
+      return;
+    }
+
+    if (
+      interestsProjects.length <= 0 ||
+      (interestsProjects.length === 1 && interestsProjects[0] === "")
+    ) {
+      //no interests selected
+      setError("You must select at least one project interest.");
+      return;
+    }
+    //save data
+
+    setScreen(3);
+  };
+
+  // ------------------------- screen 3 -------------------------------
+  const [interestedBootcamp, setInteredtedBootcamp] = useState("");
+
+  const handleChange_interestedbootcamp = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setInteredtedBootcamp(newValue);
+    // console.log(newValue);
+  };
+  const handleFormSubmitScreen3 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+    if (interestedBootcamp === "") {
       setError("Missing one or more required fields.");
       return;
     }
     //save data
 
-    console.log(1);
+    //change screens
+    if (interestedBootcamp === "true") {
+      setScreen(4); // bootcamp info page
+    } else {
+      setScreen(5); // leadership start info page
+    }
+  };
+
+  // ------------------------- screen 5 -------------------------------
+  const [interestedLeadership, setInterestedLeadership] = useState("");
+
+  const handleChange_interestedleadership = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setInterestedLeadership(newValue);
+    console.log(newValue);
+  };
+  const handleFormSubmitScreen5 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+    if (interestedLeadership === "") {
+      setError("Missing one or more required fields.");
+      return;
+    }
+    //save data
+
+    //change screens
+    if (interestedLeadership === "true") {
+      setScreen(4); // bootcamp info page
+    } else {
+      setScreen(5); // leadership start info page
+    }
   };
 
   if (payment_status === "completed" && screen === 0) {
@@ -1300,20 +1391,6 @@ const Register: FC<RegisterProps> = () => {
                     width="fit-content"
                   />
                 </FlexRow>
-                {/* Bootcamp */}
-                <div className={styles.Radio}>
-                  <p className={styles.Mini}>
-                    Are you interested in bootcamp?
-                    <span className={styles.Required}>*</span>
-                  </p>
-                  <input type="radio" name="bootcamp" id="bootcamp-yes" />
-                  <label htmlFor="bootcamp-yes">Yes</label>
-                  <br />
-
-                  <input type="radio" name="bootcamp" id="bootcamp-no" />
-                  <label htmlFor="bootcamp-no">No</label>
-                  <br />
-                </div>
               </FlexColumn>
             </form>
           </div>
@@ -1326,7 +1403,7 @@ const Register: FC<RegisterProps> = () => {
       <div className={styles.Register} data-testid="Register">
         <FlexRow spacing="center" align="center" height="100vh" padding="1em">
           <div style={{ width: "100%", maxWidth: "500px" }}>
-            <form onSubmit={handleFormSubmitScreen1}>
+            <form onSubmit={handleFormSubmitScreen2}>
               <FlexColumn width="100%">
                 {/* list of opportunities */}
                 <div className={styles.ContentBlock}>
@@ -1576,7 +1653,13 @@ const Register: FC<RegisterProps> = () => {
                 <div className={styles.Radio}>
                   <p className={styles.Mini}>
                     Please upload your resume{" "}
-                    <a href="https://forms.gle/7nWcCpimq6x291vD8">here</a>.
+                    <a
+                      className={styles.InlineLink}
+                      href="https://forms.gle/7nWcCpimq6x291vD8"
+                    >
+                      here
+                    </a>
+                    .
                     <br /> Did you submit your resume?
                     <span className={styles.Required}>*</span>
                   </p>
@@ -1588,6 +1671,130 @@ const Register: FC<RegisterProps> = () => {
                     onChange={handleChange_projectsresume}
                   />
                   <label htmlFor="projects-resume-yes">yes</label>
+                  <br />
+                </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
+              </FlexColumn>
+            </form>
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 3) {
+    //---------------------------- screen 3 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitScreen3}>
+              <FlexColumn width="100%">
+                {/* list of opportunities */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Get Involved!</h1>
+                  <p>
+                    Which DSGT opportunities are you interested in for this
+                    semester? You must participate in at least one opportunity
+                    below to be an active member in the club:
+                    <br />
+                    <br />
+                    - Projects <br />
+                    - Bootcamp <br />- Leadership team
+                  </p>
+                </div>
+                {/* Bootcamp */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you interested in bootcamp?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="bootcamp"
+                    id="bootcamp-yes"
+                    data-value="true"
+                    onChange={handleChange_interestedbootcamp}
+                  />
+                  <label htmlFor="bootcamp-yes">Yes</label>
+                  <br />
+
+                  <input
+                    type="radio"
+                    name="bootcamp"
+                    id="bootcamp-no"
+                    data-value="false"
+                    onChange={handleChange_interestedbootcamp}
+                  />
+                  <label htmlFor="bootcamp-no">No</label>
+                  <br />
+                </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
+              </FlexColumn>
+            </form>
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 5) {
+    //---------------------------- screen 5 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitScreen5}>
+              <FlexColumn width="100%">
+                {/* list of opportunities */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Get Involved!</h1>
+                  <p>
+                    Which DSGT opportunities are you interested in for this
+                    semester? You must participate in at least one opportunity
+                    below to be an active member in the club:
+                    <br />
+                    <br />
+                    - Projects <br />
+                    - Bootcamp <br />- Leadership team
+                  </p>
+                </div>
+                {/* leadership */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you interested in joining our leadership team?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="leadership"
+                    id="leadership-yes"
+                    data-value="true"
+                    onChange={handleChange_interestedleadership}
+                    checked={interestedLeadership === "true"}
+                  />
+                  <label htmlFor="leadership-yes">Yes</label>
+                  <br />
+
+                  <input
+                    type="radio"
+                    name="leadership"
+                    id="leadership-no"
+                    data-value="false"
+                    onChange={handleChange_interestedleadership}
+                    checked={interestedLeadership === "false"}
+                  />
+                  <label htmlFor="leadership-no">No</label>
                   <br />
                 </div>
                 <ErrorText>{error}</ErrorText>

@@ -90,7 +90,8 @@
   }
 }
 
-.Radio, .Checkbox {
+.Radio,
+.Checkbox {
   margin-bottom: 10px;
   width: 100%;
   input {
@@ -99,7 +100,9 @@
   }
 }
 
-
+.InlineLink {
+  color: var(--foreground);
+}
 
 .Required {
   display: inline-block;
