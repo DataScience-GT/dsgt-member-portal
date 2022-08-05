@@ -532,6 +532,112 @@ const Register: FC<RegisterProps> = () => {
       setScreen(5); // leadership start info page
     }
   };
+  // ------------------------- screen 4 -------------------------------
+  const [interestsBootcamp, setInterestsBootcamp] = useState([""]);
+  const [bootcampMeetings, setBootcampMeetings] = useState("");
+  const [bootcampConsent, setBootcampConsent] = useState("");
+  const [bootcampDataConsent, setBootcampDataConsent] = useState("");
+
+  const handleChange_interestsBootcampCheckbox = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.checked) {
+      //add to list
+      let newInterests = [...interestsBootcamp, newValue];
+      if (interestsBootcamp.length === 1 && interestsBootcamp[0] === "") {
+        newInterests = [newValue];
+      }
+      setInterestsBootcamp(newInterests);
+      // console.log(newInterests);
+    } else {
+      //remove from list
+      let index = interestsBootcamp.indexOf(newValue);
+      let newInterests;
+      if (interestsBootcamp.length === 1 && interestsBootcamp[0] === newValue) {
+        newInterests = [""];
+      } else if (index > -1) {
+        newInterests = interestsBootcamp;
+        newInterests.splice(index, 1);
+      }
+
+      if (newInterests) {
+        setInterestsBootcamp(newInterests);
+        // console.log(newInterests);
+      }
+    }
+  };
+
+  const handleChange_bootcampmeetings = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setBootcampMeetings(newValue);
+    // console.log(newValue);
+  };
+  const handleChange_bootcampconsent = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setBootcampConsent(newValue);
+    // console.log(newValue);
+  };
+  const handleChange_bootcampdataconsent = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setBootcampDataConsent(newValue);
+    // console.log(newValue);
+  };
+
+  const handleFormSubmitScreen4 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+    if (!(bootcampConsent && bootcampDataConsent)) {
+      setError("Missing one or more required fields.");
+      return;
+    }
+
+    if (
+      interestsBootcamp.length <= 0 ||
+      (interestsBootcamp.length === 1 && interestsBootcamp[0] === "")
+    ) {
+      //no interests selected
+      setError("You must select at least one bootcamp interest.");
+      return;
+    }
+    //save data
+
+    setScreen(5);
+  };
 
   // ------------------------- screen 5 -------------------------------
   const [interestedLeadership, setInterestedLeadership] = useState("");
@@ -547,7 +653,7 @@ const Register: FC<RegisterProps> = () => {
       e.currentTarget.nextElementSibling?.innerHTML.toString() ||
       e.currentTarget.id;
     setInterestedLeadership(newValue);
-    console.log(newValue);
+    // console.log(newValue);
   };
   const handleFormSubmitScreen5 = async (
     e: React.FormEvent<HTMLFormElement>
@@ -564,9 +670,48 @@ const Register: FC<RegisterProps> = () => {
 
     //change screens
     if (interestedLeadership === "true") {
-      setScreen(4); // bootcamp info page
+      setScreen(6); // leadership form page
     } else {
-      setScreen(5); // leadership start info page
+      //end the form process
+      alert("done");
+    }
+  };
+
+  // ------------------------- screen 6 -------------------------------
+  const [leadershipStatus, setLeadershipStatus] = useState("");
+
+  const handleChange_leadershipstatus = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    setLeadershipStatus(newValue);
+    console.log(newValue);
+  };
+  const handleFormSubmitScreen6 = async (
+    e: React.FormEvent<HTMLFormElement>
+  ) => {
+    setError("");
+    // setLoading(true);
+    e.preventDefault();
+    //confirm ALL data
+    if (interestedLeadership === "") {
+      setError("Missing one or more required fields.");
+      return;
+    }
+    //save data
+
+    //change screens
+    if (interestedLeadership === "true") {
+      setScreen(6); // leadership form page
+    } else {
+      //end the form process
+      alert("done");
     }
   };
 
@@ -1463,6 +1608,7 @@ const Register: FC<RegisterProps> = () => {
                     name="part-projects"
                     id="part-projects-yes"
                     data-value={"true"}
+                    checked={partOfProject === "true"}
                     onChange={handleChange_partproject}
                   />
                   <label htmlFor="part-projects-yes">Yes</label>
@@ -1473,6 +1619,7 @@ const Register: FC<RegisterProps> = () => {
                     name="part-projects"
                     id="part-projects-no"
                     data-value={"false"}
+                    checked={partOfProject === "false"}
                     onChange={handleChange_partproject}
                   />
                   <label htmlFor="part-projects-no">No</label>
@@ -1719,6 +1866,7 @@ const Register: FC<RegisterProps> = () => {
                     name="bootcamp"
                     id="bootcamp-yes"
                     data-value="true"
+                    checked={interestedBootcamp === "true"}
                     onChange={handleChange_interestedbootcamp}
                   />
                   <label htmlFor="bootcamp-yes">Yes</label>
@@ -1729,9 +1877,161 @@ const Register: FC<RegisterProps> = () => {
                     name="bootcamp"
                     id="bootcamp-no"
                     data-value="false"
+                    checked={interestedBootcamp === "false"}
                     onChange={handleChange_interestedbootcamp}
                   />
                   <label htmlFor="bootcamp-no">No</label>
+                  <br />
+                </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
+              </FlexColumn>
+            </form>
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 4) {
+    //---------------------------- screen 4 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitScreen4}>
+              <FlexColumn width="100%">
+                {/* list of opportunities */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Bootcamp</h1>
+                  <p>
+                    Please answer the questions below if you would like to apply
+                    for our bootcamp program!
+                    <br />
+                    <br />
+                    NOTE: This semester, we are offering both our in-person
+                    bootcamp as well as a new self-paced Udemy course that
+                    covers a similar curriculum. Our in-person bootcamp consists
+                    of biweekly workshops (held every other Monday at 6:30 PM
+                    EST) and a team project component, while the Udemy course is
+                    fully self-guided and will not include the opportunity to
+                    work with other bootcamp students on a project. If you
+                    indicate that you are applying to both in-person bootcamp
+                    and our self-paced Udemy course, we will first consider you
+                    for in-person bootcamp and then for our Udemy course.
+                    <br />
+                    <br />
+                    More information about our in-person bootcamp and Udemy
+                    course can be found{" "}
+                    <a
+                      className={styles.InlineLink}
+                      href="https://dsgtbootcamp.netlify.app/options"
+                    >
+                      here
+                    </a>
+                    .
+                  </p>
+                </div>
+                {/* which bootcamp applying to? */}
+                <div className={styles.Checkbox}>
+                  <p className={styles.Mini}>
+                    I am applying to (may select one or both options)
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="checkbox"
+                    name="interests-bootcamp"
+                    id="interests-bootcamp-IP"
+                    onChange={handleChange_interestsBootcampCheckbox}
+                  />
+                  <label htmlFor="interests-bootcamp-IP">
+                    In-person bootcamp
+                  </label>
+                  <br />
+                  <input
+                    type="checkbox"
+                    name="interests-bootcamp"
+                    id="interests-bootcamp-SP"
+                    onChange={handleChange_interestsBootcampCheckbox}
+                  />
+                  <label htmlFor="interests-bootcamp-SP">
+                    Self-paced Udemy bootcamp course
+                  </label>
+                  <br />
+                </div>
+                {/* meetings */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    (If applying to in-person bootcamp) Are you available on
+                    Mondays at 6:30pm for our meetings? Attendance is required
+                  </p>
+                  <input
+                    type="radio"
+                    name="bootcamp-meetings"
+                    id="bootcamp-meetings-yes"
+                    data-value={"true"}
+                    onChange={handleChange_bootcampmeetings}
+                  />
+                  <label htmlFor="bootcamp-meetings-yes">yes</label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="bootcamp-meetings"
+                    id="bootcamp-meetings-no"
+                    data-value={"false"}
+                    onChange={handleChange_bootcampmeetings}
+                  />
+                  <label htmlFor="bootcamp-meetings-no">no</label>
+                  <br />
+                </div>
+                {/* bootcamp consent */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Bootcamp sessions may be recorded and shared with DSGT
+                    members. By attending, I consent to the recording of
+                    bootcamp sessions.
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="bootcamp-consent"
+                    id="bootcamp-consent-yes"
+                    data-value={"true"}
+                    onChange={handleChange_bootcampconsent}
+                  />
+                  <label htmlFor="bootcamp-consent-yes">I agree</label>
+                  <br />
+                </div>
+                {/* bootcamp data consent */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Do you consent to us recording your data during meetings for
+                    recruitment and marketing opportunities? (Including
+                    Photos/Videos)
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="bootcamp-consent-data"
+                    id="bootcamp-consent-data-yes"
+                    data-value={"true"}
+                    onChange={handleChange_bootcampdataconsent}
+                  />
+                  <label htmlFor="bootcamp-consent-data-yes">Yes</label>
+                  <br />
+
+                  <input
+                    type="radio"
+                    name="bootcamp-consent-data"
+                    id="bootcamp-consent-data-no"
+                    data-value={"false"}
+                    onChange={handleChange_bootcampdataconsent}
+                  />
+                  <label htmlFor="bootcamp-consent-data-no">No</label>
                   <br />
                 </div>
                 <ErrorText>{error}</ErrorText>
@@ -1795,6 +2095,69 @@ const Register: FC<RegisterProps> = () => {
                     checked={interestedLeadership === "false"}
                   />
                   <label htmlFor="leadership-no">No</label>
+                  <br />
+                </div>
+                <ErrorText>{error}</ErrorText>
+                <FlexRow spacing="flex-end" width="100%">
+                  <InputField
+                    type={"submit"}
+                    placeholder="Continue"
+                    width="fit-content"
+                  />
+                </FlexRow>
+              </FlexColumn>
+            </form>
+          </div>
+        </FlexRow>
+      </div>
+    );
+  } else if (emailVerified && screen === 6) {
+    //---------------------------- screen 6 ----------------------------
+    return (
+      <div className={styles.Register} data-testid="Register">
+        <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+          <div style={{ width: "100%", maxWidth: "500px" }}>
+            <form onSubmit={handleFormSubmitScreen6}>
+              <FlexColumn width="100%">
+                {/* leadership team */}
+                <div className={styles.ContentBlock}>
+                  <h1 className={"Major"}>Leadership Team</h1>
+                </div>
+                {/* leadership status */}
+                <div className={styles.Radio}>
+                  <p className={styles.Mini}>
+                    Are you currently on our leadership team?
+                    <span className={styles.Required}>*</span>
+                  </p>
+                  <input
+                    type="radio"
+                    name="leadership-status"
+                    id="leadership-status-yes-keep"
+                    onChange={handleChange_leadershipstatus}
+                  />
+                  <label htmlFor="leadership-status-yes-keep">
+                    Yes, and I would like to keep my existing position
+                  </label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="leadership-status"
+                    id="leadership-status-yes-new"
+                    onChange={handleChange_leadershipstatus}
+                  />
+                  <label htmlFor="leadership-status-yes-new">
+                    Yes, but I would like to apply for a new position
+                  </label>
+                  <br />
+                  <input
+                    type="radio"
+                    name="leadership-status"
+                    id="leadership-status-no"
+                    onChange={handleChange_leadershipstatus}
+                  />
+                  <label htmlFor="leadership-status-no">
+                    No, but I would like to apply
+                  </label>
                   <br />
                 </div>
                 <ErrorText>{error}</ErrorText>
