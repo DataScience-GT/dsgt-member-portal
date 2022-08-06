@@ -20,6 +20,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
     event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     let error: Error = err as Error;
+    console.log(error.message);
     next(new StatusError(`stripe webhook error: ${error.message}`, 500));
     return;
   }
