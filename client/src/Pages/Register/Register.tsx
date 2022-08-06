@@ -720,7 +720,7 @@ const Register: FC<RegisterProps> = () => {
       setScreen(6); // leadership form page
     } else {
       //end the form process
-      alert("done");
+      window.location.href = "/portal";
     }
   };
 
@@ -754,12 +754,13 @@ const Register: FC<RegisterProps> = () => {
     //save data
 
     //change screens
-    if (interestedLeadership === "true") {
-      setScreen(6); // leadership form page
-    } else {
-      //end the form process
-      alert("done");
-    }
+    window.location.href = "/portal";
+    // if (interestedLeadership === "true") {
+    //   setScreen(6); // leadership form page
+    // } else {
+    //   //end the form process
+
+    // }
   };
 
   if (payment_status === "completed" && screen === 0) {
