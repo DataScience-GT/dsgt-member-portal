@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   checkBillingDetailsExists,
   registerUser,
+  result_billingDetails,
   result_register,
 } from "../../API/Register";
 import ErrorText from "../../components/ErrorText/ErrorText";
@@ -46,10 +47,26 @@ const Register: FC<RegisterProps> = () => {
     setLoading(true);
     e.preventDefault();
     //check if billing data found
-    await checkBillingDetailsExists(paymentEmail, (data: Object) => {
-      // console.log(data);
-      setEmailVerified(true);
-    })
+    await checkBillingDetailsExists(
+      paymentEmail,
+      (result: result_billingDetails) => {
+        // console.log(data);
+        // check for completion
+        let nextPage = 0;
+        if (result.data.account) {
+          //account already exists
+          nextPage = 1;
+          if (result.data.projects) {
+            nextPage = 3;
+            if (result.data.bootcamp) {
+              nextPage = 5;
+            }
+          }
+        }
+        setEmailVerified(true);
+        setScreen(nextPage);
+      }
+    )
       .catch((err) => {
         setError(err.message);
       })

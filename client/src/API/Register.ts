@@ -1,6 +1,28 @@
+export type result_billingDetails = {
+  ok: number;
+  data: {
+    billing_details: {
+      details_id: number;
+      city: string;
+      country: string;
+      line1: string;
+      line2: string;
+      postal_code: string;
+      state: string;
+      email: string;
+      name: string;
+      phone: string;
+      created_at: string;
+    };
+    account: boolean;
+    projects: boolean;
+    bootcamp: boolean;
+  };
+};
+
 export const checkBillingDetailsExists = async (
   email: string,
-  callback: (data: Object) => void
+  callback: (data: result_billingDetails) => void
 ) => {
   await fetch("/api/billing/verify", {
     method: "POST",
@@ -15,7 +37,7 @@ export const checkBillingDetailsExists = async (
       throw new Error(json.error);
     } else {
       //return the billing data
-      callback(json.data);
+      callback(json);
     }
   });
 };

@@ -546,3 +546,31 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
     phone: billing_details.phone,
   });
 };
+
+// -------------------------- forms --------------------------
+/**
+ * checks whether the projects form has been saved
+ * @param email user's email
+ * @returns true if exists, false otherwise
+ */
+export const checkFormProjectsExists = async (email: string) => {
+  let res = await db("form_projects").count("*").where("user_email", email);
+  if (!res || res[0].count <= 0) {
+    return false;
+  } else {
+    return true;
+  }
+};
+/**
+ * checks whether the bootcamp form has been saved
+ * @param email user's email
+ * @returns true if exists, false otherwise
+ */
+export const checkFormBootcampExists = async (email: string) => {
+  let res = await db("form_bootcamp").count("*").where("user_email", email);
+  if (!res || res[0].count <= 0) {
+    return false;
+  } else {
+    return true;
+  }
+};

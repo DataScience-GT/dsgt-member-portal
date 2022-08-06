@@ -64,10 +64,10 @@ function App() {
             localStorage.setItem("dsgt-portal-fname", json.fname);
             localStorage.setItem("dsgt-portal-role", json.role);
             if (
-              window.location.pathname.toLowerCase() == "/login" ||
-              window.location.pathname.toLowerCase() == "/signup" ||
-              window.location.pathname.toLowerCase() == "/register" ||
-              window.location.pathname.toLowerCase() == "/"
+              window.location.pathname.toLowerCase() === "/login" ||
+              window.location.pathname.toLowerCase() === "/signup" ||
+              // window.location.pathname.toLowerCase() === "/register" ||
+              window.location.pathname.toLowerCase() === "/"
             ) {
               window.location.href = "/portal";
             }

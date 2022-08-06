@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   return knex.schema
     .createTable("form_projects", function (table) {
       table
-        .integer("user_email")
+        .string("user_email")
         .references("email")
         .inTable("user")
         .onDelete("CASCADE");
@@ -17,7 +17,7 @@ export async function up(knex: Knex): Promise<void> {
     })
     .createTable("form_bootcamp", function (table) {
       table
-        .integer("user_email")
+        .string("user_email")
         .references("email")
         .inTable("user")
         .onDelete("CASCADE");

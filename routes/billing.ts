@@ -4,7 +4,13 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
-import { checkBillingDetailsExists, getBillingDetails } from "../model";
+import {
+  checkBillingDetailsExists,
+  checkFormBootcampExists,
+  checkFormProjectsExists,
+  checkUserEmail,
+  getBillingDetails,
+} from "../model";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -31,8 +37,21 @@ router.post(
       );
       return;
     }
-    let data = await getBillingDetails(email);
-    res.json({ ok: 1, data: data });
+    //check wether forms have been filled in
+    let billing_data = await getBillingDetails(email);
+    let account_exists = await checkUserEmail(email);
+    let form_projects_exists = await checkFormProjectsExists(email);
+    let form_bootcamp_exists = await checkFormBootcampExists(email);
+
+    res.json({
+      ok: 1,
+      data: {
+        billing_data: billing_data,
+        account: account_exists,
+        projects: form_projects_exists,
+        bootcamp: form_bootcamp_exists,
+      },
+    });
   }
 );
 
