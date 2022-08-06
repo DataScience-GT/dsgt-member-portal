@@ -8,8 +8,7 @@ import { createBillingDetails } from "../model";
 import { StatusError } from "../Classes/StatusError";
 
 const stripe = require("stripe");
-const endpointSecret =
-  "whsec_7684b0c6ca4fcdaa6a511e4855af592342bef4911ccbedc3eaeb4e38e3f38e64";
+const endpointSecret = process.env.STRIPE_SECRET;
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   const sig = req.headers["stripe-signature"];
