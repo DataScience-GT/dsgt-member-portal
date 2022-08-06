@@ -79,10 +79,7 @@ export const getUsers = (sorts?: Sort[] | Sort) => {
 /**
  * Registers a user. It is advised to use `checkUserEmail()` to make sure the email is unique.
  */
-export const registerUser = async (
-  { email, fname, lname, password }: Required<RegisterUser>,
-  next: NextFunction
-) => {
+export const registerUser = async (user: RegisterUser, next: NextFunction) => {
   try {
     //add the user to the database
     let uuid = crypto.randomBytes(24).toString("hex");
@@ -90,20 +87,31 @@ export const registerUser = async (
       //regenerate new uuid until unique
       uuid = crypto.randomBytes(24).toString("hex");
     }
-    let hash = md5(password);
+    let hash = md5(user.password);
     await db
       .insert({
-        email: email,
-        fname: fname,
-        lname: lname,
+        email: user.email,
+        fname: user.fname,
+        lname: user.lname,
         password: hash,
         uuid: uuid,
+        major: user.major,
+        minor: user.minor,
+        gtemail: user.gtEmail,
+        personalemail: user.personalEmail,
+        newmember: user.newMember,
+        studyyear: user.studyYear,
+        gender: user.gender,
+        ethnicity: user.ethnicity,
+        location: user.location,
+        experience: user.experience,
+        interests: JSON.stringify(user.interests),
       })
       .into("user");
     let res = await db
       .select("user_inc")
       .from("user")
-      .where("email", email)
+      .where("email", user.email)
       .andWhere("password", hash);
     if (res.length <= 0) {
       return false;

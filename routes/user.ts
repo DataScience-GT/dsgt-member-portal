@@ -94,13 +94,39 @@ router.post(
       fname: req.body.fname,
       lname: req.body.lname,
       password: req.body.password,
+      major: req.body.major,
+      minor: req.body.minor,
+      gtEmail: req.body.gtEmail,
+      personalEmail: req.body.personalEmail,
+      newMember: req.body.newMember,
+      studyYear: req.body.studyYear,
+      gender: req.body.gender,
+      ethnicity: req.body.ethnicity,
+      location: req.body.location,
+      experience: req.body.experience,
+      interests: req.body.interests,
     };
-    if (!(u.email && u.fname && u.lname && u.password)) {
+    if (
+      !(
+        u.email &&
+        u.fname &&
+        u.lname &&
+        u.password &&
+        u.major &&
+        u.gtEmail &&
+        u.newMember &&
+        u.studyYear &&
+        u.gender &&
+        u.ethnicity &&
+        u.location &&
+        u.experience &&
+        u.interests
+      )
+    ) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+      return;
     }
     u.email = u.email.toLowerCase();
-    u.fname = u.fname.toLowerCase();
-    u.lname = u.lname.toLowerCase();
     let emailUsed = await checkUserEmail(u.email);
     if (emailUsed) {
       next(
@@ -109,6 +135,7 @@ router.post(
           400
         )
       );
+      return;
     } else {
       let x = await registerUser(u, next);
       //login success -- generate session key

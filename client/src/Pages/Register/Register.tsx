@@ -1,6 +1,10 @@
 import React, { FC, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { checkBillingDetailsExists } from "../../API/Register";
+import {
+  checkBillingDetailsExists,
+  registerUser,
+  result_register,
+} from "../../API/Register";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import InputHelper from "../../components/InputHelper/InputHelper";
@@ -24,8 +28,8 @@ const Register: FC<RegisterProps> = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const payment_status = searchParams.get("payment_status");
   const [loading, setLoading] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(true);
-  const [screen, setScreen] = useState(1);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [screen, setScreen] = useState(0);
   const [error, setError] = useState("");
   //--------------- ---------------
   //--------------- First Form (Payment mail) ---------------
@@ -43,7 +47,7 @@ const Register: FC<RegisterProps> = () => {
     e.preventDefault();
     //check if billing data found
     await checkBillingDetailsExists(paymentEmail, (data: Object) => {
-      console.log(data);
+      // console.log(data);
       setEmailVerified(true);
     })
       .catch((err) => {
@@ -307,9 +311,35 @@ const Register: FC<RegisterProps> = () => {
       setError("You must select at least one interest.");
       return;
     }
-    setScreen(1);
 
-    //attempt to register user
+    //attempt to register account
+    await registerUser(
+      paymentEmail,
+      fname,
+      lname,
+      password,
+      major,
+      minor,
+      gtemail,
+      personalEmail,
+      newMember,
+      studyYear,
+      gender,
+      ethnicity,
+      location,
+      experience,
+      JSON.stringify(interests),
+      (data: result_register) => {
+        //callback function
+        if (data.ok) {
+          //save session id and role
+          localStorage.setItem("dsgt-portal-session-key", data.session_key);
+          //continue to next section
+          setScreen(1);
+          setError("");
+        }
+      }
+    );
   };
 
   // ------------------------- screen 1 -------------------------------
