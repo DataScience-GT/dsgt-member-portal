@@ -50,7 +50,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
         setError(json.error);
       } else {
         //success
-        console.log(json);
+        // console.log(json);
         setSuccess("Email sent, expires in 10 minutes.");
         setComplete(true);
       }
