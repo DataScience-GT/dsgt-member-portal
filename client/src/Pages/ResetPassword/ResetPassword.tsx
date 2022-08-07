@@ -134,7 +134,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
                 placeholder={"Email"}
                 onChange={handleEmailChange}
               />
-              <InputField type={"submit"} placeholder={"Send Email"} />
+              <InputField type={"submit"} placeholder={"Send Recovery Email"} />
             </FlexColumn>
           </form>
         </div>
