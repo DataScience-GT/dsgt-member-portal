@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { attemptLogin } from "../../API/Login";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
@@ -31,28 +32,64 @@ const Login: FC<LoginProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    await fetch("/api/user/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-      },
-      body: JSON.stringify({ email: email, password: password }),
-    }).then(async (res) => {
-      const json = await res.json();
-      if (!json.ok && json.error) {
-        setError(json.error);
-      } else {
-        //save session key to localstorage
-        localStorage.setItem("dsgt-portal-session-key", json.session_key);
-        window.location.href = "/portal";
-      }
+    await attemptLogin(email, password).catch((err) => {
+      setError(err.message);
     });
   };
 
   return (
     <div className={styles.Login} data-testid="Login">
-      <div className={styles.Panel}>
+      <FlexRow spacing="center" align="center" height="100vh" padding="1em">
+        <div style={{ width: "100%", maxWidth: "500px" }}>
+          <form onSubmit={handleSubmit}>
+            <FlexColumn width="100%">
+              <h1 className={styles.Major}>Login</h1>
+              <InputField
+                type="email"
+                placeholder="Email"
+                width="100%"
+                onChange={handleChange_email}
+              />
+              <InputField
+                type="password"
+                placeholder="Password"
+                onChange={handleChange_password}
+                width="100%"
+              />
+              <InputField type="submit" placeholder="Login" width="100%" />
+              <div style={{ width: "100%" }}>
+                <FlexRow
+                  height="fit-content"
+                  width="100%"
+                  spacing="flex-end"
+                  align="center"
+                >
+                  <a className={styles.InlineLink} href="/passwordreset">
+                    forgot password?
+                  </a>
+                </FlexRow>
+              </div>
+
+              <ErrorText>{error}</ErrorText>
+              <div className={styles.Divider}></div>
+              <div className={styles.Bottom}>
+                <FlexRow
+                  spacing="space-between"
+                  align="center"
+                  height="fit-content"
+                  width="100%"
+                >
+                  <h3 className={styles.Mini}>I need an account:</h3>
+                  <a className={styles.InlineLink} href="/register">
+                    Register
+                  </a>
+                </FlexRow>
+              </div>
+            </FlexColumn>
+          </form>
+        </div>
+      </FlexRow>
+      {/* <div className={styles.Panel}>
         <FlexRow height="100%">
           <div className={`${styles.PanelHalf}`}>
             <form onSubmit={handleSubmit}>
@@ -74,7 +111,6 @@ const Login: FC<LoginProps> = () => {
                   type="password"
                   placeholder="Password"
                   onChange={handleChange_password}
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                   width="100%"
                 />
                 <InputField type="submit" placeholder="Login" width="100%" />
@@ -106,7 +142,7 @@ const Login: FC<LoginProps> = () => {
           </div>
           <div className={`${styles.PanelHalf} ${styles.PanelRight}`}></div>
         </FlexRow>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -1,58 +1,146 @@
-$bg: #dce5f2;
-// $fill: #1a2554;
-$borders: #c4ccd7;
-$text: #7c8297;
-$fill: #445379;
+// $bg: #dce5f2;
+// // $fill: #1a2554;
+// $borders: #c4ccd7;
+// $text: #7c8297;
+// $fill: #445379;
+
+// .Login {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-direction: column;
+//   height: 100vh;
+//   flex-direction: column;
+//   a {
+//     text-decoration: none;
+//   }
+// }
+
+// .Panel {
+//   display: block;
+//   position: relative;
+//   width: 80%;
+//   max-width: 1200px;
+//   height: 80%;
+//   // border: 1px solid black;
+//   background: $bg;
+//   border-radius: 40px;
+// }
+
+// .PanelHalf {
+//   display: block;
+//   position: relative;
+//   width: 50%;
+//   height: 100%;
+//   border-radius: 30px;
+//   > form {
+//     height: 100%;
+//     width: 100%;
+//   }
+// }
+
+// .PanelRight {
+//   background: linear-gradient(to bottom, #21244a, #62749c);
+//   height: calc(100% - 40px);
+//   width: calc(50% - 40px);
+//   margin: 20px;
+//   // transform: translateX(calc(100% + 40px));
+//   z-index: 4;
+// }
+
+// .Header {
+//   font-size: 2em;
+//   color: #525d85;
+//   width: fit-content;
+//   margin-bottom: 1em;
+// }
+
+// .Divider {
+//   display: block;
+//   position: relative;
+//   width: 100%;
+//   height: 3px;
+//   border-bottom: 3px solid $borders;
+//   margin: 1.5em 0;
+// }
+
+// .mini {
+//   color: #525d85;
+//   display: inline-block;
+//   width: fit-content;
+//   font-weight: 400;
+// }
+// .InlineButton {
+//   display: inline-block;
+//   border: 2px solid $borders;
+//   background: #fff;
+//   padding: 4px 12px;
+//   padding-top: 2px;
+//   width: fit-content;
+//   color: $text;
+//   font-weight: 500;
+//   border-radius: 12px;
+//   transition: 0.3s all ease;
+//   &:hover {
+//     filter: brightness(0.8);
+//   }
+//   &:active {
+//     transform: scale(0.95);
+//   }
+// }
+// .bottom {
+//   width: 100%;
+// }
 
 .Login {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  height: 100vh;
-  flex-direction: column;
-  a {
-    text-decoration: none;
-  }
-}
-
-.Panel {
-  display: block;
-  position: relative;
-  width: 80%;
-  max-width: 1200px;
-  height: 80%;
-  // border: 1px solid black;
-  background: $bg;
-  border-radius: 40px;
-}
-
-.PanelHalf {
-  display: block;
-  position: relative;
-  width: 50%;
+  background: var(--background);
+  color: var(--foreground);
   height: 100%;
-  border-radius: 30px;
-  > form {
-    height: 100%;
-    width: 100%;
+  overflow: auto;
+}
+
+.Major {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Minor {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Mini {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Link {
+  background: var(--background);
+  color: var(--foreground);
+  border: 2px solid var(--borderColor);
+  padding: 0.5em;
+  padding-top: 0.4em;
+  border-radius: 10px;
+  transition: var(--animDuration) background ease;
+  margin: 10px 0;
+  &:hover {
+    background: var(--hover);
   }
 }
 
-.PanelRight {
-  background: linear-gradient(to bottom, #21244a, #62749c);
-  height: calc(100% - 40px);
-  width: calc(50% - 40px);
-  margin: 20px;
-  // transform: translateX(calc(100% + 40px));
-  z-index: 4;
-}
-
-.Header {
-  font-size: 2em;
-  color: #525d85;
-  width: fit-content;
-  margin-bottom: 1em;
+.InlineLink {
+  display: inline-block;
+  color: var(--foreground);
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .Divider {
@@ -60,34 +148,14 @@ $fill: #445379;
   position: relative;
   width: 100%;
   height: 3px;
-  border-bottom: 3px solid $borders;
+  border-bottom: 3px solid var(--borderColor);
   margin: 1.5em 0;
 }
 
-.mini {
-  color: #525d85;
-  display: inline-block;
-  width: fit-content;
-  font-weight: 400;
-}
-.InlineButton {
-  display: inline-block;
-  border: 2px solid $borders;
-  background: #fff;
-  padding: 4px 12px;
-  padding-top: 2px;
-  width: fit-content;
-  color: $text;
-  font-weight: 500;
-  border-radius: 12px;
-  transition: 0.3s all ease;
-  &:hover {
-    filter: brightness(0.8);
-  }
-  &:active {
-    transform: scale(0.95);
-  }
-}
-.bottom {
+.Bottom {
   width: 100%;
+  .Mini {
+    width: fit-content;
+    margin: 0;
+  }
 }

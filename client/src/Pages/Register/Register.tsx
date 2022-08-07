@@ -356,7 +356,9 @@ const Register: FC<RegisterProps> = () => {
           setError("");
         }
       }
-    );
+    ).catch((err) => {
+      setError(err.message);
+    });
   };
 
   // ------------------------- screen 1 -------------------------------
@@ -2169,7 +2171,7 @@ const Register: FC<RegisterProps> = () => {
               <FlexColumn width="100%">
                 {/* leadership team */}
                 <div className={styles.ContentBlock}>
-                  <h1 className={"Major"}>Leadership Team</h1>
+                  <h1 className={styles.Major}>Leadership Team</h1>
                 </div>
                 {/* leadership status */}
                 <div className={styles.Radio}>
