@@ -3,9 +3,10 @@ import { NextFunction } from "express";
 import { error } from "./Logger";
 
 export const sendEmail = (
-  message: string,
-  subject: string,
   receiving_email: string[] | string,
+  subject: string,
+  text: string | null,
+  html: string | null,
   next: NextFunction
 ) => {
   const transporter = nodemailer.createTransport({
@@ -27,8 +28,8 @@ export const sendEmail = (
       from: `"${process.env.SMTP_EMAIL_USERNAME}" <youremail@gmail.com>`, // sender address
       to: receiving_email, // list of receivers
       subject: subject, // Subject line
-      text: "There is a new article. It's about sending emails, check it out!", // plain text body
-      html: "<b>There is a new article. It's about sending emails, check it out!</b>", // html body
+      text: text, // plain text body
+      html: html, // html body
     })
     .then((info: any) => {
       return info;

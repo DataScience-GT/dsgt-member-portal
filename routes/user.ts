@@ -32,6 +32,9 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
+import path from "path";
+import { getPasswordResetEmail } from "../EmailTemplates/PasswordReset";
+import { sendEmail } from "../email";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -327,7 +330,13 @@ router.post(
       return;
     }
     //DO NOT SEND THIS CODE BACK TO THE REQEUST -- EMAIL TO THE EMAIL GIVEN
-    res.json({ ok: 1, reset_code: x });
+    //get the recovery link
+    let host = req.get("host");
+    let recovery_url = `${host}/passwordreset?reset_code=${x}`;
+    //send the email with link
+    let emailToSend = getPasswordResetEmail(recovery_url);
+    await sendEmail(email, "Password Recovery", null, emailToSend, next);
+    res.json({ ok: 1 });
   }
 );
 
