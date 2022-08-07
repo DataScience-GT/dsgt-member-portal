@@ -32,7 +32,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
     setError("");
     setSuccess("");
     if (complete) {
-      setError("Already complete");
+      setError("Email already sent.");
       return;
     }
     //initiate password reset
@@ -101,8 +101,6 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
               spacing="center"
               align="center"
             >
-              <ErrorText>{error}</ErrorText>
-              <SuccessText>{success}</SuccessText>
               <br />
               <InputField
                 type={"password"}
@@ -113,6 +111,8 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
                 validIndication
               />
               <InputField type={"submit"} placeholder={"Save Password"} />
+              <ErrorText>{error}</ErrorText>
+              <SuccessText>{success}</SuccessText>
               {complete ? <a href="/login">Login</a> : ""}
             </FlexColumn>
           </form>
@@ -126,8 +126,6 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
               spacing="center"
               align="center"
             >
-              <ErrorText>{error}</ErrorText>
-              <SuccessText>{success}</SuccessText>
               <br />
               <InputField
                 type={"email"}
@@ -135,6 +133,8 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
                 onChange={handleEmailChange}
               />
               <InputField type={"submit"} placeholder={"Send Recovery Email"} />
+              <ErrorText>{error}</ErrorText>
+              <SuccessText>{success}</SuccessText>
             </FlexColumn>
           </form>
         </div>
