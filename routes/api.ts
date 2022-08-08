@@ -55,10 +55,13 @@ router.get(
   }
 );
 
-router.post("/test", (req: Request, res: Response, next: NextFunction) => {
-  console.log(req.body);
-  res.json({ ok: 1, body: req.body });
-});
+router.post(
+  "/test",
+  (req: Request, res: Response, next: NextFunction) => {
+    
+    res.json({ ok: 1, body: req.body });
+  }
+);
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;
