@@ -45,10 +45,9 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   });
   const [enable, setEnable] = useState(false);
 
+  let saved_sort = localStorage.getItem("dsgt-portal-member-sorts");
   const [currentSort, setCurrentSort] = useState(
-    JSON.parse(localStorage.getItem("dsgt-portal-member-sorts") || "") || [
-      { column: "", order: "" },
-    ]
+    saved_sort ? JSON.parse(saved_sort) : [{ column: "", order: "" }]
   );
   const [currentOrder, setCurrentOrder] = useState(
     currentSort[0].order == "asc" || false
