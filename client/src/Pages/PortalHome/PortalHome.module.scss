@@ -32,12 +32,19 @@
 }
 
 .FlexLeft {
-    flex-grow: 1;
-    max-width: calc(100% - 25em - 5em);
+  flex-grow: 1;
+  max-width: calc(100% - 25em - 5em);
+  min-width: 250px;
 }
 
 .Announcements {
-    width: 25em;
-    height: 100vh;
-    // border: 1px solid var(--borderColor);
+  width: 25em;
+  height: 100vh;
+  // border: 1px solid var(--borderColor);
+}
+
+@media only screen and (max-width: 1000px) {
+  .Announcements {
+    margin-top: 5em;
+  }
 }
