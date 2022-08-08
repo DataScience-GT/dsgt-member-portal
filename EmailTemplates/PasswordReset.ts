@@ -1,3 +1,3 @@
 export const getPasswordResetEmail = (recovery_link: string) => {
-  return `<h1>click here to reset your password: ${recovery_link}</h1>`;
+  return `<p>click the following link to reset your password:</p><a href='${recovery_link}'>${recovery_link}</a>`;
 };
