@@ -351,9 +351,11 @@ const Register: FC<RegisterProps> = () => {
         if (data.ok) {
           //save session id and role
           localStorage.setItem("dsgt-portal-session-key", data.session_key);
-          //continue to next section
-          setScreen(1);
-          setError("");
+          // //continue to next section
+          // setScreen(1);
+          // setError("");
+          // END FORM HERE FOR NOW (MAY HAVE TO MOVE ALL OTHER FORMS TO PORTAL LATER)
+          window.location.href = "/portal";
         }
       }
     ).catch((err) => {
@@ -1070,7 +1072,6 @@ const Register: FC<RegisterProps> = () => {
                     placeholder="What is your personal email address? (optional)"
                     name="PersonalEmail"
                     width="100%"
-                    validIndication
                     required={false}
                     onChange={handleChange_personalemail}
                   />
