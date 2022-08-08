@@ -55,19 +55,10 @@ router.get(
   }
 );
 
-router.get(
-  "/test",
-  ApiAuthenticate,
-  (req: Request, res: Response, next: NextFunction) => {
-    // sendEmail(
-    //   "hello world!",
-    //   "Welcome to DSGT!",
-    //   "rambergerjohn@gmail.com",
-    //   next
-    // );
-    res.json({ ok: 1 });
-  }
-);
+router.post("/test", (req: Request, res: Response, next: NextFunction) => {
+  console.log(req.body);
+  res.json({ ok: 1, body: req.body });
+});
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;
