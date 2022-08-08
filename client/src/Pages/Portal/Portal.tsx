@@ -11,6 +11,7 @@ import PortalMembers from "../PortalMembers/PortalMembers";
 import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
 import PortalAccount from "../PortalAccount/PortalAccount";
+import PortalEvent from "../PortalEvent/PortalEvent";
 
 interface PortalProps {
   role?: string;
@@ -37,6 +38,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
             ) : (
               ""
             )}
+            <Route path="/event" element={<PortalEvent />} />
           </Routes>
         </div>
       </FlexRow>
