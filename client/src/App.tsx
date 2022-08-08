@@ -24,20 +24,11 @@ function App() {
   useEffect(() => {
     //check for theme
     let theme_stored = localStorage.getItem("dsgt-portal-theme");
-    switch (theme_stored) {
-      case "Light":
-        setTheme(Theme.Light);
-        break;
-      case "Dark":
-        setTheme(Theme.Dark);
-        break;
-      case "Black":
-        setTheme(Theme.Black);
-        break;
-      default:
-        setTheme(Theme.Dark);
-        localStorage.setItem("dsgt-portal-theme", Theme.Dark);
-        break;
+    if (theme_stored) {
+      setTheme(theme_stored as Theme);
+    } else {
+      setTheme(Theme.Dark);
+      localStorage.setItem("dsgt-portal-theme", Theme.Dark);
     }
     //check if logged in --
     let session_key = localStorage.getItem("dsgt-portal-session-key");

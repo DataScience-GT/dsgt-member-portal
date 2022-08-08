@@ -53,3 +53,11 @@ code {
   --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
     brightness(113%) contrast(100%);
 }
+.Bubblegum {
+  --background: #fdc8da;
+  --foreground: #4e3e63;
+  --borderColor: #35838c;
+  --hover: #efaec4;
+  --svgFilter: invert(47%) sepia(31%) saturate(720%) hue-rotate(138deg)
+    brightness(88%) contrast(91%);
+}
