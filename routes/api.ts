@@ -30,6 +30,10 @@ router.use("/webhook", webhook);
 import billing from "./billing";
 router.use("/billing", ApiAuthenticate, billing);
 
+//setup /api/event -- for events
+import event from "./event";
+router.use("/event", ApiAuthenticate, event);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
 });
@@ -55,13 +59,9 @@ router.get(
   }
 );
 
-router.post(
-  "/test",
-  (req: Request, res: Response, next: NextFunction) => {
-    
-    res.json({ ok: 1, body: req.body });
-  }
-);
+router.post("/test", (req: Request, res: Response, next: NextFunction) => {
+  res.json({ ok: 1, body: req.body });
+});
 
 // router.get("/login", (req: Request, res: Response, next: NextFunction) => {
 //   // let auth = req.headers.authorization;
