@@ -18,3 +18,28 @@
   font-weight: 500;
   margin-bottom: 1em;
 }
+
+.TextBox {
+  width: 100%;
+  height: 10em;
+  padding: 1em;
+  font-size: 1.4em;
+}
+
+input,
+textarea {
+  margin-bottom: 10px;
+}
+
+.Left {
+  width: 50%;
+  min-width: 250px;
+}
+
+.Right {
+  display: block;
+  position: relative;
+  flex-grow: 1;
+  align-self: stretch;
+  min-width: 250px;
+}

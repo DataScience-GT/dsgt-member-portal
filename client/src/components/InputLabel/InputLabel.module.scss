@@ -1,0 +1,12 @@
+.InputLabel {
+  margin: 6px 0;
+  margin-left: 20px;
+  font-weight: 500;
+  .Required {
+    display: inline-block;
+    position: relative;
+    font-size: inherit;
+    color: orange;
+    margin-left: 2px;
+  }
+}
