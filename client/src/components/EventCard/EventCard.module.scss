@@ -71,22 +71,45 @@
   }
 }
 
-
 .Content {
-  flex-grow: 1;
+  // flex-grow: 1;
+  height: 70%;
   width: 100%;
   display: block;
 
   padding: 10px;
-
+  overflow: hidden;
   //   border: 1px solid yellow;
+}
+
+.When {
+  font-size: 0.9em;
+  flex: 0 1 auto;
 }
 
 //the heading
 .Major {
   font-size: 1.5em;
+  flex: 0 1 auto;
+}
+
+.Location {
+  font-size: 0.9em;
+  flex: 0 1 auto;
+  color: var(--borderColor);
 }
 
 .Description {
   font-size: 1em;
+  width: 100%;
+  flex: 1 1 auto;
+  white-space: pre-wrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }

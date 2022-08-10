@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./EventCard.module.scss";
 
 interface EventCardProps {
@@ -113,6 +114,18 @@ const EventCard: FC<EventCardProps> = ({
     datetime = rightDate.join(joinSymbol);
   }
 
+  let desc = "Event Description 1";
+
+  if (big) {
+    if (longDescription) {
+      desc = longDescription;
+    } else if (shortDescription) {
+      desc = shortDescription;
+    }
+  } else if (shortDescription) {
+    desc = shortDescription;
+  }
+
   return (
     <div
       className={`${styles.EventCard} ${big ? styles.BigEventCard : ""} ${
@@ -127,11 +140,12 @@ const EventCard: FC<EventCardProps> = ({
         {/* <img src={imageSRC} alt={name} /> */}
       </div>
       <div className={styles.Content}>
-        <p className={styles.When}>{datetime}</p>
-        <h1 className={styles.Major}>{name ? name : "Event Name"}</h1>
-        <p className={styles.Description}>
-          {shortDescription ? shortDescription : "Event Short Description"}
-        </p>
+        <FlexColumn height="100%" wrap="nowrap">
+          <p className={styles.When}>{datetime}</p>
+          <p className={styles.Location}>{location}</p>
+          <h1 className={styles.Major}>{name ? name : "Event Name"}</h1>
+          <p className={styles.Description}>{desc}</p>
+        </FlexColumn>
       </div>
     </div>
   );
