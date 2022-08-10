@@ -14,6 +14,7 @@ interface EventCardProps {
   imageSRC?: string;
   big?: boolean;
   sticky?: boolean;
+  link?: string;
 }
 
 const EventCard: FC<EventCardProps> = ({
@@ -28,6 +29,7 @@ const EventCard: FC<EventCardProps> = ({
   imageSRC,
   big,
   sticky,
+  link,
 }: EventCardProps) => {
   const format_month = "short";
   const format_day = "numeric";
@@ -145,6 +147,18 @@ const EventCard: FC<EventCardProps> = ({
           <p className={styles.Location}>{location}</p>
           <h1 className={styles.Major}>{name ? name : "Event Name"}</h1>
           <p className={styles.Description}>{desc}</p>
+          {link ? (
+            <a
+              className={styles.Link}
+              href={link}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Learn More
+            </a>
+          ) : (
+            ""
+          )}
         </FlexColumn>
       </div>
     </div>

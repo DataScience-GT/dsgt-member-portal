@@ -22,6 +22,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
   const [endTime, setEndTime] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
+  const [link, setLink] = useState("");
   // const [imgFile, setImgFile] = useState<File>();
 
   useEffect(() => {
@@ -78,7 +79,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
   return (
     <div className={styles.PortalEvent} data-testid="PortalEvent">
       <h1 className={styles.Major}>Events</h1>
-      <FlexRow height="fit-content" gap="20px" spacing="space-between">
+      <FlexRow height="fit-content" gap="5em" spacing="flex-start" wrap="wrap-reverse">
         <form className={styles.Left} onSubmit={handleSubmit}>
           <h2 className={styles.Minor}>Create an Event</h2>
           <FlexColumn width="100%">
@@ -168,6 +169,16 @@ const PortalEvent: FC<PortalEventProps> = () => {
                 handleChange_textarea(e, setLongDescription);
               }}
             ></textarea>
+            <InputField
+              type={"url"}
+              placeholder="Link To (URL)"
+              name="url"
+              onChange={(e) => {
+                handleChange_input(e, setLink);
+              }}
+              width="auto"
+              validIndication
+            />
             <ErrorText>{error}</ErrorText>
             <InputField type={"submit"} placeholder="submit" width="auto" />
           </FlexColumn>
@@ -187,6 +198,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               endTime={endTime}
               shortDescription={shortDescription}
               longDescription={longDescription}
+              link={link}
               big
             />
             <EventCard
@@ -199,6 +211,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               endTime={endTime}
               shortDescription={shortDescription}
               longDescription={longDescription}
+              link={link}
             />
           </FlexColumn>
         </div>
