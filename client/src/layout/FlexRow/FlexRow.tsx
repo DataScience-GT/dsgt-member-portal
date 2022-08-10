@@ -3,12 +3,13 @@ import styles from "./FlexRow.module.scss";
 
 interface FlexRowProps {
   children?: React.ReactNode;
-  gap?: number;
+  gap?: string;
   spacing?: string;
   align?: string;
   padding?: string;
   height?: string;
   width?: string;
+  wrap?: "wrap" | "nowrap" | "wrap-reverse" | undefined;
 }
 
 const FlexRow: FC<FlexRowProps> = ({
@@ -19,16 +20,18 @@ const FlexRow: FC<FlexRowProps> = ({
   padding,
   height,
   width,
+  wrap,
 }: FlexRowProps) => (
   <div
     className={styles.FlexRow}
     style={{
-      gap: `${gap}px`,
+      gap: gap,
       justifyContent: spacing,
       alignItems: align,
       padding: padding,
       height: height,
       width: width,
+      flexWrap: wrap !== undefined ? wrap : "wrap",
     }}
     data-testid="FlexRow"
   >

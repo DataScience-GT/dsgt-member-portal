@@ -3,12 +3,13 @@ import styles from "./FlexColumn.module.scss";
 
 interface FlexColumnProps {
   children?: React.ReactNode;
-  gap?: number;
+  gap?: string;
   spacing?: string;
   align?: string;
   padding?: string;
   height?: string;
   width?: string;
+  wrap?: "wrap" | "nowrap" | "wrap-reverse" | undefined;
 }
 
 const FlexColumn: FC<FlexColumnProps> = ({
@@ -19,16 +20,18 @@ const FlexColumn: FC<FlexColumnProps> = ({
   padding,
   height,
   width,
+  wrap,
 }: FlexColumnProps) => (
   <div
     className={styles.FlexColumn}
     style={{
-      gap: `${gap}px`,
+      gap: gap,
       justifyContent: spacing,
       alignItems: align,
       padding: padding,
       width: width,
       height: height,
+      flexWrap: wrap !== undefined ? wrap : "wrap",
     }}
     data-testid="FlexColumn"
   >

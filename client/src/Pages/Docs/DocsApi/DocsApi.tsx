@@ -53,7 +53,7 @@ const DocsApi: FC<DocsApiProps> = () => (
         before completing other, more complicated, requests. These are the
         possible responses:
       </MiniText>
-      <FlexRow gap={20}>
+      <FlexRow gap="20px">
         <JsonBlock jsonData={auth_result_0} success={false} />
         <JsonBlock jsonData={auth_result_0_5} success={false} />
         <JsonBlock jsonData={auth_result_1} success={true} />

@@ -100,7 +100,7 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
       ) : (
         <form onSubmit={handleFormSubmit}>
           <FlexColumn>
-            <FlexRow gap={20}>
+            <FlexRow gap="20px">
               <InputField
                 placeholder="First Name"
                 type="text"

@@ -78,7 +78,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
   return (
     <div className={styles.PortalEvent} data-testid="PortalEvent">
       <h1 className={styles.Major}>Events</h1>
-      <FlexRow height="fit-content" gap={20} spacing="space-between">
+      <FlexRow height="fit-content" gap="20px" spacing="space-between">
         <form className={styles.Left} onSubmit={handleSubmit}>
           <h2 className={styles.Minor}>Create an Event</h2>
           <FlexColumn width="100%">
@@ -109,7 +109,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               onChange={handleImage}
               required
             />
-            <FlexRow gap={10}>
+            <FlexRow gap="10px">
               <InputField
                 type={"date"}
                 placeholder="starting date"
@@ -127,7 +127,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
                 width="auto"
               />
             </FlexRow>
-            <FlexRow gap={10}>
+            <FlexRow gap="10px">
               <InputField
                 type={"date"}
                 placeholder="ending date"
@@ -173,7 +173,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
           </FlexColumn>
         </form>
         <div className={styles.Right}>
-          <FlexColumn gap={10}>
+          <FlexColumn gap="10px">
             <h2 className={styles.Minor}>
               Here's how the event will look to members:
             </h2>

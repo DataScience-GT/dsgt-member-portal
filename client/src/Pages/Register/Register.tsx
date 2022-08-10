@@ -801,11 +801,11 @@ const Register: FC<RegisterProps> = () => {
               </form>
             ) : (
               <form onSubmit={handleFormSubmitRegister}>
-                <FlexColumn width="100%" gap={10}>
+                <FlexColumn width="100%" gap="10px">
                   <h1 className={styles.Minor}>
                     Please enter the following information:
                   </h1>
-                  <FlexRow gap={10} spacing={"space-between"} width="100%">
+                  <FlexRow gap="10px" spacing={"space-between"} width="100%">
                     <InputField
                       type="text"
                       placeholder="First Name"

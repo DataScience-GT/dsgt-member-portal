@@ -96,7 +96,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
         This request returns a list of all of the users in the database. Results
         will be in the form of:
       </MiniText>
-      <FlexRow spacing="space-between" gap={20}>
+      <FlexRow spacing="space-between" gap="20px">
         <FlexColumn>
           <Parameter id="data" type="Array[User]" desc="array of users">
             data
@@ -145,7 +145,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       <MiniText>
         This request attempts to login a user. Input parameters:
       </MiniText>
-      <FlexRow spacing="space-between" gap={20}>
+      <FlexRow spacing="space-between" gap="20px">
         <FlexColumn>
           <Parameter
             id="email1"
@@ -166,7 +166,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
         </FlexColumn>
         <JsonBlock jsonData={user_login_input} input sticky nomargin />
       </FlexRow>
-      <FlexRow gap={20} spacing="space-between">
+      <FlexRow gap="20px" spacing="space-between">
         <MiniText>
           The most common error is when the email or password combo is
           incorrect:
@@ -176,7 +176,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       <MiniText>
         If the email and password combo exist, then the response will look like:
       </MiniText>
-      <FlexRow spacing="space-between" gap={20}>
+      <FlexRow spacing="space-between" gap="20px">
         <FlexColumn>
           <Parameter
             id="session_key"
@@ -199,7 +199,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
       <MiniText>
         This request attempts to register a user. Input parameters:
       </MiniText>
-      <FlexRow spacing="space-between" gap={20}>
+      <FlexRow spacing="space-between" gap="20px">
         <FlexColumn>
           <Parameter
             id="email2"
@@ -240,7 +240,7 @@ const DocsApiUser: FC<DocsApiUserProps> = () => (
         If the email is unique and all other parameters are valid, then the
         response will look like:
       </MiniText>
-      <FlexRow spacing="space-between" gap={20}>
+      <FlexRow spacing="space-between" gap="20px">
         <FlexColumn>
           <Parameter
             id="session_key2"
