@@ -48,6 +48,18 @@ const EventCard: FC<EventCardProps> = ({
     ) {
       sameYear = true;
     }
+  } else if (startDate) {
+    let sd = new Date(startDate);
+    let now = new Date();
+    if (sd.getFullYear() === now.getFullYear()) {
+      sameYear = true;
+    }
+  } else if (endDate) {
+    let ed = new Date(endDate);
+    let now = new Date();
+    if (ed.getFullYear() === now.getFullYear()) {
+      sameYear = true;
+    }
   }
 
   if (startDate && startTime) {

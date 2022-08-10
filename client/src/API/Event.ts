@@ -1,4 +1,16 @@
-export const createEvent = async (imageData: string, callback?: () => void) => {
+export const createEvent = async (
+  name: string,
+  location: string,
+  imageData: string,
+  startDate: string,
+  startTime: string,
+  endDate: string,
+  endTime: string,
+  shortDescription: string,
+  longDescription: string,
+  link: string,
+  callback?: () => void
+) => {
   await fetch("/api/test", {
     method: "POST",
     headers: {

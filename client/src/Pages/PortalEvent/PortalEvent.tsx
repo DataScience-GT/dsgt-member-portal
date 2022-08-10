@@ -68,18 +68,35 @@ const PortalEvent: FC<PortalEventProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    if (!imgData) {
+    if (!(imgData && eventName && shortDescription)) {
       setError("Missing one or more required fields.");
       return;
     }
-    await createEvent(imgData, () => {
-      console.log("done");
-    });
+    await createEvent(
+      eventName,
+      eventLocation,
+      imgData,
+      startDate,
+      startTime,
+      endDate,
+      endTime,
+      shortDescription,
+      longDescription,
+      link,
+      () => {
+        console.log("done");
+      }
+    );
   };
   return (
     <div className={styles.PortalEvent} data-testid="PortalEvent">
       <h1 className={styles.Major}>Events</h1>
-      <FlexRow height="fit-content" gap="5em" spacing="flex-start" wrap="wrap-reverse">
+      <FlexRow
+        height="fit-content"
+        gap="5em"
+        spacing="flex-start"
+        wrap="wrap-reverse"
+      >
         <form className={styles.Left} onSubmit={handleSubmit}>
           <h2 className={styles.Minor}>Create an Event</h2>
           <FlexColumn width="100%">
