@@ -574,3 +574,6 @@ export const checkFormBootcampExists = async (email: string) => {
     return true;
   }
 };
+
+
+// ----------------------- events -----------------------
