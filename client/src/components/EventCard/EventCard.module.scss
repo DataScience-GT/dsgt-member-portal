@@ -19,11 +19,17 @@
 
 .BigEventCard {
   width: calc(40em + 20px);
+  max-width: 100%;
+  // width: 100%;
   flex-direction: row;
   .Image {
     height: 100%;
     width: 30%;
     border-radius: 10px 0 0 10px;
+    > img {
+      height: 100%;
+      width: auto;
+    }
   }
   .Content {
     height: 100%;
@@ -48,6 +54,11 @@
   border-radius: 10px 10px 0 0;
   overflow: hidden;
 
+  // background image
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+
   //   border: 1px solid blue;
   > img {
     position: absolute;
@@ -60,12 +71,6 @@
   }
 }
 
-.BigImage {
-  > img {
-    height: 100%;
-    width: auto;
-  }
-}
 
 .Content {
   flex-grow: 1;

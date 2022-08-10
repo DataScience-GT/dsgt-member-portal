@@ -28,19 +28,50 @@ const EventCard: FC<EventCardProps> = ({
   big,
   sticky,
 }: EventCardProps) => {
+  const format_month = "short";
+  const format_day = "numeric";
+  const format_hour = "numeric";
+  const format_minute = "numeric";
+
   let leftDate = [];
+  let sameYear = false;
+  if (startDate && endDate) {
+    let sd = new Date(startDate);
+    let ed = new Date(endDate);
+    let now = new Date();
+    if (
+      sd.getFullYear() === now.getFullYear() &&
+      sd.getFullYear() === ed.getFullYear()
+    ) {
+      sameYear = true;
+    }
+  }
+
   if (startDate && startTime) {
     let d = new Date(`${startDate} ${startTime}`);
-    leftDate.push(d.toLocaleDateString("en-us"));
+    if (sameYear) {
+      leftDate.push(
+        d.toLocaleDateString("en-us", { month: format_month, day: format_day })
+      );
+    } else {
+      leftDate.push(d.toLocaleDateString("en-us"));
+    }
+
     leftDate.push(
       d.toLocaleTimeString("en-us", {
-        hour: "numeric",
-        minute: "numeric",
+        hour: format_hour,
+        minute: format_minute,
       })
     );
   } else if (startDate) {
-    let sd = new Date(startDate);
-    leftDate.push(sd.toLocaleDateString("en-us"));
+    let sd = new Date(`${startDate} 12:00`);
+    if (sameYear) {
+      leftDate.push(
+        sd.toLocaleDateString("en-us", { month: format_month, day: format_day })
+      );
+    } else {
+      leftDate.push(sd.toLocaleDateString("en-us"));
+    }
   }
   // } else if (startTime) {
   //   let st = new Date(startTime);
@@ -49,25 +80,37 @@ const EventCard: FC<EventCardProps> = ({
   let rightDate = [];
   if (endDate && endTime) {
     let d = new Date(`${endDate} ${endTime}`);
-    rightDate.push(d.toLocaleDateString("en-us"));
+    if (sameYear) {
+      rightDate.push(
+        d.toLocaleDateString("en-us", { month: format_month, day: format_day })
+      );
+    } else {
+      rightDate.push(d.toLocaleDateString("en-us"));
+    }
     rightDate.push(
       d.toLocaleTimeString("en-us", {
-        hour: "numeric",
-        minute: "numeric",
+        hour: format_hour,
+        minute: format_minute,
       })
     );
   } else if (endDate) {
-    let ed = new Date(endDate);
-    rightDate.push(ed.toLocaleDateString("en-us"));
+    let ed = new Date(`${endDate} 12:00`);
+    if (sameYear) {
+      rightDate.push(
+        ed.toLocaleDateString("en-us", { month: format_month, day: format_day })
+      );
+    } else {
+      rightDate.push(ed.toLocaleDateString("en-us"));
+    }
   }
   let datetime = "";
-
+  const joinSymbol = ", ";
   if (leftDate.length && rightDate.length) {
-    datetime = `${leftDate.join(" ")} - ${rightDate.join(" ")}`;
+    datetime = `${leftDate.join(joinSymbol)} to ${rightDate.join(joinSymbol)}`;
   } else if (leftDate.length) {
-    datetime = leftDate.join(" ");
+    datetime = leftDate.join(joinSymbol);
   } else if (rightDate.length) {
-    datetime = rightDate.join(" ");
+    datetime = rightDate.join(joinSymbol);
   }
 
   return (
@@ -77,8 +120,11 @@ const EventCard: FC<EventCardProps> = ({
       }`}
       data-testid="EventCard"
     >
-      <div className={`${styles.Image} ${big ? styles.BigImage : ""}`}>
-        <img src={imageSRC} alt={name} />
+      <div
+        className={`${styles.Image}`}
+        style={{ backgroundImage: `url(${imageSRC})` }}
+      >
+        {/* <img src={imageSRC} alt={name} /> */}
       </div>
       <div className={styles.Content}>
         <p className={styles.When}>{datetime}</p>
