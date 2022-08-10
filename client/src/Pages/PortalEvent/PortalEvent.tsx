@@ -78,7 +78,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
   return (
     <div className={styles.PortalEvent} data-testid="PortalEvent">
       <h1 className={styles.Major}>Events</h1>
-      <FlexRow height="fit-content" gap={20}>
+      <FlexRow height="fit-content" gap={20} spacing="space-between">
         <form className={styles.Left} onSubmit={handleSubmit}>
           <h2 className={styles.Minor}>Create an Event</h2>
           <FlexColumn width="100%">
@@ -89,6 +89,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               onChange={(e) => {
                 handleChange_input(e, setEventName);
               }}
+              width="auto"
             />
             <InputField
               type={"text"}
@@ -96,6 +97,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               onChange={(e) => {
                 handleChange_input(e, setEventLocation);
               }}
+              width="auto"
             />
             <InputLabel htmlFor="image" required>
               Event Image
@@ -107,34 +109,42 @@ const PortalEvent: FC<PortalEventProps> = () => {
               onChange={handleImage}
               required
             />
-            <InputField
-              type={"date"}
-              placeholder="starting date"
-              onChange={(e) => {
-                handleChange_input(e, setStartDate);
-              }}
-            />
-            <InputField
-              type={"time"}
-              placeholder="starting time"
-              onChange={(e) => {
-                handleChange_input(e, setStartTime);
-              }}
-            />
-            <InputField
-              type={"date"}
-              placeholder="ending date"
-              onChange={(e) => {
-                handleChange_input(e, setEndDate);
-              }}
-            />
-            <InputField
-              type={"time"}
-              placeholder="ending time"
-              onChange={(e) => {
-                handleChange_input(e, setEndTime);
-              }}
-            />
+            <FlexRow gap={10}>
+              <InputField
+                type={"date"}
+                placeholder="starting date"
+                onChange={(e) => {
+                  handleChange_input(e, setStartDate);
+                }}
+                width="auto"
+              />
+              <InputField
+                type={"time"}
+                placeholder="starting time"
+                onChange={(e) => {
+                  handleChange_input(e, setStartTime);
+                }}
+                width="auto"
+              />
+            </FlexRow>
+            <FlexRow gap={10}>
+              <InputField
+                type={"date"}
+                placeholder="ending date"
+                onChange={(e) => {
+                  handleChange_input(e, setEndDate);
+                }}
+                width="auto"
+              />
+              <InputField
+                type={"time"}
+                placeholder="ending time"
+                onChange={(e) => {
+                  handleChange_input(e, setEndTime);
+                }}
+                width="auto"
+              />
+            </FlexRow>
             <InputLabel htmlFor="short-description" required>
               Short Description
             </InputLabel>
@@ -159,7 +169,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               }}
             ></textarea>
             <ErrorText>{error}</ErrorText>
-            <InputField type={"submit"} placeholder="submit" />
+            <InputField type={"submit"} placeholder="submit" width="auto" />
           </FlexColumn>
         </form>
         <div className={styles.Right}>
@@ -178,6 +188,17 @@ const PortalEvent: FC<PortalEventProps> = () => {
               shortDescription={shortDescription}
               longDescription={longDescription}
               big
+            />
+            <EventCard
+              name={eventName}
+              location={eventLocation}
+              imageSRC={imgData}
+              startDate={startDate}
+              startTime={startTime}
+              endDate={endDate}
+              endTime={endTime}
+              shortDescription={shortDescription}
+              longDescription={longDescription}
             />
           </FlexColumn>
         </div>

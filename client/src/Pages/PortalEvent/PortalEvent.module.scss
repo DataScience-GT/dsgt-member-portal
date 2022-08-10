@@ -32,14 +32,36 @@ textarea {
 }
 
 .Left {
-  width: 50%;
-  min-width: 250px;
+  // width: 50%;
+  display: block;
+  position: relative;
+  // width: 50%;
+  // flex-grow: 1;
+  min-width: 25em;
+  max-width: 100%;
+  width: fit-content;
 }
 
 .Right {
   display: block;
   position: relative;
-  flex-grow: 1;
+  // flex-grow: 1;
+  // flex-shrink: 50%;
   align-self: stretch;
   min-width: 250px;
+  max-width: 100%;
+  width: fit-content;
+}
+
+.Cards {
+  display: flex;
+  height: fit-content;
+  width: 100%;
+  flex-direction: row;
+  // border: 1px solid var(--borderColor);
+
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
