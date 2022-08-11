@@ -18,7 +18,8 @@ const PortalHome: FC<PortalHomeProps> = () => {
   const [annLoading, setAnnLoading] = useState(true);
   const [eventLoading, setEventLoading] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
-  const [events, setEvents] = useState<result_getEvents[]>([]);
+  const [upcomingEvents, setUpcomingEvents] = useState<result_getEvents[]>([]);
+  const [ongoingEvents, setOngoingEvents] = useState<result_getEvents[]>([]);
 
   const addWelcomeMessage = (message: string) => {
     const list = messages.concat(message);
@@ -71,18 +72,30 @@ const PortalHome: FC<PortalHomeProps> = () => {
     };
     getAnnouncements();
 
-    //get events
-    const getEventData = async () => {
+    //get upcoming events
+    const getEventDataUpcoming = async () => {
       await getEvents(
         3,
         EventListType.Upcoming,
         (result: result_getEvents[]) => {
-          setEvents(result);
+          setUpcomingEvents(result);
           setEventLoading(false);
         }
       ).catch(console.error);
     };
-    getEventData();
+    getEventDataUpcoming();
+
+    //get ongoing events
+    const getEventDataOngoing = async () => {
+      await getEvents(
+        3,
+        EventListType.Ongoing,
+        (result: result_getEvents[]) => {
+          setOngoingEvents(result);
+        }
+      ).catch(console.error);
+    };
+    getEventDataOngoing();
   }, []);
 
   return (
@@ -97,13 +110,44 @@ const PortalHome: FC<PortalHomeProps> = () => {
           </h1>
           <h2 className={styles.Minor}>{secondaryMessage}</h2>
           <br />
+          {ongoingEvents.length <= 0 ? (
+            ""
+          ) : (
+            <div>
+              <h2 className={styles.Minor}>Ongoing Events</h2>
+              <p className={styles.Mini}>
+                Don't miss the chance to attend these events!
+              </p>
+              <div className={styles.Cards}>
+                {" "}
+                {ongoingEvents.map((e, i) => {
+                  return (
+                    <EventCard
+                      key={i}
+                      name={e.name}
+                      location={e.location}
+                      imageSRC={e.imageData}
+                      shortDescription={e.shortDescription}
+                      longDescription={e.longDescription}
+                      startDate={e.startDate}
+                      startTime={e.startTime}
+                      endDate={e.endDate}
+                      endTime={e.endTime}
+                      link={e.link}
+                      big={i === 0 ? true : false}
+                    ></EventCard>
+                  );
+                })}
+              </div>
+            </div>
+          )}
           <h2 className={styles.Minor}>Upcoming Events</h2>
           <div className={styles.Cards}>
             {eventLoading
               ? "loading..."
-              : events.length <= 0
+              : upcomingEvents.length <= 0
               ? "No events found."
-              : events.map((e, i) => {
+              : upcomingEvents.map((e, i) => {
                   return (
                     <EventCard
                       key={i}

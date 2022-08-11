@@ -15,7 +15,7 @@
 .Minor {
   font-size: 1.5em;
   font-weight: 500;
-  margin-bottom: 1em;
+  // margin-bottom: 1em;
 }
 
 .Cards {
@@ -29,6 +29,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   align-items: flex-start;
+  margin: 1em 0;
 }
 
 .FlexLeft {
