@@ -1,4 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from "react";
+import { getEvents, result_getEvents } from "../../API/Event";
 import Announcement from "../../components/Announcement/Announcement";
 import EventCard from "../../components/EventCard/EventCard";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
@@ -14,8 +15,10 @@ const PortalHome: FC<PortalHomeProps> = () => {
   ]);
   const [secondaryMessage, setSecondaryMessage] = useState("");
 
-  const [loading, setLoading] = useState(true);
+  const [annLoading, setAnnLoading] = useState(true);
+  const [eventLoading, setEventLoading] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
+  const [events, setEvents] = useState<result_getEvents[]>([]);
 
   const addWelcomeMessage = (message: string) => {
     const list = messages.concat(message);
@@ -63,10 +66,19 @@ const PortalHome: FC<PortalHomeProps> = () => {
           //use data
           setAnnouncements(json.data);
         }
-        setLoading(false);
+        setAnnLoading(false);
       });
     };
     getAnnouncements();
+
+    //get events
+    const getEventData = async () => {
+      await getEvents(undefined, (result: result_getEvents[]) => {
+        setEvents(result);
+        setEventLoading(false);
+      });
+    };
+    getEventData();
   }, []);
 
   return (
@@ -83,17 +95,34 @@ const PortalHome: FC<PortalHomeProps> = () => {
           <br />
           <h2 className={styles.Minor}>Upcoming Events</h2>
           <div className={styles.Cards}>
-            <EventCard big></EventCard>
-            {/* <EventCard big></EventCard> */}
-            {/* <EventCard big></EventCard> */}
-            <EventCard></EventCard>
-            <EventCard></EventCard>
+            {eventLoading
+              ? "loading..."
+              : events.length <= 0
+              ? "No events found."
+              : events.map((e, i) => {
+                  return (
+                    <EventCard
+                      key={i}
+                      name={e.name}
+                      location={e.location}
+                      imageSRC={e.imageData}
+                      shortDescription={e.shortDescription}
+                      longDescription={e.longDescription}
+                      startDate={e.startDate}
+                      startTime={e.startTime}
+                      endDate={e.endDate}
+                      endTime={e.endTime}
+                      link={e.link}
+                      big={i === 0 ? true : false}
+                    ></EventCard>
+                  );
+                })}
           </div>
         </div>
         <div className={styles.Announcements}>
           <div className={styles.Minor}>Announcements</div>
           <FlexColumn>
-            {loading
+            {annLoading
               ? "loading..."
               : announcements.length <= 0
               ? "No announcements found."
