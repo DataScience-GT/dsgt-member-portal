@@ -15,8 +15,15 @@ export type result_getEvents = {
   endISO: string;
   imageData: string;
 };
+
+export enum EventListType {
+  Upcoming,
+  Ongoing,
+  Continuous,
+}
 export const getEvents = async (
   count?: number,
+  type?: EventListType | undefined | null,
   callback?: (result: result_getEvents[]) => void
 ) => {
   let url = "/api/event/get";
@@ -31,6 +38,9 @@ export const getEvents = async (
     },
     body: JSON.stringify({
       session_id: localStorage.getItem("dsgt-portal-session-key"),
+      upcoming: type === EventListType.Upcoming,
+      ongoing: type === EventListType.Ongoing,
+      continuous: type === EventListType.Continuous,
     }),
   }).then(async (res) => {
     const json = await res.json();

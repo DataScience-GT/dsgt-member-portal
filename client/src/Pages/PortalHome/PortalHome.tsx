@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { getEvents, result_getEvents } from "../../API/Event";
+import { EventListType, getEvents, result_getEvents } from "../../API/Event";
 import Announcement from "../../components/Announcement/Announcement";
 import EventCard from "../../components/EventCard/EventCard";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
@@ -73,10 +73,14 @@ const PortalHome: FC<PortalHomeProps> = () => {
 
     //get events
     const getEventData = async () => {
-      await getEvents(3, (result: result_getEvents[]) => {
-        setEvents(result);
-        setEventLoading(false);
-      }).catch(console.error);
+      await getEvents(
+        3,
+        EventListType.Upcoming,
+        (result: result_getEvents[]) => {
+          setEvents(result);
+          setEventLoading(false);
+        }
+      ).catch(console.error);
     };
     getEventData();
   }, []);
