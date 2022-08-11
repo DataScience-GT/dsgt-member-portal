@@ -163,7 +163,7 @@ const EventCard: FC<EventCardProps> = ({
       seconds = seconds % 60;
       minutes = minutes % 60;
       hours = hours % 24;
-      days = days % 30.5;
+      days = Math.floor(days % 30.5);
       months = months % 12;
 
       let times = [];

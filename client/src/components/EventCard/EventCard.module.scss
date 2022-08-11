@@ -51,7 +51,7 @@
   width: calc(100% - 20px);
   height: calc(35% - 10px);
   // border-bottom: 1px solid var(--borderColor);
-  background: var(--foreground);
+  background: var(--theme);
   margin: 10px 10px 0 10px;
 
   border-radius: 10px;
@@ -118,7 +118,7 @@
 }
 
 .Link {
-  background-color: var(--foreground);
+  background-color: var(--theme);
   color: var(--background);
   padding: 4px 10px;
   text-align: center;
