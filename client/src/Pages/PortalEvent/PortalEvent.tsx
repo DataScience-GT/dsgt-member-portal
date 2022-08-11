@@ -4,6 +4,8 @@ import ErrorText from "../../components/ErrorText/ErrorText";
 import EventCard from "../../components/EventCard/EventCard";
 import InputField from "../../components/InputField/InputField";
 import InputLabel from "../../components/InputLabel/InputLabel";
+import Modal, { ModalPreset } from "../../components/Modal/Modal";
+import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalEvent.module.scss";
@@ -12,6 +14,9 @@ interface PortalEventProps {}
 
 const PortalEvent: FC<PortalEventProps> = () => {
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
   const [FR, setFR] = useState(new FileReader());
   const [eventName, setEventName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
@@ -68,10 +73,17 @@ const PortalEvent: FC<PortalEventProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     if (!(imgData && eventName && shortDescription)) {
       setError("Missing one or more required fields.");
       return;
     }
+    setShowConfirmModal(true);
+  };
+
+  const handleCreateEvent = async () => {
+    setError("");
+    setSuccess("");
     await createEvent(
       eventName,
       eventLocation,
@@ -84,7 +96,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
       longDescription,
       link,
       () => {
-        console.log("done");
+        setSuccess("Event Created.");
       }
     );
   };
@@ -197,6 +209,7 @@ const PortalEvent: FC<PortalEventProps> = () => {
               validIndication
             />
             <ErrorText>{error}</ErrorText>
+            <SuccessText>{success}</SuccessText>
             <InputField type={"submit"} placeholder="submit" width="auto" />
           </FlexColumn>
         </form>
@@ -233,6 +246,14 @@ const PortalEvent: FC<PortalEventProps> = () => {
           </FlexColumn>
         </div>
       </FlexRow>
+      <Modal
+        open={showConfirmModal}
+        setOpen={setShowConfirmModal}
+        preset={ModalPreset.Confirm}
+        handleConfirmed={handleCreateEvent}
+      >
+        Are you sure you would like to create this event?
+      </Modal>
     </div>
   );
 };
