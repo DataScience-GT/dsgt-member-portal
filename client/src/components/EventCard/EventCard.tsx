@@ -140,6 +140,53 @@ const EventCard: FC<EventCardProps> = ({
     desc = shortDescription;
   }
 
+  //check if an ongoing event
+  let ongoing = false;
+  let timeLeft = "";
+  if (startDate && endDate) {
+    let now = new Date();
+    let sd = new Date(`${startDate} ${startTime}`);
+    let ed = new Date(`${endDate} ${endTime}`);
+
+    console.log(now, sd);
+    if (now.getTime() <= ed.getTime() && now.getTime() >= sd.getTime()) {
+      ongoing = true;
+      //calculate time until ending
+      let milliseconds = ed.getTime() - now.getTime();
+      let seconds = Math.floor(milliseconds / 1000);
+      let minutes = Math.floor(seconds / 60);
+      let hours = Math.floor(minutes / 60);
+      let days = Math.floor(hours / 24);
+      let months = Math.floor(days / 30.5);
+      let years = Math.floor(days / 365);
+
+      seconds = seconds % 60;
+      minutes = minutes % 60;
+      hours = hours % 24;
+      days = days % 30.5;
+      months = months % 12;
+
+      let times = [];
+      if (years) {
+        times.push(years + "y");
+      }
+      if (months) {
+        times.push(months + "mo");
+      }
+      if (days) {
+        times.push(days + "d");
+      }
+      if (hours) {
+        times.push(hours + "h");
+      }
+      if (minutes) {
+        times.push(minutes + "min");
+      }
+
+      timeLeft = `${times.join(" ")} left`;
+    }
+  }
+
   return (
     <div
       className={`${styles.EventCard} ${big ? styles.BigEventCard : ""} ${
@@ -156,6 +203,7 @@ const EventCard: FC<EventCardProps> = ({
       <div className={styles.Content}>
         <FlexColumn height="100%" wrap="nowrap">
           <p className={styles.When}>{datetime}</p>
+          <p className={styles.Countdown}>{ongoing ? timeLeft : ""}</p>
           <p className={styles.Location}>{location}</p>
           <h1 className={styles.Major}>{name ? name : "Event Name"}</h1>
           <p className={styles.Description}>{desc}</p>
