@@ -73,10 +73,10 @@ const PortalHome: FC<PortalHomeProps> = () => {
 
     //get events
     const getEventData = async () => {
-      await getEvents(undefined, (result: result_getEvents[]) => {
+      await getEvents(3, (result: result_getEvents[]) => {
         setEvents(result);
         setEventLoading(false);
-      });
+      }).catch(console.error);
     };
     getEventData();
   }, []);

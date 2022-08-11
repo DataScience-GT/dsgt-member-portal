@@ -19,7 +19,11 @@ export const getEvents = async (
   count?: number,
   callback?: (result: result_getEvents[]) => void
 ) => {
-  await fetch("/api/event/get", {
+  let url = "/api/event/get";
+  if (count) {
+    url = `/api/event/get?count=${count}`;
+  }
+  await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

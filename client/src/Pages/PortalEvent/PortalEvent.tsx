@@ -98,7 +98,9 @@ const PortalEvent: FC<PortalEventProps> = () => {
       () => {
         setSuccess("Event Created.");
       }
-    );
+    ).catch((err) => {
+      setError(err.message);
+    });
   };
   return (
     <div className={styles.PortalEvent} data-testid="PortalEvent">
