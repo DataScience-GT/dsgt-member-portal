@@ -23,6 +23,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string("shortDescription", 500);
     table.string("longDescription", 2000);
     table.string("link", 500);
+    table.boolean("enabled").defaultTo("true");
     table.timestamp("created_at").defaultTo(knex.fn.now());
   });
 }
