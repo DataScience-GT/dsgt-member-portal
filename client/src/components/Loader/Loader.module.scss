@@ -10,19 +10,19 @@
     animation: offset 8s infinite;
     opacity: 0;
 
-    color: rgb(32 163 158);
+    color: var(--theme);
 
     &:nth-child(1) {
-        animation-delay: 1s;
+      animation-delay: 1s;
     }
     &:nth-child(2) {
-        animation-delay: 2s;
+      animation-delay: 2s;
     }
     &:nth-child(3) {
-        animation-delay: 3s;
+      animation-delay: 3s;
     }
     &:nth-child(4) {
-        animation-delay: 4s;
+      animation-delay: 4s;
     }
   }
 }
@@ -31,12 +31,12 @@
   0% {
     opacity: 0;
   }
-//   49% {
-//     opacity: 0;
-//   }
-//   50% {
-//     opacity: 1;
-//   }
+  //   49% {
+  //     opacity: 0;
+  //   }
+  //   50% {
+  //     opacity: 1;
+  //   }
   50% {
     opacity: 1;
   }
@@ -44,25 +44,4 @@
   60% {
     opacity: 0;
   }
-}
-
-//manage themes
-.Light {
-  --background: #fff;
-  --foreground: #000;
-  --svgFilter: none;
-}
-.Dark {
-  --background: #222;
-  --foreground: #fff;
-  --hover: #444;
-  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
-    brightness(113%) contrast(100%);
-}
-.Black {
-  --background: #000;
-  --foreground: #fff;
-  --hover: #222;
-  --svgFilter: invert(99%) sepia(13%) saturate(0%) hue-rotate(81deg)
-    brightness(113%) contrast(100%);
 }
