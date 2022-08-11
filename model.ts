@@ -7,6 +7,7 @@ import { NewSession } from "./interfaces/Session";
 import e, { NextFunction } from "express";
 import { BillingDetails } from "./interfaces/Stripe";
 import { StatusError } from "./Classes/StatusError";
+import { Event } from "./interfaces/Event";
 
 const crypto = require("crypto");
 
@@ -575,5 +576,52 @@ export const checkFormBootcampExists = async (email: string) => {
   }
 };
 
-
 // ----------------------- events -----------------------
+
+export const getEvents = async (
+  count?: number | null,
+  upcoming?: boolean | null,
+  ongoing?: boolean | null
+) => {
+  if (count) {
+    return await db("event")
+      .select("*")
+      .orderBy("created_at", "desc")
+      .limit(count);
+  } else {
+    return await db("event").select("*").orderBy("created_at", "desc");
+  }
+};
+
+export const createEvent = async (e: Event) => {
+  // table.increments("event_id").primary();
+  // table.string("name");
+  // table.string("location", 300);
+  // table.string("imageData", 50000);
+  // table.string("startDate");
+  // table.string("startTime");
+  // table.string("endDate");
+  // table.string("endTime");
+  // table.string("shortDescription", 500);
+  // table.string("longDescription", 2000);
+  // table.string("link", 500);
+  // table.boolean("enabled").defaultTo("true");
+  // table.timestamp("created_at").defaultTo(knex.fn.now());
+  // table.timestamp("startISO");
+  // table.timestamp("endISO");
+  await db("event").insert({
+    name: e.name,
+    location: e.location,
+    imageData: e.imageData,
+    startDate: e.startDate,
+    startTime: e.startTime,
+    endDate: e.endDate,
+    endTime: e.endTime,
+    shortDescription: e.shortDescription,
+    longDescription: e.longDescription,
+    link: e.link,
+    enabled: e.enabled ?? true,
+    startISO: e.startISO,
+    endISO: e.endISO,
+  });
+};

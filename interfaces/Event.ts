@@ -1,0 +1,30 @@
+// table.increments("event_id").primary();
+// table.string("name");
+// table.string("location", 300);
+// table.string("imageData", 50000);
+// table.string("startDate");
+// table.string("startTime");
+// table.string("endDate");
+// table.string("endTime");
+// table.string("shortDescription", 500);
+// table.string("longDescription", 2000);
+// table.string("link", 500);
+// table.boolean("enabled").defaultTo("true");
+// table.timestamp("created_at").defaultTo(knex.fn.now());
+// table.timestamp("startISO");
+// table.timestamp("endISO");
+export interface Event {
+  name: string;
+  location?: string;
+  imageData: string;
+  startDate?: string;
+  startTime?: string;
+  endDate?: string;
+  endTime?: string;
+  shortDescription: string;
+  longDescription?: string;
+  link?: string;
+  enabled?: boolean;
+  startISO?: string;
+  endISO?: string;
+}
