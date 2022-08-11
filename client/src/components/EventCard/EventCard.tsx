@@ -148,7 +148,6 @@ const EventCard: FC<EventCardProps> = ({
     let sd = new Date(`${startDate} ${startTime}`);
     let ed = new Date(`${endDate} ${endTime}`);
 
-    console.log(now, sd);
     if (now.getTime() <= ed.getTime() && now.getTime() >= sd.getTime()) {
       ongoing = true;
       //calculate time until ending
