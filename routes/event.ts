@@ -11,7 +11,15 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
-  let events = await getEvents();
+  let count = req.query.count?.toString();
+  let countNum: number | undefined = undefined;
+  if (count) {
+    countNum = parseInt(count);
+  }
+  let ongoing = req.body.ongoing as boolean;
+  let continuous = req.body.continuous as boolean;
+  let upcoming = req.body.upcoming as boolean;
+  let events = await getEvents(countNum, upcoming, ongoing, continuous);
   res.send({ ok: 1, data: events });
 });
 

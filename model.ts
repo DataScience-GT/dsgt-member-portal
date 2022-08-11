@@ -581,15 +581,76 @@ export const checkFormBootcampExists = async (email: string) => {
 export const getEvents = async (
   count?: number | null,
   upcoming?: boolean | null,
-  ongoing?: boolean | null
+  ongoing?: boolean | null,
+  continuous?: boolean | null
 ) => {
-  if (count) {
-    return await db("event")
-      .select("*")
-      .orderBy("created_at", "desc")
-      .limit(count);
+  let order_by = "created_at";
+  if (upcoming) {
+    // console.log(1);
+
+    order_by = "startISO";
+    let now = new Date();
+    // let t1 = new Date(now.getTime() - time);
+    // return await db("ratelimiting")
+    //   .count("*")
+    //   .where("created_at", ">=", t1.toISOString())
+    //   .andWhere("pathname", pathname);
+    if (count) {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "asc")
+        .where("startISO", ">=", now.toISOString())
+        .limit(count);
+    } else {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "asc")
+        .where("startISO", ">=", now.toISOString());
+    }
+  } else if (ongoing) {
+    // console.log(2);
+    order_by = "endISO";
+    let now = new Date();
+    if (count) {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "asc")
+        .where("startISO", "<=", now.toISOString())
+        .andWhere("endISO", ">=", now.toISOString())
+        .limit(count);
+    } else {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "asc")
+        .where("startISO", "<=", now.toISOString())
+        .andWhere("endISO", ">=", now.toISOString());
+    }
+  } else if (continuous) {
+    // console.log(3);
+
+    if (count) {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "desc")
+        .where("startISO", null)
+        .limit(count);
+    } else {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "desc")
+        .where("startISO", null);
+    }
   } else {
-    return await db("event").select("*").orderBy("created_at", "desc");
+    // console.log(4);
+
+    if (count) {
+      return await db("event")
+        .select("*")
+        .orderBy(order_by, "desc")
+        .limit(count);
+    } else {
+      return await db("event").select("*").orderBy(order_by, "desc");
+    }
   }
 };
 
