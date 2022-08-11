@@ -36,7 +36,6 @@ router.post(
       link: req.body.link,
       enabled: req.body.enabled,
     };
-    console.log(e.imageData.length);
     if (e.startDate) {
       let d = new Date(`${e.startDate} ${e.startTime || "12:00"} EST`);
       e.startISO = d.toISOString();
