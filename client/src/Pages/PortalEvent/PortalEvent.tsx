@@ -1,5 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { createEvent } from "../../API/Event";
+import {
+  createEvent,
+  EventListType,
+  getEvents,
+  result_getEvents,
+} from "../../API/Event";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import EventCard from "../../components/EventCard/EventCard";
 import InputField from "../../components/InputField/InputField";
@@ -30,8 +35,22 @@ const PortalEvent: FC<PortalEventProps> = () => {
   const [link, setLink] = useState("");
   // const [imgFile, setImgFile] = useState<File>();
 
+  //stuff for events on bottom half of page
+  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<result_getEvents[]>([]);
+
   useEffect(() => {
     FR.addEventListener("load", loadImageData);
+
+    //get event list
+    const getAllEvents = async () => {
+      await getEvents(undefined, undefined, (result: result_getEvents[]) => {
+        setLoading(false);
+        setEvents(result);
+      }).catch(console.error);
+    };
+    getAllEvents();
+
     return () => {
       FR.removeEventListener("load", loadImageData);
     };
@@ -248,6 +267,34 @@ const PortalEvent: FC<PortalEventProps> = () => {
           </FlexColumn>
         </div>
       </FlexRow>
+      <FlexColumn padding="1em 0 0 0">
+        <h2 className={styles.Minor}>Existing Events</h2>
+        <div className={styles.Cards}>
+          {loading
+            ? "loading..."
+            : events.length <= 0
+            ? "No events found."
+            : events.map((e, i) => {
+                return (
+                  <EventCard
+                    key={i}
+                    name={e.name}
+                    location={e.location}
+                    imageSRC={e.imageData}
+                    shortDescription={e.shortDescription}
+                    longDescription={e.longDescription}
+                    startDate={e.startDate}
+                    startTime={e.startTime}
+                    endDate={e.endDate}
+                    endTime={e.endTime}
+                    link={e.link}
+                    // big={i === 0 ? true : false}
+                    deletable
+                  ></EventCard>
+                );
+              })}
+        </div>
+      </FlexColumn>
       <Modal
         open={showConfirmModal}
         setOpen={setShowConfirmModal}
