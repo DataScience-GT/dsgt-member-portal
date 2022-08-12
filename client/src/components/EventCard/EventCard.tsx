@@ -2,6 +2,8 @@ import React, { FC } from "react";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./EventCard.module.scss";
 
+import trash_icon from "../../assets/icons/trash.svg";
+
 interface EventCardProps {
   name?: string;
   location?: string;
@@ -15,6 +17,7 @@ interface EventCardProps {
   big?: boolean;
   sticky?: boolean;
   link?: string;
+  deletable?: boolean;
 }
 
 const EventCard: FC<EventCardProps> = ({
@@ -30,6 +33,7 @@ const EventCard: FC<EventCardProps> = ({
   big,
   sticky,
   link,
+  deletable,
 }: EventCardProps) => {
   const format_month = "short";
   const format_day = "numeric";
@@ -197,6 +201,13 @@ const EventCard: FC<EventCardProps> = ({
         className={`${styles.Image}`}
         style={{ backgroundImage: `url(${imageSRC})` }}
       >
+        {deletable ? (
+          <div className={styles.DeleteButton}>
+            <img src={trash_icon} alt="click to delete" />
+          </div>
+        ) : (
+          ""
+        )}
         {/* <img src={imageSRC} alt={name} /> */}
       </div>
       <div className={styles.Content}>

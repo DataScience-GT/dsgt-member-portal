@@ -15,6 +15,11 @@
 
   &:hover {
     transform: translateY(-2px);
+    .DeleteButton {
+      background: var(--hover);
+      filter: opacity(80%);
+      display: flex;
+    }
   }
 }
 
@@ -137,4 +142,25 @@
 .Countdown {
   color: var(--theme);
   font-weight: 500;
+}
+
+.DeleteButton {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  user-select: none;
+
+  > img {
+    display: block;
+    position: relative;
+    height: 60%;
+  }
 }
