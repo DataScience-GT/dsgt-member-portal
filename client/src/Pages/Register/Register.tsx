@@ -55,13 +55,16 @@ const Register: FC<RegisterProps> = () => {
         let nextPage = 0;
         if (result.data.account) {
           //account already exists
-          nextPage = 1;
-          if (result.data.projects) {
-            nextPage = 3;
-            if (result.data.bootcamp) {
-              nextPage = 5;
-            }
-          }
+          setError("An account with this email has already been created.");
+          return;
+          // window.location.href = "/portal";
+          // nextPage = 1;
+          // if (result.data.projects) {
+          //   nextPage = 3;
+          //   if (result.data.bootcamp) {
+          //     nextPage = 5;
+          //   }
+          // }
         }
         setEmailVerified(true);
         setScreen(nextPage);
@@ -2249,7 +2252,7 @@ const Register: FC<RegisterProps> = () => {
               </p>
               <a
                 className={styles.Link}
-                href="https://buy.stripe.com/test_7sIg131iXb0CfiUdQQ"
+                href="https://buy.stripe.com/aEUbKAeO80T19GgcMP"
               >
                 Pay through Stripe →
               </a>
