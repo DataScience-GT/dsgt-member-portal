@@ -45,14 +45,20 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   });
   const [enable, setEnable] = useState(false);
 
-  let saved_sort = localStorage.getItem("dsgt-portal-member-sorts");
+  // let saved_sort = localStorage.getItem("dsgt-portal-member-sorts");
+  // const [currentSort, setCurrentSort] = useState(
+  //   saved_sort ? JSON.parse(saved_sort) : [{ column: "", order: "" }]
+  // );
   const [currentSort, setCurrentSort] = useState(
-    saved_sort ? JSON.parse(saved_sort) : [{ column: "", order: "" }]
+    localStorage.getItem("dsgt-portal-member-sort") || "fname"
   );
-  const [currentOrder, setCurrentOrder] = useState(
-    currentSort[0].order == "asc" || false
+  // const [currentOrder, setCurrentOrder] = useState(
+  //   currentSort[0].order == "asc" || false
+  // );
+  let savedOrder = localStorage.getItem("dsgt-portal-member-sort-order");
+  const [currentOrder, setCurrentOrder] = useState<boolean>(
+    savedOrder ? savedOrder === "true" : false
   );
-  const [reload, setReload] = useState(0);
 
   const handleEnableDisable = (
     user_id: number,
@@ -75,7 +81,6 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   };
 
   const handleDisableConfirmed = async () => {
-    console.log("confirmed");
     await fetch("/api/user/update", {
       method: "POST",
       headers: {
@@ -110,7 +115,6 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         },
         body: JSON.stringify({
           session_id: localStorage.getItem("dsgt-portal-session-key"),
-          sorts: localStorage.getItem("dsgt-portal-member-sorts"),
         }),
       }).then(async (res) => {
         const json = await res.json();
@@ -118,70 +122,64 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           setError(json.error);
           console.log(json.error);
         } else {
-          setMembers(json.data);
+          if (currentSort) {
+            sortMembers(currentSort, currentOrder || false, json.data);
+          } else {
+            setMembers(json.data);
+          }
           // console.log(json.data);
           setLoading(false);
         }
       });
     };
     callDB();
-  }, [reload]);
+  }, []);
 
   // --------------- handle sorting of table ---------------
-  const handleSort = (type: number) => {
-    let o = currentOrder;
-    if (type === 1) {
-      //full name
-      if (currentSort[0].column.includes("name")) {
-        //resort in opposite direction
-        setCurrentOrder(!currentOrder);
-        o = !o;
-      }
-      let order = o ? "asc" : "desc";
-      setCurrentSort([
-        { column: "fname", order: order },
-        { column: "lname", order: order },
-      ]);
-    } else if (type === 2) {
-      //email
-      if (currentSort[0].column === "email") {
-        //resort in opposite direction
-        setCurrentOrder(!currentOrder);
-        o = !o;
-      }
-      let order = o ? "asc" : "desc";
-      setCurrentSort([{ column: "email", order: order }]);
-    } else if (type === 3) {
-      //role
-      if (currentSort[0].column === "role") {
-        //resort in opposite direction
-        setCurrentOrder(!currentOrder);
-        o = !o;
-      }
-      let order = o ? "asc" : "desc";
-      setCurrentSort([{ column: "role", order: order }]);
-    } else if (type === 4) {
-      //enabled
-      if (currentSort[0].column === "enabled") {
-        //resort in opposite direction
-        setCurrentOrder(!currentOrder);
-        o = !o;
-      }
-      let order = o ? "asc" : "desc";
-      setCurrentSort([{ column: "enabled", order: order }]);
+  const handleSort = (e: React.MouseEvent<HTMLTableHeaderCellElement>) => {
+    let newSort = e.currentTarget.getAttribute("data-sort-type");
+    if (!newSort) {
+      return;
     }
-    setReload(reload + 1);
+    let newOrder = currentOrder;
+    if (newSort === currentSort) {
+      //change order
+      newOrder = !currentOrder;
+      setCurrentOrder(newOrder);
+    } else if (newSort) {
+      setCurrentSort(newSort);
+    }
+    sortMembers(newSort, newOrder);
+  };
+
+  const sortMembers = (sort: string, order: boolean, memberList?: []): void => {
+    let mems = members;
+    if (memberList) {
+      mems = memberList;
+    }
+    mems.sort((a, b) => {
+      if (a[sort] > b[sort]) {
+        return order ? 1 : -1;
+      } else if (a[sort] < b[sort]) {
+        return order ? -1 : 1;
+      }
+      return 0;
+    });
+    setMembers(mems);
   };
 
   useEffect(() => {
     // console.log(currentSort, currentOrder);
-    if (currentSort.length && currentSort[0].column && currentSort[0].order) {
+    if (currentSort) {
+      localStorage.setItem("dsgt-portal-member-sort", currentSort);
+    }
+    if (currentOrder !== undefined) {
       localStorage.setItem(
-        "dsgt-portal-member-sorts",
-        JSON.stringify(currentSort)
+        "dsgt-portal-member-sort-order",
+        currentOrder.toString()
       );
     }
-  }, [currentSort]);
+  }, [currentSort, currentOrder]);
 
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
@@ -192,14 +190,10 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         <table className={styles.Table}>
           <thead>
             <tr>
-              <th
-                onClick={() => {
-                  handleSort(1);
-                }}
-              >
+              <th onClick={handleSort} data-sort-type="fname">
                 <img src={user_icon} alt="User Icon" />
                 Full Name
-                {currentSort[0].column.includes("name") ? (
+                {currentSort.includes("name") ? (
                   currentOrder ? (
                     <img
                       className={styles.SortIcon}
@@ -217,14 +211,10 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   ""
                 )}
               </th>
-              <th
-                onClick={() => {
-                  handleSort(2);
-                }}
-              >
+              <th onClick={handleSort} data-sort-type="email">
                 <img src={email_icon} alt="Email Icon" />
                 Email
-                {currentSort[0].column === "email" ? (
+                {currentSort === "email" ? (
                   currentOrder ? (
                     <img
                       className={styles.SortIcon}
@@ -242,14 +232,10 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   ""
                 )}
               </th>
-              <th
-                onClick={() => {
-                  handleSort(3);
-                }}
-              >
+              <th onClick={handleSort} data-sort-type="role">
                 <img src={dice_icon} alt="Role Icon" />
                 Role
-                {currentSort[0].column === "role" ? (
+                {currentSort === "role" ? (
                   currentOrder ? (
                     <img
                       className={styles.SortIcon}
@@ -267,14 +253,10 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   ""
                 )}
               </th>
-              <th
-                onClick={() => {
-                  handleSort(4);
-                }}
-              >
+              <th onClick={handleSort} data-sort-type="enabled">
                 <img src={shield_icon} alt="Enabled Icon" />
                 Enabled
-                {currentSort[0].column === "enabled" ? (
+                {currentSort === "enabled" ? (
                   currentOrder ? (
                     <img
                       className={styles.SortIcon}
