@@ -2256,6 +2256,12 @@ const Register: FC<RegisterProps> = () => {
               >
                 Pay through Stripe →
               </a>
+              <a
+                className={styles.Link}
+                href="/register?payment_status=completed"
+              >
+                Already Paid? Continue Registration →
+              </a>
             </FlexColumn>
           </div>
         </FlexRow>
