@@ -1,7 +1,7 @@
 {
   "name": "dsgt-member-portal",
-  "version": "1.0.0",
-  "description": "the member portal for dsgt 202",
+  "version": "1.0.1",
+  "description": "the member portal for dsgt 2022",
   "main": "index.js",
   "scripts": {
     "heroku-prebuild": "cd client && npm install && npm run build",
