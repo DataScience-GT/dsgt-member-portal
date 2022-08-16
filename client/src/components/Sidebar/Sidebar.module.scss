@@ -14,6 +14,11 @@
   transition: var(--animDuration) width ease;
 }
 
+.SidebarItems {
+  height: calc(100% - 15em);
+  overflow: auto;
+}
+
 .Header {
   display: flex;
   position: relative;

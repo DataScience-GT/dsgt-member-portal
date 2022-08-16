@@ -84,67 +84,69 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       <div className={styles.Header}>
         <h1>DSGT</h1>
       </div>
-      <SidebarItem
-        onClick={handleClick}
-        imgsrc={home_icon}
-        open={open}
-        path="/portal/home"
-        active
-      >
-        Home
-      </SidebarItem>
-      {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+      <div className={styles.SidebarItems}>
         <SidebarItem
           onClick={handleClick}
-          imgsrc={events_icon}
+          imgsrc={home_icon}
           open={open}
-          path="/portal/event"
+          path="/portal/home"
+          active
         >
-          Events
+          Home
         </SidebarItem>
-      ) : (
-        ""
-      )}
-      {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+          <SidebarItem
+            onClick={handleClick}
+            imgsrc={events_icon}
+            open={open}
+            path="/portal/event"
+          >
+            Events
+          </SidebarItem>
+        ) : (
+          ""
+        )}
+        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+          <SidebarItem
+            onClick={handleClick}
+            imgsrc={members_icon}
+            open={open}
+            path="/portal/members"
+          >
+            Members
+          </SidebarItem>
+        ) : (
+          ""
+        )}
+        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+          <SidebarItem
+            onClick={handleClick}
+            imgsrc={megaphone_icon}
+            open={open}
+            path="/portal/announce"
+          >
+            Announce
+          </SidebarItem>
+        ) : (
+          ""
+        )}
         <SidebarItem
           onClick={handleClick}
-          imgsrc={members_icon}
+          imgsrc={account_icon}
           open={open}
-          path="/portal/members"
+          path="/portal/account"
         >
-          Members
+          Account
         </SidebarItem>
-      ) : (
-        ""
-      )}
-      {compareUserRoles(role || "guest", "moderator") >= 0 ? (
         <SidebarItem
           onClick={handleClick}
-          imgsrc={megaphone_icon}
+          imgsrc={settings_icon}
           open={open}
-          path="/portal/announce"
+          path="/portal/settings"
         >
-          Announce
+          Settings
         </SidebarItem>
-      ) : (
-        ""
-      )}
-      <SidebarItem
-        onClick={handleClick}
-        imgsrc={account_icon}
-        open={open}
-        path="/portal/account"
-      >
-        Account
-      </SidebarItem>
-      <SidebarItem
-        onClick={handleClick}
-        imgsrc={settings_icon}
-        open={open}
-        path="/portal/settings"
-      >
-        Settings
-      </SidebarItem>
+      </div>
       <div className={styles.User}>
         <h1 className={styles.Fname}>
           {localStorage.getItem("dsgt-portal-fname")}
