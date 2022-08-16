@@ -15,6 +15,7 @@ import members_icon from "../../assets/icons/users-alt.svg";
 import megaphone_icon from "../../assets/icons/megaphone.svg";
 import account_icon from "../../assets/icons/portrait.svg";
 import events_icon from "../../assets/icons/calendars.svg";
+import forms_icon from "../../assets/icons/form.svg";
 
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 
@@ -93,6 +94,14 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           active
         >
           Home
+        </SidebarItem>
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={forms_icon}
+          open={open}
+          path="/portal/forms"
+        >
+          Forms
         </SidebarItem>
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
