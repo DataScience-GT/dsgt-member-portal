@@ -22,28 +22,44 @@ const PortalForms: FC<PortalFormsProps> = () => {
   return (
     <div className={styles.PortalForms} data-testid="PortalForms">
       <h1 className={styles.Major}>Forms</h1>
-      <h1 className={styles.Minor}>Create a Form</h1>
-      <FlexRow gap="20px" wrap="wrap-reverse" align="flex-start">
+      <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
         <Form onSubmit={handleSubmit}>
+          <h1 className={styles.Minor}>Create a Form</h1>
           <InputField
             type="text"
             placeholder="Form Name"
             onChange={(e) => {
               handleChange_input_string(e, setFormName);
             }}
+            width="100%"
             required
+            validIndication
           />
           <InputField
             type="text"
             placeholder="Estimated Time"
             helper={<InputHelper lines={["Example: 5min"]} />}
+            width="100%"
             onChange={(e) => {
               handleChange_input_string(e, setFormTime);
             }}
           />
+          <InputField
+            type="url"
+            placeholder="Form Link"
+            width="100%"
+            onChange={(e) => {
+              handleChange_input_string(e, setFormURL);
+            }}
+            required
+            validIndication
+          />
         </Form>
         <div className={styles.SideBySide}>
-          <FlexColumn>
+          <FlexColumn gap="20px">
+            <h1 className={styles.Minor}>
+              Here's what your form will look like to members:
+            </h1>
             <FormItem
               formName={formName}
               formTime={formTime}
@@ -52,15 +68,19 @@ const PortalForms: FC<PortalFormsProps> = () => {
           </FlexColumn>
         </div>
       </FlexRow>
-      <h1 className={styles.Minor}>Existing Forms</h1>
-      <FlexColumn gap="10px">
+      <FlexColumn gap="20px">
+        <h1 className={styles.Minor}>Existing Forms</h1>
         <FormItem
           formName="Leadership Application"
           formTime="5min"
           formLink="#"
+          deletable
+          onDelete={() => {
+            console.log("delete");
+          }}
         />
-        <FormItem />
-        <FormItem />
+        <FormItem deletable />
+        <FormItem deletable />
       </FlexColumn>
     </div>
   );
