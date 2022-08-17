@@ -18,3 +18,8 @@
   font-weight: 500;
   margin-bottom: 1em;
 }
+
+.SideBySide {
+  flex-grow: 1;
+  align-self: stretch;
+}
