@@ -15,7 +15,7 @@ const FormItem: FC<FormItemProps> = ({
 }: FormItemProps) => (
   <div className={styles.FormItem} data-testid="FormItem">
     <a href={formLink} target="_blank" rel="noreferrer">
-      <FlexRow align="center">
+      <FlexRow spacing="space-between" align="center" width="fit-content">
         <div className={styles.LabelBox}>
           <span className={styles.FormLabel}>Form</span>
         </div>

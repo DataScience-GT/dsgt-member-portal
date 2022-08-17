@@ -4,9 +4,14 @@
   border-radius: 5px;
   // padding: 0.5em;
   font-size: 1.1em;
-  max-width: 30%;
+  position: relative;
+  width: fit-content;
 
   cursor: pointer;
+
+  > a {
+    width: fit-content;
+  }
 
   a {
     color: inherit;
@@ -46,11 +51,19 @@
   align-items: flex-start;
   padding: 0.5em 0.5em;
   gap: 10px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // white-space: nowrap;
+  word-break: break-all;
+  position: relative;
 }
 
 .FormName {
+  position: relative;
   font-size: 1em;
   line-height: 1em;
+  align-self: stretch;
 }
 
 .FormTime {
