@@ -25,6 +25,12 @@
   }
 }
 
+// .Deletable {
+//   // &:hover {
+//   //   filter: opacity(0.5);
+//   // }
+// }
+
 .LabelBox {
   display: flex;
   padding: 0.5em;
@@ -75,4 +81,13 @@
 .FormArrow {
   padding: 0 0.5em 0 0;
   transition: var(--animDuration) margin-left ease;
+}
+
+.Trash {
+  height: 1.75em;
+  padding: 0.25em;
+  filter: var(--svgFilter);
+  &:hover {
+    filter: var(--svgFilter) brightness(0.8);
+  }
 }
