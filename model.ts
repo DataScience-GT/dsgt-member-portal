@@ -8,6 +8,7 @@ import e, { NextFunction } from "express";
 import { BillingDetails } from "./interfaces/Stripe";
 import { StatusError } from "./Classes/StatusError";
 import { Event } from "./interfaces/Event";
+import { Form } from "./interfaces/Form";
 
 const crypto = require("crypto");
 
@@ -685,4 +686,24 @@ export const createEvent = async (e: Event) => {
     startISO: e.startISO,
     endISO: e.endISO,
   });
+};
+
+// ------------------------------- forms -------------------------------
+export const createForm = async (f: Form) => {
+  // table.string("name");
+  // table.string("time");
+  // table.string("url", 1000);
+  // table.boolean("enabled").defaultTo(true);
+  await db("forms").insert({
+    name: f.name,
+    time: f.time,
+    url: f.url,
+  });
+};
+
+export const getForms = async (count?: number) => {
+  return await db("forms")
+    .select("*")
+    .orderBy("created_at", "asc")
+    .limit(count || 500);
 };
