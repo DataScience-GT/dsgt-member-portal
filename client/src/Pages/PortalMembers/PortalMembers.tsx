@@ -16,6 +16,7 @@ import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import { handleChange_input_string } from "../../Scripts/InputHandler";
+import SuccessText from "../../components/SuccessText/SuccessText";
 
 interface PortalMembersProps {}
 
@@ -247,6 +248,11 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           handleChange_input_string(e, setSearch);
         }}
       />
+      <SuccessText>
+        {search.length > 0
+          ? `${members.length} result${members.length !== 1 ? "s" : ""} found`
+          : ""}
+      </SuccessText>
       <ErrorText>{error}</ErrorText>
       {loading ? (
         <div>loading...</div>
