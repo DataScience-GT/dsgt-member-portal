@@ -41,6 +41,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   const [loading, setLoading] = useState(true);
 
   const [showDisableModal, setShowDisableModal] = useState(false);
+  const [showChangeRoleModal, setShowChangeRoleModal] = useState(false);
   const [currentUser, setCurrentUser] = useState({
     user_id: -1,
     email: "",
@@ -64,26 +65,6 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   const [currentOrder, setCurrentOrder] = useState<boolean>(
     savedOrder ? savedOrder === "true" : false
   );
-
-  const handleEnableDisable = (
-    user_id: number,
-    userEmail: string,
-    fname: string,
-    lname: string,
-    role: string,
-    enable: boolean
-  ) => {
-    // console.log(userEmail, enable);
-    setCurrentUser({
-      user_id: user_id,
-      email: userEmail,
-      fname: fname,
-      lname: lname,
-      role: role,
-    });
-    setEnable(enable);
-    setShowDisableModal(true);
-  };
 
   const handleDisableConfirmed = async () => {
     await fetch("/api/user/update", {
@@ -239,6 +220,12 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     }
   }, [search]);
 
+  // --------------- update user roles ---------------
+
+  const handleStartChangeRole = () => {
+    console.log(1);
+  };
+
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
       <InputField
@@ -368,13 +355,18 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   </td>
                   <td className={styles.Actions}>
                     <MemberActionMenu
-                      enabled={member["enabled"]}
-                      user_id={member["user_id"]}
-                      email={member["email"]}
-                      fname={member["fname"]}
-                      lname={member["lname"]}
-                      role={member["role"]}
-                      onEnableDisable={handleEnableDisable}
+                      enabled={member.enabled}
+                      onEnableDisable={() => {
+                        setCurrentUser({
+                          user_id: member.user_id,
+                          email: member.email,
+                          fname: member.fname,
+                          lname: member.lname,
+                          role: member.role,
+                        });
+                        setEnable(!member.enabled);
+                        setShowDisableModal(true);
+                      }}
                     />
                   </td>
                 </tr>

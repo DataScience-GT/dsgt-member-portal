@@ -6,28 +6,11 @@ import cross_icon from "../../assets/icons/cross-small-skinny.svg";
 
 interface MemberActionMenuProps {
   enabled?: boolean;
-  user_id?: number;
-  email?: string;
-  fname?: string;
-  lname?: string;
-  role?: string;
-  onEnableDisable?: (
-    user_id: number,
-    userEmail: string,
-    fname: string,
-    lname: string,
-    role: string,
-    enable: boolean
-  ) => void;
+  onEnableDisable?: () => void;
 }
 
 const MemberActionMenu: FC<MemberActionMenuProps> = ({
   enabled,
-  user_id,
-  email,
-  fname,
-  lname,
-  role,
   onEnableDisable,
 }: MemberActionMenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,45 +43,17 @@ const MemberActionMenu: FC<MemberActionMenuProps> = ({
             title="Click to Close"
           />
         </div>
-        {enabled ? (
-          <p
-            className={styles.Action}
-            onClick={() => {
-              if (
-                user_id &&
-                email &&
-                fname &&
-                lname &&
-                role &&
-                onEnableDisable
-              ) {
-                onEnableDisable(user_id, email, fname, lname, role, false);
-                closeMenu();
-              }
-            }}
-          >
-            Disable
-          </p>
-        ) : (
-          <p
-            className={styles.Action}
-            onClick={() => {
-              if (
-                user_id &&
-                email &&
-                fname &&
-                lname &&
-                role &&
-                onEnableDisable
-              ) {
-                onEnableDisable(user_id, email, fname, lname, role, true);
-                closeMenu();
-              }
-            }}
-          >
-            Enable
-          </p>
-        )}
+        <p
+          className={styles.Action}
+          onClick={() => {
+            if (onEnableDisable) {
+              onEnableDisable();
+              closeMenu();
+            }
+          }}
+        >
+          {enabled ? "Disable" : "Enable"}
+        </p>
       </div>
     </div>
   );
