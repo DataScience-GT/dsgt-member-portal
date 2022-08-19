@@ -12,6 +12,7 @@ import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
 import PortalAccount from "../PortalAccount/PortalAccount";
 import PortalEvent from "../PortalEvent/PortalEvent";
+import PortalForms from "../PortalForms/PortalForms";
 
 interface PortalProps {
   role?: string;
@@ -26,19 +27,24 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
         <div className={styles.PortalBody}>
           <Routes>
             <Route path="/*" element={<PortalHome />} />
-            <Route path="/settings" element={<PortalSettings />} />
-            <Route path="/account" element={<PortalAccount />} />
+            <Route path="/settings/*" element={<PortalSettings />} />
+            <Route path="/forms/*" element={<PortalForms role={role} />} />
+            <Route path="/account/*" element={<PortalAccount />} />
             {compareUserRoles(role || "guest", "moderator") >= 0 ? (
-              <Route path="/members" element={<PortalMembers />} />
+              <Route path="/members/*" element={<PortalMembers />} />
             ) : (
               ""
             )}
             {compareUserRoles(role || "guest", "moderator") >= 0 ? (
-              <Route path="/announce" element={<PortalAnnounce />} />
+              <Route path="/announce/*" element={<PortalAnnounce />} />
             ) : (
               ""
             )}
-            <Route path="/event" element={<PortalEvent />} />
+            {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+              <Route path="/event/*" element={<PortalEvent />} />
+            ) : (
+              ""
+            )}
           </Routes>
         </div>
       </FlexRow>

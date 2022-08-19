@@ -34,6 +34,10 @@ router.use("/billing", ApiAuthenticate, billing);
 import event from "./event";
 router.use("/event", ApiAuthenticate, event);
 
+//setup /api/form -- for forms
+import form from "./form";
+router.use("/form", ApiAuthenticate, form);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
 });
@@ -75,3 +79,4 @@ router.post("/test", (req: Request, res: Response, next: NextFunction) => {
 // });
 
 module.exports = router;
+export default router;

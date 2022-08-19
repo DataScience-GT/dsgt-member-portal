@@ -1,0 +1,93 @@
+.FormItem {
+  display: block;
+  border: 2px solid var(--theme);
+  border-radius: 5px;
+  // padding: 0.5em;
+  font-size: 1.1em;
+  position: relative;
+  width: fit-content;
+
+  cursor: pointer;
+
+  > a {
+    width: fit-content;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &:hover {
+    .FormArrow {
+      margin-left: 0.5em;
+    }
+  }
+}
+
+// .Deletable {
+//   // &:hover {
+//   //   filter: opacity(0.5);
+//   // }
+// }
+
+.LabelBox {
+  display: flex;
+  padding: 0.5em;
+  align-self: stretch;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  background: var(--theme);
+  color: #fff;
+}
+.FormLabel {
+  font-size: 0.8em;
+  line-height: 1em;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.FormContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0.5em 0.5em;
+  gap: 10px;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // white-space: nowrap;
+  word-break: break-all;
+  position: relative;
+}
+
+.FormName {
+  position: relative;
+  font-size: 1em;
+  line-height: 1em;
+  align-self: stretch;
+}
+
+.FormTime {
+  color: var(--borderColor);
+  font-size: 0.8em;
+  line-height: 1em;
+}
+
+.FormArrow {
+  padding: 0 0.5em 0 0;
+  transition: var(--animDuration) margin-left ease;
+}
+
+.Trash {
+  height: 1.75em;
+  padding: 0.25em;
+  filter: var(--svgFilter);
+  &:hover {
+    filter: var(--svgFilter) brightness(0.8);
+  }
+}
