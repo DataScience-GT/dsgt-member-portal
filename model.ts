@@ -707,3 +707,7 @@ export const getForms = async (count?: number) => {
     .orderBy("created_at", "asc")
     .limit(count || 500);
 };
+
+export const deleteform = async (formId: number) => {
+  await db("forms").where("form_id", formId).del();
+};
