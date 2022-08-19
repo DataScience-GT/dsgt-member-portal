@@ -1,6 +1,6 @@
 {
   "name": "dsgt-member-portal",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "the member portal for dsgt 2022",
   "main": "index.js",
   "scripts": {
