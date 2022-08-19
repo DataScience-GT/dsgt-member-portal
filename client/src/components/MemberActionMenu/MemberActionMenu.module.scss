@@ -28,7 +28,7 @@
   display: flex;
   padding-top: 2em;
   height: fit-content;
-  width: fit-content;
+  width: auto;
   top: -3px;
   right: 1.3em;
   background: var(--background);
@@ -58,6 +58,9 @@
 
 .Action {
   padding: 0.5em;
+  white-space: nowrap;
+  text-align: center;
+  align-self: stretch;
 
   cursor: pointer;
   &:hover {
