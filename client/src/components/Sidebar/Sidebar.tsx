@@ -4,7 +4,7 @@ import styles from "./Sidebar.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 
-import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
+import { compareUserRoles } from "../../Scripts/RoleManagement";
 
 //import all icons
 import right_arrow_icon from "../../assets/icons/angle-right.svg";

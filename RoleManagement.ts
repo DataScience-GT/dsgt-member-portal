@@ -5,8 +5,8 @@
  * @returns 1 if role1>role2, 0 if role1=role2, -1 if role1<role2
  */
 export const compareUserRoles = (role1: string, role2: string) => {
-  let a = getRoleValue(role1);
-  let b = getRoleValue(role2);
+  let a = getRoleValue(role1 as Role);
+  let b = getRoleValue(role2 as Role);
   if (a > b) {
     //role1 > role2
     return 1;
@@ -19,24 +19,33 @@ export const compareUserRoles = (role1: string, role2: string) => {
   }
 };
 
-export const getRoleValue = (role: string) => {
-  if (role) {
-    role = role.toLowerCase();
-  }
-  switch (role) {
-    case "guest":
-      return 0;
-    case "member":
-      return 3;
-    case "moderator" || "mod":
-      return 6;
-    case "administrator" || "admin":
-      return 9;
-    case "developer" || "dev":
-      return 12;
-    case "owner":
-      return 999;
-    default:
-      return -1;
-  }
+/**
+ * Gets the value of a user's role
+ * @param role {Role} user's role
+ * @returns number
+ */
+export const getRoleValue = (role: Role): number => {
+  let roleValue = RoleValueMap.get(role);
+  return roleValue ?? 0;
 };
+
+export enum Role {
+  Guest = "guest",
+  Member = "member",
+  Moderator = "moderator",
+  Administrator = "administrator",
+  Developer = "developer",
+  Owner = "owner",
+}
+
+/**
+ * Converts the user's role into its value
+ */
+export const RoleValueMap = new Map([
+  [Role.Guest, 0],
+  [Role.Member, 3],
+  [Role.Moderator, 6],
+  [Role.Administrator, 9],
+  [Role.Developer, 12],
+  [Role.Owner, 999],
+]);

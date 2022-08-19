@@ -8,7 +8,7 @@ import styles from "./Portal.module.scss";
 
 import { Theme, ThemeContext } from "../../Context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
-import { compareUserRoles, getRoleValue } from "../../Scripts/RoleManagement";
+import { compareUserRoles } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
 import PortalAccount from "../PortalAccount/PortalAccount";
 import PortalEvent from "../PortalEvent/PortalEvent";

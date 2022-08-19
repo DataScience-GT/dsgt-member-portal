@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { Theme, ThemeContext } from "./Context/ThemeContext";
 
-import { getRoleValue } from "./Scripts/RoleManagement";
+import { getRoleValue, Role } from "./Scripts/RoleManagement";
 
 //import pages
 import Signup from "./Pages/Signup/Signup";
@@ -102,7 +102,7 @@ function App() {
               <Route path="/Register" element={<Register />} />
               <Route path="/Passwordreset/*" element={<ResetPassword />} />
               <Route path="/Docs/*" element={<Docs />} />
-              {getRoleValue(userRole) >= 0 ? (
+              {getRoleValue(userRole as Role) >= 0 ? (
                 <Route path="/Portal/*" element={<Portal role={userRole} />} />
               ) : (
                 ""
