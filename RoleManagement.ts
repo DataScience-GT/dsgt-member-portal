@@ -34,7 +34,9 @@ export enum Role {
   Member = "member",
   Moderator = "moderator",
   Administrator = "administrator",
+  JrDeveloper = "jr. developer",
   Developer = "developer",
+  SrDeveloper = "sr. developer",
   Owner = "owner",
 }
 
@@ -46,6 +48,8 @@ export const RoleValueMap = new Map([
   [Role.Member, 3],
   [Role.Moderator, 6],
   [Role.Administrator, 9],
-  [Role.Developer, 12],
+  [Role.JrDeveloper, 600],
+  [Role.Developer, 700],
+  [Role.SrDeveloper, 800],
   [Role.Owner, 999],
 ]);
