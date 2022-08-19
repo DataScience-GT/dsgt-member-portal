@@ -57,10 +57,19 @@
     color: var(--foreground);
   }
   .Role {
+    display: -webkit-box;
     font-size: 1em;
     font-weight: 500;
     text-transform: capitalize;
     color: var(--foreground);
+    text-align: center;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    -webkit-box-orient: vertical;
+    /* Needed to make it work */
+    overflow: hidden;
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
   }
 }
 
