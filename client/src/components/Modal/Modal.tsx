@@ -6,6 +6,7 @@ import FlexRow from "../../layout/FlexRow/FlexRow";
 
 export enum ModalPreset {
   Confirm = "ConfirmPreset",
+  Change = "ChangePreset",
 }
 
 interface ModalProps {
@@ -59,6 +60,33 @@ const Modal: FC<ModalProps> = ({
             </button>
             <button className={styles.Confirm} onClick={handleConfirm}>
               Confirm
+            </button>
+          </FlexRow>
+        </div>
+      </div>
+    );
+  }
+  if (preset === ModalPreset.Change) {
+    return (
+      <div
+        className={`${styles.Modal} ${open ? styles.Open : styles.Closed}`}
+        data-testid="Modal"
+      >
+        <div className={styles.bg} onClick={closeModal}></div>
+        <div className={styles.Menu}>
+          <img
+            className={styles.MenuClose}
+            src={close_icon}
+            alt="Close Icon"
+            onClick={closeModal}
+          />
+          {children}
+          <FlexRow spacing="flex-end">
+            <button className={styles.Cancel} onClick={closeModal}>
+              Cancel
+            </button>
+            <button className={styles.Confirm} onClick={handleConfirm}>
+              Submit
             </button>
           </FlexRow>
         </div>

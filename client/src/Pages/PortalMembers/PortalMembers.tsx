@@ -17,26 +17,21 @@ import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
 import { handleChange_input_string } from "../../Scripts/InputHandler";
 import SuccessText from "../../components/SuccessText/SuccessText";
+import { Role } from "../../Scripts/RoleManagement";
+import InputDropdown from "../../components/InputDropdown/InputDropdown";
+import FlexRow from "../../layout/FlexRow/FlexRow";
+import {
+  changeMemberEnableDisable,
+  changeMemberRole,
+  getMembers,
+  result_getMembers,
+} from "../../API/Member";
 
 interface PortalMembersProps {}
 
-type member = {
-  user_id: number;
-  fname: string;
-  lname: string;
-  email: string;
-  role: string;
-  enabled: boolean;
-};
-
-type Sort = {
-  column: string;
-  order: string;
-};
-
 const PortalMembers: FC<PortalMembersProps> = () => {
-  const [allMembers, setAllMembers] = useState<member[]>([]);
-  const [members, setMembers] = useState<member[]>([]);
+  const [allMembers, setAllMembers] = useState<result_getMembers[]>([]);
+  const [members, setMembers] = useState<result_getMembers[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -50,6 +45,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     role: "",
   });
   const [enable, setEnable] = useState(false);
+  const [newRole, setNewRole] = useState<Role>();
 
   // let saved_sort = localStorage.getItem("dsgt-portal-member-sorts");
   // const [currentSort, setCurrentSort] = useState(
@@ -67,59 +63,27 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   );
 
   const handleDisableConfirmed = async () => {
-    await fetch("/api/user/update", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-      },
-      body: JSON.stringify({
-        session_id: localStorage.getItem("dsgt-portal-session-key"),
-        user_email: currentUser.email,
-        user_enabled: enable,
-      }),
-    }).then(async (res) => {
-      const json = await res.json();
-      if (!json.ok && json.error) {
-        setError(json.error);
-        console.log(json.error);
-      } else {
-        //user successfully enabled/disabled
-        window.location.reload();
-      }
+    await changeMemberEnableDisable(currentUser.email, enable, () => {
+      window.location.reload();
+    }).catch((err) => {
+      setError(err.message);
     });
   };
 
   useEffect(() => {
     //get members from db
-    const callDB = async () => {
-      await fetch("/api/user/get", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-        },
-        body: JSON.stringify({
-          session_id: localStorage.getItem("dsgt-portal-session-key"),
-        }),
-      }).then(async (res) => {
-        const json = await res.json();
-        if (!json.ok && json.error) {
-          setError(json.error);
-          console.log(json.error);
-        } else {
-          if (currentSort) {
-            sortMembers(currentSort, currentOrder || false, json.data);
-          } else {
-            setMembers(json.data);
-          }
-          setAllMembers(json.data);
-          // console.log(json.data);
-          setLoading(false);
-        }
-      });
-    };
-    callDB();
+    getMembers((data) => {
+      if (currentSort) {
+        sortMembers(currentSort, currentOrder || false, data);
+      } else {
+        setMembers(data);
+      }
+      setAllMembers(data);
+      // console.log(json.data);
+      setLoading(false);
+    }).catch((err) => {
+      setError(err.message);
+    });
   }, []);
 
   // --------------- handle sorting of table ---------------
@@ -142,7 +106,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   const sortMembers = (
     sort: string,
     order: boolean,
-    memberList?: [] | member[]
+    memberList?: [] | result_getMembers[]
   ): void => {
     let mems = members;
     if (memberList) {
@@ -222,8 +186,13 @@ const PortalMembers: FC<PortalMembersProps> = () => {
 
   // --------------- update user roles ---------------
 
-  const handleStartChangeRole = () => {
-    console.log(1);
+  const handleChangeRole = async () => {
+    if (newRole)
+      await changeMemberRole(currentUser.email, newRole, () => {
+        window.location.reload();
+      }).catch((err) => {
+        setError(err.message);
+      });
   };
 
   return (
@@ -356,7 +325,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   <td className={styles.Actions}>
                     <MemberActionMenu
                       enabled={member.enabled}
-                      onEnableDisable={() => {
+                      onAnything={() => {
                         setCurrentUser({
                           user_id: member.user_id,
                           email: member.email,
@@ -364,8 +333,13 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                           lname: member.lname,
                           role: member.role,
                         });
+                      }}
+                      onEnableDisable={() => {
                         setEnable(!member.enabled);
                         setShowDisableModal(true);
+                      }}
+                      onChangeRole={() => {
+                        setShowChangeRoleModal(true);
                       }}
                     />
                   </td>
@@ -386,6 +360,28 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           {currentUser.fname} {currentUser.lname}
         </span>
         's account?
+      </Modal>
+      <Modal
+        open={showChangeRoleModal}
+        setOpen={setShowChangeRoleModal}
+        preset={ModalPreset.Change}
+        handleConfirmed={handleChangeRole}
+      >
+        <p>
+          Change{" "}
+          <span className={styles.ModalHighlight}>
+            {currentUser.fname} {currentUser.lname}
+          </span>
+          's role:
+        </p>
+        <FlexRow spacing="center">
+          <InputDropdown
+            options={Object.values(Role)}
+            setState={setNewRole}
+            initialValue={currentUser.role}
+            hideInitial
+          />
+        </FlexRow>
       </Modal>
     </div>
   );

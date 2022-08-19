@@ -3,15 +3,20 @@ import styles from "./MemberActionMenu.module.scss";
 
 import threedots_icon from "../../assets/icons/menu-dots-vertical.svg";
 import cross_icon from "../../assets/icons/cross-small-skinny.svg";
+import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 
 interface MemberActionMenuProps {
   enabled?: boolean;
+  onAnything?: () => void;
   onEnableDisable?: () => void;
+  onChangeRole?: () => void;
 }
 
 const MemberActionMenu: FC<MemberActionMenuProps> = ({
   enabled,
+  onAnything,
   onEnableDisable,
+  onChangeRole,
 }: MemberActionMenuProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -43,17 +48,32 @@ const MemberActionMenu: FC<MemberActionMenuProps> = ({
             title="Click to Close"
           />
         </div>
-        <p
-          className={styles.Action}
-          onClick={() => {
-            if (onEnableDisable) {
-              onEnableDisable();
-              closeMenu();
-            }
-          }}
-        >
-          {enabled ? "Disable" : "Enable"}
-        </p>
+        <FlexColumn>
+          <p
+            className={styles.Action}
+            onClick={() => {
+              if (onEnableDisable) {
+                if (onAnything) onAnything();
+                onEnableDisable();
+                closeMenu();
+              }
+            }}
+          >
+            {enabled ? "Disable" : "Enable"}
+          </p>
+          <p
+            className={styles.Action}
+            onClick={() => {
+              if (onChangeRole) {
+                if (onAnything) onAnything();
+                onChangeRole();
+                closeMenu();
+              }
+            }}
+          >
+            Change Role
+          </p>
+        </FlexColumn>
       </div>
     </div>
   );
