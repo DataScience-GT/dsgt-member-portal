@@ -28,7 +28,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
           <Routes>
             <Route path="/*" element={<PortalHome />} />
             <Route path="/settings/*" element={<PortalSettings />} />
-            <Route path="/forms/*" element={<PortalForms />} />
+            <Route path="/forms/*" element={<PortalForms role={role} />} />
             <Route path="/account/*" element={<PortalAccount />} />
             {compareUserRoles(role || "guest", "moderator") >= 0 ? (
               <Route path="/members/*" element={<PortalMembers />} />
