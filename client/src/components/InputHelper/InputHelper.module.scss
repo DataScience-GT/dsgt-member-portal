@@ -39,9 +39,9 @@
     transform: translate(0, calc(-100% - 30px));
     &::before {
       content: "";
-      bottom: 0px;
+      top: calc(100% - 1px);
       left: 50%;
-      transform: translate(-50%, 63px);
+      transform: translate(-50%, 0);
 
       border: 15px solid transparent;
       border-top: 20px solid rgb(56, 56, 56);
