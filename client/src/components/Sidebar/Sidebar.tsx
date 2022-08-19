@@ -95,18 +95,16 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         >
           Home
         </SidebarItem>
-        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
-          <SidebarItem
-            onClick={handleClick}
-            imgsrc={forms_icon}
-            open={open}
-            path="/portal/forms"
-          >
-            Forms
-          </SidebarItem>
-        ) : (
-          ""
-        )}
+
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={forms_icon}
+          open={open}
+          path="/portal/forms"
+        >
+          Forms
+        </SidebarItem>
+
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
