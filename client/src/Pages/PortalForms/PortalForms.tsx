@@ -1,5 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
-import { createForm, getForms, result_getForms } from "../../API/Form";
+import {
+  createForm,
+  deleteForm,
+  getForms,
+  result_getForms,
+} from "../../API/Form";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import Form from "../../components/Form/Form";
 import FormItem from "../../components/FormItem/FormItem";
@@ -59,6 +64,23 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
     });
   }, []);
 
+  const [error2, setError2] = useState("");
+
+  const [currentFormId, setCurrentFormId] = useState(-1);
+  const [currentFormName, setCurrentFormName] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleDeleteForm = async () => {
+    setError2("");
+    //attempt to delete the form
+    await deleteForm(currentFormId, () => {
+      window.location.reload();
+    }).catch((err) => {
+      console.error(err);
+      setError2(err.message);
+    });
+  };
+
   return (
     <div className={styles.PortalForms} data-testid="PortalForms">
       <h1 className={styles.Major}>Forms</h1>
@@ -114,17 +136,26 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
           </FlexRow>
           <FlexColumn gap="20px">
             <h1 className={styles.Minor}>Manage Forms</h1>
-            {forms
+            {error2 ? <ErrorText>{error2}</ErrorText> : ""}
+            {loading
+              ? "loading..."
+              : forms && forms.length > 0
               ? forms.map((form, i) => (
                   <FormItem
                     formName={form.name}
                     formTime={form.time}
                     formLink={form.url}
                     key={form.form_id}
+                    formID={form.form_id}
+                    onDelete={() => {
+                      setCurrentFormId(form.form_id);
+                      setCurrentFormName(form.name);
+                      setShowDeleteModal(true);
+                    }}
                     deletable
                   />
                 ))
-              : "loading..."}
+              : "No forms found."}
           </FlexColumn>
           <Modal
             open={showCreateModal}
@@ -134,13 +165,23 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
           >
             Are you sure you would like to create this form?
           </Modal>
+          <Modal
+            open={showDeleteModal}
+            setOpen={setShowDeleteModal}
+            preset={ModalPreset.Confirm}
+            handleConfirmed={handleDeleteForm}
+          >
+            Are you sure you would like to delete the form '{currentFormName}'?
+          </Modal>
         </>
       ) : (
         ""
       )}
       <FlexColumn gap="20px" padding="20px 0">
         <h1 className={styles.Minor}>Complete Forms</h1>
-        {forms
+        {loading
+          ? "loading..."
+          : forms && forms.length > 0
           ? forms.map((form, i) => (
               <FormItem
                 formName={form.name}
@@ -149,7 +190,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
                 key={form.form_id}
               />
             ))
-          : "loading..."}
+          : "No forms found."}
       </FlexColumn>
     </div>
   );
