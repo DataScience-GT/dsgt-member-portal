@@ -40,7 +40,7 @@ router.post(
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
       //check if user has perms
-      if (compareUserRoles(valid.role, "administrator") >= 0) {
+      if (compareUserRoles(valid.role, "moderator") >= 0) {
         //insert event
         await createForm(f);
         res.json({ ok: 1 });
@@ -69,7 +69,7 @@ router.delete(
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
       //check if user has perms
-      if (compareUserRoles(valid.role, "administrator") >= 0) {
+      if (compareUserRoles(valid.role, "moderator") >= 0) {
         //insert event
         await deleteform(form_id);
         res.json({ ok: 1 });
