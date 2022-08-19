@@ -14,10 +14,13 @@ import sort_down from "../../assets/icons/sort-amount-down.svg";
 
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import InputField from "../../components/InputField/InputField";
+import { handleChange_input_string } from "../../Scripts/InputHandler";
 
 interface PortalMembersProps {}
 
 type member = {
+  user_id: number;
   fname: string;
   lname: string;
   email: string;
@@ -31,7 +34,8 @@ type Sort = {
 };
 
 const PortalMembers: FC<PortalMembersProps> = () => {
-  const [members, setMembers] = useState([]);
+  const [allMembers, setAllMembers] = useState<member[]>([]);
+  const [members, setMembers] = useState<member[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -127,6 +131,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           } else {
             setMembers(json.data);
           }
+          setAllMembers(json.data);
           // console.log(json.data);
           setLoading(false);
         }
@@ -152,17 +157,51 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     sortMembers(newSort, newOrder);
   };
 
-  const sortMembers = (sort: string, order: boolean, memberList?: []): void => {
+  const sortMembers = (
+    sort: string,
+    order: boolean,
+    memberList?: [] | member[]
+  ): void => {
     let mems = members;
     if (memberList) {
       mems = memberList;
     }
     mems.sort((a, b) => {
-      if (a[sort] > b[sort]) {
-        return order ? 1 : -1;
-      } else if (a[sort] < b[sort]) {
-        return order ? -1 : 1;
+      let aVal;
+      let bVal;
+      switch (sort.toLowerCase()) {
+        case "fname":
+          aVal = a.fname;
+          bVal = b.fname;
+          break;
+        case "lname":
+          aVal = a.lname;
+          bVal = b.lname;
+          break;
+        case "email":
+          aVal = a.email;
+          bVal = b.email;
+          break;
+        case "role":
+          aVal = a.role;
+          bVal = b.role;
+          break;
+        case "enabled":
+          aVal = a.enabled;
+          bVal = b.enabled;
+          break;
+        default:
+          aVal = a.fname;
+          bVal = b.fname;
       }
+      if (aVal && bVal) {
+        if (aVal > bVal) {
+          return order ? 1 : -1;
+        } else if (aVal < bVal) {
+          return order ? -1 : 1;
+        }
+      }
+
       return 0;
     });
     setMembers(mems);
@@ -181,8 +220,33 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     }
   }, [currentSort, currentOrder]);
 
+  // -------------------- handle searching --------------------
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (search) {
+      let s = search.toLowerCase();
+      //try to filter members
+      let mems = allMembers.filter((member) =>
+        Object.values(member).join(" ").toLowerCase().includes(s)
+      );
+
+      //sort the findings
+      sortMembers(currentSort, currentOrder, mems);
+    } else {
+      setMembers(allMembers);
+    }
+  }, [search]);
+
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
+      <InputField
+        type="search"
+        placeholder="Search"
+        onChange={(e) => {
+          handleChange_input_string(e, setSearch);
+        }}
+      />
       <ErrorText>{error}</ErrorText>
       {loading ? (
         <div>loading...</div>
