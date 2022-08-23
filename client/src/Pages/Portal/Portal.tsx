@@ -6,7 +6,7 @@ import PortalHome from "../PortalHome/PortalHome";
 import PortalSettings from "../PortalSettings/PortalSettings";
 import styles from "./Portal.module.scss";
 
-import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import { ThemeContext } from "../../Context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
@@ -19,7 +19,7 @@ interface PortalProps {
 }
 
 const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   return (
     <div className={`${styles.Portal} ${styles[theme]}`} data-testid="Portal">
       <FlexRow height="100vh">
