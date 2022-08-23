@@ -13,6 +13,7 @@ import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
 import PortalAccount from "../PortalAccount/PortalAccount";
 import PortalEvent from "../PortalEvent/PortalEvent";
 import PortalForms from "../PortalForms/PortalForms";
+import FeedbackButton from "../../components/FeedbackButton/FeedbackButton";
 
 interface PortalProps {
   role?: string;
@@ -46,6 +47,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
               ""
             )}
           </Routes>
+          <FeedbackButton />
         </div>
       </FlexRow>
     </div>
