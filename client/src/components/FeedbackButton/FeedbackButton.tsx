@@ -85,7 +85,7 @@ const FeedbackButton: FC<FeedbackButtonProps> = () => {
               <InlineRadioInput
                 name="satisfied"
                 label="Satisfied"
-                color="#99cc00"
+                color="#B5D6A7"
                 currentValue={satisfied}
                 setValue={setSatisfied}
               />
