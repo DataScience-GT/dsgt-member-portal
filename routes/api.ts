@@ -38,6 +38,10 @@ router.use("/event", ApiAuthenticate, event);
 import form from "./form";
 router.use("/form", ApiAuthenticate, form);
 
+//setup /api/feedback
+import feedback from "./feedback";
+router.use("/feedback", ApiAuthenticate, feedback);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
 });

@@ -9,6 +9,7 @@ import { BillingDetails } from "./interfaces/Stripe";
 import { StatusError } from "./Classes/StatusError";
 import { Event } from "./interfaces/Event";
 import { Form } from "./interfaces/Form";
+import { Feedback } from "./interfaces/Feedback";
 
 const crypto = require("crypto");
 
@@ -710,4 +711,30 @@ export const getForms = async (count?: number) => {
 
 export const deleteform = async (formId: number) => {
   await db("forms").where("form_id", formId).del();
+};
+
+// ------------------------ Feedback ------------------------
+
+export const createFeedback = async (f: Feedback) => {
+  // table.string("name");
+  // table.string("time");
+  // table.string("url", 1000);
+  // table.boolean("enabled").defaultTo(true);
+  await db("feedback").insert({
+    user_id: f.user_id,
+    satisfaction: f.satisfaction,
+    action: f.action,
+    urgency: f.urgency,
+    content: f.content,
+  });
+};
+
+export const getFeedback = async (count?: number) => {
+  return await db("feedback")
+    .select("*")
+    .orderBy(
+      { column: "created_at", order: "asc" },
+      { column: "resolved", order: "desc" }
+    )
+    .limit(count || 500);
 };
