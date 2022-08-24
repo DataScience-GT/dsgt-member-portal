@@ -7,15 +7,19 @@
   height: 5em;
   width: fit-content;
   min-width: 5em;
-  padding: 1em;
 
   border-radius: 100em;
   z-index: 20;
 
   transition: var(--animDuration) width ease-in-out;
   > label {
+    display: block;
+    position: relative;
     cursor: pointer;
     z-index: 1;
+    padding: 1em;
+    height: 100%;
+    width: 100%;
   }
 
   &:hover {
