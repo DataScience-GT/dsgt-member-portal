@@ -10,6 +10,6 @@ export type Feedback = {
   user_id?: number;
   satisfaction?: string | number;
   action?: string;
-  urgency?: string;
+  urgency?: number;
   content?: string;
 };

@@ -34,7 +34,7 @@ router.post(
       content: req.body.content,
     };
 
-    if (!fback.satisfaction || !fback.action) {
+    if (!fback.satisfaction && !fback.action) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
