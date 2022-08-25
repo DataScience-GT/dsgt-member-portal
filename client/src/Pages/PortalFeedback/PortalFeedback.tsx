@@ -40,13 +40,15 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
     setFeedbackType(newValue as FeedbackType);
     setLoading(true);
   };
+
   return (
     <div className={styles.PortalFeedback} data-testid="PortalFeedback">
       <h1 className={styles.Major}>Feedback</h1>
       <h2 className={styles.Minor}>Select Type:</h2>
       <InputDropdown
         options={Object.keys(FeedbackType)}
-        initialValue={feedbackType}
+        values={Object.values(FeedbackType)}
+        initialValue={feedbackType.toString()}
         onChange={handleTypeChange}
       />
       <ErrorText>{error}</ErrorText>
