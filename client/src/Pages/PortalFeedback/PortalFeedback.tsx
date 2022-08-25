@@ -21,6 +21,7 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
   useEffect(() => {
     //get feedback
     getFeedback(feedbackType, undefined, (data) => {
+      console.log(data);
       setFeedback(data);
     })
       .catch((err) => {
@@ -37,6 +38,7 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
       return;
     }
     setFeedbackType(newValue as FeedbackType);
+    setLoading(true);
   };
   return (
     <div className={styles.PortalFeedback} data-testid="PortalFeedback">
@@ -53,7 +55,7 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
       ) : (
         <div>
           {feedback.map((f) => (
-            <p>{f.action}</p>
+            <p key={f.feedback_id}>{f.action}</p>
           ))}
         </div>
       )}
