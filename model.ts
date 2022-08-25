@@ -732,9 +732,7 @@ export const createFeedback = async (f: Feedback) => {
 export const getFeedback = async (count?: number) => {
   return await db("feedback")
     .select("*")
-    .orderBy(
-      { column: "created_at", order: "asc" },
-      { column: "resolved", order: "desc" }
-    )
+    .orderBy("created_at", "desc")
+    .orderBy("resolved", "asc")
     .limit(count || 500);
 };
