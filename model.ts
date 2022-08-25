@@ -734,8 +734,17 @@ export const getFeedback = async (
   count?: number
 ) => {
   return await db("feedback")
-    .select("*")
-    .where("action", feedbackType)
+    .select(
+      "feedback_id",
+      "action",
+      "urgency",
+      "content",
+      "resolved",
+      "resolved_by",
+      "created_at"
+    )
+    .whereNotNull("content")
+    .andWhere("action", feedbackType)
     .orderBy("created_at", "desc")
     .orderBy("resolved", "asc")
     .limit(count || 500);
