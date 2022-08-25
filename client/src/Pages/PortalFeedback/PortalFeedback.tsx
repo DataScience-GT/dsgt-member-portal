@@ -56,7 +56,7 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
       ) : (
         <div>
           {feedback.map((f) => (
-            <p key={f.feedback_id}>{f.action}</p>
+            <p key={f.feedback_id}>{Object.values(f).join(", ")}</p>
           ))}
         </div>
       )}
