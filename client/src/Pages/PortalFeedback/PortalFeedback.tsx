@@ -21,7 +21,6 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
   useEffect(() => {
     //get feedback
     getFeedback(feedbackType, undefined, (data) => {
-      console.log(data);
       setFeedback(data);
     })
       .catch((err) => {
