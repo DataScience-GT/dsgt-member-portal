@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./FeedbackButton.module.scss";
 
@@ -7,6 +7,7 @@ import close_icon from "../../assets/icons/cross-small-skinny.svg";
 import InlineRadioInput from "../InlineRadioInput/InlineRadioInput";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import { handleChange_textarea_string } from "../../Scripts/InputHandler";
+import { createFeedback } from "../../API/Feedback";
 
 interface FeedbackButtonProps {}
 
@@ -24,8 +25,44 @@ const FeedbackButton: FC<FeedbackButtonProps> = () => {
     document.getElementById("feedback-menu-open")?.click();
   };
 
-  const handleSubmit = () => {
-    console.log(satisfied, action, urgency, bugText, changeText, featureText);
+  const handleSubmit = async () => {
+    //attempt to submit the feedback
+    if (satisfied || (action && (bugText || featureText || changeText))) {
+      let content = "";
+      switch (action) {
+        case "change":
+          content = changeText;
+          break;
+        case "bug":
+          content = bugText;
+          break;
+        case "feature":
+          content = featureText;
+          break;
+        default:
+          break;
+      }
+      await createFeedback(
+        satisfied,
+        action,
+        parseInt(urgency),
+        content,
+        () => {
+          closeMenu();
+        }
+      );
+    } else {
+      closeMenu();
+    }
+  };
+
+  const closeMenu = () => {
+    setSatisfied("");
+    setAction("");
+    setUrgency("");
+    setBugText("");
+    setFeatureText("");
+    setChangeText("");
 
     setScreen(2);
     setTimeout(() => {
@@ -176,6 +213,7 @@ const FeedbackButton: FC<FeedbackButtonProps> = () => {
                     name="urgency"
                     label="High"
                     color="red"
+                    value="3"
                     currentValue={urgency}
                     setValue={setUrgency}
                   />
@@ -183,6 +221,7 @@ const FeedbackButton: FC<FeedbackButtonProps> = () => {
                     name="urgency"
                     label="Medium"
                     color="#FD9800"
+                    value="2"
                     currentValue={urgency}
                     setValue={setUrgency}
                   />
@@ -190,6 +229,7 @@ const FeedbackButton: FC<FeedbackButtonProps> = () => {
                     name="urgency"
                     label="Low"
                     color="#B5D6A7"
+                    value="1"
                     currentValue={urgency}
                     setValue={setUrgency}
                   />
