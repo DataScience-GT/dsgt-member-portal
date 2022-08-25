@@ -729,9 +729,13 @@ export const createFeedback = async (f: Feedback) => {
   });
 };
 
-export const getFeedback = async (count?: number) => {
+export const getFeedback = async (
+  feedbackType: "bug" | "feature" | "change",
+  count?: number
+) => {
   return await db("feedback")
     .select("*")
+    .where("action", feedbackType)
     .orderBy("created_at", "desc")
     .orderBy("resolved", "asc")
     .limit(count || 500);

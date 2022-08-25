@@ -47,7 +47,8 @@ router.post(
 
 router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
   let session_id = req.body.session_id;
-  if (!session_id) {
+  let feedback_type = req.body.feedback_type;
+  if (!session_id || !feedback_type) {
     next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
     return;
   }
@@ -58,7 +59,7 @@ router.post("/get", async (req: Request, res: Response, next: NextFunction) => {
     return;
   }
 
-  let feedback = await getFeedback();
+  let feedback = await getFeedback(feedback_type);
 
   res.json({ ok: 1, data: feedback });
 });
