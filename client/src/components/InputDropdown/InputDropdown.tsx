@@ -23,6 +23,7 @@ const InputDropdown: FC<InputDropdownProps> = ({
         if (setState) setState(e.currentTarget.value);
         if (onChange) onChange(e);
       }}
+      value={initialValue}
     >
       {options
         ? options.map((o, i) => {
@@ -34,7 +35,7 @@ const InputDropdown: FC<InputDropdownProps> = ({
                   <option
                     key={i}
                     value={o}
-                    selected
+                    // selected
                     style={{ fontWeight: 700 }}
                   >
                     {o}
