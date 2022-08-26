@@ -5,7 +5,9 @@ import {
   result_getFeedback,
 } from "../../API/Feedback";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import Feedback from "../../components/Feedback/Feedback";
 import InputDropdown from "../../components/InputDropdown/InputDropdown";
+import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalFeedback.module.scss";
 
 interface PortalFeedbackProps {}
@@ -54,11 +56,16 @@ const PortalFeedback: FC<PortalFeedbackProps> = () => {
       {loading ? (
         <p>loading...</p>
       ) : (
-        <div>
+        <FlexRow gap="1em" padding="1em 0 0 0">
           {feedback.map((f) => (
-            <p key={f.feedback_id}>{Object.values(f).join(", ")}</p>
+            <Feedback
+              key={f.feedback_id}
+              id={f.feedback_id}
+              type={f.action}
+              content={f.content}
+            />
           ))}
-        </div>
+        </FlexRow>
       )}
     </div>
   );
