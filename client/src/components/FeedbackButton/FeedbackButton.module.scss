@@ -1,0 +1,155 @@
+.FeedbackButton {
+  display: block;
+  position: fixed;
+  bottom: 2.5em;
+  right: 2.5em;
+
+  height: 5em;
+  width: fit-content;
+  min-width: 5em;
+
+  border-radius: 100em;
+  z-index: 20;
+
+  transition: var(--animDuration) width ease-in-out;
+  > label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    z-index: 1;
+    padding: 1em;
+    height: 100%;
+    width: 100%;
+  }
+
+  &:hover {
+    ._openOnHover {
+      display: inline-block;
+      animation: openAnimation var(--animDuration) ease;
+    }
+  }
+}
+.FeedbackButton,
+.FeedbackMenu {
+  box-shadow: 0px 0px 3px 5px rgba($color: #555, $alpha: 0.3);
+  background: #eee;
+  color: #111;
+}
+
+.ButtonIcon {
+  height: 60%;
+  user-select: none;
+}
+
+.ButtonText {
+  position: relative;
+  user-select: none;
+  font-size: 1.1em;
+  font-weight: 500;
+  width: 100%;
+  margin-left: 0.5em;
+}
+
+._openOnHover {
+  display: none;
+  overflow: hidden;
+  transition: var(--animDuration) all ease-in-out;
+}
+
+@keyframes openAnimation {
+  0% {
+    max-width: 0;
+  }
+  100% {
+    max-width: 10em;
+  }
+}
+
+.Checkbox {
+  display: none;
+  &:checked ~ .FeedbackMenu {
+    display: block;
+  }
+}
+
+// THE ACTUAL MENU
+.FeedbackMenu {
+  display: none;
+  position: fixed;
+  bottom: 2.5em;
+  right: 2.5em;
+  z-index: 3;
+
+  max-height: calc(100% - 5em);
+  max-width: calc(100% - 10.5em);
+  min-height: 3em;
+  min-width: 3em;
+
+  height: fit-content;
+  width: 300px;
+
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 1em;
+  padding-top: 4em;
+  border: 2px solid var(--theme);
+  overflow-y: auto;
+}
+
+.Head {
+  display: block;
+  position: absolute;
+  width: calc(100% + 2px);
+  height: 3em;
+  background-color: var(--theme);
+
+  top: -1px;
+  left: -1px;
+
+  padding: 0.25em;
+
+  > .CloseIcon {
+    max-height: 100%;
+    float: right;
+    cursor: pointer;
+  }
+}
+
+.Major,
+.Minor,
+.Mini {
+  font-weight: 500;
+  line-height: 1em;
+}
+
+.Major {
+  font-size: 1.5em;
+  margin-bottom: 4px;
+}
+.Minor {
+  font-size: 1.2em;
+}
+.Mini {
+  font-size: 1em;
+}
+
+.SubmitButton {
+  padding: 0.5em;
+  border-radius: 5px;
+  font-weight: 500;
+  float: right;
+  cursor: pointer;
+  background: var(--theme);
+  border: none;
+  &:hover {
+
+  }
+}
+
+.TextInput {
+  margin-top: 0.5em;
+  width: 100%;
+  height: auto;
+  min-height: 5em;
+  padding: 0.25em;
+}

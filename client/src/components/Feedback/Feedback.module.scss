@@ -1,0 +1,34 @@
+.Feedback {
+  display: block;
+  max-width: 250px;
+  width: 100%;
+  height: fit-content;
+  border: 2px solid var(--borderColor);
+  border-radius: 5px;
+  .Type {
+    display: flex;
+    width: fit-content;
+    // height: 100%;
+    align-self: stretch;
+
+    padding: 0.5em;
+
+    color: black;
+    font-weight: 700;
+
+    justify-content: center;
+    align-items: center;
+  }
+  .TypeBUG {
+    background: red;
+    color: #fff;
+  }
+  .TypeCHANGE {
+    background: #fd9800;
+    color: #111;
+  }
+  .TypeFEATURE {
+    background: green;
+    color: #fff;
+  }
+}

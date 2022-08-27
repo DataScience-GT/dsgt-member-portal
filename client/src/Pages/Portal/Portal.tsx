@@ -6,20 +6,22 @@ import PortalHome from "../PortalHome/PortalHome";
 import PortalSettings from "../PortalSettings/PortalSettings";
 import styles from "./Portal.module.scss";
 
-import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import { ThemeContext } from "../../Context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";
 import PortalAccount from "../PortalAccount/PortalAccount";
 import PortalEvent from "../PortalEvent/PortalEvent";
 import PortalForms from "../PortalForms/PortalForms";
+import FeedbackButton from "../../components/FeedbackButton/FeedbackButton";
+import PortalFeedback from "../PortalFeedback/PortalFeedback";
 
 interface PortalProps {
   role?: string;
 }
 
 const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
-  const { theme, setTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
   return (
     <div className={`${styles.Portal} ${styles[theme]}`} data-testid="Portal">
       <FlexRow height="100vh">
@@ -45,7 +47,13 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
             ) : (
               ""
             )}
+            {compareUserRoles(role || "guest", "administrator") >= 0 ? (
+              <Route path="/feedback/*" element={<PortalFeedback />} />
+            ) : (
+              ""
+            )}
           </Routes>
+          <FeedbackButton />
         </div>
       </FlexRow>
     </div>
