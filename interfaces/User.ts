@@ -40,6 +40,8 @@ export interface RegisterUser {
   location: string;
   experience: string;
   interests: string;
+  hearAbout: string;
+  emailConsent: string | boolean;
 }
 
 export interface LoginUser {

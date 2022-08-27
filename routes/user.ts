@@ -108,6 +108,8 @@ router.post(
       location: req.body.location,
       experience: req.body.experience,
       interests: req.body.interests,
+      hearAbout: req.body.hearAbout,
+      emailConsent: req.body.emailConsent,
     };
     if (
       !(
@@ -123,7 +125,9 @@ router.post(
         u.ethnicity &&
         u.location &&
         u.experience &&
-        u.interests
+        u.interests &&
+        u.hearAbout &&
+        u.emailConsent
       )
     ) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));

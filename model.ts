@@ -108,6 +108,8 @@ export const registerUser = async (user: RegisterUser, next: NextFunction) => {
         location: user.location,
         experience: user.experience,
         interests: JSON.stringify(user.interests),
+        hear_about: user.hearAbout,
+        email_consent: user.emailConsent,
       })
       .into("user");
     let res = await db
