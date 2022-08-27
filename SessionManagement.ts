@@ -11,6 +11,8 @@ type SessionValidation = {
   user_id: number;
   role: string;
   uuid: string;
+  hear_about?: string;
+  email_consent?: boolean | string;
 };
 
 export const checkSessionValid = async (
@@ -38,6 +40,8 @@ export const checkSessionValid = async (
         user_id: x.user_id,
         role: x.role,
         uuid: x.uuid,
+        hear_about: x.hear_about,
+        email_consent: x.email_consent,
       };
       return v;
     } else {
@@ -50,6 +54,8 @@ export const checkSessionValid = async (
         user_id: x.user_id,
         role: x.role,
         uuid: x.uuid,
+        hear_about: x.hear_about,
+        email_consent: x.email_consent,
       };
       return v;
     }

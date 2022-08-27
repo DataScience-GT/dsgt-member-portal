@@ -274,7 +274,9 @@ export const validateSession = async (session_id: string) => {
       "session.enabled",
       "user.role",
       "user.email",
-      "user.uuid"
+      "user.uuid",
+      "user.hear_about",
+      "user.email_consent"
     )
     .where("session_id", session_id);
   if (res.length <= 0) {
