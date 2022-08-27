@@ -79,6 +79,8 @@ export const registerUser = async (
   location: string,
   experience: string,
   interests: string[] | string,
+  hearAbout: string,
+  emailConsent: string | boolean,
   callback: (data: result_register) => void
 ) => {
   await fetch("/api/user/register", {
@@ -103,6 +105,8 @@ export const registerUser = async (
       location: location,
       experience: experience,
       interests: interests,
+      hearAbout: hearAbout,
+      emailConsent: emailConsent,
     }),
   }).then(async (res) => {
     const json = await res.json();

@@ -95,6 +95,8 @@ const Register: FC<RegisterProps> = () => {
   const [interests, setInterests] = useState([""]);
   const [interestsOtherChecked, setInterestsOtherChecked] = useState(false);
   const [interestsOther, setInterestsOther] = useState("");
+  const [hearAbout, setHearAbout] = useState("");
+  const [emailConsent, setEmailConsent] = useState("");
 
   //handle all of the form elements updating (save input to state)
   const handleChange_fname = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -297,6 +299,57 @@ const Register: FC<RegisterProps> = () => {
     // //console.log(newValue);
   };
 
+  const handleChange_hearaboutRadio = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.getAttribute("data-value")?.toLowerCase() === "other") {
+      //set value to input value
+      let input = e.currentTarget.nextElementSibling
+        ?.lastChild as HTMLInputElement;
+      newValue = input.value;
+    }
+    setHearAbout(newValue);
+    //console.log(newValue);
+  };
+  const handleChange_hearaboutOther = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //other input
+    let newValue = e.currentTarget.value;
+    (
+      e.currentTarget.parentElement?.previousElementSibling as HTMLInputElement
+    ).checked = true;
+    setHearAbout(newValue);
+    //console.log(newValue);
+  };
+
+  const handleChange_emailconsentRadio = (
+    e: React.KeyboardEvent<HTMLInputElement>
+  ) => {
+    //radio input -- get value of label (next element)
+    //check if label has input
+    // console.log(e.currentTarget.nextElementSibling?.lastChild);
+    let newValue =
+      e.currentTarget.getAttribute("data-value") ||
+      e.currentTarget.nextElementSibling?.innerHTML.toString() ||
+      e.currentTarget.id;
+    if (e.currentTarget.getAttribute("data-value")?.toLowerCase() === "other") {
+      //set value to input value
+      let input = e.currentTarget.nextElementSibling
+        ?.lastChild as HTMLInputElement;
+      newValue = input.value;
+    }
+    setEmailConsent(newValue);
+    //console.log(newValue);
+  };
+
   const handleFormSubmitRegister = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
@@ -316,7 +369,9 @@ const Register: FC<RegisterProps> = () => {
         gender &&
         ethnicity &&
         location &&
-        experience
+        experience &&
+        hearAbout &&
+        emailConsent
       )
     ) {
       setError("Missing one or more required fields.");
@@ -349,6 +404,8 @@ const Register: FC<RegisterProps> = () => {
       location,
       experience,
       JSON.stringify(interests),
+      hearAbout,
+      emailConsent,
       (data: result_register) => {
         //callback function
         if (data.ok) {
@@ -1514,6 +1571,97 @@ const Register: FC<RegisterProps> = () => {
                       />
                     </label>
                     <br />
+                  </div>
+                  {/* Hear About */}
+                  <div className={styles.Radio}>
+                    <p className={styles.Mini}>
+                      How did you hear about DSGT?
+                      <span className={styles.Required}>*</span>
+                    </p>
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-word"
+                      onChange={handleChange_hearaboutRadio}
+                    />
+                    <label htmlFor="hearabout-word">Word of mouth</label>
+                    <br />
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-reddit"
+                      onChange={handleChange_hearaboutRadio}
+                    />
+                    <label htmlFor="hearabout-reddit">Reddit</label>
+                    <br />
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-instagram"
+                      onChange={handleChange_hearaboutRadio}
+                    />
+                    <label htmlFor="hearabout-instagram">Instagram</label>
+                    <br />
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-tabling"
+                      onChange={handleChange_hearaboutRadio}
+                    />
+                    <label htmlFor="hearabout-tabling">Tabling</label>
+                    <br />
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-kickoff"
+                      onChange={handleChange_hearaboutRadio}
+                    />
+                    <label htmlFor="hearabout-kickoff">Kickoff</label>
+                    <br />
+
+                    <input
+                      type="radio"
+                      name="hearabout"
+                      id="hearabout-other"
+                      onChange={handleChange_hearaboutRadio}
+                      data-value="other"
+                    />
+                    <label htmlFor="hearabout-other">
+                      Other:{" "}
+                      <input
+                        className={styles.InlineInput}
+                        type={"text"}
+                        placeholder=" "
+                        autoComplete="hearabout"
+                        onChange={handleChange_hearaboutOther}
+                      />
+                    </label>
+                    <br />
+                  </div>
+
+                  {/* Email Consent*/}
+                  <div className={styles.Radio}>
+                    <p className={styles.Mini}>
+                      Do you consent to being on the DSGT mailing list?
+                      <span className={styles.Required}>*</span>
+                    </p>
+                    <input
+                      type="radio"
+                      name="emailconsent"
+                      id="emailconsent-yes"
+                      data-value={true}
+                      onChange={handleChange_emailconsentRadio}
+                    />
+                    <label htmlFor="emailconsent-yes">Yes</label>
+                    <br />
+                    <input
+                      type="radio"
+                      name="emailconsent"
+                      id="emailconsent-no"
+                      data-value={false}
+                      onChange={handleChange_emailconsentRadio}
+                    />
+                    <label htmlFor="emailconsent-no">No</label>
                   </div>
                   <ErrorText>{error}</ErrorText>
                   <FlexRow spacing="flex-end" width="100%">
