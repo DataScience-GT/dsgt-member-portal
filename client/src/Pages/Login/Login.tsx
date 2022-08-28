@@ -16,7 +16,7 @@ const Login: FC<LoginProps> = () => {
 
   //handle all of the form elements updating (save input to state)
   const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9@. ]/g, "");
+    e.target.value = e.target.value.replace(/[^a-zA-Z0-9@.+_ ]/g, "");
     setEmail(e.target.value);
   };
   const handleChange_password = (e: React.KeyboardEvent<HTMLInputElement>) => {

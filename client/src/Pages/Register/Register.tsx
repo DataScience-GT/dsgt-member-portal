@@ -38,7 +38,7 @@ const Register: FC<RegisterProps> = () => {
   const handleChange_paymentemail = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    e.target.value = e.target.value.replace(/[^a-zA-Z0-9@. ]/g, "");
+    e.target.value = e.target.value.replace(/[^a-zA-Z0-9@.+_ ]/g, "");
     setPaymentEmail(e.target.value);
   };
   //handle form submission
@@ -133,6 +133,7 @@ const Register: FC<RegisterProps> = () => {
   const handleChange_personalemail = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
+    e.currentTarget.value = e.target.value.replace(/[^a-zA-Z0-9@.+_ ]/g, "");
     setPersonalEmail(e.currentTarget.value);
     // console.log(e.currentTarget.value);
   };
