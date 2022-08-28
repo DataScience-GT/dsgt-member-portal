@@ -7,6 +7,8 @@ import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalSettings.module.scss";
 
+import packageJson from "../../../package.json";
+
 interface PortalSettingsProps {}
 
 const PortalSettings: FC<PortalSettingsProps> = () => {
@@ -99,7 +101,7 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
         <div>loading...</div>
       ) : (
         <form onSubmit={handleFormSubmit}>
-          <FlexColumn>
+          <FlexColumn padding="1em 0 0 0">
             <FlexRow gap="20px">
               <InputField
                 placeholder="First Name"
@@ -122,10 +124,15 @@ const PortalSettings: FC<PortalSettingsProps> = () => {
           </FlexColumn>
         </form>
       )}
-      <a className={styles.Link} href="/passwordreset">Reset Password</a>
+      <a className={styles.Link} href="/passwordreset">
+        Reset Password
+      </a>
       <h2 className={styles.Minor}>Portal Settings</h2>
       <p className={styles.Mini}>Theme</p>
       <ThemeDropdown />
+      <br />
+      <h2 className={styles.Minor}>Version</h2>
+      <p className={styles.Mini}>v{packageJson.version}</p>
     </div>
   );
 };
