@@ -190,7 +190,10 @@ export const updateUser = async ({
  * @returns `true` if email has already been used, `false` otherwise
  */
 export const checkUserEmail = async (email: string) => {
-  let res = await db("user").count("*").where("email", email);
+  let res = await db("user")
+    .count("*")
+    .where("email", email)
+    .orWhere("gtemail", email);
   if (parseInt(res[0].count)) {
     return true;
   }
@@ -203,11 +206,11 @@ export const checkUserEmail = async (email: string) => {
  */
 export const loginUser = async ({ email, password }: Required<LoginUser>) => {
   let hash = md5(password);
-  let res = await db
-    .select("user_inc", "role")
-    .from("user")
-    .where("email", email)
-    .andWhere("password", hash);
+  let res = await db("user")
+    .select("user_inc", "role", "gtemail")
+    .where({ email: email, password: hash })
+    .orWhere({ gtemail: email, password: hash });
+  // .andWhere("password", hash);
   if (res.length <= 0) {
     return false;
   } else {
@@ -250,7 +253,10 @@ export const changeUserPassword = async (
  * @returns enabled: boolean, or false if the email doesn't exist.
  */
 export const getUserEnabled = async (email: string) => {
-  let res = await db("user").select("enabled").where("email", email);
+  let res = await db("user")
+    .select("enabled")
+    .where("email", email)
+    .orWhere("gtemail", email);
   if (!res.length) {
     return false;
   } else {
@@ -299,6 +305,7 @@ export const validateSession = async (session_id: string) => {
       "session.enabled",
       "user.role",
       "user.email",
+      "user.gtemail",
       "user.uuid",
       "user.hear_about",
       "user.email_consent"
