@@ -50,7 +50,18 @@ export type Sort = {
   order: string;
 };
 
-export const getUsers = (sorts?: Sort[] | Sort) => {
+type result_getUsers = {
+  user_id: number;
+  email: string;
+  fname: string;
+  lname: string;
+  enabled: boolean;
+  role: string;
+  created_at: string;
+  last_logged_on?: string;
+};
+
+export const getUsers = (sorts?: Sort[] | Sort): result_getUsers[] => {
   if (sorts) {
     return db
       .select(
@@ -76,6 +87,20 @@ export const getUsers = (sorts?: Sort[] | Sort) => {
         "created_at"
       )
       .from("user");
+  }
+};
+
+export const getUserLastLoggedOn = async (user_id: number) => {
+  let res = await db
+    .select("created_at")
+    .from("session")
+    .where("user_id", user_id)
+    .orderBy("created_at", "desc")
+    .limit(1);
+  if (!res || !res.length) {
+    return false;
+  } else {
+    return res[0].created_at;
   }
 };
 

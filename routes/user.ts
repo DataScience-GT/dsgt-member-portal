@@ -23,6 +23,7 @@ import {
   getPasswordResets,
   attemptPasswordReset,
   deleteUser,
+  getUserLastLoggedOn,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -59,6 +60,9 @@ router.post(
       //check if has enough perms
       if (compareUserRoles(valid.role, "administrator") >= 0) {
         const x = await getUsers(sorts);
+        for (let user of x) {
+          user.last_logged_on = await getUserLastLoggedOn(user.user_id);
+        }
         res.json({ ok: 1, data: x });
       } else {
         next(new StatusErrorPreset(ErrorPreset.NoPermission));
