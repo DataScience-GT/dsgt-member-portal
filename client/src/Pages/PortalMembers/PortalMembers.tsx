@@ -7,6 +7,7 @@ import user_icon from "../../assets/icons/user.svg";
 import email_icon from "../../assets/icons/at.svg";
 import dice_icon from "../../assets/icons/dice-d20.svg";
 import shield_icon from "../../assets/icons/shield-check.svg";
+import lastonline_icon from "../../assets/icons/alarm-clock.svg";
 import list_icon from "../../assets/icons/list.svg";
 
 import sort_up from "../../assets/icons/sort-amount-up.svg";
@@ -136,6 +137,10 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           aVal = a.enabled;
           bVal = b.enabled;
           break;
+        case "last_logged_on":
+          aVal = a.last_logged_on;
+          bVal = b.last_logged_on;
+          break;
         default:
           aVal = a.fname;
           bVal = b.fname;
@@ -193,6 +198,37 @@ const PortalMembers: FC<PortalMembersProps> = () => {
       }).catch((err) => {
         setError(err.message);
       });
+  };
+
+  const handleGetLastLoggedOn = (member: result_getMembers) => {
+    if (!member.last_logged_on) {
+      return "never";
+    }
+    let log = new Date(member.last_logged_on);
+    let now = new Date();
+    const total_ms = now.getTime() - log.getTime();
+
+    let seconds = Math.floor(total_ms / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+    let days = Math.floor(hours / 24);
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+    hours = hours % 24;
+
+    let str: string[] = [];
+    if (days) {
+      str.push(`${days} Days`);
+    } else if (hours) {
+      str.push(`${hours} Hours`);
+    } else if (minutes) {
+      str.push(`${minutes} Minutes`);
+    } else if (seconds) {
+      str.push(`${seconds} Seconds`);
+    }
+
+    return str.join(", ");
   };
 
   return (
@@ -300,6 +336,27 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   ""
                 )}
               </th>
+              <th onClick={handleSort} data-sort-type="last_logged_on">
+                <img src={lastonline_icon} alt="Last Logged On Icon" />
+                Last On
+                {currentSort === "last_logged_on" ? (
+                  currentOrder ? (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_up}
+                      alt="Sort Icon"
+                    />
+                  ) : (
+                    <img
+                      className={styles.SortIcon}
+                      src={sort_down}
+                      alt="Sort Icon"
+                    />
+                  )
+                ) : (
+                  ""
+                )}
+              </th>
               <th>
                 <img src={list_icon} alt="Actions Icon" />
                 Actions
@@ -321,6 +378,9 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                     }`}
                   >
                     {member["enabled"] ? "yes" : "no"}
+                  </td>
+                  <td className={`${styles.LastLoggedOn}`}>
+                    {handleGetLastLoggedOn(member)}
                   </td>
                   <td className={styles.Actions}>
                     <MemberActionMenu

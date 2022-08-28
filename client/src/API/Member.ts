@@ -33,6 +33,7 @@ export type result_getMembers = {
   email: string;
   role: string;
   enabled: boolean;
+  last_logged_on: string;
 };
 
 export const getMembers = async (

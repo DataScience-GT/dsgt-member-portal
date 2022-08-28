@@ -22,18 +22,24 @@
 
   .Role,
   th:nth-child(3) {
-    padding: 10px 5em;
+    padding: 10px 2em;
     text-transform: capitalize;
   }
 
   .Enabled,
   th:nth-child(4) {
-    padding: 10px 5em;
+    padding: 10px 2em;
+    text-transform: capitalize;
+  }
+
+  .LastLoggedOn,
+  th:nth-child(5) {
+    padding: 10px 2em;
     text-transform: capitalize;
   }
 
   .Actions,
-  th:nth-child(5) {
+  th:nth-child(6) {
     padding: 10px 0;
   }
 
@@ -59,7 +65,7 @@
     padding-bottom: 1.5em !important;
     color: #7d7d7d;
 
-    &:nth-child(-n + 4) {
+    &:nth-child(-n + 5) {
       cursor: pointer;
       transition: var(--animDuration) color ease;
       &:hover {
