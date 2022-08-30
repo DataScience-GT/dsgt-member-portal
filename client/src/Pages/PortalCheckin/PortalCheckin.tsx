@@ -1,4 +1,6 @@
 import React, { FC, useState } from "react";
+import { QrReader, OnResultFunction } from "react-qr-reader";
+
 import styles from "./PortalCheckin.module.scss";
 import portal_styles from "../PortalPage.module.scss";
 import InputDropdown from "../../components/InputDropdown/InputDropdown";
@@ -13,13 +15,24 @@ enum CheckinPage {
   Scan = "scan",
 }
 
+const scan_setup = {
+  delay: 3000,
+};
+
 const PortalCheckin: FC<PortalCheckinProps> = () => {
   // const [scan, setScan] = useState(false);
-  const [page, setPage] = useState<CheckinPage>(CheckinPage.Create);
+  const [page, setPage] = useState<CheckinPage>(CheckinPage.Scan);
+  const [data, setData] = useState("No result");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(1);
+  };
+
+  const handleScan: OnResultFunction = (data) => {
+    if (data) {
+      setData(data.toString());
+    }
   };
 
   return (
@@ -46,7 +59,25 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         ) : (
           ""
         )}
-        {page === CheckinPage.Scan ? <div>b</div> : ""}
+        {page === CheckinPage.Scan ? (
+          <>
+            <QrReader
+              constraints={{ facingMode: "environment", aspectRatio: 1 }}
+              // videoStyle={{ width: "100%" }}
+              scanDelay={scan_setup.delay}
+              onResult={handleScan}
+              // videoContainerStyle={{ width: "100%"  }}
+              className={styles.ScanVideo}
+              // delay={scan_setup.delay}
+
+              // onError={this.handleError}
+              // onScan={this.handleScan}
+            />
+            <p>{data}</p>
+          </>
+        ) : (
+          ""
+        )}
       </FlexColumn>
     </div>
   );
