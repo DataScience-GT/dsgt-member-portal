@@ -17,6 +17,7 @@ import account_icon from "../../assets/icons/portrait.svg";
 import events_icon from "../../assets/icons/calendars.svg";
 import forms_icon from "../../assets/icons/form.svg";
 import feedback_icon from "../../assets/icons/comments-question.svg";
+import checkin_icon from "../../assets/icons/calendar-check.svg";
 
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 
@@ -138,6 +139,18 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
             path="/portal/announce"
           >
             Announce
+          </SidebarItem>
+        ) : (
+          ""
+        )}
+        {compareUserRoles(role || "guest", "administrator") >= 0 ? (
+          <SidebarItem
+            onClick={handleClick}
+            imgsrc={checkin_icon}
+            open={open}
+            path="/portal/checkin"
+          >
+            Check In
           </SidebarItem>
         ) : (
           ""
