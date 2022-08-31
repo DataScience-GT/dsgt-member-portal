@@ -794,6 +794,30 @@ export const getFeedback = async (
     .limit(count || 500);
 };
 
+// ---------------------------- checkin ----------------------------
+
+// get list of checkin events
+export const getCheckinEvents = async () => {
+  return await db("checkin_event").select("*");
+};
+
+/**
+ * creates a new checkin event
+ * @param name the name of the check-in event
+ * @param created_by the id of the user making the event
+ */
+export const createCheckinEvent = async (name: string, created_by: number) => {
+  await db("checkin_event").insert({ name, created_by });
+};
+
+/**
+ * deletes a checkin event
+ * @param event_id the id for the checkin event
+ */
+export const deleteCheckinEvent = async (event_id: number) => {
+  await db("checkin_event").where({ event_id }).del();
+};
+
 // ------------------------------ files ------------------------------
 export const getAllMembers = async () => {
   return await db("user").select(
