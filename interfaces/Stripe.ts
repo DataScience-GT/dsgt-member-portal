@@ -1,5 +1,5 @@
 export interface BillingDetails {
-  address: {
+  address?: {
     city: string;
     country: string;
     line1: string;
@@ -8,6 +8,6 @@ export interface BillingDetails {
     state: string;
   };
   email: string;
-  name: string;
+  name?: string;
   phone?: string;
 }

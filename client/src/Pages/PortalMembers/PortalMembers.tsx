@@ -233,6 +233,16 @@ const PortalMembers: FC<PortalMembersProps> = () => {
 
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
+      <a
+        href={`/api/file/members?session_id=${localStorage.getItem(
+          "dsgt-portal-session-key"
+        )}`}
+        className={styles.Link}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Export
+      </a>
       <InputField
         type="search"
         placeholder="Search"
