@@ -42,6 +42,10 @@ router.use("/form", ApiAuthenticate, form);
 import feedback from "./feedback";
 router.use("/feedback", ApiAuthenticate, feedback);
 
+//setup /api/checkin
+import checkin from "./checkin";
+router.use("/checkin", ApiAuthenticate, checkin);
+
 //setup /api/file
 import file from "./file";
 router.use("/file", file);
