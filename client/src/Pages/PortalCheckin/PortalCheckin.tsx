@@ -19,10 +19,20 @@ const scan_setup = {
   delay: 3000,
 };
 
+type StatusMessage = {
+  type: "success" | "error";
+  message: string;
+};
+
 const PortalCheckin: FC<PortalCheckinProps> = () => {
   // const [scan, setScan] = useState(false);
-  const [page, setPage] = useState<CheckinPage>(CheckinPage.Scan);
+  const [page, setPage] = useState<CheckinPage>(CheckinPage.Create);
   const [data, setData] = useState("No result");
+  const [status, setStatus] = useState<StatusMessage>({
+    type: "success",
+    message: "success123",
+  });
+  const [canScan, setCanScan] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,8 +40,23 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
   };
 
   const handleScan: OnResultFunction = (data) => {
-    if (data) {
-      setData(data.toString());
+    if (canScan && data) {
+      //check scan
+      //show success or fail
+      // setData(data.toString());
+      let res: StatusMessage = {
+        type: "error",
+        message: "error123",
+      };
+      setStatus(res);
+      setCanScan(false);
+      setTimeout(() => {
+        setCanScan(true);
+        setStatus({
+          type: "success",
+          message: "success123",
+        });
+      }, 2000);
     }
   };
 
@@ -73,7 +98,9 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
               // onError={this.handleError}
               // onScan={this.handleScan}
             />
-            <p>{data}</p>
+            <p className={`${styles.StatusText} ${styles[status?.type]}`}>
+              {status.message}
+            </p>
           </>
         ) : (
           ""

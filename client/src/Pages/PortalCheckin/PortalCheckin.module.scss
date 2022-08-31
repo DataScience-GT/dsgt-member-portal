@@ -8,3 +8,16 @@
   max-width: 100%;
   height: fit-content;
 }
+
+.StatusText {
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}
