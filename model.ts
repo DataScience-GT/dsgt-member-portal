@@ -793,3 +793,30 @@ export const getFeedback = async (
     .orderBy("resolved", "asc")
     .limit(count || 500);
 };
+
+// ------------------------------ files ------------------------------
+export const getAllMembers = async () => {
+  return await db("user").select(
+    "user_inc",
+    "email",
+    "fname",
+    "lname",
+    "created_at",
+    "enabled",
+    "uuid",
+    "major",
+    "minor",
+    "gtemail",
+    "personalemail",
+    "newmember",
+    "studyyear",
+    "gender",
+    "ethnicity",
+    "location",
+    "experience",
+    "interests",
+    "role",
+    "hear_about",
+    "email_consent"
+  );
+};

@@ -42,6 +42,10 @@ router.use("/form", ApiAuthenticate, form);
 import feedback from "./feedback";
 router.use("/feedback", ApiAuthenticate, feedback);
 
+//setup /api/file
+import file from "./file";
+router.use("/file", file);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the api!");
 });
