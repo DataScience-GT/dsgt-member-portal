@@ -573,17 +573,25 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
   // table.string("email");
   // table.string("name");
   // table.string("phone");
-  await db("billing_details").insert({
-    city: billing_details.address.city,
-    country: billing_details.address.country,
-    line1: billing_details.address.line1,
-    line2: billing_details.address.line2,
-    postal_code: billing_details.address.postal_code,
-    state: billing_details.address.state,
-    email: billing_details.email,
-    name: billing_details.name,
-    phone: billing_details.phone,
-  });
+  if (billing_details.address) {
+    await db("billing_details").insert({
+      city: billing_details.address.city,
+      country: billing_details.address.country,
+      line1: billing_details.address.line1,
+      line2: billing_details.address.line2,
+      postal_code: billing_details.address.postal_code,
+      state: billing_details.address.state,
+      email: billing_details.email,
+      name: billing_details.name,
+      phone: billing_details.phone,
+    });
+  } else {
+    await db("billing_details").insert({
+      email: billing_details.email,
+      name: billing_details.name,
+      phone: billing_details.phone,
+    });
+  }
 };
 
 // -------------------------- forms --------------------------
