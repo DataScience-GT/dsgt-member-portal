@@ -43,7 +43,7 @@ router.get(
       var data = parser.parse(user_data);
 
       // Send csv data to client
-      res.attachment("filename.csv");
+      res.attachment("members.csv");
       res.status(200).send(data);
     } catch (err) {
       next(err);
