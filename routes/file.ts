@@ -5,6 +5,7 @@ import {
   StatusErrorPreset,
 } from "../Classes/StatusError";
 import { getAllMembers } from "../model";
+import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 const { Parser } = require("json2csv");
 
@@ -17,12 +18,22 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 router.get(
   "/members",
   async (req: Request, res: Response, next: NextFunction) => {
-    let session_id = req.query.session_id;
+    let session_id = req.query.session_id?.toString();
     if (!session_id) {
       next(new StatusError(ErrorPreset.MissingRequiredFields));
       return;
     }
     //validate session
+    let valid = await checkSessionValid(session_id, next);
+    if (!(valid && valid.valid)) {
+      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+      return;
+    }
+    if (compareUserRoles(valid.role, "administrator") < 0) {
+      next(new StatusErrorPreset(ErrorPreset.NoPermission));
+      return;
+    }
+    //get data
     const user_data = await getAllMembers();
 
     try {
