@@ -39,6 +39,7 @@ const ValidateSession = (where: "query" | "body", required_role?: string) => {
         return;
       }
     }
+    res.locals.session = valid;
     next();
   };
 };
