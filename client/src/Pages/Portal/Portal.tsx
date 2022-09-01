@@ -53,7 +53,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
             ) : (
               ""
             )}
-            {compareUserRoles(role || "guest", "administrator") >= 0 ? (
+            {compareUserRoles(role || "guest", "moderator") >= 0 ? (
               <Route path="/checkin/*" element={<PortalCheckin />} />
             ) : (
               ""
