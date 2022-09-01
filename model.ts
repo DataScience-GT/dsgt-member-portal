@@ -818,6 +818,61 @@ export const deleteCheckinEvent = async (event_id: number) => {
   await db("checkin_event").where({ event_id }).del();
 };
 
+/**
+ * gets a list of people checked in to events
+ * @param event_id the id of the event you want to get users checked in for
+ * @returns list of users
+ */
+export const getCheckinUsers = async (event_id?: number) => {
+  if (event_id) {
+    return await db("checkin_user").select("*").where({ event_id });
+  } else {
+    return await db("checkin_user").select("*");
+  }
+};
+
+/**
+ * gets the user's id from their uuid
+ * @param uuid the user's uuid
+ * @returns user_id
+ */
+export const getUserIdFromUUID = async (uuid: string) => {
+  let res = await db("user").select("user_inc").where({ uuid });
+  if (res && res.length) {
+    return res[0].user_inc;
+  }
+};
+
+/**
+ * attempts to check a user into an event
+ * @param event_id the id for the event
+ * @param user_id the user's id
+ * @param created_by the id of the user making the event
+ */
+export const checkInUser = async (
+  event_id: number,
+  user_id: number,
+  created_by: number
+) => {
+  await db("checkin_user").insert({ event_id, user_id, created_by });
+};
+
+/**
+ * checks whether a user has been checked in for the event
+ * @param event_id the id for the event
+ * @param user_id the id for the user
+ * @returns boolean
+ */
+export const isUserCheckedIn = async (event_id: number, user_id: number) => {
+  let res = await db("checkin_user").count("*").where({ event_id, user_id });
+  if (res && res.length) {
+    let count = parseInt(res[0].count);
+    return count > 0;
+  } else {
+    return true;
+  }
+};
+
 // ------------------------------ files ------------------------------
 export const getAllMembers = async () => {
   return await db("user").select(
