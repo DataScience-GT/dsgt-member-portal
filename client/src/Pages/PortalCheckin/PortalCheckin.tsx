@@ -124,9 +124,13 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
               ? "loading..."
               : events && events.length
               ? events?.map((e, i) => (
-                  <div key={e.event_id} data-event-id={e.event_id}>
+                  <h2
+                    className={portal_styles.Minor}
+                    key={e.event_id}
+                    data-event-id={e.event_id}
+                  >
                     {e.name}
-                  </div>
+                  </h2>
                 ))
               : "No check-in events."}
           </FlexColumn>
