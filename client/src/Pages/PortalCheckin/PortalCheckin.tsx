@@ -42,6 +42,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
   const [page, setPage] = useState<CheckinPage>(CheckinPage.Manage);
 
   const [loading, setLoading] = useState(true);
+  const [loadEvents, setLoadEvents] = useState(0);
   const [events, setEvents] = useState<result_getCheckinEvents[]>();
 
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -65,7 +66,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         setScanEventId(data[0].event_id);
       }
     });
-  }, []);
+  }, [loadEvents]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -83,6 +84,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
     await createCheckinEvent(eventName, () => {
       setSuccess("Check-in event created.");
       setEventName("");
+      setLoadEvents(loadEvents + 1);
     });
   };
 
@@ -100,7 +102,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         .finally(() => {
           setTimeout(() => {
             setCanScan(true);
-          }, 2000);
+          }, 3000);
         });
     }
   };
