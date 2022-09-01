@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { QrReader, OnResultFunction } from "react-qr-reader";
 
 import styles from "./PortalCheckin.module.scss";
 import portal_styles from "../PortalPage.module.scss";
@@ -9,6 +8,7 @@ import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
 
 import {
+  checkinUser,
   createCheckinEvent,
   getCheckinEvents,
   result_getCheckinEvents,
@@ -17,6 +17,8 @@ import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import { handleChange_input_string } from "../../Scripts/InputHandler";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import SuccessText from "../../components/SuccessText/SuccessText";
+
+const QrReader = require("react-qr-reader");
 
 interface PortalCheckinProps {}
 
@@ -47,10 +49,11 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const [data, setData] = useState("No result");
+  // const [data, setData] = useState("");
+  const [scanEventId, setScanEventId] = useState(-1);
   const [status, setStatus] = useState<StatusMessage>({
     type: "success",
-    message: "success123",
+    message: "",
   });
   const [canScan, setCanScan] = useState(true);
 
@@ -58,6 +61,9 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
     getCheckinEvents((data) => {
       setLoading(false);
       setEvents(data);
+      if (data && data.length) {
+        setScanEventId(data[0].event_id);
+      }
     });
   }, []);
 
@@ -80,24 +86,22 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
     });
   };
 
-  const handleScan: OnResultFunction = (data) => {
+  const handleScan = async (data: any) => {
     if (canScan && data) {
+      setStatus({ type: "success", message: "" });
       //check scan
-      //show success or fail
-      // setData(data.toString());
-      let res: StatusMessage = {
-        type: "error",
-        message: "error123",
-      };
-      setStatus(res);
       setCanScan(false);
-      setTimeout(() => {
-        setCanScan(true);
-        setStatus({
-          type: "success",
-          message: "success123",
+      await checkinUser(scanEventId, data.toString(), (message) => {
+        setStatus({ type: "success", message });
+      })
+        .catch((err) => {
+          setStatus({ type: "error", message: err.message });
+        })
+        .finally(() => {
+          setTimeout(() => {
+            setCanScan(true);
+          }, 2000);
         });
-      }, 2000);
     }
   };
 
@@ -151,21 +155,40 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         )}
         {page === CheckinPage.Scan ? (
           <>
-            <QrReader
-              constraints={{ facingMode: "environment", aspectRatio: 1 }}
-              // videoStyle={{ width: "100%" }}
-              scanDelay={scan_setup.delay}
-              onResult={handleScan}
-              // videoContainerStyle={{ width: "100%"  }}
-              className={styles.ScanVideo}
-              // delay={scan_setup.delay}
+            {loading ? (
+              "loading..."
+            ) : (
+              <FlexColumn gap="1em">
+                <h2 className={portal_styles.Minor}>Check-in Event:</h2>
+                <InputDropdown
+                  options={events?.map((x) => x.name)}
+                  values={events?.map((x) => x.event_id)}
+                  setState={setScanEventId}
+                />
+                <QrReader
+                  // constraints={{ facingMode: "environment", aspectRatio: 1 }}
+                  // videoStyle={{ width: "100%" }}
+                  scanDelay={scan_setup.delay}
+                  onScan={handleScan}
+                  onError={(err: any) => {
+                    console.error(err);
+                    setStatus({
+                      type: "error",
+                      message: err.message,
+                    });
+                  }}
+                  // videoContainerStyle={{ width: "100%"  }}
+                  className={styles.ScanVideo}
+                  // delay={scan_setup.delay}
 
-              // onError={this.handleError}
-              // onScan={this.handleScan}
-            />
-            <p className={`${styles.StatusText} ${styles[status?.type]}`}>
-              {status.message}
-            </p>
+                  // onError={this.handleError}
+                  // onScan={this.handleScan}
+                />
+                <p className={`${styles.StatusText} ${styles[status?.type]}`}>
+                  {status.message}
+                </p>
+              </FlexColumn>
+            )}
           </>
         ) : (
           ""
