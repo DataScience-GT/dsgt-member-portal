@@ -149,7 +149,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
               }}
               placeholder="Name"
               type="text"
-              width="auto"
+              width="100%"
               required
             />
             <ErrorText>{error}</ErrorText>
@@ -195,7 +195,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
                 </p>
               </FlexColumn>
             ) : (
-              "No Events"
+              "No check-in events."
             )}
           </>
         ) : (
