@@ -145,6 +145,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
               }}
               placeholder="Name"
               type="text"
+              width="auto"
               required
             />
             <ErrorText>{error}</ErrorText>
@@ -157,8 +158,8 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
           <>
             {loading ? (
               "loading..."
-            ) : (
-              <FlexColumn gap="1em">
+            ) : events && events.length ? (
+              <FlexColumn gap="1em" width="100%">
                 <h2 className={portal_styles.Minor}>Check-in Event:</h2>
                 <InputDropdown
                   options={events?.map((x) => x.name)}
@@ -177,6 +178,7 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
                       message: err.message,
                     });
                   }}
+                  style={{ maxWidth: "100%" }}
                   // videoContainerStyle={{ width: "100%"  }}
                   className={styles.ScanVideo}
                   // delay={scan_setup.delay}
@@ -188,6 +190,8 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
                   {status.message}
                 </p>
               </FlexColumn>
+            ) : (
+              "No Events"
             )}
           </>
         ) : (
