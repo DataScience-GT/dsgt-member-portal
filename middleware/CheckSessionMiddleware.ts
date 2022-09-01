@@ -13,6 +13,12 @@ import { log, warning, error } from "../Logger";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 
+/**
+ * Validates a user's session
+ * @param where where the session_id should come from
+ * @param required_role what role is required for this request
+ * @returns middleware
+ */
 const ValidateSession = (where: "query" | "body", required_role?: string) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     let session_id;
