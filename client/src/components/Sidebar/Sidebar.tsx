@@ -143,7 +143,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
-        {compareUserRoles(role || "guest", "administrator") >= 0 ? (
+        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
             imgsrc={checkin_icon}
