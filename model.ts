@@ -796,6 +796,15 @@ export const getFeedback = async (
 
 // ---------------------------- checkin ----------------------------
 
+export const checkinEventExists = async (event_id: number) => {
+  let res = await db("checkin_event").count("*").where({ event_id });
+  if (res && res.length) {
+    let count = parseInt(res[0].count);
+    return count > 0;
+  }
+  return false;
+};
+
 // get list of checkin events
 export const getCheckinEvents = async () => {
   return await db("checkin_event").select("*");

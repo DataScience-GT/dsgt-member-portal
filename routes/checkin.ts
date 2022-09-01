@@ -6,6 +6,7 @@ import {
 } from "../Classes/StatusError";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
 import {
+  checkinEventExists,
   checkInUser,
   createCheckinEvent,
   deleteCheckinEvent,
@@ -95,6 +96,13 @@ router.post(
     let created_by: number = res.locals.session.user_id;
 
     let user_id = await getUserIdFromUUID(uuid);
+    //add check for event_id
+    let event_exists = await checkinEventExists(event_id);
+    if (!event_exists) {
+      next(new Error("Event not found"));
+      return;
+    }
+
     //check if the user has already been checked in
     let checked_in = await isUserCheckedIn(event_id, user_id);
     if (checked_in) {
@@ -104,7 +112,7 @@ router.post(
 
     //attempt to check the user in
     await checkInUser(event_id, user_id, created_by);
-    res.json({ ok: 1 });
+    res.json({ ok: 1, message: "user has been checked in!" });
   }
 );
 
