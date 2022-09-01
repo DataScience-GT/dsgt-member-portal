@@ -24,7 +24,7 @@ const ValidateSession = (where: "query" | "body", required_role?: string) => {
     }
 
     if (!session_id) {
-      next(new StatusError(ErrorPreset.MissingRequiredFields));
+      next(new StatusError(`missing session_id in ${where}`, 400));
       return;
     }
     //validate session
