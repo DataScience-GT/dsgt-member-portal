@@ -12,7 +12,7 @@ import {
   deleteCheckinEvent,
   getCheckinEvents,
   getCheckinUsers,
-  getUserIdFromUUID,
+  getUserFromUUID,
   isUserCheckedIn,
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
@@ -95,7 +95,7 @@ router.post(
     }
     let created_by: number = res.locals.session.user_id;
 
-    let user_id = await getUserIdFromUUID(uuid);
+    let user = await getUserFromUUID(uuid);
     //add check for event_id
     let event_exists = await checkinEventExists(event_id);
     if (!event_exists) {
@@ -104,15 +104,20 @@ router.post(
     }
 
     //check if the user has already been checked in
-    let checked_in = await isUserCheckedIn(event_id, user_id);
+    let checked_in = await isUserCheckedIn(event_id, user.user_id);
     if (checked_in) {
-      next(new Error("Member has aleady been checked in."));
+      next(
+        new Error(`'${user.fname} ${user.lname}' has aleady been checked in.`)
+      );
       return;
     }
 
     //attempt to check the user in
-    await checkInUser(event_id, user_id, created_by);
-    res.json({ ok: 1, message: "user has been checked in!" });
+    await checkInUser(event_id, user.user_id, created_by);
+    res.json({
+      ok: 1,
+      message: `'${user.fname} ${user.lname}' has been checked in!`,
+    });
   }
 );
 

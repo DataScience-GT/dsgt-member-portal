@@ -845,10 +845,12 @@ export const getCheckinUsers = async (event_id?: number) => {
  * @param uuid the user's uuid
  * @returns user_id
  */
-export const getUserIdFromUUID = async (uuid: string) => {
-  let res = await db("user").select("user_inc").where({ uuid });
+export const getUserFromUUID = async (uuid: string) => {
+  let res = await db("user")
+    .select("user_inc as user_id", "fname", "lname", "email")
+    .where({ uuid });
   if (res && res.length) {
-    return res[0].user_inc;
+    return res[0];
   }
 };
 
