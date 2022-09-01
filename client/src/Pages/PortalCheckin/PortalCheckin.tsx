@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { QrReader, OnResultFunction } from "react-qr-reader";
 
 import styles from "./PortalCheckin.module.scss";
@@ -8,9 +8,20 @@ import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
 
+import {
+  createCheckinEvent,
+  getCheckinEvents,
+  result_getCheckinEvents,
+} from "../../API/Checkin";
+import Modal, { ModalPreset } from "../../components/Modal/Modal";
+import { handleChange_input_string } from "../../Scripts/InputHandler";
+import ErrorText from "../../components/ErrorText/ErrorText";
+import SuccessText from "../../components/SuccessText/SuccessText";
+
 interface PortalCheckinProps {}
 
 enum CheckinPage {
+  Manage = "manage",
   Create = "create",
   Scan = "scan",
 }
@@ -26,7 +37,16 @@ type StatusMessage = {
 
 const PortalCheckin: FC<PortalCheckinProps> = () => {
   // const [scan, setScan] = useState(false);
-  const [page, setPage] = useState<CheckinPage>(CheckinPage.Create);
+  const [page, setPage] = useState<CheckinPage>(CheckinPage.Manage);
+
+  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<result_getCheckinEvents[]>();
+
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [eventName, setEventName] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const [data, setData] = useState("No result");
   const [status, setStatus] = useState<StatusMessage>({
     type: "success",
@@ -34,9 +54,30 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
   });
   const [canScan, setCanScan] = useState(true);
 
+  useEffect(() => {
+    getCheckinEvents((data) => {
+      setLoading(false);
+      setEvents(data);
+    });
+  }, []);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(1);
+    setError("");
+    setSuccess("");
+    setShowCreateModal(true);
+  };
+
+  const handleCreateEvent = async () => {
+    if (!eventName) {
+      setError("Missing name");
+      return;
+    }
+    //attempt to create the event
+    await createCheckinEvent(eventName, () => {
+      setSuccess("Check-in event created.");
+      setEventName("");
+    });
   };
 
   const handleScan: OnResultFunction = (data) => {
@@ -73,13 +114,37 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
           initialValue={page}
           setState={setPage}
         />
+        {page === CheckinPage.Manage ? (
+          <FlexColumn>
+            {loading
+              ? "loading..."
+              : events && events.length
+              ? events?.map((e, i) => (
+                  <div key={e.event_id} data-event-id={e.event_id}>
+                    {e.name}
+                  </div>
+                ))
+              : "No check-in events."}
+          </FlexColumn>
+        ) : (
+          ""
+        )}
         {page === CheckinPage.Create ? (
           <Form
             onSubmit={handleSubmit}
             maxWidth="100%"
             submitPlaceholder="Create"
           >
-            <InputField placeholder="Name" type="text" required />
+            <InputField
+              onChange={(e) => {
+                handleChange_input_string(e, setEventName);
+              }}
+              placeholder="Name"
+              type="text"
+              required
+            />
+            <ErrorText>{error}</ErrorText>
+            <SuccessText>{success}</SuccessText>
           </Form>
         ) : (
           ""
@@ -105,6 +170,14 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         ) : (
           ""
         )}
+        <Modal
+          open={showCreateModal}
+          setOpen={setShowCreateModal}
+          preset={ModalPreset.Confirm}
+          handleConfirmed={handleCreateEvent}
+        >
+          Are you sure you would like to create this check-in event?
+        </Modal>
       </FlexColumn>
     </div>
   );
