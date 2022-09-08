@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
+import ErrorText from "../../components/ErrorText/ErrorText";
 import styles from "./PortalAccount.module.scss";
 
 interface PortalAccountProps {}
@@ -33,10 +34,11 @@ const PortalAccount: FC<PortalAccountProps> = () => {
   return (
     <div className={styles.PortalAccount} data-testid="PortalAccount">
       <h1 className={styles.Major}>Account</h1>
+      <ErrorText>{error}</ErrorText>
       {loading ? (
         <div>loading...</div>
       ) : (
-        <img className={styles.qrcode} src={qrdata} />
+        <img className={styles.qrcode} src={qrdata} alt="QR Code"/>
       )}
     </div>
   );
