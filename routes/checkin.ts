@@ -8,6 +8,7 @@ import ValidateSession from "../middleware/CheckSessionMiddleware";
 import {
   checkinEventExists,
   checkInUser,
+  checkUUIDExists,
   createCheckinEvent,
   deleteCheckinEvent,
   getCheckinEvents,
@@ -95,6 +96,12 @@ router.post(
     }
     let created_by: number = res.locals.session.user_id;
 
+    //check if uuid exists
+    let uuid_exists = await checkUUIDExists(uuid);
+    if (!uuid_exists) {
+      next(new StatusError("User not found, invalid QR code.", 404))
+      return;
+    }
     let user = await getUserFromUUID(uuid);
     //add check for event_id
     let event_exists = await checkinEventExists(event_id);
