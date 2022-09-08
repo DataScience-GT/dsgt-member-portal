@@ -323,9 +323,14 @@ router.post(
       return;
     }
     //check if email exists
-    let exists = await checkUserEmail(email);
+    let exists = await checkUserEmail(email, true);
     if (!exists) {
-      next(new StatusError("Account with that email does not exist.", 404));
+      next(
+        new StatusError(
+          "Account with that email does not exist.",
+          404
+        )
+      );
       return;
     }
     //intitiate a password reset

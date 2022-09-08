@@ -189,11 +189,17 @@ export const updateUser = async ({
  * @param email string
  * @returns `true` if email has already been used, `false` otherwise
  */
-export const checkUserEmail = async (email: string) => {
-  let res = await db("user")
-    .count("*")
-    .where("email", email)
-    .orWhere("gtemail", email);
+export const checkUserEmail = async (email: string, onlyBase?: boolean) => {
+  let res;
+  if (onlyBase) {
+    res = await db("user").count("*").where("email", email);
+  } else {
+    res = await db("user")
+      .count("*")
+      .where("email", email)
+      .orWhere("gtemail", email);
+  }
+
   if (parseInt(res[0].count)) {
     return true;
   }
