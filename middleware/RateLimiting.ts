@@ -25,36 +25,35 @@ const RateLimit = (
   rate_timeframe: number | undefined
 ) => {
   return async (req: Request, res: Response, next: NextFunction) => {
-    // const clientIp = requestIp.getClientIp(req);
-    // res.locals.clientIp = clientIp;
-    // //save the request
-    // const path = req.originalUrl as string;
+    const clientIp = requestIp.getClientIp(req);
+    res.locals.clientIp = clientIp;
+    //save the request
+    const path = req.originalUrl as string;
 
     //get the rate limiting data
-    // if (path && rate_limit && rate_timeframe) {
-    //   let x = await getCountUserRequestsWithinTimeframe(
-    //     clientIp,
-    //     path,
-    //     rate_timeframe
-    //   );
-    //   let countRecent = x[0].count;
-    //   if (countRecent >= rate_limit) {
-    //     //block the request
-    //     next(
-    //       new StatusError(
-    //         "Too many requests. Please wait between requests.",
-    //         429
-    //       )
-    //     );
-    //   } else {
-    //     await insertApiRequest(clientIp, path);
-    //     next();
-    //   }
-    // } else {
-    //   await insertApiRequest(clientIp, path);
-    //   next();
-    // }
-    next();
+    if (path && rate_limit && rate_timeframe) {
+      let x = await getCountUserRequestsWithinTimeframe(
+        clientIp,
+        path,
+        rate_timeframe
+      );
+      let countRecent = x[0].count;
+      if (countRecent >= rate_limit) {
+        //block the request
+        next(
+          new StatusError(
+            "Too many requests. Please wait between requests.",
+            429
+          )
+        );
+      } else {
+        await insertApiRequest(clientIp, path);
+        next();
+      }
+    } else {
+      await insertApiRequest(clientIp, path);
+      next();
+    }
   };
 };
 
