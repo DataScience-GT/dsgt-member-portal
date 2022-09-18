@@ -106,6 +106,14 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         >
           Forms
         </SidebarItem>
+        <SidebarItem
+            onClick={handleClick}
+            imgsrc={members_icon}
+            open={open}
+            path="/portal/teams"
+          >
+            Teams
+          </SidebarItem>
 
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
