@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 import styles from "./InlineLink.module.scss";
 
 interface InlineLinkProps {
@@ -8,14 +9,14 @@ interface InlineLinkProps {
 }
 
 const InlineLink: FC<InlineLinkProps> = ({ to, children, margin }) => (
-  <a
+  <Link
     className={styles.InlineLink}
     data-testid="InlineLink"
-    href={to}
+    to={to || ""}
     style={{ margin: margin }}
   >
     {children}
-  </a>
+  </Link>
 );
 
 export default InlineLink;
