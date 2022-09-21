@@ -1,1 +1,28 @@
-.TeamCard {}
+.TeamCard {
+  border: 2px solid var(--borderColor);
+  border-radius: 0.5em;
+  padding: 1em;
+  max-width: 100%;
+}
+
+.Name {
+  color: var(--foreground);
+  font-size: 1.1em;
+}
+
+.Button {
+  background-color: var(--theme);
+  color: var(--background);
+  padding: 4px 10px;
+  text-align: center;
+  font-size: 0.8em;
+  font-weight: 500;
+  user-select: none;
+  width: 100%;
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+  &:hover {
+    filter: brightness(0.8);
+  }
+}
