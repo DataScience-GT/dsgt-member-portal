@@ -1,0 +1,14 @@
+.InlineLink {
+  display: inline-block;
+  color: inherit;
+  background: var(--background);
+  color: var(--foreground);
+  border: 2px solid var(--borderColor);
+  padding: 0.5em;
+  padding-top: 0.4em;
+  border-radius: 10px;
+  transition: var(--animDuration) background ease;
+  &:hover {
+    background: var(--hover);
+  }
+}
