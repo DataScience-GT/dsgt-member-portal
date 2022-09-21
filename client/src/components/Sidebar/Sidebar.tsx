@@ -33,7 +33,19 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
     let current_path = window.location.pathname;
     let x = document.querySelector(`div[data-active=true]`);
     x?.removeAttribute("data-active");
-    let elem = document.querySelector(`div[data-path="${current_path}"]`);
+
+    //check for home
+    let selector = `div[data-path="${current_path}"]`;
+    if (current_path === "/portal") {
+      selector = `div[data-path="/portal/home"]`;
+    } else {
+      let tags = current_path.split("/");
+      if (tags.length > 3) {
+        selector = `div[data-path="/${tags[1]}/${tags[2]}"]`;
+      }
+    }
+
+    let elem = document.querySelector(selector);
     if (elem) {
       elem.setAttribute("data-active", "true");
     }
@@ -48,11 +60,11 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       e.currentTarget.setAttribute("data-active", "true");
 
       //href
-      let path = e.currentTarget.getAttribute("data-path");
-      if (path) {
-        // window.history.pushState({}, "", path); //push to state
-        window.location.href = path;
-      }
+      // let path = e.currentTarget.getAttribute("data-path");
+      // if (path) {
+      //   // window.history.pushState({}, "", path); //push to state
+      //   window.location.href = path;
+      // }
     }
   };
 
@@ -107,13 +119,13 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           Forms
         </SidebarItem>
         <SidebarItem
-            onClick={handleClick}
-            imgsrc={members_icon}
-            open={open}
-            path="/portal/teams"
-          >
-            Teams
-          </SidebarItem>
+          onClick={handleClick}
+          imgsrc={members_icon}
+          open={open}
+          path="/portal/teams"
+        >
+          Teams
+        </SidebarItem>
 
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
