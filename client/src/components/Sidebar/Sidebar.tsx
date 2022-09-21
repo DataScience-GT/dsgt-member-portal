@@ -58,7 +58,10 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       let x = document.querySelector(`div[data-active=true]`);
       x?.removeAttribute("data-active");
       e.currentTarget.setAttribute("data-active", "true");
+      //close the sidebar
+      setOpen(false);
 
+      //old
       //href
       // let path = e.currentTarget.getAttribute("data-path");
       // if (path) {
