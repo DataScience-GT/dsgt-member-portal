@@ -22,6 +22,8 @@ function App() {
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
+    console.log(process.env);
+
     //check for theme
     let theme_stored = localStorage.getItem("dsgt-portal-theme");
     if (theme_stored) {
