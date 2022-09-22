@@ -1,2 +1,2 @@
-let something = "asda"
-    let something_eLSe = "sajkdas"
+let something = "asda";
+let something_eLSe = "sajkdas";
