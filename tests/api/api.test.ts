@@ -2,6 +2,7 @@ import app from "../../app";
 import supertest from "supertest";
 
 import bearer from "../bearer";
+require("dotenv").config();
 
 describe("Test /api", () => {
   console.log("api_key", process.env.API_KEY);
