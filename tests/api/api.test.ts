@@ -39,15 +39,15 @@ describe("Test /api", () => {
       })
       .catch(done);
   });
-  test("/api/auth with auth", (done) => {
-    supertest(app)
-      .get("/api/auth")
-      .set("Authorization", bearer)
-      .expect(200)
-      .then((res) => {
-        expect(res.body.ok).toBe(1);
-        done();
-      })
-      .catch(done);
-  });
+  // test("/api/auth with auth", (done) => {
+  //   supertest(app)
+  //     .get("/api/auth")
+  //     .set("Authorization", bearer)
+  //     .expect(200)
+  //     .then((res) => {
+  //       expect(res.body.ok).toBe(1);
+  //       done();
+  //     })
+  //     .catch(done);
+  // });
 });
