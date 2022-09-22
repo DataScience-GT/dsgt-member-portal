@@ -4,7 +4,7 @@ import supertest from "supertest";
 import bearer from "../bearer";
 
 describe("Test /api", () => {
-  console.log(bearer);
+  console.log("api_key", process.env.API_KEY);
   test("GET /api/", (done) => {
     supertest(app)
       .get("/api")
