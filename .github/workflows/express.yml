@@ -20,11 +20,11 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
+      env:
+          API_KEY: key1234
+          REACT_APP_API_KEY: key1234
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
-      env:
-        API_KEY: ${{ secrets.API_KEY }}
-        REACT_APP_API_KEY: ${{ secrets.REACT_APP_API_KEY }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
