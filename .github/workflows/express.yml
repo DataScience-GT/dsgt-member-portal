@@ -10,10 +10,9 @@ on:
     branches: [ "main" ]
 
 jobs:
-  env:
-    API_KEY: 1234
   build:
-
+    env:
+      API_KEY: 1234
     runs-on: ubuntu-latest
 
     strategy:
