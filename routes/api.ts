@@ -51,7 +51,7 @@ import file from "./file";
 router.use("/file", file);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
-  res.send("welcome to the api!");
+  res.status(200).send("welcome to the api!");
 });
 
 router.get(
