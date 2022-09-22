@@ -10,7 +10,7 @@
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "db:migrate": "cd dist && knex migrate:latest",
     "db:seed": "cd dist && knex seed:run",
-    "test": "cross-env NODE_ENV=development jest --testTimeout=10000"
+    "test": "cross-env NODE_ENV=development jest --testTimeout=10000 --detectOpenHandles"
   },
   "repository": {
     "type": "git",
