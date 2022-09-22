@@ -21,6 +21,14 @@ Hosted through Heroku.
 If you only want the backend, only start the backend. 
 
 If you only want the frontend, only start the frontend (but most of the frontend requires the backed).
+
+## Making an Account
+When booting up the portal locally for the first time, you may notice that you don't have a way to log in (The data on the production server is not the same as the data on your local server). Since we require all members to have paid their dues, we get account info from Stripe. To bypass this, you can simulate a Stripe payment through Postman. 
+
+1. Make sure you seed your database using `knex seed:run`. This will bypass the stripe payment for `test@test.com`.
+2. Next, on the login page click the `Register` button, then hit `Already Paid? Continue Registration`. Enter `test@test.com` and create your account.
+3. Run the seed command (`knex seed:run`) again in order to gain full access to the local portal.
+4. As of now there is no way to update emails, but once that exists, you can change the email of your local account.
 # Local Setup (One-Time)
 ## Frontend vs. Backend
 The frontend and backend for the portal can be run independently of each other, and run in (similar) separate ways. Read the respective sections to see how to run/setup each.
@@ -50,6 +58,7 @@ If you have not setup the backend yet on your local system, you will need to do 
 4. Go back into VSCode (or another IDE) and create a file named `.env` in the root folder. This will hold our environment variables for the backend. 
 5. In `.env`, insert the following data
     ```
+    NODE_ENV=development
     PORT=4211
     SESSION_TIMEOUT_H=20
 
@@ -60,8 +69,8 @@ If you have not setup the backend yet on your local system, you will need to do 
     DB_PASS=*your postgres password if you have one*
     DB_NAME=*the name of your database that you created*
     ```
-6. Go back to the console and run `npm run db:migrate`. This will setup your database to have the current schema. 
-7. You can also run seeds now if you are familiar with knex and have made seeds.
+6. Go back to the console and run `knex migrate:latest`. This will setup your database to have the current schema. 
+7. You can also go ahead and run the seed files to allow for you to create a starter account. To do this, run `knex seed:run`. 
 8. Run `npm run dev` to start the backend. You should see something like:
     ```
     10:50:27 AM - Starting compilation in watch mode...
