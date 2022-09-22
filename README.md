@@ -13,6 +13,10 @@ Backend: Express.js written in Typescript, data using PostgreSQL.
 
 Hosted through Heroku.
 
+## Api Documentation
+- Production: https://member.datasciencegt.org/docs
+- Development (might need  to change port): http://localhost:3000/docs
+
 # Quick Start (Already Setup)
 1. Open 2 consoles in the root folder
 2. Run `npm install && npm run dev` in console 1.
