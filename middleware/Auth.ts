@@ -12,7 +12,7 @@ const ApiAuthenticate = (
   res: Response,
   next: NextFunction
 ): void => {
-  console.log("auth", process.env.API_KEY);
+  // console.log("auth", process.env.API_KEY);
   if (req && req.headers && req.headers.authorization) {
     if (req.headers.authorization.includes("Bearer ")) {
       let auth = req.headers.authorization.split(" ")[1];
