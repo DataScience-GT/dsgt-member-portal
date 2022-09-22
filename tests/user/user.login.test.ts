@@ -3,6 +3,12 @@ import supertest from "supertest";
 
 import bearer from "../bearer";
 
+describe("fake test", () => {
+  it("should equal 4", () => {
+    expect(2 + 2).toEqual(4);
+  });
+});
+
 // describe("Test /api/user/login", () => {
 //   // test("/api/user/login with no auth", (done) => {
 //   //   supertest(app)
