@@ -5,10 +5,14 @@ name: Node Client
 
 on:
   push:
+    paths-ignore:
+      - '**.md'
     paths:
       - 'client/**'
     branches: [ "main" ]
   pull_request:
+    paths-ignore:
+      - '**.md'
     paths:
       - 'client/**'
     branches: [ "main" ]
