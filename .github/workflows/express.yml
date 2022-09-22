@@ -10,6 +10,8 @@ on:
     branches: [ "main" ]
 
 jobs:
+  env:
+    API_KEY: 1234
   build:
 
     runs-on: ubuntu-latest
@@ -26,8 +28,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-      env:
-        API_KEY: 1234
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run test
