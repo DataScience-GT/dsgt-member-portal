@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusError } from "../Classes/StatusError";
 
 //dotenv
+require("dotenv").config();
 
 /**
  * Authenticates the reqeust by a bearer api token.
@@ -11,6 +12,7 @@ const ApiAuthenticate = (
   res: Response,
   next: NextFunction
 ): void => {
+  console.log("auth", process.env.API_KEY);
   if (req && req.headers && req.headers.authorization) {
     if (req.headers.authorization.includes("Bearer ")) {
       let auth = req.headers.authorization.split(" ")[1];
