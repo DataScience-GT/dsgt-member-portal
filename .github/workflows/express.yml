@@ -12,7 +12,7 @@ on:
 jobs:
   build:
     env:
-      API_KEY: 1234
+      API_KEY: ${{ secret.API_KEY }}
     runs-on: ubuntu-latest
 
     strategy:
