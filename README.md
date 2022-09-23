@@ -71,7 +71,7 @@ If you have not setup the backend yet on your local system, you will need to do 
     API_KEY=key1234
 
     DB_HOST=localhost
-    DB_USER=*the owner the your database that you created*
+    DB_USER=*the owner of your database that you created*
     DB_PASS=*your postgres password if you have one*
     DB_NAME=*the name of your database that you created*
     ```
