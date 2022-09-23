@@ -1,0 +1,33 @@
+.ScrollableList {
+  display: inline-block;
+  border: 1px solid var(--borderColor);
+  overflow-y: auto;
+  overflow-x: visible;
+}
+
+.Item {
+  width: 100%;
+  height: fit-content;
+  padding: 3px 1em;
+  text-align: center;
+  background: var(--hover);
+  &:hover {
+    background: var(--borderColor);
+  }
+}
+
+.Clickable {
+  cursor: pointer;
+  transition: var(--animDuration) transform ease;
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.Nothing {
+  width: 100%;
+  height: fit-content;
+  padding: 3px 1em;
+  text-align: center;
+  background: var(--hover);
+}
