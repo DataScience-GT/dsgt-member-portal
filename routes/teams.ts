@@ -32,6 +32,30 @@ router.get(
   }
 );
 
+router.get(
+  "/list/my",
+  ValidateSession("query"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    //get member id from session
+    let member_id = res.locals.session.user_id;
+
+    //get a list of teams that the user is in
+    let users_teams: Team[] = [];
+
+    let teams = await getTeams();
+    for (let team of teams) {
+      if (team.members) {
+        let ids: number[] = team.members.split(",").map((m) => parseInt(m));
+        if (ids.includes(member_id)) {
+          users_teams.push(team);
+        }
+      }
+    }
+
+    res.json({ ok: 1, data: users_teams });
+  }
+);
+
 router.post(
   "/create",
   ValidateSession("body", "administrator"),
