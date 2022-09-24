@@ -4,7 +4,13 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
-import { checkTeamIdExists, createTeam, getTeam, getTeams } from "../model";
+import {
+  checkTeamIdExists,
+  createTeam,
+  getTeam,
+  getTeams,
+  updateTeam,
+} from "../model";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -51,9 +57,57 @@ router.get(
     }
 
     //get data for team
-    const team_data = await getTeam(team_id);
+    const team_data = (await getTeam(team_id))[0];
 
     res.json({ ok: 1, data: team_data });
+  }
+);
+
+router.post(
+  "/:team_id/add",
+  async (req: Request, res: Response, next: NextFunction) => {
+    //input data
+    const team_id = parseInt(req.params.team_id as string);
+    const members = req.body.members as string;
+
+    //null check on members
+    if (!members) {
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+      return;
+    }
+
+    //check team exists
+    if (!(await checkTeamIdExists(team_id))) {
+      next(new StatusError("Team not found", 404));
+      return;
+    }
+
+    //get data for team
+    const team_data = (await getTeam(team_id))[0];
+
+    let newMembers = new Set<number>(); // use a set to ignore duplicates
+
+    //keep existing members
+    if (team_data.members) {
+      team_data.members.split(",").forEach((m) => {
+        newMembers.add(parseInt(m));
+      });
+    }
+
+    //add new members
+    members.split(",").forEach((m) => {
+      newMembers.add(parseInt(m));
+    });
+
+    //update the team
+    await updateTeam(
+      team_id,
+      undefined,
+      undefined,
+      Array.from(newMembers).join(",")
+    );
+
+    res.json({ ok: 1 });
   }
 );
 

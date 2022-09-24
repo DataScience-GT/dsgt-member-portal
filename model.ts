@@ -921,22 +921,45 @@ export const getAllMembers = async () => {
 
 export const getTeams = async (count?: number) => {
   if (count && count > 0) {
-    return await db("teams").select("*").limit(count);
+    return (await db("teams").select("*").limit(count)) as {
+      team_id: number;
+      name: string;
+      description: string;
+      members: string;
+    }[];
   } else {
-    return await db("teams").select("*");
+    return (await db("teams").select("*")) as {
+      team_id: number;
+      name: string;
+      description: string;
+      members: string;
+    }[];
   }
 };
 
 export const checkTeamIdExists = async (team_id: number) => {
   let res = await db("teams").count("*").where({ team_id });
-  console.log(res);
   return res[0].count > 0;
 };
 
 export const getTeam = async (team_id: number) => {
-  return await db("teams").select("*").where({ team_id });
+  return (await db("teams").select("*").where({ team_id })) as {
+    team_id: number;
+    name: string;
+    description: string;
+    members: string;
+  }[];
 };
 
 export const createTeam = async (name: string, description?: string) => {
   await db("teams").insert({ name, description });
+};
+
+export const updateTeam = async (
+  team_id: number,
+  name?: string,
+  description?: string,
+  members?: string
+) => {
+  await db("teams").update({ name, description, members }).where({ team_id });
 };
