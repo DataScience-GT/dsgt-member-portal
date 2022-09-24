@@ -4,6 +4,7 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 import {
   checkTeamIdExists,
   createTeam,
@@ -18,16 +19,21 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the teams api!");
 });
 
-router.get("/list", async (req: Request, res: Response, next: NextFunction) => {
-  let count = parseInt(req.query.count as string);
+router.get(
+  "/list",
+  ValidateSession("query", "administrator"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let count = parseInt(req.query.count as string);
 
-  //get a list of teams (provide count if given)
-  let teams = await getTeams(count);
-  res.json({ ok: 1, data: teams });
-});
+    //get a list of teams (provide count if given)
+    let teams = await getTeams(count);
+    res.json({ ok: 1, data: teams });
+  }
+);
 
 router.post(
   "/create",
+  ValidateSession("body", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const name = req.body.name;
@@ -47,6 +53,7 @@ router.post(
 
 router.get(
   "/:team_id",
+  ValidateSession("body", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const team_id = parseInt(req.params.team_id as string);
@@ -77,6 +84,7 @@ router.get(
 
 router.post(
   "/:team_id/add",
+  ValidateSession("body", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const team_id = parseInt(req.params.team_id as string);
@@ -126,6 +134,7 @@ router.post(
 
 router.post(
   "/:team_id/remove",
+  ValidateSession("body", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const team_id = parseInt(req.params.team_id as string);
