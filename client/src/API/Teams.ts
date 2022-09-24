@@ -30,6 +30,31 @@ export const getTeams = async (
   });
 };
 
+export const getMyTeams = async (
+  callback?: (data: result_getTeams[]) => void
+) => {
+  await fetch(
+    `/api/teams/list/my?session_id=${localStorage.getItem(
+      "dsgt-portal-session-key"
+    )}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+    }
+  ).then(async (res) => {
+    const json = await res.json();
+    if (!json.ok && json.error) {
+      throw new Error(json.error);
+    } else {
+      //return the data
+      if (callback) callback(json.data);
+    }
+  });
+};
+
 export type result_getTeamData = {
   team_id: number;
   name: string;

@@ -12,6 +12,7 @@ import { handleChange_input_string } from "../../Scripts/InputHandler";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import ScrollableList from "../../components/ScrollableList/ScrollableList";
 import {
+  getMyTeams,
   getTeamData,
   getTeams,
   result_getTeamData,
@@ -25,6 +26,7 @@ interface PortalTeamsProps {
 
 const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
   const [teams, setTeams] = useState<result_getTeams[]>();
+  const [myTeams, setMyTeams] = useState<result_getTeams[]>();
 
   const [teamName, setTeamName] = useState("");
   const handleSubmit = () => {};
@@ -32,6 +34,9 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
   useEffect(() => {
     getTeams((data) => {
       setTeams(data);
+    });
+    getMyTeams((data) => {
+      setMyTeams(data);
     });
   }, []);
 
@@ -51,11 +56,11 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
                   <FlexColumn>
                     <h2 className={portal_styles.Minor}>Your Teams</h2>
                     <FlexRow gap="1em" padding="1em 0">
-                      {teams && teams.length
-                        ? teams?.map((t, i) => (
+                      {myTeams && myTeams.length
+                        ? myTeams?.map((t, i) => (
                             <TeamCard name={t.name} key={t.team_id} />
                           ))
-                        : ""}
+                        : "No Teams."}
                     </FlexRow>
                   </FlexColumn>
                   <FlexColumn>
