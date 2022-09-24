@@ -93,7 +93,7 @@ router.get(
     let team_data = (await getTeam(team_id))[0];
     team_data.member_list = [];
 
-    let to_add = team_data.members.split(",");
+    let to_add = team_data.members ? team_data.members.split(",") : [];
     for (let m of to_add) {
       let member_data = await getUserFromId(parseInt(m));
       if (!team_data.member_list) {
