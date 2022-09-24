@@ -55,6 +55,37 @@ export const getMyTeams = async (
   });
 };
 
+export type result_addMembersToTeam = {
+  ok: number;
+  not_added?: string[];
+};
+
+export const addMembersToTeam = async (
+  team_id: number,
+  emails: string[],
+  callback?: (data: result_addMembersToTeam) => void
+) => {
+  await fetch(`/api/teams/${team_id}/add`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+    },
+    body: JSON.stringify({
+      session_id: localStorage.getItem("dsgt-portal-session-key"),
+      emails: emails.join(","),
+    }),
+  }).then(async (res) => {
+    const json = await res.json();
+    if (!json.ok && json.error) {
+      throw new Error(json.error);
+    } else {
+      //return the data
+      if (callback) callback(json);
+    }
+  });
+};
+
 export type result_getTeamData = {
   team_id: number;
   name: string;
