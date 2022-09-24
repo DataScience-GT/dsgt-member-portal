@@ -954,3 +954,20 @@ export const getUserFromId = async (user_id: number) => {
     .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
     .where({ user_inc: user_id })) as TeamMember[];
 };
+
+/**
+ * Gets a user's ID from their email or gtemail
+ * @param email the user's email or gtemail
+ * @returns user's ID or -1 if not found
+ */
+export const getUserIdFromEmail = async (email: string) => {
+  let res = await db("user")
+    .select("user_inc as user_id")
+    .where({ email: email })
+    .orWhere({ gtemail: email });
+  if (res && res.length) {
+    return parseInt(res[0].user_id);
+  } else {
+    return -1;
+  }
+};

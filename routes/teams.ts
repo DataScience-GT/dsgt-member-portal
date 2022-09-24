@@ -11,6 +11,7 @@ import {
   getTeam,
   getTeams,
   getUserFromId,
+  getUserIdFromEmail,
   updateTeam,
 } from "../model";
 const router = express.Router();
@@ -88,10 +89,11 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const team_id = parseInt(req.params.team_id as string);
-    const members = req.body.members as string;
+    // const members = req.body.members as string;
+    const emails = req.body.emails as string;
 
     //null check on members
-    if (!members) {
+    if (!emails) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
@@ -115,9 +117,26 @@ router.post(
     }
 
     //add new members
-    members.split(",").forEach((m) => {
-      newMembers.add(parseInt(m));
-    });
+    // members.split(",").forEach((m) => {
+    //   newMembers.add(parseInt(m));
+    // });
+    let notAddedEmails: string[] = [];
+    let addedEmails: string[] = [];
+    for (let email of emails.split(",")) {
+      //get user id from email
+      let member_id = await getUserIdFromEmail(email.toLowerCase().trim());
+      if (member_id > 0) {
+        newMembers.add(member_id);
+        addedEmails.push(email);
+      } else {
+        notAddedEmails.push(email);
+      }
+    }
+
+    if (addedEmails.length == 0) {
+      next(new StatusError("No members found with those emails.", 400));
+      return;
+    }
 
     //update the team
     await updateTeam(
@@ -128,7 +147,7 @@ router.post(
     );
 
     //send response
-    res.json({ ok: 1 });
+    res.json({ ok: 1, not_added: notAddedEmails });
   }
 );
 
