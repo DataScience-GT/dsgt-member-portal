@@ -53,7 +53,7 @@ router.post(
 
 router.get(
   "/:team_id",
-  ValidateSession("body", "administrator"),
+  ValidateSession("query", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
     //input data
     const team_id = parseInt(req.params.team_id as string);
