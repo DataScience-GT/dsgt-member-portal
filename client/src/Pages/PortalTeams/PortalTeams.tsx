@@ -17,6 +17,7 @@ import {
   result_getTeamData,
   result_getTeams,
 } from "../../API/Teams";
+import ErrorText from "../../components/ErrorText/ErrorText";
 
 interface PortalTeamsProps {
   role?: string;
@@ -125,6 +126,7 @@ interface TeamPageProps {
 const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const { team_id } = useParams();
   const [teamData, setTeamData] = useState<result_getTeamData>();
+  const [error, setError] = useState("");
 
   const [emails, setEmails] = useState<Set<string>>();
 
@@ -156,6 +158,8 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
     if (team_id)
       getTeamData(parseInt(team_id), (data) => {
         setTeamData(data);
+      }).catch((err) => {
+        setError(err.message);
       });
   }, []);
 
@@ -166,34 +170,40 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
       </InlineLink>
       {compareUserRoles(role || "guest", "administrator") >= 0 ? (
         <FlexColumn gap="1em" padding="1em 0 0 0">
-          <h2 className={portal_styles.Minor}>Add users to team</h2>
-
-          <FlexRow gap="1em">
-            <textarea
-              className={styles.TextInput}
-              onChange={handleChange_emails}
-            ></textarea>
-
+          {!error ? (
             <>
+              <h2 className={portal_styles.Minor}>Add users to team</h2>
+
+              <FlexRow gap="1em">
+                <textarea
+                  className={styles.TextInput}
+                  onChange={handleChange_emails}
+                ></textarea>
+
+                <>
+                  <ScrollableList
+                    height="15em"
+                    minWidth="15em"
+                    width="fit-content"
+                    values={emails ? Array.from(emails) : []}
+                  />
+                </>
+              </FlexRow>
+              <h2 className={portal_styles.Minor}>Members on the team</h2>
               <ScrollableList
                 height="15em"
                 minWidth="15em"
                 width="fit-content"
-                values={emails ? Array.from(emails) : []}
+                values={
+                  teamData
+                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
+                    : []
+                }
               />
             </>
-          </FlexRow>
-          <h2 className={portal_styles.Minor}>Members on the team</h2>
-          <ScrollableList
-            height="15em"
-            minWidth="15em"
-            width="fit-content"
-            values={
-              teamData
-                ? teamData.member_list.map((d) => d.fname + " " + d.lname)
-                : []
-            }
-          />
+          ) : (
+            <ErrorText>{error}</ErrorText>
+          )}
         </FlexColumn>
       ) : (
         <>
