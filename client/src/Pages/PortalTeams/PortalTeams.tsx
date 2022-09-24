@@ -8,11 +8,15 @@ import TeamCard from "../../components/TeamCard/TeamCard";
 import InlineLink from "../../components/InlineLink/InlineLink";
 import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
-import { handleChange_input_string } from "../../Scripts/InputHandler";
+import {
+  handleChange_input_string,
+  handleChange_textarea_string,
+} from "../../Scripts/InputHandler";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import ScrollableList from "../../components/ScrollableList/ScrollableList";
 import {
   addMembersToTeam,
+  createTeam,
   getMyTeams,
   getTeamData,
   getTeams,
@@ -30,8 +34,24 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
   const [teams, setTeams] = useState<result_getTeams[]>();
   const [myTeams, setMyTeams] = useState<result_getTeams[]>();
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const [teamName, setTeamName] = useState("");
-  const handleSubmit = () => {};
+  const [teamDescription, setTeamDescription] = useState("");
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    if (!teamName) {
+      setError("Missing required field: Team Name");
+      return;
+    }
+
+    await createTeam(teamName, teamDescription, () => {
+      setSuccess("Team Created!");
+    }).catch((err) => setError(err.message));
+  };
 
   useEffect(() => {
     getTeams((data) => {
@@ -53,18 +73,18 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
           path="/"
           element={
             <>
+              <FlexColumn>
+                <h2 className={portal_styles.Minor}>Your Teams</h2>
+                <FlexRow gap="1em" padding="1em 0">
+                  {myTeams && myTeams.length
+                    ? myTeams?.map((t, i) => (
+                        <TeamCard name={t.name} key={t.team_id} />
+                      ))
+                    : "No Teams."}
+                </FlexRow>
+              </FlexColumn>
               {compareUserRoles(role || "guest", "administrator") >= 0 ? (
                 <>
-                  <FlexColumn>
-                    <h2 className={portal_styles.Minor}>Your Teams</h2>
-                    <FlexRow gap="1em" padding="1em 0">
-                      {myTeams && myTeams.length
-                        ? myTeams?.map((t, i) => (
-                            <TeamCard name={t.name} key={t.team_id} />
-                          ))
-                        : "No Teams."}
-                    </FlexRow>
-                  </FlexColumn>
                   <FlexColumn>
                     <h2 className={portal_styles.Minor}>All Teams</h2>
                     <FlexRow gap="1em" padding="1em 0 0 0">
@@ -82,7 +102,7 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
                   <FlexColumn padding="1em 0 0 0" width="100%">
                     <h2 className={portal_styles.Minor}>Create Team</h2>
                     <FlexRow
-                      gap="5em"
+                      gap="1em"
                       wrap="wrap-reverse"
                       align="flex-end"
                       width="100%"
@@ -102,11 +122,20 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
                           required
                           originalValue={teamName}
                         />
+                        <textarea
+                          className={styles.DescriptionInput}
+                          placeholder={"Description"}
+                          onChange={(e) => {
+                            handleChange_textarea_string(e, setTeamDescription);
+                          }}
+                        ></textarea>
+                        <ErrorText>{error}</ErrorText>
+                        <SuccessText>{success}</SuccessText>
                       </Form>
                       <div className={styles.SideBySide}>
                         <FlexColumn gap="20px">
                           <h1 className={portal_styles.Minor}>
-                            Here's what your team will look like to members:
+                            Here's what your team looks like:
                           </h1>
                           <TeamCard name={teamName} id={-1} />
                         </FlexColumn>
