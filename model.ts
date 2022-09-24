@@ -917,5 +917,26 @@ export const getAllMembers = async () => {
   );
 };
 
-
 // ------------------------------ teams ------------------------------
+
+export const getTeams = async (count?: number) => {
+  if (count && count > 0) {
+    return await db("teams").select("*").limit(count);
+  } else {
+    return await db("teams").select("*");
+  }
+};
+
+export const checkTeamIdExists = async (team_id: number) => {
+  let res = await db("teams").count("*").where({ team_id });
+  console.log(res);
+  return res[0].count > 0;
+};
+
+export const getTeam = async (team_id: number) => {
+  return await db("teams").select("*").where({ team_id });
+};
+
+export const createTeam = async (name: string, description?: string) => {
+  await db("teams").insert({ name, description });
+};
