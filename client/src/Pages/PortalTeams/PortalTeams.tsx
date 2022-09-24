@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./PortalTeams.module.scss";
 import portal_styles from "../PortalPage.module.scss";
 import { Route, Routes, useParams } from "react-router-dom";
@@ -11,14 +11,28 @@ import InputField from "../../components/InputField/InputField";
 import { handleChange_input_string } from "../../Scripts/InputHandler";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import ScrollableList from "../../components/ScrollableList/ScrollableList";
+import {
+  getTeamData,
+  getTeams,
+  result_getTeamData,
+  result_getTeams,
+} from "../../API/Teams";
 
 interface PortalTeamsProps {
   role?: string;
 }
 
 const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
+  const [teams, setTeams] = useState<result_getTeams[]>();
+
   const [teamName, setTeamName] = useState("");
   const handleSubmit = () => {};
+
+  useEffect(() => {
+    getTeams((data) => {
+      setTeams(data);
+    });
+  }, []);
 
   return (
     <div
@@ -36,17 +50,25 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
                   <FlexColumn>
                     <h2 className={portal_styles.Minor}>Your Teams</h2>
                     <FlexRow gap="1em" padding="1em 0">
-                      <TeamCard name="Tech Team" />
-                      <TeamCard name="Content Team" />
-                      <TeamCard name="Bootcamp In-Person" />
+                      {teams && teams.length
+                        ? teams?.map((t, i) => (
+                            <TeamCard name={t.name} key={t.team_id} />
+                          ))
+                        : ""}
                     </FlexRow>
                   </FlexColumn>
                   <FlexColumn>
                     <h2 className={portal_styles.Minor}>All Teams</h2>
                     <FlexRow gap="1em" padding="1em 0 0 0">
-                      <TeamCard name="Tech Team" id={1} />
-                      <TeamCard name="Content Team" id={2} />
-                      <TeamCard name="Bootcamp In-Person" id={3} />
+                      {teams && teams.length
+                        ? teams?.map((t, i) => (
+                            <TeamCard
+                              name={t.name}
+                              id={t.team_id}
+                              key={t.team_id}
+                            />
+                          ))
+                        : ""}
                     </FlexRow>
                   </FlexColumn>
                   <FlexColumn padding="1em 0 0 0" width="100%">
@@ -102,6 +124,8 @@ interface TeamPageProps {
 }
 const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const { team_id } = useParams();
+  const [teamData, setTeamData] = useState<result_getTeamData>();
+
   const [emails, setEmails] = useState<Set<string>>();
 
   const handleChange_emails = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -128,6 +152,13 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
     setEmails(s);
   };
 
+  useEffect(() => {
+    if (team_id)
+      getTeamData(parseInt(team_id), (data) => {
+        setTeamData(data);
+      });
+  }, []);
+
   return (
     <div className={styles.TeamPage}>
       <InlineLink to="/portal/teams" margin="1em 0 0 0">
@@ -152,6 +183,17 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
               />
             </>
           </FlexRow>
+          <h2 className={portal_styles.Minor}>Members on the team</h2>
+          <ScrollableList
+            height="15em"
+            minWidth="15em"
+            width="fit-content"
+            values={
+              teamData
+                ? teamData.member_list.map((d) => d.fname + " " + d.lname)
+                : []
+            }
+          />
         </FlexColumn>
       ) : (
         <>
