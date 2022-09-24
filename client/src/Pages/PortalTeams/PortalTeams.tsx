@@ -12,6 +12,7 @@ import { handleChange_input_string } from "../../Scripts/InputHandler";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import ScrollableList from "../../components/ScrollableList/ScrollableList";
 import {
+  addMembersToTeam,
   getMyTeams,
   getTeamData,
   getTeams,
@@ -19,6 +20,7 @@ import {
   result_getTeams,
 } from "../../API/Teams";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import SuccessText from "../../components/SuccessText/SuccessText";
 
 interface PortalTeamsProps {
   role?: string;
@@ -132,6 +134,9 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const { team_id } = useParams();
   const [teamData, setTeamData] = useState<result_getTeamData>();
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loadError, setLoadError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [emails, setEmails] = useState<Set<string>>();
 
@@ -164,9 +169,32 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
       getTeamData(parseInt(team_id), (data) => {
         setTeamData(data);
       }).catch((err) => {
-        setError(err.message);
+        setLoadError(err.message);
       });
-  }, []);
+  }, [team_id]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+    if (!emails) {
+      setError("No emails entered");
+      return;
+    }
+    if (!loading && team_id) {
+      setLoading(true);
+      addMembersToTeam(parseInt(team_id), Array.from(emails), (data) => {
+        if (data.not_added && data.not_added.length) {
+          setError(`Added all but: ${data.not_added.join(", ")}`);
+        } else {
+          setSuccess(
+            `Added ${emails.size} member${emails.size > 1 ? "s" : ""}`
+          );
+        }
+        setLoading(false);
+      }).catch((err) => setError(err.message));
+    }
+  };
 
   return (
     <div className={styles.TeamPage}>
@@ -175,25 +203,29 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
       </InlineLink>
       {compareUserRoles(role || "guest", "administrator") >= 0 ? (
         <FlexColumn gap="1em" padding="1em 0 0 0">
-          {!error ? (
+          {!loadError ? (
             <>
               <h2 className={portal_styles.Minor}>Add users to team</h2>
+              <Form width="fit-content" onSubmit={handleSubmit}>
+                <FlexRow gap="1em">
+                  <textarea
+                    className={styles.TextInput}
+                    onChange={handleChange_emails}
+                    placeholder="Emails"
+                  ></textarea>
 
-              <FlexRow gap="1em">
-                <textarea
-                  className={styles.TextInput}
-                  onChange={handleChange_emails}
-                ></textarea>
-
-                <>
-                  <ScrollableList
-                    height="15em"
-                    minWidth="15em"
-                    width="fit-content"
-                    values={emails ? Array.from(emails) : []}
-                  />
-                </>
-              </FlexRow>
+                  <>
+                    <ScrollableList
+                      height="15em"
+                      minWidth="15em"
+                      width="fit-content"
+                      values={emails ? Array.from(emails) : []}
+                    />
+                  </>
+                </FlexRow>
+                <SuccessText>{success}</SuccessText>
+                <ErrorText>{error}</ErrorText>
+              </Form>
               <h2 className={portal_styles.Minor}>Members on the team</h2>
               <ScrollableList
                 height="15em"
@@ -207,7 +239,7 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
               />
             </>
           ) : (
-            <ErrorText>{error}</ErrorText>
+            <ErrorText>{loadError}</ErrorText>
           )}
         </FlexColumn>
       ) : (

@@ -66,7 +66,7 @@ export const addMembersToTeam = async (
   callback?: (data: result_addMembersToTeam) => void
 ) => {
   await fetch(`/api/teams/${team_id}/add`, {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
