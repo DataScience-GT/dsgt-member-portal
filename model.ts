@@ -921,19 +921,9 @@ export const getAllMembers = async () => {
 
 export const getTeams = async (count?: number) => {
   if (count && count > 0) {
-    return (await db("teams").select("*").limit(count)) as {
-      team_id: number;
-      name: string;
-      description: string;
-      members: string;
-    }[];
+    return (await db("teams").select("*").limit(count)) as Team[];
   } else {
-    return (await db("teams").select("*")) as {
-      team_id: number;
-      name: string;
-      description: string;
-      members: string;
-    }[];
+    return (await db("teams").select("*")) as Team[];
   }
 };
 
@@ -943,12 +933,7 @@ export const checkTeamIdExists = async (team_id: number) => {
 };
 
 export const getTeam = async (team_id: number) => {
-  return (await db("teams").select("*").where({ team_id })) as {
-    team_id: number;
-    name: string;
-    description: string;
-    members: string;
-  }[];
+  return (await db("teams").select("*").where({ team_id })) as Team[];
 };
 
 export const createTeam = async (name: string, description?: string) => {
@@ -962,4 +947,10 @@ export const updateTeam = async (
   members?: string
 ) => {
   await db("teams").update({ name, description, members }).where({ team_id });
+};
+
+export const getUserFromId = async (user_id: number) => {
+  return (await db("user")
+    .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
+    .where({ user_inc: user_id })) as TeamMember[];
 };
