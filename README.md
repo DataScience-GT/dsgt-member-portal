@@ -87,14 +87,15 @@ If you have not setup the backend yet on your local system, you will need to do 
 
 ### Setup Postman
 1. Create a [Postman](https://postman.com) account.
-2. Have John add you to the Postman Workspace. Send your account email.
-3. Once you have been added to the workspace you can continue.
-4. download and install [Postman Agent](https://www.postman.com/downloads/postman-agent/).
-5. With the agent running, go back to Postman and you should see this at the bottom right:
+2. Create a workspace from the top left. Call it whatever you want, and make the visibilty `Personal`. You now have a workspace where you can store and send API calls to our backend server.
+3. Download and install [Postman Agent](https://www.postman.com/downloads/postman-agent/).
+4. With the agent running, go back to Postman and you should see this at the bottom right:
 
     ![Should show a check next to Postman Agent](./repo_images/postman_agent.png)
 
-6. Through Postman, send the `GET /api` request in the `/api` folder. You sould see `welcome to the api!` if the backend is currently running (step 8 of setup repository).
+5. Create an API request by hitting `New` near the top-left, and clicking `HTTP Request`. Notice you can change the request type (GET, POST, PUT, etc.), Authorization header, and much more. Keep the request as a GET request, and in the URL field, enter http://localhost:4211/api.
+6. Make sure the backend server is running on your local system, and then hit Send. Note: you won't be able to send a request without the postman agent from step 3 running. You should see: `welcome to the api!`
+
 
 ## Frontend
 ### Note
