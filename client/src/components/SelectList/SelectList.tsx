@@ -21,7 +21,7 @@ const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
     let checked = e.currentTarget.checked;
     let val = e.currentTarget.getAttribute("data-value");
     let set: Set<any> = selected ?? new Set<any>();
-    if (checked) {
+    if (!set.has(val)) {
       //add to set
       set.add(val);
     } else {
@@ -54,6 +54,8 @@ const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
               data-value={v}
               data-uid={uid}
               onChange={handleChange}
+              value={v}
+              checked={selected && selected.has(v)}
             />
             <label htmlFor={id} data-value={v} data-uid={uid}>
               {keys && keys.length ? keys[i] : v}
