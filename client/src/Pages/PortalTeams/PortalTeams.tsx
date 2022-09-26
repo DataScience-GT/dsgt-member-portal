@@ -271,10 +271,13 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
               <SelectList
                 minWidth="15em"
                 width="fit-content"
-                values={
+                keys={
                   teamData
                     ? teamData.member_list.map((d) => d.fname + " " + d.lname)
                     : []
+                }
+                values={
+                  teamData ? teamData.member_list.map((d) => d.user_id) : []
                 }
               />
             </>
