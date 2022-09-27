@@ -1,16 +1,16 @@
-import React, { FC, useState } from "react";
+import React, { FC, SetStateAction, useState } from "react";
 import styles from "./SelectList.module.scss";
 
 interface SelectListProps {
-  title?: string;
   values?: any[];
   keys?: any[];
   width?: string;
   minWidth?: string;
   maxWidth?: string;
+  onChange?: (checked: Set<any>) => void;
 }
 
-const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
+const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
   //keep track of selected values
   const [selected, setSelected] = useState<Set<any>>(new Set<any>());
 
@@ -28,7 +28,7 @@ const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
       set.delete(val);
     }
     setSelected(set);
-    console.log(set);
+    if (onChange) onChange(set);
   };
   return (
     <div className={styles.SelectList} data-testid="SelectList">
