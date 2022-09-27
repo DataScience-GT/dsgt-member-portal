@@ -4,6 +4,7 @@ import {
   StatusError,
   StatusErrorPreset,
 } from "../Classes/StatusError";
+import { Team } from "../interfaces/Team";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
 import {
   checkTeamIdExists,

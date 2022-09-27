@@ -1,4 +1,4 @@
-type Team = {
+export type Team = {
   team_id: number;
   name: string;
   description: string;
@@ -6,7 +6,7 @@ type Team = {
   member_list?: TeamMember[];
 };
 
-type TeamMember = {
+export type TeamMember = {
   user_id: number;
   fname: string;
   lname: string;

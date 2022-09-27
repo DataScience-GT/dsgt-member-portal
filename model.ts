@@ -11,6 +11,8 @@ import { Event } from "./interfaces/Event";
 import { Form } from "./interfaces/Form";
 import { Feedback } from "./interfaces/Feedback";
 
+import { Team, TeamMember } from "./interfaces/Team";
+
 const crypto = require("crypto");
 
 type ErrorWithMessage = {
