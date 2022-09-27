@@ -86,6 +86,32 @@ export const addMembersToTeam = async (
   });
 };
 
+export const removeMembersFromTeam = async (
+  team_id: number,
+  member_ids: number[],
+  callback?: () => void
+) => {
+  await fetch(`/api/teams/${team_id}/remove`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+    },
+    body: JSON.stringify({
+      session_id: localStorage.getItem("dsgt-portal-session-key"),
+      members: member_ids.join(","),
+    }),
+  }).then(async (res) => {
+    const json = await res.json();
+    if (!json.ok && json.error) {
+      throw new Error(json.error);
+    } else {
+      //return the data
+      if (callback) callback();
+    }
+  });
+};
+
 export type result_getTeamData = {
   team_id: number;
   name: string;
