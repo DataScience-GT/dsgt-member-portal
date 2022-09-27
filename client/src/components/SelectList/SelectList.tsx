@@ -12,14 +12,13 @@ interface SelectListProps {
 
 const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
   //keep track of selected values
-  const [selected, setSelected] = useState<Set<any>>();
+  const [selected, setSelected] = useState<Set<any>>(new Set<any>());
 
   //generate a random identifier for all elements in list.
   let select_id = makeid(5);
   //handle changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let checked = e.currentTarget.checked;
-    let val = e.currentTarget.getAttribute("data-value");
+    let val = e.currentTarget.value;
     let set: Set<any> = selected ?? new Set<any>();
     if (!set.has(val)) {
       //add to set
@@ -48,16 +47,17 @@ const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
         let id = `${select_id}-sl-${mid}-${uid}`;
         return (
           <div key={id} data-select-id={select_id}>
-            <input
-              id={id}
-              type={"checkbox"}
-              data-value={v}
-              data-uid={uid}
-              onChange={handleChange}
-              value={v}
-              // checked={selected && selected.has(v)}
-            />
             <label htmlFor={id} data-value={v} data-uid={uid}>
+              <input
+                key={id}
+                id={id}
+                name={id}
+                type={"checkbox"}
+                value={v}
+                data-value={v}
+                data-uid={uid}
+                onChange={handleChange}
+              />{" "}
               {keys && keys.length ? keys[i] : v}
             </label>
           </div>
