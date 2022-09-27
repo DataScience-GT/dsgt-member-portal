@@ -235,7 +235,9 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
         <FlexColumn gap="1em" padding="1em 0 0 0">
           {!loadError ? (
             <>
-              <h2 className={portal_styles.Minor}>Add Members to team</h2>
+              <h2 className={portal_styles.Minor}>
+                Add Members to {teamData?.name ?? "team"}
+              </h2>
               <Form width="fit-content" onSubmit={handleSubmit}>
                 <FlexRow gap="1em">
                   <textarea
@@ -256,18 +258,9 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
                 <SuccessText>{success}</SuccessText>
                 <ErrorText>{error}</ErrorText>
               </Form>
-              <h2 className={portal_styles.Minor}>Members on the team</h2>
-              <ScrollableList
-                height="15em"
-                minWidth="15em"
-                width="fit-content"
-                values={
-                  teamData
-                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
-                    : []
-                }
-              />
-              <h2 className={portal_styles.Minor}>Remove Members from team</h2>
+              <h2 className={portal_styles.Minor}>
+                Remove Members from {teamData?.name ?? "team"}
+              </h2>
               <SelectList
                 minWidth="15em"
                 width="fit-content"
@@ -278,6 +271,19 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
                 }
                 values={
                   teamData ? teamData.member_list.map((d) => d.user_id) : []
+                }
+              />
+              <h2 className={portal_styles.Minor}>
+                Members on {teamData?.name ?? "team"}
+              </h2>
+              <ScrollableList
+                height="15em"
+                minWidth="15em"
+                width="fit-content"
+                values={
+                  teamData
+                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
+                    : []
                 }
               />
             </>
