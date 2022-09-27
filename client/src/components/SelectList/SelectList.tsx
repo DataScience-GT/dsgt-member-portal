@@ -55,7 +55,7 @@ const SelectList: FC<SelectListProps> = ({ title, keys, values }) => {
               data-uid={uid}
               onChange={handleChange}
               value={v}
-              checked={selected && selected.has(v)}
+              // checked={selected && selected.has(v)}
             />
             <label htmlFor={id} data-value={v} data-uid={uid}>
               {keys && keys.length ? keys[i] : v}
