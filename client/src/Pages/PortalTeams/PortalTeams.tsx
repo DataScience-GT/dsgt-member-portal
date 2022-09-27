@@ -20,6 +20,7 @@ import {
   getMyTeams,
   getTeamData,
   getTeams,
+  removeMembersFromTeam,
   result_getTeamData,
   result_getTeams,
 } from "../../API/Teams";
@@ -234,20 +235,14 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
     e.preventDefault();
     setRemoveError("");
     setRemoveSuccess("");
-    if (!emails) {
-      setRemoveError("No emails entered");
+    if (!removeIds || removeIds.size < 1) {
+      setRemoveError("No members selected");
       return;
     }
     if (!loading && team_id) {
       setLoading(true);
-      addMembersToTeam(parseInt(team_id), Array.from(emails), (data) => {
-        if (data.not_added && data.not_added.length) {
-          setRemoveError(`Added all but: ${data.not_added.join(", ")}`);
-        } else {
-          setRemoveSuccess(
-            `Added ${emails.size} member${emails.size > 1 ? "s" : ""}`
-          );
-        }
+      removeMembersFromTeam(parseInt(team_id), Array.from(removeIds), () => {
+        setRemoveSuccess("Members removed from team.");
         setLoading(false);
       }).catch((err) => setRemoveError(err.message));
     }
@@ -296,24 +291,34 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
                 <SuccessText>{addSuccess}</SuccessText>
                 <ErrorText>{addError}</ErrorText>
               </Form>
-              <Form width="fit-content" onSubmit={handleRemove}>
-                <h2 className={portal_styles.Minor}>Remove members</h2>
-                <SelectList
-                  minWidth="15em"
-                  width="fit-content"
-                  keys={
-                    teamData
-                      ? teamData.member_list.map((d) => d.fname + " " + d.lname)
-                      : []
-                  }
-                  values={
-                    teamData ? teamData.member_list.map((d) => d.user_id) : []
-                  }
-                  onChange={(checked) => {
-                    setRemoveIds(checked);
-                  }}
-                />
-              </Form>
+              {teamData &&
+              teamData.member_list &&
+              teamData.member_list.length > 0 ? (
+                <Form width="fit-content" onSubmit={handleRemove}>
+                  <h2 className={portal_styles.Minor}>Remove members</h2>
+                  <SelectList
+                    minWidth="15em"
+                    width="fit-content"
+                    keys={
+                      teamData
+                        ? teamData.member_list.map(
+                            (d) => d.fname + " " + d.lname
+                          )
+                        : []
+                    }
+                    values={
+                      teamData ? teamData.member_list.map((d) => d.user_id) : []
+                    }
+                    onChange={(checked) => {
+                      setRemoveIds(checked);
+                    }}
+                  />
+                  <SuccessText>{removeSuccess}</SuccessText>
+                  <ErrorText>{addSuccess}</ErrorText>
+                </Form>
+              ) : (
+                ""
+              )}
             </>
           ) : (
             <ErrorText>{loadError}</ErrorText>
