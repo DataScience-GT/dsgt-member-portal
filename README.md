@@ -71,7 +71,7 @@ If you have not setup the backend yet on your local system, you will need to do 
     API_KEY=key1234
 
     DB_HOST=localhost
-    DB_USER=*the owner the your database that you created*
+    DB_USER=*the owner of your database that you created*
     DB_PASS=*your postgres password if you have one*
     DB_NAME=*the name of your database that you created*
     ```
@@ -95,6 +95,7 @@ If you have not setup the backend yet on your local system, you will need to do 
 
 5. Create an API request by hitting `New` near the top-left, and clicking `HTTP Request`. Notice you can change the request type (GET, POST, PUT, etc.), Authorization header, and much more. Keep the request as a GET request, and in the URL field, enter http://localhost:4211/api.
 6. Make sure the backend server is running on your local system, and then hit Send. Note: you won't be able to send a request without the postman agent from step 3 running. You should see: `welcome to the api!`
+
 
 ## Frontend
 ### Note
