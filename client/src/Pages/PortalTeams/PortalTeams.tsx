@@ -163,12 +163,16 @@ interface TeamPageProps {
 const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const { team_id } = useParams();
   const [teamData, setTeamData] = useState<result_getTeamData>();
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [loadError, setLoadError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [emails, setEmails] = useState<Set<string>>();
+  const [addError, setAddError] = useState("");
+  const [addSuccess, setAddSuccess] = useState("");
+
+  const [removeIds, setRemoveIds] = useState<Set<number>>(new Set());
+  const [removeError, setRemoveError] = useState("");
+  const [removeSuccess, setRemoveSuccess] = useState("");
 
   const handleChange_emails = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let newValue = e.currentTarget.value;
@@ -203,26 +207,49 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
       });
   }, [team_id]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAdd = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setAddError("");
+    setAddSuccess("");
     if (!emails) {
-      setError("No emails entered");
+      setAddError("No emails entered");
       return;
     }
     if (!loading && team_id) {
       setLoading(true);
       addMembersToTeam(parseInt(team_id), Array.from(emails), (data) => {
         if (data.not_added && data.not_added.length) {
-          setError(`Added all but: ${data.not_added.join(", ")}`);
+          setAddError(`Added all but: ${data.not_added.join(", ")}`);
         } else {
-          setSuccess(
+          setAddSuccess(
             `Added ${emails.size} member${emails.size > 1 ? "s" : ""}`
           );
         }
         setLoading(false);
-      }).catch((err) => setError(err.message));
+      }).catch((err) => setAddError(err.message));
+    }
+  };
+
+  const handleRemove = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setRemoveError("");
+    setRemoveSuccess("");
+    if (!emails) {
+      setRemoveError("No emails entered");
+      return;
+    }
+    if (!loading && team_id) {
+      setLoading(true);
+      addMembersToTeam(parseInt(team_id), Array.from(emails), (data) => {
+        if (data.not_added && data.not_added.length) {
+          setRemoveError(`Added all but: ${data.not_added.join(", ")}`);
+        } else {
+          setRemoveSuccess(
+            `Added ${emails.size} member${emails.size > 1 ? "s" : ""}`
+          );
+        }
+        setLoading(false);
+      }).catch((err) => setRemoveError(err.message));
     }
   };
 
@@ -236,9 +263,20 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
           {!loadError ? (
             <>
               <h2 className={portal_styles.Minor}>
-                Add Members to {teamData?.name ?? "team"}
+                Members on {teamData?.name ?? "team"}
               </h2>
-              <Form width="fit-content" onSubmit={handleSubmit}>
+              <ScrollableList
+                height="15em"
+                minWidth="15em"
+                width="fit-content"
+                values={
+                  teamData
+                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
+                    : []
+                }
+              />
+              <h2 className={portal_styles.Minor}>Add members</h2>
+              <Form width="fit-content" onSubmit={handleAdd}>
                 <FlexRow gap="1em">
                   <textarea
                     className={styles.TextInput}
@@ -255,37 +293,27 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
                     />
                   </>
                 </FlexRow>
-                <SuccessText>{success}</SuccessText>
-                <ErrorText>{error}</ErrorText>
+                <SuccessText>{addSuccess}</SuccessText>
+                <ErrorText>{addError}</ErrorText>
               </Form>
-              <h2 className={portal_styles.Minor}>
-                Remove Members from {teamData?.name ?? "team"}
-              </h2>
-              <SelectList
-                minWidth="15em"
-                width="fit-content"
-                keys={
-                  teamData
-                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
-                    : []
-                }
-                values={
-                  teamData ? teamData.member_list.map((d) => d.user_id) : []
-                }
-              />
-              <h2 className={portal_styles.Minor}>
-                Members on {teamData?.name ?? "team"}
-              </h2>
-              <ScrollableList
-                height="15em"
-                minWidth="15em"
-                width="fit-content"
-                values={
-                  teamData
-                    ? teamData.member_list.map((d) => d.fname + " " + d.lname)
-                    : []
-                }
-              />
+              <Form width="fit-content" onSubmit={handleRemove}>
+                <h2 className={portal_styles.Minor}>Remove members</h2>
+                <SelectList
+                  minWidth="15em"
+                  width="fit-content"
+                  keys={
+                    teamData
+                      ? teamData.member_list.map((d) => d.fname + " " + d.lname)
+                      : []
+                  }
+                  values={
+                    teamData ? teamData.member_list.map((d) => d.user_id) : []
+                  }
+                  onChange={(checked) => {
+                    setRemoveIds(checked);
+                  }}
+                />
+              </Form>
             </>
           ) : (
             <ErrorText>{loadError}</ErrorText>
