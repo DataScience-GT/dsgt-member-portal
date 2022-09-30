@@ -12,22 +12,23 @@ interface SelectListProps {
 
 const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
   //keep track of selected values
-  const [selected, setSelected] = useState<Set<any>>(new Set<any>());
+  const [checked, setChecked] = useState<Set<any>>(new Set<any>());
 
   //generate a random identifier for all elements in list.
   let select_id = makeid(5);
   //handle changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let val = e.currentTarget.value;
-    let set: Set<any> = selected ?? new Set<any>();
-    if (!set.has(val)) {
+    let set: Set<any> = checked;
+    if (e.currentTarget.checked) {
       //add to set
       set.add(val);
     } else {
       //remove from set
       set.delete(val);
     }
-    setSelected(set);
+    setChecked(set);
+    console.log(set);
     if (onChange) onChange(set);
   };
   return (
@@ -46,10 +47,10 @@ const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
         //create full html id
         let id = `${select_id}-sl-${mid}-${uid}`;
         return (
-          <div key={id} data-select-id={select_id}>
+          <div key={"1-" + id} data-select-id={select_id}>
             <label htmlFor={id} data-value={v} data-uid={uid}>
               <input
-                key={id}
+                key={"2-" + id}
                 id={id}
                 name={id}
                 type={"checkbox"}
@@ -57,6 +58,7 @@ const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
                 data-value={v}
                 data-uid={uid}
                 onChange={handleChange}
+                checked={checked.has(v)}
               />{" "}
               {keys && keys.length ? keys[i] : v}
             </label>
