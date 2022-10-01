@@ -9,7 +9,7 @@ export const getTeams = async (
   callback?: (data: result_getTeams[]) => void
 ) => {
   await fetch(
-    `/api/teams/list?session_id=${localStorage.getItem(
+    `/api/team/list?session_id=${localStorage.getItem(
       "dsgt-portal-session-key"
     )}`,
     {
@@ -34,7 +34,7 @@ export const getMyTeams = async (
   callback?: (data: result_getTeams[]) => void
 ) => {
   await fetch(
-    `/api/teams/list/my?session_id=${localStorage.getItem(
+    `/api/team/list/my?session_id=${localStorage.getItem(
       "dsgt-portal-session-key"
     )}`,
     {
@@ -65,7 +65,7 @@ export const addMembersToTeam = async (
   emails: string[],
   callback?: (data: result_addMembersToTeam) => void
 ) => {
-  await fetch(`/api/teams/${team_id}/add`, {
+  await fetch(`/api/team/${team_id}/add`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -91,7 +91,7 @@ export const removeMembersFromTeam = async (
   member_ids: number[],
   callback?: () => void
 ) => {
-  await fetch(`/api/teams/${team_id}/remove`, {
+  await fetch(`/api/team/${team_id}/remove`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -133,7 +133,7 @@ export const getTeamData = async (
   callback?: (data: result_getTeamData) => void
 ) => {
   await fetch(
-    `/api/teams/${team_id}?session_id=${localStorage.getItem(
+    `/api/team/${team_id}?session_id=${localStorage.getItem(
       "dsgt-portal-session-key"
     )}`,
     {
@@ -159,7 +159,7 @@ export const createTeam = async (
   team_description?: string,
   callback?: () => void
 ) => {
-  await fetch(`/api/teams/create`, {
+  await fetch(`/api/team/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
