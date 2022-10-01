@@ -7,29 +7,27 @@ interface SelectListProps {
   width?: string;
   minWidth?: string;
   maxWidth?: string;
-  onChange?: (checked: Set<any>) => void;
+  onChange?: (checked: any[]) => void;
 }
 
 const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
   //keep track of selected values
-  const [checked, setChecked] = useState<Set<any>>(new Set<any>());
+  const [selected, setSelected] = useState<any[]>([]);
 
   //generate a random identifier for all elements in list.
   let select_id = makeid(5);
   //handle changes
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let val = e.currentTarget.value;
-    let set: Set<any> = checked;
-    if (e.currentTarget.checked) {
+  const handleCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let newChecked = [...selected];
+    if (e.target.checked) {
       //add to set
-      set.add(val);
+      newChecked = [...selected, e.target.value];
     } else {
       //remove from set
-      set.delete(val);
+      newChecked.splice(newChecked.indexOf(e.target.value), 1);
     }
-    setChecked(set);
-    console.log(set);
-    if (onChange) onChange(set);
+    setSelected(newChecked)
+    // if (onChange) onChange(set);
   };
   return (
     <div className={styles.SelectList} data-testid="SelectList">
@@ -47,18 +45,17 @@ const SelectList: FC<SelectListProps> = ({ keys, values, onChange }) => {
         //create full html id
         let id = `${select_id}-sl-${mid}-${uid}`;
         return (
-          <div key={"1-" + id} data-select-id={select_id}>
+          <div key={"key-" + id} data-select-id={select_id}>
             <label htmlFor={id} data-value={v} data-uid={uid}>
               <input
-                key={"2-" + id}
                 id={id}
-                name={id}
+                // name={id}
                 type={"checkbox"}
                 value={v}
-                data-value={v}
-                data-uid={uid}
-                onChange={handleChange}
-                checked={checked.has(v)}
+                // data-value={v}
+                // data-uid={uid}
+                onChange={handleCheck}
+                // checked={selected.includes(v) ?? false}
               />{" "}
               {keys && keys.length ? keys[i] : v}
             </label>

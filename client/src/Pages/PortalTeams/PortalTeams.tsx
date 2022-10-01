@@ -171,7 +171,7 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const [addError, setAddError] = useState("");
   const [addSuccess, setAddSuccess] = useState("");
 
-  const [removeIds, setRemoveIds] = useState<Set<number>>(new Set());
+  const [removeIds, setRemoveIds] = useState<number[]>([]);
   const [removeError, setRemoveError] = useState("");
   const [removeSuccess, setRemoveSuccess] = useState("");
 
@@ -235,7 +235,7 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
     e.preventDefault();
     setRemoveError("");
     setRemoveSuccess("");
-    if (!removeIds || removeIds.size < 1) {
+    if (!removeIds || removeIds.length < 1) {
       setRemoveError("No members selected");
       return;
     }
