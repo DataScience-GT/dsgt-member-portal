@@ -11,6 +11,8 @@ import { Event } from "./interfaces/Event";
 import { Form } from "./interfaces/Form";
 import { Feedback } from "./interfaces/Feedback";
 
+import { Team, TeamMember } from "./interfaces/Team";
+
 const crypto = require("crypto");
 
 type ErrorWithMessage = {
@@ -915,4 +917,59 @@ export const getAllMembers = async () => {
     "hear_about",
     "email_consent"
   );
+};
+
+// ------------------------------ teams ------------------------------
+
+export const getTeams = async (count?: number) => {
+  if (count && count > 0) {
+    return (await db("teams").select("*").limit(count)) as Team[];
+  } else {
+    return (await db("teams").select("*")) as Team[];
+  }
+};
+
+export const checkTeamIdExists = async (team_id: number) => {
+  let res = await db("teams").count("*").where({ team_id });
+  return res[0].count > 0;
+};
+
+export const getTeam = async (team_id: number) => {
+  return (await db("teams").select("*").where({ team_id })) as Team[];
+};
+
+export const createTeam = async (name: string, description?: string) => {
+  await db("teams").insert({ name, description });
+};
+
+export const updateTeam = async (
+  team_id: number,
+  name?: string,
+  description?: string,
+  members?: string
+) => {
+  await db("teams").update({ name, description, members }).where({ team_id });
+};
+
+export const getUserFromId = async (user_id: number) => {
+  return (await db("user")
+    .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
+    .where({ user_inc: user_id })) as TeamMember[];
+};
+
+/**
+ * Gets a user's ID from their email or gtemail
+ * @param email the user's email or gtemail
+ * @returns user's ID or -1 if not found
+ */
+export const getUserIdFromEmail = async (email: string) => {
+  let res = await db("user")
+    .select("user_inc as user_id")
+    .where({ email: email })
+    .orWhere({ gtemail: email });
+  if (res && res.length) {
+    return parseInt(res[0].user_id);
+  } else {
+    return -1;
+  }
 };

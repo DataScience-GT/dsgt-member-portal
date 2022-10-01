@@ -11,7 +11,8 @@ import right_arrow_icon from "../../assets/icons/angle-right.svg";
 
 import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
-import members_icon from "../../assets/icons/users-alt.svg";
+import teams_icon from "../../assets/icons/users-alt.svg";
+import members_icon from "../../assets/icons/list.svg";
 import megaphone_icon from "../../assets/icons/megaphone.svg";
 import account_icon from "../../assets/icons/portrait.svg";
 import events_icon from "../../assets/icons/calendars.svg";
@@ -33,7 +34,19 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
     let current_path = window.location.pathname;
     let x = document.querySelector(`div[data-active=true]`);
     x?.removeAttribute("data-active");
-    let elem = document.querySelector(`div[data-path="${current_path}"]`);
+
+    //check for home
+    let selector = `div[data-path="${current_path}"]`;
+    if (current_path === "/portal") {
+      selector = `div[data-path="/portal/home"]`;
+    } else {
+      let tags = current_path.split("/");
+      if (tags.length > 3) {
+        selector = `div[data-path="/${tags[1]}/${tags[2]}"]`;
+      }
+    }
+
+    let elem = document.querySelector(selector);
     if (elem) {
       elem.setAttribute("data-active", "true");
     }
@@ -46,13 +59,16 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       let x = document.querySelector(`div[data-active=true]`);
       x?.removeAttribute("data-active");
       e.currentTarget.setAttribute("data-active", "true");
+      //close the sidebar
+      setOpen(false);
 
+      //old
       //href
-      let path = e.currentTarget.getAttribute("data-path");
-      if (path) {
-        // window.history.pushState({}, "", path); //push to state
-        window.location.href = path;
-      }
+      // let path = e.currentTarget.getAttribute("data-path");
+      // if (path) {
+      //   // window.history.pushState({}, "", path); //push to state
+      //   window.location.href = path;
+      // }
     }
   };
 
@@ -105,6 +121,14 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           path="/portal/forms"
         >
           Forms
+        </SidebarItem>
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={teams_icon}
+          open={open}
+          path="/portal/teams"
+        >
+          Teams
         </SidebarItem>
 
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (

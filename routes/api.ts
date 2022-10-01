@@ -46,6 +46,10 @@ router.use("/feedback", ApiAuthenticate, feedback);
 import checkin from "./checkin";
 router.use("/checkin", ApiAuthenticate, checkin);
 
+//setup /api/teams
+import team from "./team";
+router.use("/team", ApiAuthenticate, team);
+
 //setup /api/file
 import file from "./file";
 router.use("/file", file);
