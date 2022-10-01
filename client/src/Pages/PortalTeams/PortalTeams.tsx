@@ -171,7 +171,7 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
   const [addError, setAddError] = useState("");
   const [addSuccess, setAddSuccess] = useState("");
 
-  const [removeIds, setRemoveIds] = useState<number[]>([]);
+  const [removeIds, setRemoveIds] = useState<Set<number>>(new Set());
   const [removeError, setRemoveError] = useState("");
   const [removeSuccess, setRemoveSuccess] = useState("");
 
@@ -235,15 +235,16 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
     e.preventDefault();
     setRemoveError("");
     setRemoveSuccess("");
-    if (!removeIds || removeIds.length < 1) {
+    if (!removeIds || removeIds.size < 1) {
       setRemoveError("No members selected");
       return;
     }
     if (!loading && team_id) {
       setLoading(true);
       removeMembersFromTeam(parseInt(team_id), Array.from(removeIds), () => {
-        setRemoveSuccess("Members removed from team.");
+        setRemoveSuccess("Member(s) removed from team.");
         setLoading(false);
+        // window.location.reload();
       }).catch((err) => setRemoveError(err.message));
     }
   };
@@ -296,25 +297,33 @@ const TeamPage: FC<TeamPageProps> = ({ role }) => {
               teamData.member_list.length > 0 ? (
                 <Form width="fit-content" onSubmit={handleRemove}>
                   <h2 className={portal_styles.Minor}>Remove members</h2>
-                  <SelectList
-                    minWidth="15em"
-                    width="fit-content"
-                    keys={
-                      teamData
-                        ? teamData.member_list.map(
-                            (d) => d.fname + " " + d.lname
-                          )
-                        : []
-                    }
-                    values={
-                      teamData ? teamData.member_list.map((d) => d.user_id) : []
-                    }
-                    onChange={(checked) => {
-                      setRemoveIds(checked);
-                    }}
-                  />
+                  {teamData.member_list.map((member, i) => {
+                    let id = `member-${member.user_id}`;
+                    return (
+                      <div key={"key-" + member.user_id}>
+                        <input
+                          name={"remove-members"}
+                          id={id}
+                          type={"checkbox"}
+                          onChange={(e) => {
+                            let checked = e.currentTarget.checked;
+                            let set = new Set(removeIds);
+                            if (checked) {
+                              set.add(member.user_id);
+                            } else {
+                              set.delete(member.user_id);
+                            }
+                            setRemoveIds(set);
+                          }}
+                        />
+                        <label
+                          htmlFor={id}
+                        >{` ${member.fname} ${member.lname}`}</label>
+                      </div>
+                    );
+                  })}
                   <SuccessText>{removeSuccess}</SuccessText>
-                  <ErrorText>{addSuccess}</ErrorText>
+                  <ErrorText>{removeError}</ErrorText>
                 </Form>
               ) : (
                 ""
