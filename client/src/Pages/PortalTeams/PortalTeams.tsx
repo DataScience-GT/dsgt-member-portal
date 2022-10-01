@@ -26,7 +26,6 @@ import {
 } from "../../API/Teams";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import SuccessText from "../../components/SuccessText/SuccessText";
-import SelectList from "../../components/SelectList/SelectList";
 
 interface PortalTeamsProps {
   role?: string;
