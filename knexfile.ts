@@ -1,8 +1,6 @@
 require("dotenv").config();
 const pg = require("pg");
 
-export {};
-
 // Update with your config settings.
 if (process.env.DATABASE_URL) {
   pg.defaults.ssl = { rejectUnauthorized: false };
