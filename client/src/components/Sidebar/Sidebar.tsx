@@ -11,7 +11,8 @@ import right_arrow_icon from "../../assets/icons/angle-right.svg";
 
 import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
-import members_icon from "../../assets/icons/users-alt.svg";
+import teams_icon from "../../assets/icons/users-alt.svg";
+import members_icon from "../../assets/icons/list.svg";
 import megaphone_icon from "../../assets/icons/megaphone.svg";
 import account_icon from "../../assets/icons/portrait.svg";
 import events_icon from "../../assets/icons/calendars.svg";
@@ -123,7 +124,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         </SidebarItem>
         <SidebarItem
           onClick={handleClick}
-          imgsrc={members_icon}
+          imgsrc={teams_icon}
           open={open}
           path="/portal/teams"
         >
