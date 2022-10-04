@@ -108,6 +108,6 @@ In order to load most of the views in the frontend site, you will need the backe
     ```
 
     This should be the same API_KEY in your backend `.env`
-3. Run the command `npm install` in the console.
+3. Run the command `npm install --force` in the console.
 4. Run the command `npm run start` in the console.
 5. The website should open in 1-2 minutes. You can see the status of this in the console.
