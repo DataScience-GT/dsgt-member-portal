@@ -6,10 +6,14 @@ import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 const router = express.Router();
 
+// All urls in this file have the path /api/form
+
+// Simple welcome message at the endpoint /api/form
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the form api!");
 });
 
+// Can get first few forms using the parameter count like /get?count=1 or simply form/get for all the forms
 router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
   let countString = req.query.count?.toString();
   let count: number = 500;
@@ -20,6 +24,7 @@ router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
   res.send({ ok: 1, data: forms });
 });
 
+// Create a new form: Requires session id, name, time, url, in body of request. Also requires that user is a moderator(set the bearer_token).
 router.post(
   "/create",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -53,6 +58,7 @@ router.post(
   }
 );
 
+// Delete a form: Requires session_id and form_id and user must be a moderator.
 router.delete(
   "/remove",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -81,6 +87,7 @@ router.delete(
     }
   }
 );
+
 
 module.exports = router;
 export default router;
