@@ -5,21 +5,35 @@ import styles from "./EventCard.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 
 interface EventCardProps {
+  // The name of the event
   name?: string;
+  // The event location
   location?: string;
+  // A short-hand event description
   shortDescription?: string;
+  // An extended event description
   longDescription?: string;
+  // The event start date
   startDate?: string;
+  // The event start time
   startTime?: string;
+  // The event end date
   endDate?: string;
+  // The event end time
   endTime?: string;
+  // The link to an associated event image
   imageSRC?: string;
+  // Represents whether the event card includes the long or short description
   big?: boolean;
+  // Whether the event card scrolls with the screen
   sticky?: boolean;
+  // Link for the "Learn More" button after the event description
   link?: string;
+  // Whether the event card is deletable
   deletable?: boolean;
 }
 
+// Functional component, renders EventCards on homepage
 const EventCard: FC<EventCardProps> = ({
   name,
   location,
@@ -40,6 +54,7 @@ const EventCard: FC<EventCardProps> = ({
   const format_hour = "numeric";
   const format_minute = "numeric";
 
+  // Retrieves the start & end dates and checks if they are in the current year
   let leftDate = [];
   let sameYear = false;
   if (startDate && endDate) {
@@ -66,6 +81,7 @@ const EventCard: FC<EventCardProps> = ({
     }
   }
 
+  // Formats dates and times in English-readable format "MM/DD/YYYY, XX:XX AM/PM"
   if (startDate && startTime) {
     let d = new Date(`${startDate} ${startTime}`);
     if (sameYear) {
@@ -122,6 +138,7 @@ const EventCard: FC<EventCardProps> = ({
       rightDate.push(ed.toLocaleDateString("en-us"));
     }
   }
+  // Formats the start & end dates/times for rendering
   let datetime = "";
   const joinSymbol = ", ";
   if (leftDate.length && rightDate.length) {
@@ -132,6 +149,7 @@ const EventCard: FC<EventCardProps> = ({
     datetime = rightDate.join(joinSymbol);
   }
 
+  // Decides which event description to show
   let desc = "Event Description 1";
 
   if (big) {
@@ -144,7 +162,7 @@ const EventCard: FC<EventCardProps> = ({
     desc = shortDescription;
   }
 
-  //check if an ongoing event
+  // Check if the event is ongoing
   let ongoing = false;
   let timeLeft = "";
   if (startDate && endDate) {
@@ -154,7 +172,7 @@ const EventCard: FC<EventCardProps> = ({
 
     if (now.getTime() <= ed.getTime() && now.getTime() >= sd.getTime()) {
       ongoing = true;
-      //calculate time until ending
+      // Calculate time until the end of the event
       let milliseconds = ed.getTime() - now.getTime();
       let seconds = Math.floor(milliseconds / 1000);
       let minutes = Math.floor(seconds / 60);
@@ -190,6 +208,7 @@ const EventCard: FC<EventCardProps> = ({
     }
   }
 
+  // Actual frontend rendering
   return (
     <div
       className={`${styles.EventCard} ${big ? styles.BigEventCard : ""} ${
