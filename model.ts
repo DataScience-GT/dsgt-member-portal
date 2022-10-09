@@ -765,13 +765,13 @@ export const deleteform = async (formId: number) => {
   await db("forms").where("form_id", formId).del();
 };
 
-// ------------------------ Feedback ------------------------
+// ------------------------ FEEDBACK ------------------------
 
+/**
+ * Creates and inserts feedback details into db.
+ * @param f feedback retrieved from the feedback form
+ */
 export const createFeedback = async (f: Feedback) => {
-  // table.string("name");
-  // table.string("time");
-  // table.string("url", 1000);
-  // table.boolean("enabled").defaultTo(true);
   await db("feedback").insert({
     user_id: f.user_id,
     satisfaction: f.satisfaction,
@@ -781,11 +781,16 @@ export const createFeedback = async (f: Feedback) => {
   });
 };
 
+/**
+ * Retrieve feedback from database.
+ * @param feedbackType the type of feedback
+ * @param count (optional) how many rows to query
+ */
 export const getFeedback = async (
   feedbackType: "bug" | "feature" | "change",
   count?: number
 ) => {
-  return await db("feedback")
+  await db("feedback")
     .select(
       "feedback_id",
       "action",
@@ -802,8 +807,12 @@ export const getFeedback = async (
     .limit(count || 500);
 };
 
-// ---------------------------- checkin ----------------------------
-
+// ---------------------------- CHECKIN ----------------------------
+/**
+ * Return whether the given event_id is valid.
+ * @param event_id the id of an event
+ * @returns boolean
+ */
 export const checkinEventExists = async (event_id: number) => {
   let res = await db("checkin_event").count("*").where({ event_id });
   if (res && res.length) {
@@ -813,13 +822,15 @@ export const checkinEventExists = async (event_id: number) => {
   return false;
 };
 
-// get list of checkin events
+/**
+ * Retrieves all check-in events from db.
+ */
 export const getCheckinEvents = async () => {
-  return await db("checkin_event").select("*");
+  await db("checkin_event").select("*");
 };
 
 /**
- * creates a new checkin event
+ * Creates a new checkin event.
  * @param name the name of the check-in event
  * @param created_by the id of the user making the event
  */
@@ -828,7 +839,7 @@ export const createCheckinEvent = async (name: string, created_by: number) => {
 };
 
 /**
- * deletes a checkin event
+ * Deletes a checkin event.
  * @param event_id the id for the checkin event
  */
 export const deleteCheckinEvent = async (event_id: number) => {
@@ -836,22 +847,22 @@ export const deleteCheckinEvent = async (event_id: number) => {
 };
 
 /**
- * gets a list of people checked in to events
+ * Gets a list of people checked in to events.
  * @param event_id the id of the event you want to get users checked in for
  * @returns list of users
  */
 export const getCheckinUsers = async (event_id?: number) => {
   if (event_id) {
-    return await db("checkin_user").select("*").where({ event_id });
+    await db("checkin_user").select("*").where({ event_id });
   } else {
-    return await db("checkin_user").select("*");
+    await db("checkin_user").select("*");
   }
 };
 
 /**
- * gets the user's id from their uuid
+ * Gets the user's id from their uuid.
  * @param uuid the user's uuid
- * @returns user_id
+ * @returns user id
  */
 export const getUserFromUUID = async (uuid: string) => {
   let res = await db("user")
@@ -863,7 +874,7 @@ export const getUserFromUUID = async (uuid: string) => {
 };
 
 /**
- * attempts to check a user into an event
+ * Attempts to check a user into an event.
  * @param event_id the id for the event
  * @param user_id the user's id
  * @param created_by the id of the user making the event
@@ -877,7 +888,7 @@ export const checkInUser = async (
 };
 
 /**
- * checks whether a user has been checked in for the event
+ * Checks whether a user has been checked in for the event.
  * @param event_id the id for the event
  * @param user_id the id for the user
  * @returns boolean
@@ -892,9 +903,13 @@ export const isUserCheckedIn = async (event_id: number, user_id: number) => {
   }
 };
 
-// ------------------------------ files ------------------------------
+// ------------------------------ FILES ------------------------------
+
+/**
+ * Retrieve all members from database without limit.
+ */
 export const getAllMembers = async () => {
-  return await db("user").select(
+  await db("user").select(
     "user_inc",
     "email",
     "fname",
@@ -919,8 +934,13 @@ export const getAllMembers = async () => {
   );
 };
 
-// ------------------------------ teams ------------------------------
+// ------------------------------ TEAMS ------------------------------
 
+/**
+ * Retrieve teams details from db.
+ * @param count (optional) how many rows to query
+ * @return the teams
+ */
 export const getTeams = async (count?: number) => {
   if (count && count > 0) {
     return (await db("teams").select("*").limit(count)) as Team[];
@@ -929,19 +949,41 @@ export const getTeams = async (count?: number) => {
   }
 };
 
+/**
+ * Check if team id is valid.
+ * @param team_id team id to check
+ * @return boolean
+ */
 export const checkTeamIdExists = async (team_id: number) => {
   let res = await db("teams").count("*").where({ team_id });
   return res[0].count > 0;
 };
 
+/**
+ * Retrieves specific team from db.
+ * @param team_id team_id to retrieve
+ * @return team
+ */
 export const getTeam = async (team_id: number) => {
   return (await db("teams").select("*").where({ team_id })) as Team[];
 };
 
+/**
+ * Create and insert team into db.
+ * @param name name of team
+ * @param description the description of the team
+ */
 export const createTeam = async (name: string, description?: string) => {
   await db("teams").insert({ name, description });
 };
 
+/**
+ * Update team with passed in information.
+ * @param team_id team_id
+ * @param name name of team
+ * @param description description of the team
+ * @param members all members of team
+ */
 export const updateTeam = async (
   team_id: number,
   name?: string,
@@ -951,6 +993,10 @@ export const updateTeam = async (
   await db("teams").update({ name, description, members }).where({ team_id });
 };
 
+/**
+ * Return all user details from db.
+ * @param user_id user_id to select
+ */
 export const getUserFromId = async (user_id: number) => {
   return (await db("user")
     .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
@@ -958,8 +1004,8 @@ export const getUserFromId = async (user_id: number) => {
 };
 
 /**
- * Gets a user's ID from their email or gtemail
- * @param email the user's email or gtemail
+ * Gets a user's ID from their email or gt email.
+ * @param email the user's email or gt email
  * @returns user's ID or -1 if not found
  */
 export const getUserIdFromEmail = async (email: string) => {
