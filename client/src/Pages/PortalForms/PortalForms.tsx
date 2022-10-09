@@ -31,6 +31,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
   const [formTime, setFormTime] = useState("");
   const [formURL, setFormURL] = useState("");
 
+  //Submitting form with required inputs
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSuccess("");
@@ -42,11 +43,19 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
   const handleCreateForm = async () => {
     setSuccess("");
     setError("");
+    //attempt to create new form
+    /**
+     * Creates form on membership portal for DSGT members, displays error message if form is submitted with incomplete info
+     * @param formName the title of the to-be-deployed form, e.g. "Application form"
+     * @param formURL the link to the form
+     * @param formTime how long the form will remain active in minutes, e.g. 60 mins
+     */
     await createForm(formName, formURL, formTime, () => {
       setSuccess("Form Created");
       window.location.reload();
     }).catch((err) => {
       setError(err.message);
+    //error message is displayed when new form can't be created
       console.error(err);
     });
   };
@@ -74,6 +83,10 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
   const handleDeleteForm = async () => {
     setError2("");
     //attempt to delete the form
+    /**
+     * Deletes previously created form, displays error message to console when appropriate
+     * @param currentFormId id given to created form
+     */
     await deleteForm(currentFormId, () => {
       window.location.reload();
     }).catch((err) => {
@@ -82,6 +95,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
     });
   };
 
+  //visual layout of Forms page on Membership portal along with prompted messages when user creates form
   return (
     <div className={styles.PortalForms} data-testid="PortalForms">
       <h1 className={styles.Major}>Forms</h1>
