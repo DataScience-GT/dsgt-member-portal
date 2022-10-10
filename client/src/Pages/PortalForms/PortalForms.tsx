@@ -44,6 +44,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
     setError("");
     await createForm(formName, formURL, formTime, () => {
       setSuccess("Form Created");
+      window.location.reload();
     }).catch((err) => {
       setError(err.message);
       console.error(err);
@@ -140,7 +141,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
             {loading
               ? "loading..."
               : forms && forms.length > 0
-              ? forms.map((form, i) => (
+                ? forms.map((form, i) => (
                   <FormItem
                     formName={form.name}
                     formTime={form.time}
@@ -155,7 +156,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
                     deletable
                   />
                 ))
-              : "No forms found."}
+                : "No forms found."}
           </FlexColumn>
           <Modal
             open={showCreateModal}
@@ -182,7 +183,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
         {loading
           ? "loading..."
           : forms && forms.length > 0
-          ? forms.map((form, i) => (
+            ? forms.map((form, i) => (
               <FormItem
                 formName={form.name}
                 formTime={form.time}
@@ -190,7 +191,7 @@ const PortalForms: FC<PortalFormsProps> = ({ role }: PortalFormsProps) => {
                 key={form.form_id}
               />
             ))
-          : "No forms found."}
+            : "No forms found."}
       </FlexColumn>
     </div>
   );

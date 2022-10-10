@@ -6,10 +6,20 @@ import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 const router = express.Router();
 
+// All urls in this file have the path /api/form
+
+/**
+ * Simple welcome message at the endpoint /api/form
+ */
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the form api!");
 });
 
+
+/**
+ * Gets the first n forms (uses query /get?count=n) or all forms (/get).
+ * @param {number} count (url, optional) number of forms you want to get; to get all forms, don't include the query
+ */
 router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
   let countString = req.query.count?.toString();
   let count: number = 500;
@@ -20,7 +30,13 @@ router.get("/get", async (req: Request, res: Response, next: NextFunction) => {
   res.send({ ok: 1, data: forms });
 });
 
-router.post(
+/**
+ * Create a new form
+ * @param {string} session_id (body, required) user's session id
+ * @param {string} name (body, required) form name
+ * @param {string} time (body, required) form's estimated time
+ * @param {string} url (body, required) url to form
+ */router.post(
   "/create",
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
@@ -53,7 +69,11 @@ router.post(
   }
 );
 
-router.delete(
+/**
+ * Deletes a form using its form_id
+ * @param {string} session_id (body, required) user's session id
+ * @param {string} form_id (body, required) form id
+ */router.delete(
   "/remove",
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
@@ -81,6 +101,7 @@ router.delete(
     }
   }
 );
+
 
 module.exports = router;
 export default router;
