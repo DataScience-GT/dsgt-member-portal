@@ -631,7 +631,14 @@ export const checkFormBootcampExists = async (email: string) => {
 };
 
 // ----------------------- events -----------------------
-
+/**
+ * Gets a list of events
+ * @param {number} count (optional) the number of events to return
+ * @param {boolean} upcoming (optional) tells method to get future events
+ * @param {boolean} ongoing (optional) tells method to get current events
+ * @param {boolean} continuous (optional) tells method to get events that will always be active
+ * @returns Events ordered by their descriptions.
+ */
 export const getEvents = async (
   count?: number | null,
   upcoming?: boolean | null,
@@ -707,7 +714,10 @@ export const getEvents = async (
     }
   }
 };
-
+/**
+ * Creates an event and stores it
+ * @param {Event} e (mandatory) The Event object being created
+ */
 export const createEvent = async (e: Event) => {
   // table.increments("event_id").primary();
   // table.string("name");
