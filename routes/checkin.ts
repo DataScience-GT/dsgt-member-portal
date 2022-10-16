@@ -61,7 +61,7 @@ router.delete(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //attempt to create the event
+    //attempt to delete the event
     await deleteCheckinEvent(event_id);
     res.json({ ok: 1 });
   }
