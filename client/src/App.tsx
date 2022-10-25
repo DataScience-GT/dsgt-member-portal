@@ -48,7 +48,7 @@ function App() {
           if ((!json.ok && json.error) || !json.valid) {
             //error -- invalidate session
             localStorage.removeItem("dsgt-portal-session-key");
-            setLoading(false);
+            window.location.href = "/login";
           } else {
             //success -- allow movement to accessable pages
             setUserRole(json.role);
