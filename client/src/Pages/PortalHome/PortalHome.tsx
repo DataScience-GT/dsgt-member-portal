@@ -10,7 +10,7 @@ interface PortalHomeProps {}
 
 const PortalHome: FC<PortalHomeProps> = () => {
   const [messages, setMessages] = useState([
-    "Hello, {name}.",
+    //"Hello, {name}.",    - keeping this message in causes the welcome message in the home page to flash.
     "Welcome back, {name}.",
   ]);
   const [secondaryMessage, setSecondaryMessage] = useState("");
@@ -33,6 +33,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
     const est = new Date(utc.getTime() + offset * 60 * 1000);
     const hours = est.getHours();
 
+    /* The following if-block causes the welcome message to flash upon reload but is meant to alter the message depending on the time of day. 
     if (hours >= 0 && hours < 8) {
       //0-8
       addWelcomeMessage("Good Morning, {name}.");
@@ -47,6 +48,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
       //15-24
       addWelcomeMessage("Good Evening, {name}.");
     }
+*/
 
     //get last ~5 announcements
     const getAnnouncements = async () => {
