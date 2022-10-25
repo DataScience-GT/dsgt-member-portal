@@ -983,3 +983,45 @@ export const getUserIdFromEmail = async (email: string) => {
     return -1;
   }
 };
+const getDistinctCount = async (list: string[]) => {
+    const map = new Map();
+    let user
+    list.forEach((element: string) => {
+        if(map.has(element)) { 
+            map.set(element, map.get(element) + 1);
+        } else {
+            map.set(element, 1);
+        }
+    });
+    type returnType = { [key: string] : any };
+    let retVal: returnType = {}
+    map.forEach((key: string, value: any) => {
+        retVal.push({key: value});
+    });
+    return retVal;
+};
+
+export const getUserDemographics = async () => {
+
+    let emails = await db("user").select("email") as string[];
+    let majors = await db("user").select("major") as string[];
+    let genders = await db("user").select("gender") as string[];
+    let years = await db("user").select("studyyear") as string[];
+
+    const userCount = emails.length;
+
+    const majorObj = await getDistinctCount(majors);
+    const yearObj = await getDistinctCount(genders);
+    const genderObj = await getDistinctCount(years);
+
+    const retVal = {
+        numberOfUsers: userCount,
+        majorDist: majorObj,
+        yearDist: yearObj,
+        genderDist: genderObj
+    };
+
+    return retVal;
+};
+
+

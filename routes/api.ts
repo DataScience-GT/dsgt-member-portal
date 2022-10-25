@@ -54,6 +54,10 @@ router.use("/team", ApiAuthenticate, team);
 import file from "./file";
 router.use("/file", file);
 
+//setup /api/statistics
+import statistics from "./statistics";
+router.use("/statistics", statistics);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("welcome to the api!");
 });
