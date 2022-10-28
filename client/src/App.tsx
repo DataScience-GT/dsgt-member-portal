@@ -67,7 +67,11 @@ function App() {
               window.location.pathname.toLowerCase() === "/register" ||
               window.location.pathname.toLowerCase() === "/"
             ) {
-              window.location.href = "login?redirect=" + path;
+              if (path == "") {
+                window.location.href = "/login"
+              } else {
+                window.location.href = "/login?redirect=" + path;
+              }
             }
             setLoading(false);
           }
