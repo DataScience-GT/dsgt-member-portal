@@ -21,7 +21,7 @@ function App() {
 
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  let path
+  let path = ""
 
   useEffect(() => {
 
@@ -67,7 +67,7 @@ function App() {
               window.location.pathname.toLowerCase() === "/register" ||
               window.location.pathname.toLowerCase() === "/"
             ) {
-              window.location.href = "/portal";
+              window.location.href = "login?redirect=" + path;
             }
             setLoading(false);
           }

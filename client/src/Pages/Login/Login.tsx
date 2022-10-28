@@ -5,6 +5,7 @@ import InputField from "../../components/InputField/InputField";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./Login.module.scss";
+import path from "../../App";
 
 interface LoginProps {}
 
@@ -14,7 +15,7 @@ const Login: FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //handle all of the form elements updating (save input to state)
+  // Handle all of the form elements updating (save input to state)
   const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@.+_\- ]/g, "");
     setEmail(e.target.value);
@@ -28,8 +29,10 @@ const Login: FC<LoginProps> = () => {
     setPassword(e.target.value);
   };
 
-  //handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission
+  const handleSubmit = async (
+      e: React.FormEvent<HTMLFormElement>,
+  ) => {
     e.preventDefault();
     setError("");
     await attemptLogin(email, password).catch((err) => {
