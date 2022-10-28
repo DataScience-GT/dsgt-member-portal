@@ -5,7 +5,7 @@ import { Theme, ThemeContext } from "./Context/ThemeContext";
 
 import { getRoleValue, Role } from "./Scripts/RoleManagement";
 
-//import pages
+// Import pages
 import Signup from "./Pages/Signup/Signup";
 import Login from "./Pages/Login/Login";
 import Docs from "./Pages/Docs/Docs.lazy";
@@ -15,14 +15,17 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Register from "./Pages/Register/Register";
 
 function App() {
-  //theme -- use for context
-  const [theme, setTheme] = useState(Theme.Light);
+
+  // Themes -> context
+  const [theme, setTheme] = useState(Theme.Dark);
 
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
+  let path
 
   useEffect(() => {
-    //check for theme
+
+    // Retrieves theme from local storage
     let theme_stored = localStorage.getItem("dsgt-portal-theme");
     if (theme_stored) {
       setTheme(theme_stored as Theme);
@@ -30,10 +33,11 @@ function App() {
       setTheme(Theme.Dark);
       localStorage.setItem("dsgt-portal-theme", Theme.Dark);
     }
-    //check if logged in --
+
+    // Check if logged in --
     let session_key = localStorage.getItem("dsgt-portal-session-key");
     if (session_key) {
-      //validate session
+      // Validate session
       const validateSession = async () => {
         await fetch("/api/session/validate", {
           method: "POST",
@@ -45,19 +49,22 @@ function App() {
         }).then(async (res) => {
           const json = await res.json();
           console.log(json);
+
           if ((!json.ok && json.error) || !json.valid) {
-            //error -- invalidate session
+            // Error -- invalidate session
+            path = window.location.pathname.toLowerCase()
             localStorage.removeItem("dsgt-portal-session-key");
+            // Sends you to login page after session expiration
             window.location.href = "/login";
           } else {
-            //success -- allow movement to accessable pages
+            // Success -- allow movement to pages
             setUserRole(json.role);
             localStorage.setItem("dsgt-portal-fname", json.fname);
             localStorage.setItem("dsgt-portal-role", json.role);
             if (
               window.location.pathname.toLowerCase() === "/login" ||
               window.location.pathname.toLowerCase() === "/signup" ||
-              // window.location.pathname.toLowerCase() === "/register" ||
+              window.location.pathname.toLowerCase() === "/register" ||
               window.location.pathname.toLowerCase() === "/"
             ) {
               window.location.href = "/portal";
@@ -66,11 +73,10 @@ function App() {
           }
         });
       };
-
       validateSession().catch(console.error);
-      //if so, move to portal home page
+      // If so, move to portal home page
     } else {
-      //if not, move to logged in page
+      // If not, move to logged in page
       setLoading(false);
       if (
         window.location.pathname.toLowerCase() !== "/login" &&
@@ -85,7 +91,7 @@ function App() {
   }, []);
 
   if (loading) {
-    //make a nice loading page in the future
+    // Make a nice loading page in the future
     return (
       <ThemeContext.Provider value={{ theme, setTheme }}>
         <Loader height="100vh" />

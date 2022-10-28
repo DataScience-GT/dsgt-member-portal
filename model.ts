@@ -298,7 +298,7 @@ export const createSession = async ({
 };
 
 /**
- * validates a user's session token
+ * Validates a user's session token
  * @param session_id {string} the user's session id
  * @returns session.created_at, user_id, fname, session.enabled, role, email, uuid
  */
