@@ -5,7 +5,7 @@ import InputField from "../../components/InputField/InputField";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./Login.module.scss";
-import path from "../../App";
+import { useSearchParams } from "react-router-dom";
 
 interface LoginProps {}
 
@@ -14,6 +14,8 @@ const Login: FC<LoginProps> = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Handle all of the form elements updating (save input to state)
   const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -30,12 +32,14 @@ const Login: FC<LoginProps> = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async (
-      e: React.FormEvent<HTMLFormElement>,
-  ) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    await attemptLogin(email, password).catch((err) => {
+    await attemptLogin(
+      email,
+      password,
+      searchParams.get("re") ?? undefined
+    ).catch((err) => {
       setError(err.message);
     });
   };
@@ -67,7 +71,14 @@ const Login: FC<LoginProps> = () => {
                   spacing="flex-end"
                   align="center"
                 >
-                  <a className={styles.InlineLink} href="/passwordreset">
+                  <a
+                    className={styles.InlineLink}
+                    href={`/passwordreset${
+                      searchParams.get("re")
+                        ? `?re=${searchParams.get("re")}`
+                        : ""
+                    }`}
+                  >
                     forgot password?
                   </a>
                 </FlexRow>
@@ -83,7 +94,14 @@ const Login: FC<LoginProps> = () => {
                   width="100%"
                 >
                   <h3 className={styles.Mini}>I need an account:</h3>
-                  <a className={styles.InlineLink} href="/register">
+                  <a
+                    className={styles.InlineLink}
+                    href={`/register${
+                      searchParams.get("re")
+                        ? `?re=${searchParams.get("re")}`
+                        : ""
+                    }`}
+                  >
                     Register
                   </a>
                 </FlexRow>

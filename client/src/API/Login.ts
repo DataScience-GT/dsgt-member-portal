@@ -1,6 +1,7 @@
 export const attemptLogin = async (
   email: string,
   password: string,
+  redirect?: string,
   callback?: () => void
 ) => {
   await fetch("/api/user/login", {
@@ -17,7 +18,12 @@ export const attemptLogin = async (
     } else {
       //save session key to localstorage
       localStorage.setItem("dsgt-portal-session-key", json.session_key);
-      window.location.href = "/portal";
+      if (redirect) {
+        //redirect to the page the user was trying to access
+        window.location.href = redirect;
+      } else {
+        window.location.href = "/portal";
+      }
       if (callback) callback();
     }
   });

@@ -15,16 +15,14 @@ import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Register from "./Pages/Register/Register";
 
 function App() {
-
   // Themes -> context
   const [theme, setTheme] = useState(Theme.Dark);
 
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  let path = ""
+  // const [path, setPath] = useState("");
 
   useEffect(() => {
-
     // Retrieves theme from local storage
     let theme_stored = localStorage.getItem("dsgt-portal-theme");
     if (theme_stored) {
@@ -52,10 +50,10 @@ function App() {
 
           if ((!json.ok && json.error) || !json.valid) {
             // Error -- invalidate session
-            path = window.location.pathname.toLowerCase()
+            // setPath(window.location.pathname.toLowerCase());
             localStorage.removeItem("dsgt-portal-session-key");
             // Sends you to login page after session expiration
-            window.location.href = "/login";
+            window.location.href = `/login?re=${window.location.pathname}`;
           } else {
             // Success -- allow movement to pages
             setUserRole(json.role);
@@ -67,11 +65,7 @@ function App() {
               window.location.pathname.toLowerCase() === "/register" ||
               window.location.pathname.toLowerCase() === "/"
             ) {
-              if (path == "") {
-                window.location.href = "/login"
-              } else {
-                window.location.href = "/login?redirect=" + path;
-              }
+              window.location.href = "/portal";
             }
             setLoading(false);
           }
