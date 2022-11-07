@@ -21,7 +21,6 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
   // const [path, setPath] = useState("");
-  let path = "";
 
   useEffect(() => {
     // Retrieves theme from local storage
@@ -67,8 +66,6 @@ function App() {
               window.location.pathname.toLowerCase() === "/"
             ) {
               window.location.href = "/portal";
-			  // If the user is coming from the login page, it redirects them back to where they were
-			  window.location.href = "login?redirect=" + path;
             }
             setLoading(false);
           }
