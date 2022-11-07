@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import {Route, Routes, BrowserRouter as Router, useParams} from "react-router-dom";
 import { Theme, ThemeContext } from "./Context/ThemeContext";
 
 import { getRoleValue, Role } from "./Scripts/RoleManagement";
