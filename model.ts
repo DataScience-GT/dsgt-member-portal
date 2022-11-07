@@ -1007,18 +1007,24 @@ export const getUserDemographics = async () => {
     let majors = await db("user").select("major") as string[];
     let genders = await db("user").select("gender") as string[];
     let years = await db("user").select("studyyear") as string[];
+    let roles = await db("user").select("role") as string[];
+    let interest = await db("user").select("interests") as string[];
 
     const userCount = emails.length;
 
     const majorObj = await getDistinctCount(majors);
     const yearObj = await getDistinctCount(genders);
     const genderObj = await getDistinctCount(years);
+    const roleObj = await getDistinctCount(roles);
+    const interestObj = await getDistinctCount(interest);
 
     const retVal = {
         numberOfUsers: userCount,
         majorDist: majorObj,
         yearDist: yearObj,
-        genderDist: genderObj
+        genderDist: genderObj,
+        roleDist: roleObj,
+        interestDist: interestObj
     };
 
     return retVal;
