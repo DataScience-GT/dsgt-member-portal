@@ -31,7 +31,7 @@ const Login: FC<LoginProps> = () => {
     setPassword(e.target.value);
   };
 
-  // Handle form submission
+  // Handle login form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
