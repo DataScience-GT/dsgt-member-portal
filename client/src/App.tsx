@@ -52,7 +52,7 @@ function App() {
             // Error -- invalidate session
             // setPath(window.location.pathname.toLowerCase());
             localStorage.removeItem("dsgt-portal-session-key");
-            // Sends you to login page after session expiration
+            // Sends you to login page after session expiration and stores page user was just on with re key. 
             window.location.href = `/login?re=${window.location.pathname}`;
           } else {
             // Success -- allow movement to pages
