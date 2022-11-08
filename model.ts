@@ -994,7 +994,7 @@ const getDistinctCount = async (list: string[]) => {
         }
     });
     type returnType = { [key: string] : any };
-    let retVal: returnType = {}
+    let retVal: returnType = []
     map.forEach((key: string, value: any) => {
         retVal.push({key: value});
     });
