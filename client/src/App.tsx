@@ -54,6 +54,8 @@ function App() {
             localStorage.removeItem("dsgt-portal-session-key");
             // Sends you to login page after session expiration
             window.location.href = `/login?re=${window.location.pathname}`;
+            console.log("Hello world");
+            // HELLO WORLD
           } else {
             // Success -- allow movement to pages
             setUserRole(json.role);
