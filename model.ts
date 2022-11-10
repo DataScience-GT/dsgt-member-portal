@@ -298,7 +298,7 @@ export const createSession = async ({
 };
 
 /**
- * validates a user's session token
+ * Validates a user's session token
  * @param session_id {string} the user's session id
  * @returns session.created_at, user_id, fname, session.enabled, role, email, uuid
  */
@@ -631,7 +631,14 @@ export const checkFormBootcampExists = async (email: string) => {
 };
 
 // ----------------------- events -----------------------
-
+/**
+ * Gets a list of events
+ * @param {number} count (optional) the number of events to return
+ * @param {boolean} upcoming (optional) tells method to get future events
+ * @param {boolean} ongoing (optional) tells method to get current events
+ * @param {boolean} continuous (optional) tells method to get events that will always be active
+ * @returns Events ordered by their descriptions.
+ */
 export const getEvents = async (
   count?: number | null,
   upcoming?: boolean | null,
@@ -707,7 +714,10 @@ export const getEvents = async (
     }
   }
 };
-
+/**
+ * Creates an event and stores it
+ * @param {Event} e (mandatory) The Event object being created
+ */
 export const createEvent = async (e: Event) => {
   // table.increments("event_id").primary();
   // table.string("name");
@@ -973,3 +983,51 @@ export const getUserIdFromEmail = async (email: string) => {
     return -1;
   }
 };
+const getDistinctCount = async (list: string[]) => {
+    const map = new Map();
+    let user
+    list.forEach((element: string) => {
+        if(map.has(element)) { 
+            map.set(element, map.get(element) + 1);
+        } else {
+            map.set(element, 1);
+        }
+    });
+    type returnType = { [key: string] : any };
+    let retVal: returnType = []
+    map.forEach((key: string, value: any) => {
+        retVal.push({key: value});
+    });
+    return retVal;
+};
+
+export const getUserDemographics = async () => {
+
+    let emails = await db("user").select("email") as string[];
+    let majors = await db("user").select("major") as string[];
+    let genders = await db("user").select("gender") as string[];
+    let years = await db("user").select("studyyear") as string[];
+    let roles = await db("user").select("role") as string[];
+    let interest = await db("user").select("interests") as string[];
+
+    const userCount = emails.length;
+
+    const majorObj = await getDistinctCount(majors);
+    const yearObj = await getDistinctCount(genders);
+    const genderObj = await getDistinctCount(years);
+    const roleObj = await getDistinctCount(roles);
+    const interestObj = await getDistinctCount(interest);
+
+    const retVal = {
+        numberOfUsers: userCount,
+        majorDist: majorObj,
+        yearDist: yearObj,
+        genderDist: genderObj,
+        roleDist: roleObj,
+        interestDist: interestObj
+    };
+
+    return retVal;
+};
+
+

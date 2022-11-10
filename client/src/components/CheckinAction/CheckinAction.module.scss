@@ -1,0 +1,39 @@
+.CheckinAction {
+    margin: 20px;
+    background-color: rgb(121, 121, 121);
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 20px;
+    border: none;
+    min-width: 12vw;
+}
+
+.CheckinAction:hover {
+    transition-duration: 100ms;
+    background-color: rgb(139, 139, 139);
+}
+
+.CheckinAction.selected {
+    margin: 20px;
+    background-color: rgb(228, 0, 159);
+    font-size: 25px;
+    font-weight: bold;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    border-radius: 20px;
+    border: none;
+    min-width: 12vw;
+}
+
+.CheckinAction.selected:hover {
+    transition-duration: 100ms;
+    background-color: rgb(248, 53, 216);
+}

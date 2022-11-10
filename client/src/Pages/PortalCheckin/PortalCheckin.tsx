@@ -11,6 +11,7 @@ import {
   checkinUser,
   createCheckinEvent,
   getCheckinEvents,
+  getCheckinUsers,
   result_getCheckinEvents,
 } from "../../API/Checkin";
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
@@ -66,6 +67,10 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
         setScanEventId(data[0].event_id);
       }
     });
+
+    // getCheckinUsers(undefined, (data) => {
+    //   console.log(data);
+    // });
   }, [loadEvents]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

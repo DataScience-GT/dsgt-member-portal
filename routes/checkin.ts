@@ -26,7 +26,10 @@ router.get("/", async (req: Request, res: Response, next: NextFunction) => {
 });
 
 //----------- events ------------
-
+/**
+ * Gets all the events
+ * @param {string} session_id (query, required) user's session id
+ */
 router.get(
   "/event/get",
   ValidateSession("query", "moderator"),
@@ -36,6 +39,11 @@ router.get(
   }
 );
 
+/**
+ * Creates a new event
+ * @param {string} session_id (body, required) user's session id
+ * @param {string} name (body, required) the name of the event
+ */
 router.post(
   "/event/create",
   ValidateSession("body", "moderator"),
@@ -52,6 +60,11 @@ router.post(
   }
 );
 
+/**
+ * Deletes an event
+ * @param {string} session_id (body, required) user's session id
+ * @param {string} event_id (body, required) event id of the event to delete
+ */
 router.delete(
   "/event/delete",
   ValidateSession("body", "moderator"),
@@ -61,14 +74,18 @@ router.delete(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //attempt to create the event
+    //attempt to delete the event
     await deleteCheckinEvent(event_id);
     res.json({ ok: 1 });
   }
 );
 
 //----------- users ------------
-
+/**
+ * Gets all the users for a particular event or for all events
+ * @param {string} session_id (query, required) user's session id
+ * @param {string} event_id (query, optional) event_id of the event
+ */
 router.get(
   "/users/get",
   ValidateSession("query", "moderator"),
@@ -84,6 +101,13 @@ router.get(
   }
 );
 
+/**
+ * Checks in a user for an event
+ * @param {string} session_id (body, required) user's session id
+ * @param {string} uuid (body, required) user's uuid
+ * @param {string} event_id (body, required) event_id of event to check in
+ * 
+ */
 router.post(
   "/user",
   ValidateSession("body", "moderator"),
@@ -127,6 +151,7 @@ router.post(
     });
   }
 );
+
 
 export default router;
 module.exports = router;
