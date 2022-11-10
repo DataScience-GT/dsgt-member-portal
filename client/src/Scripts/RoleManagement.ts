@@ -32,7 +32,7 @@ export const getRoleValue = (role: Role): number => {
 export enum Role {
   Guest = "guest",
   Member = "member",
-  Professor = "Professor",
+  Professor = "professor",
   Moderator = "moderator",
   Administrator = "administrator",
   JrDeveloper = "jr. developer",
