@@ -32,6 +32,7 @@ export const getRoleValue = (role: Role): number => {
 export enum Role {
   Guest = "guest",
   Member = "member",
+  Professor = "professor",
   Moderator = "moderator",
   Administrator = "administrator",
   JrDeveloper = "jr. developer",
@@ -46,6 +47,7 @@ export enum Role {
 export const RoleValueMap = new Map([
   [Role.Guest, 0],
   [Role.Member, 3],
+  [Role.Professor, 4],
   [Role.Moderator, 6],
   [Role.Administrator, 9],
   [Role.JrDeveloper, 600],
