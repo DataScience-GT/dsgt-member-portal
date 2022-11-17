@@ -996,7 +996,7 @@ const getDistinctCount = async (list: object[]) => {
       map.set(key, 1);
     }
   });
-  console.log(map);
+  // console.log(map);
   return Object.fromEntries(map);
 };
 
@@ -1017,7 +1017,7 @@ export const getUserDemographics = async () => {
   const roleObj = await getDistinctCount(roles);
   const interestObj = await getDistinctCount(interest);
 
-  console.log(majorObj);
+  // console.log(majorObj);
 
   const retVal = {
     numberOfUsers: userCount,
