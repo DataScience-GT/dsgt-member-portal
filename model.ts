@@ -1012,10 +1012,23 @@ export const getUserDemographics = async () => {
   const userCount = emails.length;
 
   const majorObj = await getDistinctCount(majors);
-  const yearObj = await getDistinctCount(genders);
-  const genderObj = await getDistinctCount(years);
+  const yearObj = await getDistinctCount(years);
+  const genderObj = await getDistinctCount(genders);
   const roleObj = await getDistinctCount(roles);
-  const interestObj = await getDistinctCount(interest);
+  const interestObj = new Map();
+  interest.forEach((element: any) => {
+    let propName = Object.keys(element)[0] + "";
+    //console.log(propName);
+    let key = element[propName].replaceAll("\\", "").replaceAll("\"", "").replaceAll("[", "").replaceAll("]", "").split(",");
+    key.forEach((ele: string) => {
+      if (interestObj.has(ele)) {
+        interestObj.set(ele, interestObj.get(ele) + 1);
+      } else {
+        interestObj.set(ele, 1);
+      }
+    })
+  });
+
 
   // console.log(majorObj);
 
@@ -1025,7 +1038,7 @@ export const getUserDemographics = async () => {
     yearDist: yearObj,
     genderDist: genderObj,
     roleDist: roleObj,
-    interestDist: interestObj
+    interestDist: Object.fromEntries(interestObj)
   };
 
   return retVal;
