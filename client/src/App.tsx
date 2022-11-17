@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
+import {Route, Routes, BrowserRouter as Router, useParams} from "react-router-dom";
 import { Theme, ThemeContext } from "./Context/ThemeContext";
 
 import { getRoleValue, Role } from "./Scripts/RoleManagement";
@@ -52,7 +52,7 @@ function App() {
             // Error -- invalidate session
             // setPath(window.location.pathname.toLowerCase());
             localStorage.removeItem("dsgt-portal-session-key");
-            // Sends you to login page after session expiration
+            // Sends you to login page after session expiration and stores page user was just on with re key. 
             window.location.href = `/login?re=${window.location.pathname}`;
           } else {
             // Success -- allow movement to pages

@@ -983,45 +983,62 @@ export const getUserIdFromEmail = async (email: string) => {
     return -1;
   }
 };
-const getDistinctCount = async (list: string[]) => {
-    const map = new Map();
-    let user
-    list.forEach((element: string) => {
-        if(map.has(element)) { 
-            map.set(element, map.get(element) + 1);
-        } else {
-            map.set(element, 1);
-        }
-    });
-    type returnType = { [key: string] : any };
-    let retVal: returnType = {}
-    map.forEach((key: string, value: any) => {
-        retVal.push({key: value});
-    });
-    return retVal;
+const getDistinctCount = async (list: object[]) => {
+  const map = new Map();
+  list.forEach((element: any) => {
+    let propName = Object.keys(element)[0] + "";
+    //console.log(propName);
+    let key = element[propName];
+    //console.log(key);
+    if (map.has(key)) {
+      map.set(key, map.get(key) + 1);
+    } else {
+      map.set(key, 1);
+    }
+  });
+  // console.log(map);
+  return Object.fromEntries(map);
 };
 
 export const getUserDemographics = async () => {
+  let emails = (await db("user").select("email")) as object[];
+  let majors = (await db("user").select("major")) as object[];
+  let genders = (await db("user").select("gender")) as object[];
+  let years = (await db("user").select("studyyear")) as object[];
+  let roles = (await db("user").select("role")) as object[];
+  let interest = (await db("user").select("interests")) as object[];
 
-    let emails = await db("user").select("email") as string[];
-    let majors = await db("user").select("major") as string[];
-    let genders = await db("user").select("gender") as string[];
-    let years = await db("user").select("studyyear") as string[];
+  const userCount = emails.length;
 
-    const userCount = emails.length;
+  const majorObj = await getDistinctCount(majors);
+  const yearObj = await getDistinctCount(years);
+  const genderObj = await getDistinctCount(genders);
+  const roleObj = await getDistinctCount(roles);
+  const interestObj = new Map();
+  interest.forEach((element: any) => {
+    let propName = Object.keys(element)[0] + "";
+    // console.log(propName);
+    let key = JSON.parse(JSON.parse(element[propName]));
+    // console.log(key);
+    for (let ele of key) {
+      if (interestObj.has(ele)) {
+        interestObj.set(ele, interestObj.get(ele) + 1);
+      } else {
+        interestObj.set(ele, 1);
+      }
+    }
+  });
 
-    const majorObj = await getDistinctCount(majors);
-    const yearObj = await getDistinctCount(genders);
-    const genderObj = await getDistinctCount(years);
+  // console.log(majorObj);
 
-    const retVal = {
-        numberOfUsers: userCount,
-        majorDist: majorObj,
-        yearDist: yearObj,
-        genderDist: genderObj
-    };
+  const retVal = {
+    numberOfUsers: userCount,
+    majorDist: majorObj,
+    yearDist: yearObj,
+    genderDist: genderObj,
+    roleDist: roleObj,
+    interestDist: Object.fromEntries(interestObj),
+  };
 
-    return retVal;
+  return retVal;
 };
-
-

@@ -17,7 +17,7 @@ const Login: FC<LoginProps> = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Handle all of the form elements updating (save input to state)
+  // Handle all the form elements updating (save input to state)
   const handleChange_email = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@.+_\- ]/g, "");
     setEmail(e.target.value);
@@ -31,11 +31,11 @@ const Login: FC<LoginProps> = () => {
     setPassword(e.target.value);
   };
 
-  // Handle form submission
+  // Handle login form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    await attemptLogin(
+    await attemptLogin( // Updated to catch search params
       email,
       password,
       searchParams.get("re") ?? undefined

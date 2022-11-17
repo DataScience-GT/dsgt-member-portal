@@ -5,6 +5,10 @@ export type result_getCheckinEvents = {
   created_by: number;
 };
 
+/**
+ * Attempts to get all check in events.
+ * @param callback callback
+ */
 export const getCheckinEvents = async (
   callback?: (result: result_getCheckinEvents[]) => void
 ) => {
@@ -27,6 +31,11 @@ export const getCheckinEvents = async (
   });
 };
 
+/**
+ * Creates an event for users to check in.
+ * @param name name of event
+ * @param callback callback
+ */
 export const createCheckinEvent = async (
   name: string,
   callback?: () => void
@@ -52,6 +61,13 @@ export const createCheckinEvent = async (
   });
 };
 
+/**
+ * Checks in user to event based on the event id,
+ * the user id.
+ * @param event_id id of event
+ * @param uuid user id
+ * @param callback callback
+ */
 export const checkinUser = async (
   event_id: number,
   uuid: string,
@@ -87,6 +103,11 @@ export type result_getCheckinUsers = {
   created_by: number;
 };
 
+/**
+ * Gets all users checked in for event.
+ * @param event_id id of event
+ * @param callback callback var
+ */
 export const getCheckinUsers = async (
   event_id?: number,
   callback?: (data: result_getCheckinUsers[]) => void
