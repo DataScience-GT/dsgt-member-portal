@@ -1001,13 +1001,12 @@ const getDistinctCount = async (list: object[]) => {
 };
 
 export const getUserDemographics = async () => {
-
-  let emails = await db("user").select("email") as object[];
-  let majors = await db("user").select("major") as object[];
-  let genders = await db("user").select("gender") as object[];
-  let years = await db("user").select("studyyear") as object[];
-  let roles = await db("user").select("role") as object[];
-  let interest = await db("user").select("interests") as object[];
+  let emails = (await db("user").select("email")) as object[];
+  let majors = (await db("user").select("major")) as object[];
+  let genders = (await db("user").select("gender")) as object[];
+  let years = (await db("user").select("studyyear")) as object[];
+  let roles = (await db("user").select("role")) as object[];
+  let interest = (await db("user").select("interests")) as object[];
 
   const userCount = emails.length;
 
@@ -1018,17 +1017,17 @@ export const getUserDemographics = async () => {
   const interestObj = new Map();
   interest.forEach((element: any) => {
     let propName = Object.keys(element)[0] + "";
-    //console.log(propName);
-    let key = element[propName].replaceAll("\\", "").replaceAll("\"", "").replaceAll("[", "").replaceAll("]", "").split(",");
-    key.forEach((ele: string) => {
+    // console.log(propName);
+    let key = JSON.parse(JSON.parse(element[propName]));
+    // console.log(key);
+    for (let ele of key) {
       if (interestObj.has(ele)) {
         interestObj.set(ele, interestObj.get(ele) + 1);
       } else {
         interestObj.set(ele, 1);
       }
-    })
+    }
   });
-
 
   // console.log(majorObj);
 
@@ -1038,10 +1037,8 @@ export const getUserDemographics = async () => {
     yearDist: yearObj,
     genderDist: genderObj,
     roleDist: roleObj,
-    interestDist: Object.fromEntries(interestObj)
+    interestDist: Object.fromEntries(interestObj),
   };
 
   return retVal;
 };
-
-
