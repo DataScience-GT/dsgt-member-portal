@@ -985,7 +985,7 @@ export const getUserIdFromEmail = async (email: string) => {
 };
 const getDistinctCount = async (list: object[]) => {
   const map = new Map();
-  list.forEach((element: object) => {
+  list.forEach((element: any) => {
     let propName = Object.keys(element)[0] + "";
     //console.log(propName);
     let key = element[propName];
