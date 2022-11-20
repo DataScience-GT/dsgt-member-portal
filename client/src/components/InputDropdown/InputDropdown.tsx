@@ -27,7 +27,7 @@ const InputDropdown: FC<InputDropdownProps> = ({
           if (setState) setState(e.currentTarget.value);
           if (onChange) onChange(e);
         }}
-        // value={initialValue}
+        value={initialValue}
       >
         {options
           ? options.map((o, i) => {
