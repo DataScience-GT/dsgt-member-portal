@@ -20,7 +20,6 @@ function App() {
 
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  // const [path, setPath] = useState("");
 
   useEffect(() => {
     // Retrieves theme from local storage
@@ -54,8 +53,6 @@ function App() {
             localStorage.removeItem("dsgt-portal-session-key");
             // Sends you to login page after session expiration and stores page user was just on with re key. 
             window.location.href = `/login?re=${window.location.pathname}`;
-            console.log("Hello world");
-            // HELLO WORLD
           } else {
             // Success -- allow movement to pages
             setUserRole(json.role);

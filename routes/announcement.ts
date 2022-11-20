@@ -15,6 +15,8 @@ import {
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
+import {getAnnouncementEmailTemplate} from "../client/src/EmailTemplate/AnnouncementEmail";
+import {sendEmail} from "../email";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the announcement api!");
@@ -29,17 +31,16 @@ router.post(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //check for count
+    // Parse number of announcements
     let count = req.query.count?.toString();
-
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
       if (count) {
-        let anns = await getAnnouncements(parseInt(count));
-        res.json({ ok: 1, data: anns });
+        let ans = await getAnnouncements(parseInt(count));
+        res.json({ ok: 1, data: ans });
       } else {
-        let anns = await getAnnouncements();
-        res.json({ ok: 1, data: anns });
+        let ans = await getAnnouncements();
+        res.json({ ok: 1, data: ans });
       }
     } else {
       next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
@@ -57,12 +58,16 @@ router.post(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
+    // Attempt to create an announcement
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
-      //check if proper perms
+      // Check if proper permissions exist (compare to moderator)
       if (compareUserRoles(valid.role, "moderator") >= 0) {
-        //create ann announcement
         await insertAnnouncement(message, valid.user_id);
+        let test_email = "[insert-email-here]]";
+        let emailToSend = getAnnouncementEmailTemplate(message);
+        console.log("Reached here.");
+        await sendEmail(test_email, "Announcement from DSGT", null, emailToSend, next);
         res.json({ ok: 1 });
       } else {
         next(new StatusErrorPreset(ErrorPreset.NoPermission));
@@ -83,11 +88,11 @@ router.delete(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
+    // Attempt to delete announcement
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
-      //check if proper perms
+      // Check for proper permissions (compare to moderator)
       if (compareUserRoles(valid.role, "moderator") >= 0) {
-        //delete announcement
         await deleteAnnouncement(announcement_id);
         res.json({ ok: 1 });
       } else {

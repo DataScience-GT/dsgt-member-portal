@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 import { NextFunction } from "express";
-import { error } from "./Logger";
 
 export const sendEmail = (
   receiving_email: string[] | string,

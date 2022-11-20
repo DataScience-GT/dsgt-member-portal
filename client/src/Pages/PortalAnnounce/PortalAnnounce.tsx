@@ -6,17 +6,21 @@ import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./PortalAnnounce.module.scss";
+import {getAnnouncementEmailTemplate} from "../../EmailTemplate/AnnouncementEmail";
+import {sendEmail} from "../../../../email";
+import {getAllMembers} from "../../../../model";
+import express, { Request, Response, NextFunction } from "express";
 
 interface PortalAnnounceProps {}
 
 const PortalAnnounce: FC<PortalAnnounceProps> = () => {
-  //new announcement
+  // New announcement
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [message, setMessage] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
 
-  //existing announcements
+  // Existing announcements
   const [loading, setLoading] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
   const [showDelModal, setShowDelModal] = useState(false);
@@ -40,6 +44,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const handleSendModalConfirm = async () => {
     setSuccess("");
     setError("");
+    console.log(message);
     await fetch("/api/announcement/create", {
       method: "POST",
       headers: {
@@ -55,8 +60,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       if (!json.ok && json.error) {
         setError(json.error);
       } else {
-        //announcement sent
+        // Announcement sent
         setSuccess("Announcement has been sent!");
+        // let emailList = getAllMembers().select("email").where("email_consent");
       }
     });
   };
@@ -79,7 +85,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       if (!json.ok && json.error) {
         setError2(json.error);
       } else {
-        //announcement sent
+        // Announcement sent
         setSuccess2("Announcement has been deleted!");
         document
           .querySelector(`[data-announcement-id="${currentAnnouncementId}"]`)
@@ -89,9 +95,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
-  //get all announcements
+  // Get all announcements
   useEffect(() => {
-    //get all announcements
+    // Get all announcements
     const getAnnouncements = async () => {
       await fetch("/api/announcement/get", {
         method: "POST",
