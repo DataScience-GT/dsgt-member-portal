@@ -6,6 +6,7 @@ import InputDropdown from "../../components/InputDropdown/InputDropdown";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
+import CheckinMenu from "../../components/CheckinMenu/CheckinMenu";
 
 import {
   checkinUser,
@@ -119,12 +120,12 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
     >
       <h1 className={portal_styles.Major}>Check In</h1>
       <FlexColumn gap="1em">
-        <InputDropdown
+        <CheckinMenu 
           values={Object.values(CheckinPage)}
           options={Object.keys(CheckinPage)}
           initialValue={page}
           setState={setPage}
-        />
+          />
         {page === CheckinPage.Manage ? (
           <FlexColumn>
             {loading
