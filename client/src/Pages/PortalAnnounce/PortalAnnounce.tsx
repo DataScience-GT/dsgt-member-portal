@@ -6,7 +6,7 @@ import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./PortalAnnounce.module.scss";
-import { getAllMembersWithEmailOn } from "../../../../model";
+import {getUsers} from "../../../../model";
 
 interface PortalAnnounceProps {}
 
@@ -69,7 +69,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     setSuccess("");
     setError("");
     if (sendEmail) {
-      setVerifiedEmails(await getAllMembersWithEmailOn());
+      await getUsersWithVerifiedEmail();
     }
     await fetch("/api/announcement/create", {
       method: "POST",
@@ -124,6 +124,31 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
           ?.remove();
         setCurrentAnnouncementId(-1);
       }
+    });
+  };
+
+  /**
+   * Makes a call to get users with verified email.
+   */
+  const getUsersWithVerifiedEmail = async () => {
+    await fetch("/api/user/get", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({
+        session_id: localStorage.getItem("dsgt-portal-session-key"),
+        collecting_emails: sendEmail
+      }),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!json.ok && json.error) {
+        console.error(json.error);
+      } else {
+        setVerifiedEmails(json.data);
+      }
+      setLoading(false);
     });
   };
 
