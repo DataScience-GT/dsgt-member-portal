@@ -306,8 +306,8 @@ router.post(
   "/resetpassword/get",
   RateLimit(3, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    //intitiate a password reset
-    //generate a random code
+    // Initiate a password reset
+    // Generate a random code
     let x = await getPasswordResets();
     res.json({ ok: 1, data: x });
   }
@@ -322,7 +322,7 @@ router.post(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //check if email exists
+    // Check if email exists
     let exists = await checkUserEmail(email, true);
     if (!exists) {
       next(
@@ -333,8 +333,8 @@ router.post(
       );
       return;
     }
-    //intitiate a password reset
-    //generate a random code
+    // Initiate a password reset
+    // Generate a random code
     let x = await initiatePasswordReset(email);
     if (!x) {
       next(
@@ -342,11 +342,11 @@ router.post(
       );
       return;
     }
-    //DO NOT SEND THIS CODE BACK TO THE REQEUST -- EMAIL TO THE EMAIL GIVEN
-    //get the recovery link
+    // DO NOT SEND THIS CODE BACK TO THE REQ -- EMAIL TO THE EMAIL GIVEN
+    // Get the recovery link
     let host = req.get("host");
     let recovery_url = `${host}/passwordreset?reset_code=${x}`;
-    //send the email with link
+    // Send the email with link
     let emailToSend = getPasswordResetEmail(recovery_url);
     await sendEmail(email, "Password Recovery", null, emailToSend, next);
     res.json({ ok: 1 });

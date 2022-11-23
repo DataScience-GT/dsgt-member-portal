@@ -237,7 +237,7 @@ export const changeUserPassword = async (
 ) => {
   let curr_hash = md5(current_password);
   let new_hash = md5(new_password);
-  //check if current password is correct
+  // Check if current password is correct
   let res = await db("user")
     .count("*")
     .where("email", email)
@@ -245,7 +245,7 @@ export const changeUserPassword = async (
   if (res.length <= 0) {
     return false;
   } else {
-    //update password
+    // Update password
     await db("user")
       .update({ password: new_hash })
       .where("email", email)
@@ -406,7 +406,7 @@ export const getAnnouncements = async (count?: number) => {
 };
 
 /**
- * creates a new announcement
+ * Creates a new announcement
  * @param message {string} message
  * @param user_id {number} the user's (who wrote the announcement) id
  */
@@ -710,7 +710,7 @@ export const getEvents = async (
           .orderBy(order_by, "desc")
           .limit(count);
     } else {
-      return await db("event").select("*").orderBy(order_by, "desc");
+      return db("event").select("*").orderBy(order_by, "desc");
     }
   }
 };
@@ -825,7 +825,7 @@ export const checkinEventExists = async (event_id: number) => {
 
 // get list of checkin events
 export const getCheckinEvents = async () => {
-  return await db("checkin_event").select("*");
+  return db("checkin_event").select("*");
 };
 
 /**
@@ -927,6 +927,16 @@ export const getAllMembers = async () => {
       "hear_about",
       "email_consent"
   );
+};
+
+/**
+ * Gets all members that are enabled and who have accepted email announcements.
+ */
+export const getAllMembersWithEmailOn = async () => {
+  return db("user").select("*").where({
+    email_consent: 'true',
+    enabled: 'true'
+  })
 };
 
 // ------------------------------ teams ------------------------------

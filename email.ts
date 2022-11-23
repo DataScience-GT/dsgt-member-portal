@@ -16,11 +16,9 @@ export const sendEmail = (
       pass: process.env.SMTP_EMAIL_PASSWORD,
     },
   });
-
   if (Array.isArray(receiving_email)) {
     receiving_email = receiving_email.join(", ");
   }
-
   transporter.verify().then().catch(next);
   transporter
     .sendMail({

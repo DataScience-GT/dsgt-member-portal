@@ -15,8 +15,8 @@ import {
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
-import {getAnnouncementEmailTemplate} from "../client/src/EmailTemplate/AnnouncementEmail";
-import {sendEmail} from "../email";
+import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
+import { sendEmail } from "../email";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the announcement api!");
@@ -54,7 +54,9 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     let message = req.body.announcement;
-    if (!session_id || !message) {
+    let sendEmailBoolean = req.body.sendEmail;
+    let verifiedEmails = req.body.verifiedEmails;
+    if (!session_id || !message || !sendEmailBoolean) { // Missing fields
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
@@ -64,10 +66,10 @@ router.post(
       // Check if proper permissions exist (compare to moderator)
       if (compareUserRoles(valid.role, "moderator") >= 0) {
         await insertAnnouncement(message, valid.user_id);
-        let test_email = "[insert-email-here]]";
-        let emailToSend = getAnnouncementEmailTemplate(message);
-        console.log("Reached here.");
-        await sendEmail(test_email, "Announcement from DSGT", null, emailToSend, next);
+        if (sendEmailBoolean) { // Email
+            let emailToSend = getAnnouncementEmailTemplate(message);
+            await sendEmail(verifiedEmails, "DSGT Announcement", null, emailToSend, next);
+        }
         res.json({ ok: 1 });
       } else {
         next(new StatusErrorPreset(ErrorPreset.NoPermission));
