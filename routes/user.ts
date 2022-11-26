@@ -9,22 +9,23 @@ const qrcode = require("qrcode");
 
 import RateLimit from "../middleware/RateLimiting";
 import {
-    getUsers,
-    registerUser,
-    checkUserEmail,
-    loginUser,
-    createSession,
-    validateSession,
-    getUserRole,
-    updateUser,
-    getUserEnabled,
-    Sort,
-    initiatePasswordReset,
-    getPasswordResets,
-    attemptPasswordReset,
-    deleteUser,
-    getAllMembersWithEmailOn,
-    getUserLastLoggedOn, getAllMembers,
+  getUsers,
+  registerUser,
+  checkUserEmail,
+  loginUser,
+  createSession,
+  validateSession,
+  getUserRole,
+  updateUser,
+  getUserEnabled,
+  Sort,
+  initiatePasswordReset,
+  getPasswordResets,
+  attemptPasswordReset,
+  deleteUser,
+  getAllMembersWithEmailOn,
+  getUserLastLoggedOn,
+  getAllMembers,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -66,9 +67,9 @@ router.post(
           user.last_logged_on = await getUserLastLoggedOn(user.user_id);
         }
         if (collecting_emails) {
-            res.json({ ok: 1, data: verifiedUsers });
+          res.json({ ok: 1, data: verifiedUsers });
         } else {
-            res.json({ ok: 1, data: allUsers });
+          res.json({ ok: 1, data: allUsers });
         }
       } else {
         next(new StatusErrorPreset(ErrorPreset.NoPermission));
@@ -331,12 +332,7 @@ router.post(
     // Check if email exists
     let exists = await checkUserEmail(email, true);
     if (!exists) {
-      next(
-        new StatusError(
-          "Account with that email does not exist.",
-          404
-        )
-      );
+      next(new StatusError("Account with that email does not exist.", 404));
       return;
     }
     // Initiate a password reset
@@ -350,7 +346,10 @@ router.post(
     }
     // DO NOT SEND THIS CODE BACK TO THE REQ -- EMAIL TO THE EMAIL GIVEN
     // Get the recovery link
-    let host = req.get("host");
+    let host =
+      process.env.NODE_ENV == "development"
+        ? req.get("host")
+        : "https://member.datasciencegt.org";
     let recovery_url = `${host}/passwordreset?reset_code=${x}`;
     // Send the email with link
     let emailToSend = getPasswordResetEmail(recovery_url);
