@@ -605,9 +605,7 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
 
 /**  
  * inserts the given professor details into the db and sends them an email to register
- * @param email_in professor's email
- * @param name_in professor's name
- * @param phone_in professor's phone number
+ * @param prof_list list of professor billing details.
  */
 export const createProfBillingDetails = async(prof_list: Set<BillingDetails>) => {
   let i;
