@@ -602,6 +602,20 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
   }
 };
 
+/**  
+ * inserts the given professor details into the db and sends them an email to register
+ * @param email_in professor's email
+ * @param name_in professor's name
+ * @param phone_in professor's phone number
+ */
+export const createProfBillingDetails = async (email_in: string, name_in: string, phone_in: string) => {
+    await db("billing_details").insert({
+        email: email_in,
+        name: name_in,
+        phone: phone_in,
+    });
+  };
+
 // -------------------------- forms --------------------------
 /**
  * checks whether the projects form has been saved
