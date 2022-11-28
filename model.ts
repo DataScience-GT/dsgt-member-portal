@@ -12,6 +12,7 @@ import { Form } from "./interfaces/Form";
 import { Feedback } from "./interfaces/Feedback";
 
 import { Team, TeamMember } from "./interfaces/Team";
+import { ListFormat } from "typescript";
 
 const crypto = require("crypto");
 
@@ -608,14 +609,14 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
  * @param name_in professor's name
  * @param phone_in professor's phone number
  */
-export const createProfBillingDetails = async (email_in: string, name_in: string, phone_in: string) => {
-    await db("billing_details").insert({
-        email: email_in,
-        name: name_in,
-        phone: phone_in,
-    });
-  };
-
+export const createProfBillingDetails = async(prof_list: Set<BillingDetails>) => {
+  let i;
+  let it = prof_list.values();
+  for(i = 0; i < prof_list.size; i++) {
+    createBillingDetails(it.next().value);
+    //SMTP
+  }
+}
 // -------------------------- forms --------------------------
 /**
  * checks whether the projects form has been saved
