@@ -199,11 +199,19 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
             ></textarea>
             <ErrorText>{error}</ErrorText>
             <SuccessText>{success}</SuccessText>
-            <InputField type={"url"} name="link" placeholder="Link URL" />
+            <InputField
+              type={"url"}
+              name="link"
+              placeholder="Link URL"
+              onChange={(e) => {
+                setLinkUrl(e.currentTarget.value);
+              }}
+            />
             <InputField
               type={"text"}
               name="link-text"
               placeholder="Link Text"
+              onChange={(e) => setLinkText(e.currentTarget.value)}
             />
             <div>
               <input
@@ -232,6 +240,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
               <Announcement
                 when={new Date()}
                 from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+                link_text={linkText}
+                link_url={linkUrl}
               >
                 {message || "No message"}
               </Announcement>
