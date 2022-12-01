@@ -1,0 +1,57 @@
+//styling for event title header
+.CheckinEventCard {
+    display: inline-block;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: rgb(61, 61, 61);
+    border-radius: 25px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 25px;
+    width: 45vw;
+    text-align: start;
+    border: none;
+    margin-bottom: 15px;
+}
+
+.CheckinEventCard.selected {
+    border-radius: 25px 25px 0px 0px;
+    margin-bottom: 0px;
+}
+
+//Styling for name holder
+.CheckinEventNamesCard {
+    display: none;
+    list-style: none;
+    transition: height 2s;
+}
+
+//.selectedd because using .selected twice fucks up code, needs fix later
+.CheckinEventNamesCard.selectedd {
+    display: block;
+    height: auto;
+    background-color: rgb(92, 92, 92);
+    border-radius: 0px 0px 25px 25px;
+    border: none;
+    margin-bottom: 15px;
+    padding-left: 30px;
+}
+
+
+//Styling for individual names
+.li {
+    font-size: 30px;
+    color: white;
+    padding-top: 20px;
+    border-bottom: white;
+}
+
+//Shows number of students scanned into event
+.scannedTag {
+    display: inline;
+    font-size: 15px;
+    color: white;
+    float: right;
+    padding-right: 25px;
+}
