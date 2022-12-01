@@ -6,7 +6,8 @@ export const sendEmail = (
   subject: string,
   text: string | null,
   html: string | null,
-  next: NextFunction
+  next: NextFunction,
+  callback?: (info: any) => void
 ) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -29,7 +30,9 @@ export const sendEmail = (
       html: html, // html body
     })
     .then((info: any) => {
-      return info;
+      if (callback) {
+        callback(info);
+      }
     })
     .catch(next);
 };

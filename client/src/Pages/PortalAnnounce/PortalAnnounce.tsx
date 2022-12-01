@@ -1,12 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import Announcement from "../../components/Announcement/Announcement";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalAnnounce.module.scss";
-import {getUsers} from "../../../../model";
 
 interface PortalAnnounceProps {}
 
@@ -17,7 +18,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const [message, setMessage] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
-  const [verifiedEmails, setVerifiedEmails] = useState([]);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
+  // const [verifiedEmails, setVerifiedEmails] = useState([]);
 
   // Existing announcements
   const [loading, setLoading] = useState(true);
@@ -27,6 +30,11 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const [error2, setError2] = useState("");
   const [success2, setSuccess2] = useState("");
 
+  /**
+   * On submit announcement, calls showSendModal. Checks for announcement length
+   * not less than 3 chars.
+   * @param e submit click
+   */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -38,21 +46,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   };
 
   /**
-   * Validates whether the checkbox is checked & updates sendEmail boolean.
+   * Handles change on announcement message.
+   * @param e new character in textfield
    */
-  const validateCheck = () => {
-    let checkbox = document.getElementById('sendEmail') as HTMLInputElement;
-    checkbox!.addEventListener( "change", () => {
-      if (checkbox!.checked) {
-        console.log("Sending to email...");
-        setSendEmail(true);
-      } else {
-        console.log("No email.")
-        setSendEmail(false);
-      }
-    });
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
   };
@@ -68,9 +64,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const handleSendModalConfirm = async () => {
     setSuccess("");
     setError("");
-    if (sendEmail) {
-      await getUsersWithVerifiedEmail();
-    }
+    // if (sendEmail) {
+    //   await getUsersWithVerifiedEmail();
+    // }
     await fetch("/api/announcement/create", {
       method: "POST",
       headers: {
@@ -80,8 +76,9 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       body: JSON.stringify({
         session_id: localStorage.getItem("dsgt-portal-session-key"),
         announcement: message,
-        sendEmailBoolean: sendEmail,
-        verifiedEmails: verifiedEmails,
+        sendToEmail: sendEmail,
+        linkUrl: linkUrl,
+        linkText: linkText,
       }),
     }).then(async (res) => {
       const json = await res.json();
@@ -90,9 +87,12 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       } else {
         // Announcement sent with email
         if (sendEmail) {
-          setSuccess("Announcement has been sent! In addition, email has been sent"
-              + " to all verified DSGT members.")
-        } else { // No email
+          setSuccess(
+            "Announcement has been sent! In addition, email has been sent" +
+              " to all verified DSGT members."
+          );
+        } else {
+          // No email
           setSuccess("Announcement has been sent! No email was sent.");
         }
       }
@@ -127,45 +127,22 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
-  /**
-   * Makes a call to get users with verified email.
-   */
-  const getUsersWithVerifiedEmail = async () => {
-    await fetch("/api/user/get", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-      },
-      body: JSON.stringify({
-        session_id: localStorage.getItem("dsgt-portal-session-key"),
-        collecting_emails: sendEmail
-      }),
-    }).then(async (res) => {
-      const json = await res.json();
-      if (!json.ok && json.error) {
-        console.error(json.error);
-      } else {
-        setVerifiedEmails(json.data);
-      }
-      setLoading(false);
-    });
-  };
-
   // Get all announcements
   useEffect(() => {
     // Get all announcements
     const getAnnouncements = async () => {
-      await fetch("/api/announcement/get", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-        },
-        body: JSON.stringify({
-          session_id: localStorage.getItem("dsgt-portal-session-key"),
-        }),
-      }).then(async (res) => {
+      await fetch(
+        `/api/announcement/get?session_id=${localStorage.getItem(
+          "dsgt-portal-session-key"
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+          },
+        }
+      ).then(async (res) => {
         const json = await res.json();
         if (!json.ok && json.error) {
           console.error(json.error);
@@ -183,22 +160,71 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
       <h1 className={styles.Major}>Announcements</h1>
       <h2 className={styles.Minor}>Send Announcement</h2>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          className={styles.TextBox}
-          placeholder="Type your announcement message here..."
-          onChange={handleChange}
-        ></textarea>
-        <ErrorText>{error}</ErrorText>
-        <SuccessText>{success}</SuccessText>
-        <input
-            type="checkbox"
-            id="sendEmail"
-            onClick={validateCheck}
-            name="sendEmail"/>
-        <label className={styles.Minor} htmlFor="sendEmail">Send email?</label>
-        <InputField placeholder="Send" type={"submit"} width="fit-content" />
-      </form>
+      <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
+        <>
+          <Form
+            onSubmit={handleSubmit}
+            submitPlaceholder="Create"
+            width="40%"
+            minWidth="300px"
+          >
+            <textarea
+              className={styles.TextBox}
+              placeholder="Type your announcement message here..."
+              onChange={handleChange}
+            ></textarea>
+            <ErrorText>{error}</ErrorText>
+            <SuccessText>{success}</SuccessText>
+            <InputField
+              type={"url"}
+              name="link"
+              placeholder="Link URL"
+              onChange={(e) => {
+                setLinkUrl(e.currentTarget.value);
+              }}
+            />
+            <InputField
+              type={"text"}
+              name="link-text"
+              placeholder="Link Text"
+              onChange={(e) => setLinkText(e.currentTarget.value)}
+            />
+            <div>
+              <input
+                type="checkbox"
+                id="sendEmail"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSendEmail(e.currentTarget.checked);
+                  console.log(e.currentTarget.checked);
+                }}
+                name="sendEmail"
+              />
+              <label
+                className={styles.Minor}
+                htmlFor="sendEmail"
+                style={{ padding: "0 0 0 0.5em" }}
+              >
+                Send email?
+              </label>
+            </div>
+          </Form>
+          <div className={styles.SideBySide}>
+            <FlexColumn gap="20px">
+              <h1 className={styles.Minor}>
+                Here's what your announcement will look like to members:
+              </h1>
+              <Announcement
+                when={new Date()}
+                from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+                link_text={linkText}
+                link_url={linkUrl}
+              >
+                {message || "No message"}
+              </Announcement>
+            </FlexColumn>
+          </div>
+        </>
+      </FlexRow>
       <Modal
         open={showSendModal}
         setOpen={setShowSendModal}
@@ -206,7 +232,16 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         handleConfirmed={handleSendModalConfirm}
       >
         Are you sure you would like to send the following announcement?
-        <span className={styles.AnnConfirm}>{message}</span>
+        <span className={styles.AnnConfirm}>
+          <Announcement
+            when={new Date()}
+            from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+            link_text={linkText}
+            link_url={linkUrl}
+          >
+            {message || "No message"}
+          </Announcement>
+        </span>
       </Modal>
 
       <h2 className={styles.Minor}>Existing Announcements</h2>
@@ -226,6 +261,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
                     from={`${a["fname"]} ${a["lname"]}`}
                     id={a["ann_id"]}
                     deletable={true}
+                    link_url={a["link_url"]}
+                    link_text={a["link_text"]}
                     onDelete={(announcement_id?: number) => {
                       setShowDelModal(true);
                       if (announcement_id)

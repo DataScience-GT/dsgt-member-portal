@@ -9,6 +9,7 @@ interface FormProps {
   submitPlaceholder?: string;
   width?: string;
   maxWidth?: string;
+  minWidth?: string;
   children?: React.ReactNode;
 }
 
@@ -18,11 +19,16 @@ const Form: FC<FormProps> = ({
   submitPlaceholder,
   width,
   maxWidth,
+  minWidth,
 }: FormProps) => (
   <div
     className={styles.Form}
     data-testid="Form"
-    style={{ width: width || "300px", maxWidth: maxWidth || "100%" }}
+    style={{
+      width: width || "300px",
+      maxWidth: maxWidth || "100%",
+      minWidth: minWidth || "0px",
+    }}
   >
     <form onSubmit={onSubmit}>
       <FlexColumn gap="10px">

@@ -7,6 +7,7 @@ import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
 import CheckinMenu from "../../components/CheckinMenu/CheckinMenu";
+import CheckinEvent from "../../components/CheckinEvent/CheckinEvent";
 
 import {
   checkinUser,
@@ -113,6 +114,12 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
     }
   };
 
+  const [selectedId, setSelectedId] = useState(0);
+
+  const handleEventSelect = (id: number) => {
+    setSelectedId(id);
+  };
+
   return (
     <div
       className={`${styles.PortalCheckin} ${portal_styles.PortalPage}`}
@@ -132,13 +139,13 @@ const PortalCheckin: FC<PortalCheckinProps> = () => {
               ? "loading..."
               : events && events.length
               ? events?.map((e, i) => (
-                  <h2
-                    className={portal_styles.Minor}
+                  <CheckinEvent 
                     key={e.event_id}
-                    data-event-id={e.event_id}
-                  >
-                    {e.name}
-                  </h2>
+                    id={e.event_id}
+                    value={e.name}
+                    selectedId={selectedId}
+                    changeSelected={handleEventSelect}
+                  />
                 ))
               : "No check-in events."}
           </FlexColumn>
