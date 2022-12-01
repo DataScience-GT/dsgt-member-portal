@@ -387,6 +387,10 @@ export const getAnnouncements = async (count?: number) => {
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
+        "announcement.email_sent",
+        "announcement.email_sent_to",
+        "announcement.link_url",
+        "announcement.link_text",
         "user.fname",
         "user.lname"
       )
@@ -399,6 +403,10 @@ export const getAnnouncements = async (count?: number) => {
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
+        "announcement.email_sent",
+        "announcement.email_sent_to",
+        "announcement.link_url",
+        "announcement.link_text",
         "user.fname",
         "user.lname"
       )
@@ -411,7 +419,14 @@ export const getAnnouncements = async (count?: number) => {
  * @param message {string} message
  * @param user_id {number} the user's (who wrote the announcement) id
  */
-export const insertAnnouncement = async (message: string, user_id: number) => {
+export const insertAnnouncement = async (
+  message: string,
+  user_id: number,
+  email_sent?: boolean,
+  email_sent_to?: string,
+  link_url?: string,
+  link_text?: string
+) => {
   await db
     .insert({ message: message, from_user: user_id })
     .into("announcement");
