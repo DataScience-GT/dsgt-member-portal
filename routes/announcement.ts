@@ -24,28 +24,20 @@ router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the announcement api!");
 });
 
-router.post(
+router.get(
   "/get",
+  ValidateSession("query"),
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    let session_id = req.body.session_id;
-    if (!session_id) {
-      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
-      return;
-    }
     // Parse number of announcements
     let count = req.query.count?.toString();
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      if (count) {
-        let ans = await getAnnouncements(parseInt(count));
-        res.json({ ok: 1, data: ans });
-      } else {
-        let ans = await getAnnouncements();
-        res.json({ ok: 1, data: ans });
-      }
+
+    if (count) {
+      let ans = await getAnnouncements(parseInt(count));
+      res.json({ ok: 1, data: ans });
     } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+      let ans = await getAnnouncements();
+      res.json({ ok: 1, data: ans });
     }
   }
 );
@@ -64,12 +56,12 @@ router.post(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //create announcements
-    await insertAnnouncement(message, res.locals.session.user_id);
+
+    let verifiedEmails: string[] = [];
 
     if (sendToEmail) {
-      let verifiedEmails = await getAllMembersWithEmailOn();
-      
+      verifiedEmails = await getAllMembersWithEmailOn();
+
       // Email
       let emailToSend = getAnnouncementEmailTemplate(message);
       sendEmail(
@@ -78,11 +70,21 @@ router.post(
         null,
         emailToSend,
         next,
-        (info: any) => {
-          res.json({ ok: 1, info: info });
-        }
+        (info: any) => {}
       );
     }
+
+    //create announcements
+    await insertAnnouncement(
+      message,
+      res.locals.session.user_id,
+      sendToEmail,
+      verifiedEmails && verifiedEmails.length
+        ? JSON.stringify(verifiedEmails)
+        : undefined
+    );
+
+    res.json({ ok: 1 });
   }
 );
 

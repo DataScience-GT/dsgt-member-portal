@@ -428,7 +428,14 @@ export const insertAnnouncement = async (
   link_text?: string
 ) => {
   await db
-    .insert({ message: message, from_user: user_id })
+    .insert({
+      message: message,
+      from_user: user_id,
+      email_sent,
+      email_sent_to,
+      link_url,
+      link_text,
+    })
     .into("announcement");
 };
 
