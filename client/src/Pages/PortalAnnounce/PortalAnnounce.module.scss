@@ -39,3 +39,10 @@
   color: #eee;
   padding: 5px;
 }
+
+.SideBySide {
+  flex-grow: 1;
+  align-self: stretch;
+  max-width: 50%;
+  min-width: 300px;
+}

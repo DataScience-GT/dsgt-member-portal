@@ -1,10 +1,12 @@
 import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import Announcement from "../../components/Announcement/Announcement";
 import ErrorText from "../../components/ErrorText/ErrorText";
+import Form from "../../components/Form/Form";
 import InputField from "../../components/InputField/InputField";
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalAnnounce.module.scss";
 
 interface PortalAnnounceProps {}
@@ -16,6 +18,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const [message, setMessage] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkText, setLinkText] = useState("");
   // const [verifiedEmails, setVerifiedEmails] = useState([]);
 
   // Existing announcements
@@ -180,32 +184,61 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
       <h1 className={styles.Major}>Announcements</h1>
       <h2 className={styles.Minor}>Send Announcement</h2>
-      <form onSubmit={handleSubmit}>
-        <textarea
-          className={styles.TextBox}
-          placeholder="Type your announcement message here..."
-          onChange={handleChange}
-        ></textarea>
-        <ErrorText>{error}</ErrorText>
-        <SuccessText>{success}</SuccessText>
-        <input
-          type="checkbox"
-          id="sendEmail"
-          onChange={(e: ChangeEvent<HTMLInputElement>) => {
-            setSendEmail(e.currentTarget.checked);
-            console.log(e.currentTarget.checked);
-          }}
-          name="sendEmail"
-        />
-        <label
-          className={styles.Minor}
-          htmlFor="sendEmail"
-          style={{ padding: "0 0 0 0.5em" }}
-        >
-          Send email?
-        </label>
-        <InputField placeholder="Send" type={"submit"} width="fit-content" />
-      </form>
+      <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
+        <>
+          <Form
+            onSubmit={handleSubmit}
+            submitPlaceholder="Create"
+            width="40%"
+            minWidth="300px"
+          >
+            <textarea
+              className={styles.TextBox}
+              placeholder="Type your announcement message here..."
+              onChange={handleChange}
+            ></textarea>
+            <ErrorText>{error}</ErrorText>
+            <SuccessText>{success}</SuccessText>
+            <InputField type={"url"} name="link" placeholder="Link URL" />
+            <InputField
+              type={"text"}
+              name="link-text"
+              placeholder="Link Text"
+            />
+            <div>
+              <input
+                type="checkbox"
+                id="sendEmail"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSendEmail(e.currentTarget.checked);
+                  console.log(e.currentTarget.checked);
+                }}
+                name="sendEmail"
+              />
+              <label
+                className={styles.Minor}
+                htmlFor="sendEmail"
+                style={{ padding: "0 0 0 0.5em" }}
+              >
+                Send email?
+              </label>
+            </div>
+          </Form>
+          <div className={styles.SideBySide}>
+            <FlexColumn gap="20px">
+              <h1 className={styles.Minor}>
+                Here's what your announcement will look like to members:
+              </h1>
+              <Announcement
+                when={new Date()}
+                from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+              >
+                {message || "No message"}
+              </Announcement>
+            </FlexColumn>
+          </div>
+        </>
+      </FlexRow>
       <Modal
         open={showSendModal}
         setOpen={setShowSendModal}
