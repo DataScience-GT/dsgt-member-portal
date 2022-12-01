@@ -353,7 +353,13 @@ router.post(
     let recovery_url = `${host}/passwordreset?reset_code=${x}`;
     // Send the email with link
     let emailToSend = getPasswordResetEmail(recovery_url);
-    await sendEmail(email, "Password Recovery", null, emailToSend, next);
+    // await sendEmail(email, "Password Recovery", null, emailToSend, next);
+    sendEmail({
+      to: email,
+      subject: "Password Recovery",
+      html: emailToSend,
+      next,
+    });
     res.json({ ok: 1 });
   }
 );

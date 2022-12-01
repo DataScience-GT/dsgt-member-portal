@@ -67,14 +67,20 @@ router.post(
 
       // Email
       let emailToSend = getAnnouncementEmailTemplate(message);
-      sendEmail(
-        verifiedEmails,
-        "DSGT Announcement",
-        null,
-        emailToSend,
-        next,
-        (info: any) => {}
-      );
+      // sendEmail(
+      //   verifiedEmails,
+      //   "DSGT Announcement",
+      //   null,
+      //   emailToSend,
+      //   next,
+      //   (info: any) => {}
+      // );
+      sendEmail({
+        bcc: verifiedEmails,
+        subject: "DSGT Announcement",
+        html: emailToSend,
+        next
+      })
     }
 
     //create announcements
