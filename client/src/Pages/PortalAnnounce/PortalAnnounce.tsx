@@ -232,7 +232,16 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         handleConfirmed={handleSendModalConfirm}
       >
         Are you sure you would like to send the following announcement?
-        <span className={styles.AnnConfirm}>{message}</span>
+        <span className={styles.AnnConfirm}>
+          <Announcement
+            when={new Date()}
+            from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+            link_text={linkText}
+            link_url={linkUrl}
+          >
+            {message || "No message"}
+          </Announcement>
+        </span>
       </Modal>
 
       <h2 className={styles.Minor}>Existing Announcements</h2>
