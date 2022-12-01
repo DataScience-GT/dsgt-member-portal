@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, useEffect, useState } from "react";
 import Announcement from "../../components/Announcement/Announcement";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
@@ -42,22 +42,6 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   };
 
   /**
-   * Validates whether the checkbox is checked & updates sendEmail boolean.
-   */
-  const validateCheck = () => {
-    let checkbox = document.getElementById('sendEmail') as HTMLInputElement;
-    checkbox!.addEventListener( "change", () => {
-      if (checkbox!.checked) {
-        console.log("Sending to email...");
-        setSendEmail(true);
-      } else {
-        console.log("No email.")
-        setSendEmail(false);
-      }
-    });
-  };
-
-  /**
    * Handles change on announcement message.
    * @param e new character in textfield
    */
@@ -98,9 +82,12 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       } else {
         // Announcement sent with email
         if (sendEmail) {
-          setSuccess("Announcement has been sent! In addition, email has been sent"
-              + " to all verified DSGT members.")
-        } else { // No email
+          setSuccess(
+            "Announcement has been sent! In addition, email has been sent" +
+              " to all verified DSGT members."
+          );
+        } else {
+          // No email
           setSuccess("Announcement has been sent! No email was sent.");
         }
       }
@@ -164,16 +151,18 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   useEffect(() => {
     // Get all announcements
     const getAnnouncements = async () => {
-      await fetch("/api/announcement/get", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-        },
-        body: JSON.stringify({
-          session_id: localStorage.getItem("dsgt-portal-session-key"),
-        }),
-      }).then(async (res) => {
+      await fetch(
+        `/api/announcement/get?session_id=${localStorage.getItem(
+          "dsgt-portal-session-key"
+        )}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+          },
+        }
+      ).then(async (res) => {
         const json = await res.json();
         if (!json.ok && json.error) {
           console.error(json.error);
@@ -200,11 +189,21 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         <ErrorText>{error}</ErrorText>
         <SuccessText>{success}</SuccessText>
         <input
-            type="checkbox"
-            id="sendEmail"
-            onClick={validateCheck}
-            name="sendEmail"/>
-        <label className={styles.Minor} htmlFor="sendEmail">Send email?</label>
+          type="checkbox"
+          id="sendEmail"
+          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+            setSendEmail(e.currentTarget.checked);
+            console.log(e.currentTarget.checked);
+          }}
+          name="sendEmail"
+        />
+        <label
+          className={styles.Minor}
+          htmlFor="sendEmail"
+          style={{ padding: "0 0 0 0.5em" }}
+        >
+          Send email?
+        </label>
         <InputField placeholder="Send" type={"submit"} width="fit-content" />
       </form>
       <Modal
