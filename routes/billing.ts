@@ -106,7 +106,7 @@ router.post(
         //check if has enough perms
        if (compareUserRoles(valid.role, "administrator") >= 0) {
           //add the payment data to the db
-          await createProfBillingDetails(prof_email, prof_name, prof_phone);
+          // await createProfBillingDetails(prof_email, prof_name, prof_phone);
           let emailToSend = getAnnouncementEmailTemplate("Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed");
           await sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
           res.json({ ok: 1 });
