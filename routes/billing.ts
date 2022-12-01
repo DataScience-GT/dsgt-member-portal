@@ -19,6 +19,7 @@ import { checkSessionValid } from "../SessionManagement";
 import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
 
 import { sendEmail } from "../email";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 const router = express.Router();
 
@@ -94,31 +95,24 @@ router.post(
 );
 
 router.post(
-    "/prof",
-    async (req: Request, res: Response, next: NextFunction) => {
-        let prof_email = req.body.email;
-        let prof_name = req.body.name;
-        let prof_phone = req.body.phone;
-        let session_id = req.body.session_id;
-        prof_email = prof_email.toLowerCase();
-        let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-        //check if has enough perms
-       if (compareUserRoles(valid.role, "administrator") >= 0) {
-          //add the payment data to the db
-          // await createProfBillingDetails(prof_email, prof_name, prof_phone);
-          let emailToSend = getAnnouncementEmailTemplate("Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed");
-          await sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
-          res.json({ ok: 1 });
-       } else {
-         next(new StatusErrorPreset(ErrorPreset.NoPermission));
-       }
-      } else {
-       next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
-      }
-    }
-  );
-  
+  "/prof",
+  ValidateSession("body", "administrator"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let prof_email = req.body.email;
+    let prof_name = req.body.name;
+    let prof_phone = req.body.phone;
+
+    prof_email = prof_email.toLowerCase();
+
+    //add the payment data to the db
+    // await createProfBillingDetails(prof_email, prof_name, prof_phone);
+    let emailToSend = getAnnouncementEmailTemplate(
+      "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
+    );
+    await sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
+    res.json({ ok: 1 });
+  }
+);
 
 module.exports = router;
 export default router;
