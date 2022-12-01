@@ -252,6 +252,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
                     from={`${a["fname"]} ${a["lname"]}`}
                     id={a["ann_id"]}
                     deletable={true}
+                    link_url={a["link_url"]}
+                    link_text={a["link_text"]}
                     onDelete={(announcement_id?: number) => {
                       setShowDelModal(true);
                       if (announcement_id)

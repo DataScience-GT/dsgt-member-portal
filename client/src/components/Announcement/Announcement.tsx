@@ -71,6 +71,16 @@ const Announcement: FC<AnnouncementProps> = ({
               ""
             )}
             <h1 className={styles.Title}>{children}</h1>
+            {link_url && (
+              <a
+                href={link_url}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.AnnouncementButton}
+              >
+                {link_text || "Learn More"}
+              </a>
+            )}
           </div>
         </FlexRow>
       </div>
@@ -102,7 +112,12 @@ const Announcement: FC<AnnouncementProps> = ({
         )}
         <h1 className={styles.Title}>{children}</h1>
         {link_url && (
-          <a href={link_url} target="_blank" rel="noreferrer" className={styles.AnnouncementButton}>
+          <a
+            href={link_url}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.AnnouncementButton}
+          >
             {link_text || "Learn More"}
           </a>
         )}
