@@ -23,7 +23,9 @@ import {
   getPasswordResets,
   attemptPasswordReset,
   deleteUser,
+  getAllMembersWithEmailOn,
   getUserLastLoggedOn,
+  getAllMembers,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles } from "../RoleManagement";
@@ -46,6 +48,7 @@ router.post(
   RateLimit(100, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
+    let collecting_emails = req.body.sendEmail;
     if (!session_id) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
@@ -54,16 +57,20 @@ router.post(
     if (req.body.sorts) {
       sorts = JSON.parse(req.body.sorts) as Sort[];
     }
-
     let valid = await checkSessionValid(session_id, next);
     if (valid && valid.valid) {
-      //check if has enough perms
+      // Check if permissions exist
       if (compareUserRoles(valid.role, "administrator") >= 0) {
-        const x = await getUsers(sorts);
-        for (let user of x) {
+        const allUsers = getUsers(sorts);
+        const verifiedUsers = await getAllMembersWithEmailOn();
+        for (let user of allUsers) {
           user.last_logged_on = await getUserLastLoggedOn(user.user_id);
         }
-        res.json({ ok: 1, data: x });
+        if (collecting_emails) {
+          res.json({ ok: 1, data: verifiedUsers });
+        } else {
+          res.json({ ok: 1, data: allUsers });
+        }
       } else {
         next(new StatusErrorPreset(ErrorPreset.NoPermission));
       }
@@ -306,8 +313,8 @@ router.post(
   "/resetpassword/get",
   RateLimit(3, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    //intitiate a password reset
-    //generate a random code
+    // Initiate a password reset
+    // Generate a random code
     let x = await getPasswordResets();
     res.json({ ok: 1, data: x });
   }
@@ -322,19 +329,14 @@ router.post(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    //check if email exists
+    // Check if email exists
     let exists = await checkUserEmail(email, true);
     if (!exists) {
-      next(
-        new StatusError(
-          "Account with that email does not exist.",
-          404
-        )
-      );
+      next(new StatusError("Account with that email does not exist.", 404));
       return;
     }
-    //intitiate a password reset
-    //generate a random code
+    // Initiate a password reset
+    // Generate a random code
     let x = await initiatePasswordReset(email);
     if (!x) {
       next(
@@ -342,11 +344,14 @@ router.post(
       );
       return;
     }
-    //DO NOT SEND THIS CODE BACK TO THE REQEUST -- EMAIL TO THE EMAIL GIVEN
-    //get the recovery link
-    let host = req.get("host");
+    // DO NOT SEND THIS CODE BACK TO THE REQ -- EMAIL TO THE EMAIL GIVEN
+    // Get the recovery link
+    let host =
+      process.env.NODE_ENV == "development"
+        ? req.get("host")
+        : "https://member.datasciencegt.org";
     let recovery_url = `${host}/passwordreset?reset_code=${x}`;
-    //send the email with link
+    // Send the email with link
     let emailToSend = getPasswordResetEmail(recovery_url);
     await sendEmail(email, "Password Recovery", null, emailToSend, next);
     res.json({ ok: 1 });

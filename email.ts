@@ -1,6 +1,5 @@
 const nodemailer = require("nodemailer");
 import { NextFunction } from "express";
-import { error } from "./Logger";
 
 export const sendEmail = (
   receiving_email: string[] | string,
@@ -17,11 +16,9 @@ export const sendEmail = (
       pass: process.env.SMTP_EMAIL_PASSWORD,
     },
   });
-
   if (Array.isArray(receiving_email)) {
     receiving_email = receiving_email.join(", ");
   }
-
   transporter.verify().then().catch(next);
   transporter
     .sendMail({

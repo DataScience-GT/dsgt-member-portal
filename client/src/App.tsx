@@ -20,7 +20,6 @@ function App() {
 
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState("");
-  // const [path, setPath] = useState("");
 
   useEffect(() => {
     // Retrieves theme from local storage

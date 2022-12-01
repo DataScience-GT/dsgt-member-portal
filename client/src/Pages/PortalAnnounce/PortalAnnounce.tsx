@@ -6,17 +6,20 @@ import Modal, { ModalPreset } from "../../components/Modal/Modal";
 import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import styles from "./PortalAnnounce.module.scss";
+import {getUsers} from "../../../../model";
 
 interface PortalAnnounceProps {}
 
 const PortalAnnounce: FC<PortalAnnounceProps> = () => {
-  //new announcement
+  // New announcement
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [message, setMessage] = useState("");
   const [showSendModal, setShowSendModal] = useState(false);
+  const [sendEmail, setSendEmail] = useState(false);
+  const [verifiedEmails, setVerifiedEmails] = useState([]);
 
-  //existing announcements
+  // Existing announcements
   const [loading, setLoading] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
   const [showDelModal, setShowDelModal] = useState(false);
@@ -33,13 +36,41 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     }
     setShowSendModal(true);
   };
+
+  /**
+   * Validates whether the checkbox is checked & updates sendEmail boolean.
+   */
+  const validateCheck = () => {
+    let checkbox = document.getElementById('sendEmail') as HTMLInputElement;
+    checkbox!.addEventListener( "change", () => {
+      if (checkbox!.checked) {
+        console.log("Sending to email...");
+        setSendEmail(true);
+      } else {
+        console.log("No email.")
+        setSendEmail(false);
+      }
+    });
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
   };
 
+  // const collectAllVerifiedEmails = async () => {
+  //
+  // }
+
+  /**
+   * Added priority with sendEmail boolean. Thus, confirmation of announcement
+   * can distinguish whether to send email or not.
+   */
   const handleSendModalConfirm = async () => {
     setSuccess("");
     setError("");
+    if (sendEmail) {
+      await getUsersWithVerifiedEmail();
+    }
     await fetch("/api/announcement/create", {
       method: "POST",
       headers: {
@@ -49,14 +80,21 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       body: JSON.stringify({
         session_id: localStorage.getItem("dsgt-portal-session-key"),
         announcement: message,
+        sendEmailBoolean: sendEmail,
+        verifiedEmails: verifiedEmails,
       }),
     }).then(async (res) => {
       const json = await res.json();
       if (!json.ok && json.error) {
         setError(json.error);
       } else {
-        //announcement sent
-        setSuccess("Announcement has been sent!");
+        // Announcement sent with email
+        if (sendEmail) {
+          setSuccess("Announcement has been sent! In addition, email has been sent"
+              + " to all verified DSGT members.")
+        } else { // No email
+          setSuccess("Announcement has been sent! No email was sent.");
+        }
       }
     });
   };
@@ -79,7 +117,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       if (!json.ok && json.error) {
         setError2(json.error);
       } else {
-        //announcement sent
+        // Announcement sent
         setSuccess2("Announcement has been deleted!");
         document
           .querySelector(`[data-announcement-id="${currentAnnouncementId}"]`)
@@ -89,9 +127,34 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
-  //get all announcements
+  /**
+   * Makes a call to get users with verified email.
+   */
+  const getUsersWithVerifiedEmail = async () => {
+    await fetch("/api/user/get", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+      },
+      body: JSON.stringify({
+        session_id: localStorage.getItem("dsgt-portal-session-key"),
+        collecting_emails: sendEmail
+      }),
+    }).then(async (res) => {
+      const json = await res.json();
+      if (!json.ok && json.error) {
+        console.error(json.error);
+      } else {
+        setVerifiedEmails(json.data);
+      }
+      setLoading(false);
+    });
+  };
+
+  // Get all announcements
   useEffect(() => {
-    //get all announcements
+    // Get all announcements
     const getAnnouncements = async () => {
       await fetch("/api/announcement/get", {
         method: "POST",
@@ -107,7 +170,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         if (!json.ok && json.error) {
           console.error(json.error);
         } else {
-          //use data
+          // Use data
           setAnnouncements(json.data);
         }
         setLoading(false);
@@ -128,6 +191,12 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         ></textarea>
         <ErrorText>{error}</ErrorText>
         <SuccessText>{success}</SuccessText>
+        <input
+            type="checkbox"
+            id="sendEmail"
+            onClick={validateCheck}
+            name="sendEmail"/>
+        <label className={styles.Minor} htmlFor="sendEmail">Send email?</label>
         <InputField placeholder="Send" type={"submit"} width="fit-content" />
       </form>
       <Modal

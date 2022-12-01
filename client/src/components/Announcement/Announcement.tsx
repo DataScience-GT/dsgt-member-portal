@@ -12,6 +12,8 @@ interface AnnouncementProps {
   id?: number;
   deletable?: boolean;
   onDelete?: (announcement_id: number) => void;
+  // Track which announcements were emails.
+  sent_email?: boolean;
 }
 
 const Announcement: FC<AnnouncementProps> = ({
@@ -21,6 +23,7 @@ const Announcement: FC<AnnouncementProps> = ({
   id,
   deletable,
   onDelete,
+    sent_email
 }: AnnouncementProps) => {
   if (deletable) {
     return (

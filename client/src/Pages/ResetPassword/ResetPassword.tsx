@@ -35,7 +35,7 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
       setError("Email already sent.");
       return;
     }
-    //initiate password reset
+    // Initiate password reset
     await fetch("/api/user/resetpassword/initiate", {
       method: "POST",
       headers: {
@@ -46,11 +46,11 @@ const ResetPassword: FC<ResetPasswordProps> = () => {
     }).then(async (res) => {
       const json = await res.json();
       if (!json.ok && json.error) {
-        //error
+        // Error
         setError(json.error);
       } else {
-        //success
-        // console.log(json);
+        // Success
+        console.log("JSON");
         setSuccess("Email sent, expires in 10 minutes.");
         setComplete(true);
       }

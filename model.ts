@@ -12,6 +12,7 @@ import { Form } from "./interfaces/Form";
 import { Feedback } from "./interfaces/Feedback";
 
 import { Team, TeamMember } from "./interfaces/Team";
+import { ListFormat } from "typescript";
 
 const crypto = require("crypto");
 
@@ -237,7 +238,7 @@ export const changeUserPassword = async (
 ) => {
   let curr_hash = md5(current_password);
   let new_hash = md5(new_password);
-  //check if current password is correct
+  // Check if current password is correct
   let res = await db("user")
     .count("*")
     .where("email", email)
@@ -245,7 +246,7 @@ export const changeUserPassword = async (
   if (res.length <= 0) {
     return false;
   } else {
-    //update password
+    // Update password
     await db("user")
       .update({ password: new_hash })
       .where("email", email)
@@ -332,7 +333,7 @@ export const validateSession = async (session_id: string) => {
  * @returns json object
  */
 export const getApiRequests = async () => {
-  return await db.select("*").from("ratelimiting");
+  return db.select("*").from("ratelimiting");
 };
 
 /**
@@ -357,10 +358,10 @@ export const getCountUserRequestsWithinTimeframe = async (
 ) => {
   let now = new Date();
   let t1 = new Date(now.getTime() - time);
-  return await db("ratelimiting")
-    .count("*")
-    .where("created_at", ">=", t1.toISOString())
-    .andWhere("pathname", pathname);
+  return db("ratelimiting")
+      .count("*")
+      .where("created_at", ">=", t1.toISOString())
+      .andWhere("pathname", pathname);
 };
 
 /**
@@ -380,33 +381,33 @@ export const getUserRole = async (email: string) => {
 // ------------------------ Announcements ------------------------
 export const getAnnouncements = async (count?: number) => {
   if (count) {
-    return await db("announcement")
-      .join("user", "user.user_inc", "=", "announcement.from_user")
-      .select(
-        "announcement.ann_id",
-        "announcement.message",
-        "announcement.created_at",
-        "user.fname",
-        "user.lname"
-      )
-      .orderBy("created_at", "desc")
-      .limit(count);
+    return db("announcement")
+        .join("user", "user.user_inc", "=", "announcement.from_user")
+        .select(
+            "announcement.ann_id",
+            "announcement.message",
+            "announcement.created_at",
+            "user.fname",
+            "user.lname"
+        )
+        .orderBy("created_at", "desc")
+        .limit(count);
   } else {
-    return await db("announcement")
-      .join("user", "user.user_inc", "=", "announcement.from_user")
-      .select(
-        "announcement.ann_id",
-        "announcement.message",
-        "announcement.created_at",
-        "user.fname",
-        "user.lname"
-      )
-      .orderBy("created_at", "desc");
+    return db("announcement")
+        .join("user", "user.user_inc", "=", "announcement.from_user")
+        .select(
+            "announcement.ann_id",
+            "announcement.message",
+            "announcement.created_at",
+            "user.fname",
+            "user.lname"
+        )
+        .orderBy("created_at", "desc");
   }
 };
 
 /**
- * creates a new announcement
+ * Creates a new announcement
  * @param message {string} message
  * @param user_id {number} the user's (who wrote the announcement) id
  */
@@ -427,12 +428,12 @@ export const deleteAnnouncement = async (announcement_id: number) => {
 // ---------------------- password reset ----------------------
 
 export const getPasswordResets = async () => {
-  return await db("passwordreset").select(
-    "reset_id",
-    "user_email",
-    "reset_code",
-    "completed",
-    "created_at"
+  return db("passwordreset").select(
+      "reset_id",
+      "user_email",
+      "reset_code",
+      "completed",
+      "created_at"
   );
 };
 
@@ -547,9 +548,9 @@ export const checkUUIDExists = async (uuid: string) => {
  */
 export const getBillingDetails = async (email?: string) => {
   if (!email) {
-    return await db("billing_details").select("*");
+    return db("billing_details").select("*");
   } else {
-    return await db("billing_details").select("*").where("email", email);
+    return db("billing_details").select("*").where("email", email);
   }
 };
 
@@ -602,6 +603,18 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
   }
 };
 
+/**  
+ * inserts the given professor details into the db and sends them an email to register
+ * @param prof_list list of professor billing details.
+ */
+export const createProfBillingDetails = async(prof_list: Set<BillingDetails>) => {
+  let i;
+  let it = prof_list.values();
+  for(i = 0; i < prof_list.size; i++) {
+    createBillingDetails(it.next().value);
+    //SMTP
+  }
+}
 // -------------------------- forms --------------------------
 /**
  * checks whether the projects form has been saved
@@ -657,60 +670,60 @@ export const getEvents = async (
     //   .where("created_at", ">=", t1.toISOString())
     //   .andWhere("pathname", pathname);
     if (count) {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "asc")
-        .where("startISO", ">=", now.toISOString())
-        .limit(count);
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "asc")
+          .where("startISO", ">=", now.toISOString())
+          .limit(count);
     } else {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "asc")
-        .where("startISO", ">=", now.toISOString());
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "asc")
+          .where("startISO", ">=", now.toISOString());
     }
   } else if (ongoing) {
     // console.log(2);
     order_by = "endISO";
     let now = new Date();
     if (count) {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "asc")
-        .where("startISO", "<=", now.toISOString())
-        .andWhere("endISO", ">=", now.toISOString())
-        .limit(count);
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "asc")
+          .where("startISO", "<=", now.toISOString())
+          .andWhere("endISO", ">=", now.toISOString())
+          .limit(count);
     } else {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "asc")
-        .where("startISO", "<=", now.toISOString())
-        .andWhere("endISO", ">=", now.toISOString());
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "asc")
+          .where("startISO", "<=", now.toISOString())
+          .andWhere("endISO", ">=", now.toISOString());
     }
   } else if (continuous) {
     // console.log(3);
 
     if (count) {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "desc")
-        .where("startISO", null)
-        .limit(count);
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "desc")
+          .where("startISO", null)
+          .limit(count);
     } else {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "desc")
-        .where("startISO", null);
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "desc")
+          .where("startISO", null);
     }
   } else {
     // console.log(4);
 
     if (count) {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "desc")
-        .limit(count);
+      return db("event")
+          .select("*")
+          .orderBy(order_by, "desc")
+          .limit(count);
     } else {
-      return await db("event").select("*").orderBy(order_by, "desc");
+      return db("event").select("*").orderBy(order_by, "desc");
     }
   }
 };
@@ -765,10 +778,10 @@ export const createForm = async (f: Form) => {
 };
 
 export const getForms = async (count?: number) => {
-  return await db("forms")
-    .select("*")
-    .orderBy("created_at", "asc")
-    .limit(count || 500);
+  return db("forms")
+      .select("*")
+      .orderBy("created_at", "asc")
+      .limit(count || 500);
 };
 
 export const deleteform = async (formId: number) => {
@@ -795,21 +808,21 @@ export const getFeedback = async (
   feedbackType: "bug" | "feature" | "change",
   count?: number
 ) => {
-  return await db("feedback")
-    .select(
-      "feedback_id",
-      "action",
-      "urgency",
-      "content",
-      "resolved",
-      "resolved_by",
-      "created_at"
-    )
-    .whereNotNull("content")
-    .andWhere("action", feedbackType)
-    .orderBy("created_at", "desc")
-    .orderBy("resolved", "asc")
-    .limit(count || 500);
+  return db("feedback")
+      .select(
+          "feedback_id",
+          "action",
+          "urgency",
+          "content",
+          "resolved",
+          "resolved_by",
+          "created_at"
+      )
+      .whereNotNull("content")
+      .andWhere("action", feedbackType)
+      .orderBy("created_at", "desc")
+      .orderBy("resolved", "asc")
+      .limit(count || 500);
 };
 
 // ---------------------------- checkin ----------------------------
@@ -825,7 +838,7 @@ export const checkinEventExists = async (event_id: number) => {
 
 // get list of checkin events
 export const getCheckinEvents = async () => {
-  return await db("checkin_event").select("*");
+  return db("checkin_event").select("*");
 };
 
 /**
@@ -852,9 +865,9 @@ export const deleteCheckinEvent = async (event_id: number) => {
  */
 export const getCheckinUsers = async (event_id?: number) => {
   if (event_id) {
-    return await db("checkin_user").select("*").where({ event_id });
+    return db("checkin_user").select("*").where({event_id});
   } else {
-    return await db("checkin_user").select("*");
+    return db("checkin_user").select("*");
   }
 };
 
@@ -904,29 +917,39 @@ export const isUserCheckedIn = async (event_id: number, user_id: number) => {
 
 // ------------------------------ files ------------------------------
 export const getAllMembers = async () => {
-  return await db("user").select(
-    "user_inc",
-    "email",
-    "fname",
-    "lname",
-    "created_at",
-    "enabled",
-    "uuid",
-    "major",
-    "minor",
-    "gtemail",
-    "personalemail",
-    "newmember",
-    "studyyear",
-    "gender",
-    "ethnicity",
-    "location",
-    "experience",
-    "interests",
-    "role",
-    "hear_about",
-    "email_consent"
+  return db("user").select(
+      "user_inc",
+      "email",
+      "fname",
+      "lname",
+      "created_at",
+      "enabled",
+      "uuid",
+      "major",
+      "minor",
+      "gtemail",
+      "personalemail",
+      "newmember",
+      "studyyear",
+      "gender",
+      "ethnicity",
+      "location",
+      "experience",
+      "interests",
+      "role",
+      "hear_about",
+      "email_consent"
   );
+};
+
+/**
+ * Gets all members that are enabled and who have accepted email announcements.
+ */
+export const getAllMembersWithEmailOn = async () => {
+  return db("user").select("*").where({
+    email_consent: 'true',
+    enabled: 'true'
+  })
 };
 
 // ------------------------------ teams ------------------------------
