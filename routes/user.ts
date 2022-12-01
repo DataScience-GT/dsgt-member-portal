@@ -48,7 +48,7 @@ router.post(
   RateLimit(100, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
-    let collecting_emails = req.body.sendEmail;
+    let sendToEmail = req.body.sendEmail;
     if (!session_id) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
@@ -66,7 +66,7 @@ router.post(
         for (let user of allUsers) {
           user.last_logged_on = await getUserLastLoggedOn(user.user_id);
         }
-        if (collecting_emails) {
+        if (sendToEmail) {
           res.json({ ok: 1, data: verifiedUsers });
         } else {
           res.json({ ok: 1, data: allUsers });

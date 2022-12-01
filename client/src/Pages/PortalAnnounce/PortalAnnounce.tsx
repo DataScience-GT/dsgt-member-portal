@@ -27,6 +27,11 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const [error2, setError2] = useState("");
   const [success2, setSuccess2] = useState("");
 
+  /**
+   * On submit announcement, calls showSendModal. Checks for announcement length
+   * not less than 3 chars.
+   * @param e submit click
+   */
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -53,6 +58,10 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
+  /**
+   * Handles change on announcement message.
+   * @param e new character in textfield
+   */
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
   };
@@ -139,7 +148,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       },
       body: JSON.stringify({
         session_id: localStorage.getItem("dsgt-portal-session-key"),
-        collecting_emails: sendEmail
+        sendToEmail: sendEmail
       }),
     }).then(async (res) => {
       const json = await res.json();
