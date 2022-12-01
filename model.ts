@@ -638,13 +638,6 @@ export const createProfBillingDetails = async(prof_list: Set<BillingDetails>, ne
   for(i = 0; i < prof_list.size; i++) {
     curr = it.next().value;
     createBillingDetails(curr);
-    sendEmail(
-      curr.email,
-      "subject",
-      "text",
-      null,
-      next,
-    );
   }
 };
 // -------------------------- forms --------------------------

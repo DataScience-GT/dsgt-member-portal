@@ -98,18 +98,24 @@ router.post(
   "/prof",
   ValidateSession("body", "administrator"),
   async (req: Request, res: Response, next: NextFunction) => {
-    let prof_email = req.body.email;
-    let prof_name = req.body.name;
-    let prof_phone = req.body.phone;
+    let prof_emails: string[] = req.body.prof_emails;
 
-    prof_email = prof_email.toLowerCase();
+    // iterate through the emails and create billing details for each
+    let all_details: Set<BillingDetails> = new Set(
+      prof_emails.map((x) => {
+        return {
+          email: x,
+        };
+      })
+    );
 
     //add the payment data to the db
-    // await createProfBillingDetails(prof_email, prof_name, prof_phone);
+    await createProfBillingDetails(all_details, next);
+
     let emailToSend = getAnnouncementEmailTemplate(
       "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
     );
-    await sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
+    // sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
     res.json({ ok: 1 });
   }
 );
