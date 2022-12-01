@@ -13,6 +13,7 @@ import { Feedback } from "./interfaces/Feedback";
 
 import { Team, TeamMember } from "./interfaces/Team";
 import { ListFormat } from "typescript";
+import { sendEmail } from "./email";
 
 const crypto = require("crypto");
 
@@ -607,12 +608,20 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
  * inserts the given professor details into the db and sends them an email to register
  * @param prof_list list of professor billing details.
  */
-export const createProfBillingDetails = async(prof_list: Set<BillingDetails>) => {
+export const createProfBillingDetails = async(prof_list: Set<BillingDetails>, next: NextFunction) => {
   let i;
   let it = prof_list.values();
+  let curr;
   for(i = 0; i < prof_list.size; i++) {
-    createBillingDetails(it.next().value);
-    //SMTP
+    curr = it.next().value;
+    createBillingDetails(curr);
+    sendEmail(
+      curr.email,
+      "Subject Line",
+      "Text text text",
+      null,
+      next,
+      );
   }
 }
 // -------------------------- forms --------------------------
