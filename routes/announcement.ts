@@ -50,6 +50,9 @@ router.post(
     let message = req.body.announcement;
     let sendToEmail = req.body.sendToEmail;
 
+    let link_url = req.body.linkUrl;
+    let link_text = req.body.linkText;
+
     // let verifiedEmails = req.body.verifiedEmails;
     if (!message) {
       // Missing fields
@@ -81,7 +84,9 @@ router.post(
       sendToEmail,
       verifiedEmails && verifiedEmails.length
         ? JSON.stringify(verifiedEmails)
-        : undefined
+        : undefined,
+      link_url,
+      link_text
     );
 
     res.json({ ok: 1 });

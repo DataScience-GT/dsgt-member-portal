@@ -77,7 +77,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         session_id: localStorage.getItem("dsgt-portal-session-key"),
         announcement: message,
         sendToEmail: sendEmail,
-        // verifiedEmails: verifiedEmails,
+        linkUrl: linkUrl,
+        linkText: linkText,
       }),
     }).then(async (res) => {
       const json = await res.json();
@@ -125,31 +126,6 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       }
     });
   };
-
-  /**
-   * Makes a call to get users with verified email.
-   */
-  // const getUsersWithVerifiedEmail = async () => {
-  //   await fetch("/api/user/get", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
-  //     },
-  //     body: JSON.stringify({
-  //       session_id: localStorage.getItem("dsgt-portal-session-key"),
-  //       sendToEmail: sendEmail
-  //     }),
-  //   }).then(async (res) => {
-  //     const json = await res.json();
-  //     if (!json.ok && json.error) {
-  //       console.error(json.error);
-  //     } else {
-  //       setVerifiedEmails(json.data);
-  //     }
-  //     setLoading(false);
-  //   });
-  // };
 
   // Get all announcements
   useEffect(() => {
