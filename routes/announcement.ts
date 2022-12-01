@@ -54,13 +54,9 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     let message = req.body.announcement;
-    let sendEmailBoolean = req.body.sendEmail;
-    let verifiedEmails;
-
-    if (sendEmailBoolean) {
-        verifiedEmails = req.body.verifiedEmails;
-    }
-    if (!session_id || !message || !sendEmailBoolean) { // Missing fields
+    let sendToEmail = req.body.sendToEmail;
+    let verifiedEmails = req.body.verifiedEmails;
+    if (!session_id || !message) { // Missing fields
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
@@ -70,7 +66,7 @@ router.post(
       // Check if proper permissions exist (compare to moderator)
       if (compareUserRoles(valid.role, "moderator") >= 0) {
         await insertAnnouncement(message, valid.user_id);
-        if (sendEmailBoolean) { // Email
+        if (sendToEmail) { // Email
             let emailToSend = getAnnouncementEmailTemplate(message);
             await sendEmail(verifiedEmails, "DSGT Announcement", null, emailToSend, next);
         }

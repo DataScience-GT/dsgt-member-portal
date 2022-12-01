@@ -80,7 +80,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       body: JSON.stringify({
         session_id: localStorage.getItem("dsgt-portal-session-key"),
         announcement: message,
-        sendEmailBoolean: sendEmail,
+        sendToEmail: sendEmail,
         verifiedEmails: verifiedEmails,
       }),
     }).then(async (res) => {
