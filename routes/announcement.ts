@@ -9,6 +9,7 @@ const router = express.Router();
 import RateLimit from "../middleware/RateLimiting";
 import {
   deleteAnnouncement,
+  getAllMembersWithEmailOn,
   getAnnouncements,
   insertAnnouncement,
   validateSession,
@@ -17,6 +18,7 @@ import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
 import { sendEmail } from "../email";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the announcement api!");
@@ -50,32 +52,36 @@ router.post(
 
 router.post(
   "/create",
-  RateLimit(10, 1000 * 60 * 60),
+  ValidateSession("body", "moderator"),
+  RateLimit(20, 1000 * 60 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    let session_id = req.body.session_id;
     let message = req.body.announcement;
     let sendToEmail = req.body.sendToEmail;
-    let verifiedEmails = req.body.verifiedEmails;
-    if (!session_id || !message) { // Missing fields
+
+    // let verifiedEmails = req.body.verifiedEmails;
+    if (!message) {
+      // Missing fields
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    // Attempt to create an announcement
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      // Check if proper permissions exist (compare to moderator)
-      if (compareUserRoles(valid.role, "moderator") >= 0) {
-        await insertAnnouncement(message, valid.user_id);
-        if (sendToEmail) { // Email
-            let emailToSend = getAnnouncementEmailTemplate(message);
-            await sendEmail(verifiedEmails, "DSGT Announcement", null, emailToSend, next);
+    //create announcements
+    await insertAnnouncement(message, res.locals.session.user_id);
+
+    if (sendToEmail) {
+      let verifiedEmails = await getAllMembersWithEmailOn();
+      
+      // Email
+      let emailToSend = getAnnouncementEmailTemplate(message);
+      sendEmail(
+        verifiedEmails,
+        "DSGT Announcement",
+        null,
+        emailToSend,
+        next,
+        (info: any) => {
+          res.json({ ok: 1, info: info });
         }
-        res.json({ ok: 1 });
-      } else {
-        next(new StatusErrorPreset(ErrorPreset.NoPermission));
-      }
-    } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+      );
     }
   }
 );
