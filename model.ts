@@ -631,11 +631,14 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
  * @param prof_list list of professor billing details.
  * @param next NextFunction for middleware
  */
-export const createProfBillingDetails = async(prof_list: Set<BillingDetails>, next: NextFunction) => {
+export const createProfBillingDetails = async (
+  prof_list: Set<BillingDetails>,
+  next: NextFunction
+) => {
   let i;
   let it = prof_list.values();
   let curr;
-  for(i = 0; i < prof_list.size; i++) {
+  for (i = 0; i < prof_list.size; i++) {
     curr = it.next().value;
     createBillingDetails(curr);
   }
@@ -968,10 +971,12 @@ export const getAllMembers = async () => {
  * Gets all members that are enabled and who have accepted email announcements.
  */
 export const getAllMembersWithEmailOn = async () => {
-  let res = await db("user").select("email").where({
-    email_consent: "true",
-    enabled: "true",
-  });
+  let res = await db("user")
+    .select("email")
+    // .whereNot({
+    //   email_consent: "false",
+    // })
+    .where({ enabled: true });
   if (res && res.length) {
     return res.map((e: any) => e.email);
   } else {
