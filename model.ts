@@ -973,10 +973,12 @@ export const getAllMembers = async () => {
 export const getAllMembersWithEmailOn = async () => {
   let res = await db("user")
     .select("email")
-    // .whereNot({
-    //   email_consent: "false",
-    // })
-    .where({ enabled: true });
+    .where((builder: any) => {
+      builder.where({ email_consent: true }).andWhere({ enabled: true });
+    })
+    .orWhere((builder: any) => {
+      builder.whereNull("email_consent").andWhere({ enabled: true });
+    });
   if (res && res.length) {
     return res.map((e: any) => e.email);
   } else {
