@@ -71,6 +71,8 @@ router.post(
       } else if (link_url) {
         email_msg += `<p><a href="${link_url}">${link_url}</a></p>`;
       }
+      // append who sent the email
+      email_msg += `<br/><p>Sent by ${res.locals.session.fname} ${res.locals.session.lname}</p>`;
 
       // Email
       let emailToSend = getAnnouncementEmailTemplate(email_msg);
