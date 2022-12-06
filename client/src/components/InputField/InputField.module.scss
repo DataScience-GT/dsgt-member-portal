@@ -123,9 +123,11 @@
   > input {
     // background: rgb(32 163 158);
     // background: $fill;
-    background: var(--foreground);
+    // background: var(--foreground);
+    background: none;
     // color: #fff;
-    color: var(--background);
+    color: var(--foreground);
+    border: 2px solid var(--borderColor);
     font-size: 1.2em;
     float: right;
     position: relative;
@@ -134,13 +136,13 @@
     width: 100%;
     padding: 10px 20px;
 
-    border-radius: 15px;
+    border-radius: 500px;
     transition: 0.3s all ease;
     cursor: pointer;
 
-    border: none;
+    // border: none;
     &:hover {
-      filter: brightness(0.8);
+      background: var(--hover);
     }
     &:active {
       transform: scale(0.95);
