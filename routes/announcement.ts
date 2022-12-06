@@ -65,8 +65,15 @@ router.post(
     if (sendToEmail) {
       verifiedEmails = await getAllMembersWithEmailOn();
 
+      let email_msg = message;
+      if (link_url && link_text) {
+        email_msg += `<p><a href="${link_url}">${link_text}</a></p>`;
+      } else if (link_url) {
+        email_msg += `<p><a href="${link_url}">${link_url}</a></p>`;
+      }
+
       // Email
-      let emailToSend = getAnnouncementEmailTemplate(message);
+      let emailToSend = getAnnouncementEmailTemplate(email_msg);
       // sendEmail(
       //   verifiedEmails,
       //   "DSGT Announcement",
