@@ -44,7 +44,7 @@ router.get(
 
 router.post(
   "/create",
-  ValidateSession("body", "moderator"),
+  ValidateSession("body", "professor"),
   RateLimit(20, 1000 * 60 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let message = req.body.announcement;
@@ -79,8 +79,8 @@ router.post(
         bcc: verifiedEmails,
         subject: "DSGT Announcement",
         html: emailToSend,
-        next
-      })
+        next,
+      });
     }
 
     //create announcements
@@ -101,6 +101,7 @@ router.post(
 
 router.delete(
   "/remove",
+  ValidateSession("body", "professor"),
   RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
@@ -110,18 +111,9 @@ router.delete(
       return;
     }
     // Attempt to delete announcement
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      // Check for proper permissions (compare to moderator)
-      if (compareUserRoles(valid.role, "moderator") >= 0) {
-        await deleteAnnouncement(announcement_id);
-        res.json({ ok: 1 });
-      } else {
-        next(new StatusErrorPreset(ErrorPreset.NoPermission));
-      }
-    } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
-    }
+
+    await deleteAnnouncement(announcement_id);
+    res.json({ ok: 1 });
   }
 );
 
