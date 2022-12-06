@@ -11,10 +11,16 @@ import {
   checkFormProjectsExists,
   checkUserEmail,
   createBillingDetails,
+  createProfBillingDetails,
   getBillingDetails,
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
+import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
+
+import { sendEmail } from "../email";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
+
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
@@ -85,6 +91,38 @@ router.post(
     } else {
       next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
     }
+  }
+);
+
+router.post(
+  "/prof",
+  ValidateSession("body", "administrator"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let prof_emails: string[] = req.body.prof_emails;
+
+    // iterate through the emails and create billing details for each
+    let all_details: Set<BillingDetails> = new Set(
+      prof_emails.map((x) => {
+        return {
+          email: x,
+        };
+      })
+    );
+
+    //add the payment data to the db
+    await createProfBillingDetails(all_details, next);
+
+    let emailToSend = getAnnouncementEmailTemplate(
+      "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
+    );
+    // sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
+    sendEmail({
+      bcc: prof_emails,
+      subject: "DSGT Registration",
+      text: emailToSend,
+      next,
+    });
+    res.json({ ok: 1 });
   }
 );
 

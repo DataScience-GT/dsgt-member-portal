@@ -1,14 +1,29 @@
 const nodemailer = require("nodemailer");
 import { NextFunction } from "express";
-import { error } from "./Logger";
 
-export const sendEmail = (
-  receiving_email: string[] | string,
-  subject: string,
-  text: string | null,
-  html: string | null,
-  next: NextFunction
-) => {
+export type EmailOptions = {
+  to?: string;
+  subject?: string;
+  text?: string;
+  html?: string;
+  attachments?: any[];
+  cc?: string | string[];
+  bcc?: string | string[];
+  next: NextFunction;
+  callback?: () => void;
+};
+
+export const sendEmail = ({
+  to,
+  subject,
+  text,
+  html,
+  attachments,
+  cc,
+  bcc,
+  next,
+  callback,
+}: EmailOptions) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 587,
@@ -17,22 +32,24 @@ export const sendEmail = (
       pass: process.env.SMTP_EMAIL_PASSWORD,
     },
   });
-
-  if (Array.isArray(receiving_email)) {
-    receiving_email = receiving_email.join(", ");
-  }
-
+  // if (Array.isArray(to)) {
+  //   to = to.join(", ");
+  // }
   transporter.verify().then().catch(next);
   transporter
     .sendMail({
-      from: `"${process.env.SMTP_EMAIL_USERNAME}" <youremail@gmail.com>`, // sender address
-      to: receiving_email, // list of receivers
+      from: `"${process.env.SMTP_EMAIL_USERNAME}" <membership@datasciencegt.org>`, // sender address
+      to: to, // list of receivers
       subject: subject, // Subject line
       text: text, // plain text body
       html: html, // html body
+      bcc: bcc,
+      cc: cc,
     })
     .then((info: any) => {
-      return info;
+      if (callback) {
+        callback();
+      }
     })
     .catch(next);
 };

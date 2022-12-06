@@ -2,7 +2,7 @@ import React, { FC, useDebugValue, useEffect, useState } from "react";
 import MemberActionMenu from "../../components/MemberActionMenu/MemberActionMenu";
 import styles from "./PortalMembers.module.scss";
 
-//import icons
+// Import icons
 import user_icon from "../../assets/icons/user.svg";
 import email_icon from "../../assets/icons/at.svg";
 import dice_icon from "../../assets/icons/dice-d20.svg";

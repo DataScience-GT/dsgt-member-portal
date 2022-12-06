@@ -27,11 +27,16 @@ const InputDropdown: FC<InputDropdownProps> = ({
           if (setState) setState(e.currentTarget.value);
           if (onChange) onChange(e);
         }}
-        value={initialValue}
+        defaultValue={initialValue}
       >
         {options
           ? options.map((o, i) => {
-              if (o === initialValue) {
+              if (
+                (values &&
+                  values.length === options.length &&
+                  values[i] === initialValue) ||
+                o === initialValue
+              ) {
                 if (hideInitial) {
                   return "";
                 } else {
@@ -57,6 +62,7 @@ const InputDropdown: FC<InputDropdownProps> = ({
                     value={
                       values && values.length === options.length ? values[i] : o
                     }
+                    // selected={o === initialValue}
                   >
                     {o}
                   </option>

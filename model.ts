@@ -12,6 +12,8 @@ import { Form } from "./interfaces/Form";
 import { Feedback } from "./interfaces/Feedback";
 
 import { Team, TeamMember } from "./interfaces/Team";
+import { ListFormat } from "typescript";
+import { sendEmail } from "./email";
 
 const crypto = require("crypto");
 
@@ -237,7 +239,7 @@ export const changeUserPassword = async (
 ) => {
   let curr_hash = md5(current_password);
   let new_hash = md5(new_password);
-  //check if current password is correct
+  // Check if current password is correct
   let res = await db("user")
     .count("*")
     .where("email", email)
@@ -245,7 +247,7 @@ export const changeUserPassword = async (
   if (res.length <= 0) {
     return false;
   } else {
-    //update password
+    // Update password
     await db("user")
       .update({ password: new_hash })
       .where("email", email)
@@ -332,7 +334,7 @@ export const validateSession = async (session_id: string) => {
  * @returns json object
  */
 export const getApiRequests = async () => {
-  return await db.select("*").from("ratelimiting");
+  return db.select("*").from("ratelimiting");
 };
 
 /**
@@ -357,7 +359,7 @@ export const getCountUserRequestsWithinTimeframe = async (
 ) => {
   let now = new Date();
   let t1 = new Date(now.getTime() - time);
-  return await db("ratelimiting")
+  return db("ratelimiting")
     .count("*")
     .where("created_at", ">=", t1.toISOString())
     .andWhere("pathname", pathname);
@@ -380,24 +382,32 @@ export const getUserRole = async (email: string) => {
 // ------------------------ Announcements ------------------------
 export const getAnnouncements = async (count?: number) => {
   if (count) {
-    return await db("announcement")
+    return db("announcement")
       .join("user", "user.user_inc", "=", "announcement.from_user")
       .select(
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
+        // "announcement.email_sent",
+        // "announcement.email_sent_to",
+        "announcement.link_url",
+        "announcement.link_text",
         "user.fname",
         "user.lname"
       )
       .orderBy("created_at", "desc")
       .limit(count);
   } else {
-    return await db("announcement")
+    return db("announcement")
       .join("user", "user.user_inc", "=", "announcement.from_user")
       .select(
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
+        // "announcement.email_sent",
+        // "announcement.email_sent_to",
+        "announcement.link_url",
+        "announcement.link_text",
         "user.fname",
         "user.lname"
       )
@@ -406,13 +416,27 @@ export const getAnnouncements = async (count?: number) => {
 };
 
 /**
- * creates a new announcement
+ * Creates a new announcement
  * @param message {string} message
  * @param user_id {number} the user's (who wrote the announcement) id
  */
-export const insertAnnouncement = async (message: string, user_id: number) => {
+export const insertAnnouncement = async (
+  message: string,
+  user_id: number,
+  email_sent?: boolean,
+  email_sent_to?: string,
+  link_url?: string,
+  link_text?: string
+) => {
   await db
-    .insert({ message: message, from_user: user_id })
+    .insert({
+      message: message,
+      from_user: user_id,
+      email_sent,
+      email_sent_to,
+      link_url,
+      link_text,
+    })
     .into("announcement");
 };
 
@@ -427,7 +451,7 @@ export const deleteAnnouncement = async (announcement_id: number) => {
 // ---------------------- password reset ----------------------
 
 export const getPasswordResets = async () => {
-  return await db("passwordreset").select(
+  return db("passwordreset").select(
     "reset_id",
     "user_email",
     "reset_code",
@@ -547,9 +571,9 @@ export const checkUUIDExists = async (uuid: string) => {
  */
 export const getBillingDetails = async (email?: string) => {
   if (!email) {
-    return await db("billing_details").select("*");
+    return db("billing_details").select("*");
   } else {
-    return await db("billing_details").select("*").where("email", email);
+    return db("billing_details").select("*").where("email", email);
   }
 };
 
@@ -602,6 +626,23 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
   }
 };
 
+/**
+ * inserts the given professor details into the db and sends them an email to register
+ * @param prof_list list of professor billing details.
+ * @param next NextFunction for middleware
+ */
+export const createProfBillingDetails = async (
+  prof_list: Set<BillingDetails>,
+  next: NextFunction
+) => {
+  let i;
+  let it = prof_list.values();
+  let curr;
+  for (i = 0; i < prof_list.size; i++) {
+    curr = it.next().value;
+    createBillingDetails(curr);
+  }
+};
 // -------------------------- forms --------------------------
 /**
  * checks whether the projects form has been saved
@@ -657,13 +698,13 @@ export const getEvents = async (
     //   .where("created_at", ">=", t1.toISOString())
     //   .andWhere("pathname", pathname);
     if (count) {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "asc")
         .where("startISO", ">=", now.toISOString())
         .limit(count);
     } else {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "asc")
         .where("startISO", ">=", now.toISOString());
@@ -673,14 +714,14 @@ export const getEvents = async (
     order_by = "endISO";
     let now = new Date();
     if (count) {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "asc")
         .where("startISO", "<=", now.toISOString())
         .andWhere("endISO", ">=", now.toISOString())
         .limit(count);
     } else {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "asc")
         .where("startISO", "<=", now.toISOString())
@@ -690,13 +731,13 @@ export const getEvents = async (
     // console.log(3);
 
     if (count) {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "desc")
         .where("startISO", null)
         .limit(count);
     } else {
-      return await db("event")
+      return db("event")
         .select("*")
         .orderBy(order_by, "desc")
         .where("startISO", null);
@@ -705,12 +746,9 @@ export const getEvents = async (
     // console.log(4);
 
     if (count) {
-      return await db("event")
-        .select("*")
-        .orderBy(order_by, "desc")
-        .limit(count);
+      return db("event").select("*").orderBy(order_by, "desc").limit(count);
     } else {
-      return await db("event").select("*").orderBy(order_by, "desc");
+      return db("event").select("*").orderBy(order_by, "desc");
     }
   }
 };
@@ -765,7 +803,7 @@ export const createForm = async (f: Form) => {
 };
 
 export const getForms = async (count?: number) => {
-  return await db("forms")
+  return db("forms")
     .select("*")
     .orderBy("created_at", "asc")
     .limit(count || 500);
@@ -795,7 +833,7 @@ export const getFeedback = async (
   feedbackType: "bug" | "feature" | "change",
   count?: number
 ) => {
-  return await db("feedback")
+  return db("feedback")
     .select(
       "feedback_id",
       "action",
@@ -825,7 +863,7 @@ export const checkinEventExists = async (event_id: number) => {
 
 // get list of checkin events
 export const getCheckinEvents = async () => {
-  return await db("checkin_event").select("*");
+  return db("checkin_event").select("*");
 };
 
 /**
@@ -852,9 +890,9 @@ export const deleteCheckinEvent = async (event_id: number) => {
  */
 export const getCheckinUsers = async (event_id?: number) => {
   if (event_id) {
-    return await db("checkin_user").select("*").where({ event_id });
+    return db("checkin_user").select("*").where({ event_id });
   } else {
-    return await db("checkin_user").select("*");
+    return db("checkin_user").select("*");
   }
 };
 
@@ -904,7 +942,7 @@ export const isUserCheckedIn = async (event_id: number, user_id: number) => {
 
 // ------------------------------ files ------------------------------
 export const getAllMembers = async () => {
-  return await db("user").select(
+  return db("user").select(
     "user_inc",
     "email",
     "fname",
@@ -927,6 +965,25 @@ export const getAllMembers = async () => {
     "hear_about",
     "email_consent"
   );
+};
+
+/**
+ * Gets all members that are enabled and who have accepted email announcements.
+ */
+export const getAllMembersWithEmailOn = async () => {
+  let res = await db("user")
+    .select("email")
+    .where((builder: any) => {
+      builder.where({ email_consent: true }).andWhere({ enabled: true });
+    })
+    .orWhere((builder: any) => {
+      builder.whereNull("email_consent").andWhere({ enabled: true });
+    });
+  if (res && res.length) {
+    return res.map((e: any) => e.email);
+  } else {
+    return [];
+  }
 };
 
 // ------------------------------ teams ------------------------------
@@ -983,51 +1040,62 @@ export const getUserIdFromEmail = async (email: string) => {
     return -1;
   }
 };
-const getDistinctCount = async (list: string[]) => {
-    const map = new Map();
-    let user
-    list.forEach((element: string) => {
-        if(map.has(element)) { 
-            map.set(element, map.get(element) + 1);
-        } else {
-            map.set(element, 1);
-        }
-    });
-    type returnType = { [key: string] : any };
-    let retVal: returnType = []
-    map.forEach((key: string, value: any) => {
-        retVal.push({key: value});
-    });
-    return retVal;
+const getDistinctCount = async (list: object[]) => {
+  const map = new Map();
+  list.forEach((element: any) => {
+    let propName = Object.keys(element)[0] + "";
+    //console.log(propName);
+    let key = element[propName];
+    //console.log(key);
+    if (map.has(key)) {
+      map.set(key, map.get(key) + 1);
+    } else {
+      map.set(key, 1);
+    }
+  });
+  // console.log(map);
+  return Object.fromEntries(map);
 };
 
 export const getUserDemographics = async () => {
+  let emails = (await db("user").select("email")) as object[];
+  let majors = (await db("user").select("major")) as object[];
+  let genders = (await db("user").select("gender")) as object[];
+  let years = (await db("user").select("studyyear")) as object[];
+  let roles = (await db("user").select("role")) as object[];
+  let interest = (await db("user").select("interests")) as object[];
 
-    let emails = await db("user").select("email") as string[];
-    let majors = await db("user").select("major") as string[];
-    let genders = await db("user").select("gender") as string[];
-    let years = await db("user").select("studyyear") as string[];
-    let roles = await db("user").select("role") as string[];
-    let interest = await db("user").select("interests") as string[];
+  const userCount = emails.length;
 
-    const userCount = emails.length;
+  const majorObj = await getDistinctCount(majors);
+  const yearObj = await getDistinctCount(years);
+  const genderObj = await getDistinctCount(genders);
+  const roleObj = await getDistinctCount(roles);
+  const interestObj = new Map();
+  interest.forEach((element: any) => {
+    let propName = Object.keys(element)[0] + "";
+    // console.log(propName);
+    let key = JSON.parse(JSON.parse(element[propName]));
+    // console.log(key);
+    for (let ele of key) {
+      if (interestObj.has(ele)) {
+        interestObj.set(ele, interestObj.get(ele) + 1);
+      } else {
+        interestObj.set(ele, 1);
+      }
+    }
+  });
 
-    const majorObj = await getDistinctCount(majors);
-    const yearObj = await getDistinctCount(genders);
-    const genderObj = await getDistinctCount(years);
-    const roleObj = await getDistinctCount(roles);
-    const interestObj = await getDistinctCount(interest);
+  // console.log(majorObj);
 
-    const retVal = {
-        numberOfUsers: userCount,
-        majorDist: majorObj,
-        yearDist: yearObj,
-        genderDist: genderObj,
-        roleDist: roleObj,
-        interestDist: interestObj
-    };
+  const retVal = {
+    numberOfUsers: userCount,
+    majorDist: majorObj,
+    yearDist: yearObj,
+    genderDist: genderObj,
+    roleDist: roleObj,
+    interestDist: Object.fromEntries(interestObj),
+  };
 
-    return retVal;
+  return retVal;
 };
-
-

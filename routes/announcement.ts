@@ -9,72 +9,108 @@ const router = express.Router();
 import RateLimit from "../middleware/RateLimiting";
 import {
   deleteAnnouncement,
+  getAllMembersWithEmailOn,
   getAnnouncements,
   insertAnnouncement,
   validateSession,
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
+import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
+import { sendEmail } from "../email";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the announcement api!");
 });
 
-router.post(
+router.get(
   "/get",
+  ValidateSession("query"),
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    let session_id = req.body.session_id;
-    if (!session_id) {
-      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
-      return;
-    }
-    //check for count
+    // Parse number of announcements
     let count = req.query.count?.toString();
 
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      if (count) {
-        let anns = await getAnnouncements(parseInt(count));
-        res.json({ ok: 1, data: anns });
-      } else {
-        let anns = await getAnnouncements();
-        res.json({ ok: 1, data: anns });
-      }
+    if (count) {
+      let ans = await getAnnouncements(parseInt(count));
+      res.json({ ok: 1, data: ans });
     } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+      let ans = await getAnnouncements();
+      res.json({ ok: 1, data: ans });
     }
   }
 );
 
 router.post(
   "/create",
-  RateLimit(10, 1000 * 60 * 60),
+  ValidateSession("body", "professor"),
+  RateLimit(20, 1000 * 60 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    let session_id = req.body.session_id;
     let message = req.body.announcement;
-    if (!session_id || !message) {
+    let sendToEmail = req.body.sendToEmail;
+
+    let link_url = req.body.linkUrl;
+    let link_text = req.body.linkText;
+
+    // let verifiedEmails = req.body.verifiedEmails;
+    if (!message) {
+      // Missing fields
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      //check if proper perms
-      if (compareUserRoles(valid.role, "moderator") >= 0) {
-        //create ann announcement
-        await insertAnnouncement(message, valid.user_id);
-        res.json({ ok: 1 });
-      } else {
-        next(new StatusErrorPreset(ErrorPreset.NoPermission));
+
+    let verifiedEmails: string[] = [];
+
+    if (sendToEmail) {
+      verifiedEmails = await getAllMembersWithEmailOn();
+
+      let email_msg = message;
+      if (link_url && link_text) {
+        email_msg += `<p><a href="${link_url}">${link_text}</a></p>`;
+      } else if (link_url) {
+        email_msg += `<p><a href="${link_url}">${link_url}</a></p>`;
       }
-    } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+      // append who sent the email
+      email_msg += `<br/><p>Sent by ${res.locals.session.fname} ${res.locals.session.lname}</p>`;
+
+      // Email
+      let emailToSend = getAnnouncementEmailTemplate(email_msg);
+      // sendEmail(
+      //   verifiedEmails,
+      //   "DSGT Announcement",
+      //   null,
+      //   emailToSend,
+      //   next,
+      //   (info: any) => {}
+      // );
+      sendEmail({
+        bcc: verifiedEmails,
+        subject: "DSGT Announcement",
+        html: emailToSend,
+        next,
+      });
     }
+
+    //create announcements
+    await insertAnnouncement(
+      message,
+      res.locals.session.user_id,
+      sendToEmail,
+      verifiedEmails && verifiedEmails.length
+        ? JSON.stringify(verifiedEmails)
+        : undefined,
+      link_url,
+      link_text
+    );
+
+    res.json({ ok: 1 });
   }
 );
 
 router.delete(
   "/remove",
+  ValidateSession("body", "professor"),
   RateLimit(10, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
@@ -83,19 +119,10 @@ router.delete(
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
     }
-    let valid = await checkSessionValid(session_id, next);
-    if (valid && valid.valid) {
-      //check if proper perms
-      if (compareUserRoles(valid.role, "moderator") >= 0) {
-        //delete announcement
-        await deleteAnnouncement(announcement_id);
-        res.json({ ok: 1 });
-      } else {
-        next(new StatusErrorPreset(ErrorPreset.NoPermission));
-      }
-    } else {
-      next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
-    }
+    // Attempt to delete announcement
+
+    await deleteAnnouncement(announcement_id);
+    res.json({ ok: 1 });
   }
 );
 

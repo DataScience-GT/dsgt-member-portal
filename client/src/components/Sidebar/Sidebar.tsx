@@ -155,7 +155,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
-        {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+        {compareUserRoles(role || "guest", "professor") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
             imgsrc={megaphone_icon}

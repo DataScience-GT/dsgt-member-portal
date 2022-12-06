@@ -4,6 +4,7 @@ import styles from "./Announcement.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import InlineLink from "../InlineLink/InlineLink";
 
 interface AnnouncementProps {
   children?: React.ReactNode;
@@ -12,6 +13,9 @@ interface AnnouncementProps {
   id?: number;
   deletable?: boolean;
   onDelete?: (announcement_id: number) => void;
+  // Track which announcements were emails.
+  link_url?: string;
+  link_text?: string;
 }
 
 const Announcement: FC<AnnouncementProps> = ({
@@ -21,6 +25,8 @@ const Announcement: FC<AnnouncementProps> = ({
   id,
   deletable,
   onDelete,
+  link_url,
+  link_text,
 }: AnnouncementProps) => {
   if (deletable) {
     return (
@@ -65,6 +71,16 @@ const Announcement: FC<AnnouncementProps> = ({
               ""
             )}
             <h1 className={styles.Title}>{children}</h1>
+            {link_url && (
+              <a
+                href={link_url}
+                target="_blank"
+                rel="noreferrer"
+                className={styles.AnnouncementButton}
+              >
+                {link_text || "Learn More"}
+              </a>
+            )}
           </div>
         </FlexRow>
       </div>
@@ -95,6 +111,16 @@ const Announcement: FC<AnnouncementProps> = ({
           ""
         )}
         <h1 className={styles.Title}>{children}</h1>
+        {link_url && (
+          <a
+            href={link_url}
+            target="_blank"
+            rel="noreferrer"
+            className={styles.AnnouncementButton}
+          >
+            {link_text || "Learn More"}
+          </a>
+        )}
       </div>
     );
   }
