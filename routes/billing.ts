@@ -116,7 +116,12 @@ router.post(
       "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
     );
     // sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
-    sendEmail({bcc: prof_emails, subject: "DSGT Registration", html: emailToSend, next});
+    sendEmail({
+      bcc: prof_emails,
+      subject: "DSGT Registration",
+      text: emailToSend,
+      next,
+    });
     res.json({ ok: 1 });
   }
 );
