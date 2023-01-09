@@ -2414,6 +2414,12 @@ const Register: FC<RegisterProps> = () => {
               <p className={styles.Mini}>
                 Make sure you know what being a member entails BEFORE paying.
               </p>
+              <div className={styles.Divider}></div>
+              <p className={styles.Mini}>
+                IMPORTANT: Make sure you remember the email that you use on
+                Stripe, this is the email your account will be linked to. If you
+                already have an existing account, use the same email as before.
+              </p>
               <a
                 className={styles.Link}
                 href="https://buy.stripe.com/aEUbKAeO80T19GgcMP"
