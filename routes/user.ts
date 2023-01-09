@@ -124,7 +124,13 @@ router.post(
       hearAbout: req.body.hearAbout,
       emailConsent: req.body.emailConsent,
     };
-    if (
+    let short_register = req.body.short;
+    if (short_register) {
+      if (!(u.email && u.fname && u.password)) {
+        next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+        return;
+      }
+    } else if (
       !(
         u.email &&
         u.fname &&

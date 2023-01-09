@@ -118,3 +118,34 @@ export const registerUser = async (
     }
   });
 };
+
+export const registerUserShort = async (
+  email: string,
+  fname: string,
+  lname: string,
+  password: string,
+  callback: (data: result_register) => void
+) => {
+  await fetch("/api/user/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+    },
+    body: JSON.stringify({
+      email: email,
+      fname: fname,
+      lname: lname,
+      password: password,
+      short: true,
+    }),
+  }).then(async (res) => {
+    const json = await res.json();
+    if (!json.ok && json.error) {
+      throw new Error(json.error);
+    } else {
+      //return the resulting data
+      callback(json);
+    }
+  });
+};

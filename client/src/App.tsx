@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import {Route, Routes, BrowserRouter as Router, useParams} from "react-router-dom";
+import {
+  Route,
+  Routes,
+  BrowserRouter as Router,
+  useParams,
+} from "react-router-dom";
 import { Theme, ThemeContext } from "./Context/ThemeContext";
 
 import { getRoleValue, Role } from "./Scripts/RoleManagement";
@@ -13,6 +18,7 @@ import Portal from "./Pages/Portal/Portal";
 import Loader from "./components/Loader/Loader";
 import ResetPassword from "./Pages/ResetPassword/ResetPassword";
 import Register from "./Pages/Register/Register";
+import ShortRegister from "./Pages/ShortRegister/ShortRegister";
 
 function App() {
   // Themes -> context
@@ -51,7 +57,7 @@ function App() {
             // Error -- invalidate session
             // setPath(window.location.pathname.toLowerCase());
             localStorage.removeItem("dsgt-portal-session-key");
-            // Sends you to login page after session expiration and stores page user was just on with re key. 
+            // Sends you to login page after session expiration and stores page user was just on with re key.
             window.location.href = `/login?re=${window.location.pathname}`;
           } else {
             // Success -- allow movement to pages
@@ -62,7 +68,8 @@ function App() {
               window.location.pathname.toLowerCase() === "/login" ||
               window.location.pathname.toLowerCase() === "/signup" ||
               window.location.pathname.toLowerCase() === "/register" ||
-              window.location.pathname.toLowerCase() === "/"
+              window.location.pathname.toLowerCase() === "/" ||
+              window.location.pathname.toLowerCase() === "/shortregister"
             ) {
               window.location.href = "/portal";
             }
@@ -79,6 +86,7 @@ function App() {
         window.location.pathname.toLowerCase() !== "/login" &&
         window.location.pathname.toLowerCase() !== "/signup" &&
         window.location.pathname.toLowerCase() !== "/register" &&
+        window.location.pathname.toLowerCase() !== "/shortregister" &&
         !window.location.pathname.toLowerCase().includes("/docs") &&
         !window.location.pathname.toLowerCase().includes("/passwordreset")
       ) {
@@ -103,6 +111,7 @@ function App() {
               <Route path="/*" element={<Login />} />
               <Route path="/Signup" element={<Signup />} />
               <Route path="/Register" element={<Register />} />
+              <Route path="/ShortRegister" element={<ShortRegister />} />
               <Route path="/Passwordreset/*" element={<ResetPassword />} />
               <Route path="/Docs/*" element={<Docs />} />
               {getRoleValue(userRole as Role) >= 0 ? (
