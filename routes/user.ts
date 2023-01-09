@@ -26,9 +26,10 @@ import {
   getAllMembersWithEmailOn,
   getUserLastLoggedOn,
   getAllMembers,
+  disableAllMembers,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
-import { compareUserRoles } from "../RoleManagement";
+import { compareUserRoles, Role } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 import {
   ErrorPreset,
@@ -38,6 +39,7 @@ import {
 import path from "path";
 import { getPasswordResetEmail } from "../EmailTemplates/PasswordReset";
 import { sendEmail } from "../email";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the user api!");
@@ -417,6 +419,21 @@ router.post(
       });
     } else {
       next(new StatusErrorPreset(ErrorPreset.SessionNotValid));
+    }
+  }
+);
+
+router.post(
+  "/disablemembers",
+  ValidateSession("body", Role.Administrator),
+  async (req: Request, res: Response, next: NextFunction) => {
+    // disable all users who have the member role.
+    // This is used to disable all members when the semester ends
+    try {
+      await disableAllMembers();
+      res.json({ ok: 1 });
+    } catch (e) {
+      next(e);
     }
   }
 );
