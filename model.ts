@@ -49,6 +49,9 @@ function getErrorMessage(error: unknown) {
 //-------------------- all db operations ---------------------
 //------------------------------------------------------------
 
+
+// ---------------------- user ----------------------
+
 export type Sort = {
   column: string;
   order: string;
@@ -281,6 +284,14 @@ export const getUserEnabled = async (email: string) => {
 export const deleteUser = async (email: string) => {
   await db("user").where("email", email).del();
 };
+
+
+/**
+ * disables all users with the "member" role (all base users)
+ */
+export const disableAllMembers = async () => {
+  await db("user").update({ enabled: false }).where("role", "member");
+}
 
 // ------------------- session -------------------
 

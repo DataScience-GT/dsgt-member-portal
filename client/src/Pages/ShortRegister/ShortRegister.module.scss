@@ -1,0 +1,70 @@
+.ShortRegister {
+  background: var(--background);
+  color: var(--foreground);
+  height: 100%;
+  overflow: auto;
+  //min-height: 100vh;
+}
+
+.Major {
+  font-size: 2.3em;
+  font-weight: 700;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Minor {
+  font-size: 1.5em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Mini {
+  font-size: 1.1em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+.Link {
+  color: inherit;
+  background: var(--background);
+  color: var(--foreground);
+  border: 2px solid var(--borderColor);
+  padding: 0.5em;
+  padding-top: 0.4em;
+  border-radius: 10px;
+  transition: var(--animDuration) background ease;
+  margin: 10px 0;
+  &:hover {
+    background: var(--hover);
+  }
+}
+
+.Divider {
+  display: block;
+  height: 2px;
+  border: solid var(--borderColor);
+  border-bottom: 1px;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.Action {
+  display: block;
+  width: fit-content;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  background: none;
+  border: 2px solid var(--borderColor);
+  border-radius: 100px;
+  color: inherit;
+  font-size: 1em;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--hover);
+  }
+}

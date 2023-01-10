@@ -4,9 +4,36 @@
   padding: 5em;
 }
 
+.MemberActions {
+  position: relative;
+  padding: 1em 0;
+  gap: 1em;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  > .Action {
+    display: block;
+    width: fit-content;
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background: none;
+    border: 2px solid var(--borderColor);
+    border-radius: 100px;
+    color: inherit;
+    font-size: 1em;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    &:hover {
+      background-color: var(--hover);
+    }
+  }
+}
+
 .Link {
   color: inherit;
   display: block;
+  width: fit-content;
 }
 
 .Table {
