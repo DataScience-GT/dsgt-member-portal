@@ -17,8 +17,9 @@ import {
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
 import { getAnnouncementEmailTemplate } from "../EmailTemplates/AnnouncementEmail";
+import { getProfessorEmail } from "../EmailTemplates/ProfessorEmail";
 
-import { sendEmail } from "../email";
+import { Attachment, sendEmail } from "../email";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 const router = express.Router();
@@ -112,14 +113,15 @@ router.post(
     //add the payment data to the db
     await createProfBillingDetails(all_details, next);
 
-    let emailToSend = getAnnouncementEmailTemplate(
-      "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
-    );
+    // let emailToSend = getAnnouncementEmailTemplate(
+    //   "Please click on the following link to register for our member portal: https://member.datasciencegt.org/register?payment_status=completed"
+    // );
+    let emailToSend = getProfessorEmail();
     // sendEmail(prof_email, "DSGT Registration", null, emailToSend, next);
     sendEmail({
       bcc: prof_emails,
       subject: "DSGT Registration",
-      text: emailToSend,
+      html: emailToSend,
       next,
     });
     res.json({ ok: 1 });
