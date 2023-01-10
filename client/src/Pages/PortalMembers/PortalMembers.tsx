@@ -143,8 +143,8 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           bVal = b.role;
           break;
         case "enabled":
-          aVal = a.enabled;
-          bVal = b.enabled;
+          aVal = a.enabled ? "yes" : "no";
+          bVal = b.enabled ? "yes" : "no";
           break;
         case "last_logged_on":
           aVal = a.last_logged_on;
@@ -251,7 +251,9 @@ const PortalMembers: FC<PortalMembersProps> = () => {
       />
       <SuccessText>
         {search.length > 0
-          ? `${members.length} result${members.length !== 1 ? "s" : ""} found`
+          ? `${members.length} result${
+              members.length !== 1 ? "s" : ""
+            } found (${members.filter((x) => x.enabled).length} enabled)`
           : ""}
       </SuccessText>
       <ErrorText>{error}</ErrorText>
