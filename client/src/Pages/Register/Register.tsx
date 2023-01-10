@@ -848,7 +848,7 @@ const Register: FC<RegisterProps> = () => {
                 <FlexColumn width="100%">
                   <h1 className={styles.Major}>Thank You!</h1>
                   <h2 className={styles.Minor}>
-                    If you already have an account from a previous semster,
+                    If you already have an account from a previous semester,
                     simply sign back in.
                   </h2>
                   <Link to="/login" className={styles.Action}>
