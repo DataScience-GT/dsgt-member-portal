@@ -41,6 +41,33 @@
   }
 }
 
+.Divider {
+  display: block;
+  height: 2px;
+  border: solid var(--borderColor);
+  border-bottom: 1px;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.Action {
+  display: block;
+  width: fit-content;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  background: none;
+  border: 2px solid var(--borderColor);
+  border-radius: 100px;
+  color: inherit;
+  font-size: 1em;
+  font-weight: 500;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--hover);
+  }
+}
+
 .Datalist {
   height: 52px;
   width: fit-content;

@@ -27,6 +27,7 @@ import {
   getMembers,
   result_getMembers,
 } from "../../API/Member";
+import { disableMembers } from "../../API/User";
 
 interface PortalMembersProps {}
 
@@ -35,6 +36,14 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   const [members, setMembers] = useState<result_getMembers[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+
+  // disable members
+  const [showDisableMembersModal, setShowDisableMembersModal] = useState(false);
+  const handleDisableMembersConfirmed = async () => {
+    await disableMembers(() => {
+      window.location.reload();
+    });
+  };
 
   const [showDisableModal, setShowDisableModal] = useState(false);
   const [showChangeRoleModal, setShowChangeRoleModal] = useState(false);
@@ -233,16 +242,6 @@ const PortalMembers: FC<PortalMembersProps> = () => {
 
   return (
     <div className={styles.PortalMembers} data-testid="PortalMembers">
-      <a
-        href={`/api/file/members?session_id=${localStorage.getItem(
-          "dsgt-portal-session-key"
-        )}`}
-        className={styles.Link}
-        target="_blank"
-        rel="noreferrer"
-      >
-        Export
-      </a>
       <InputField
         type="search"
         placeholder="Search"
@@ -256,6 +255,26 @@ const PortalMembers: FC<PortalMembersProps> = () => {
           : ""}
       </SuccessText>
       <ErrorText>{error}</ErrorText>
+      <div className={styles.MemberActions}>
+        <a
+          href={`/api/file/members?session_id=${localStorage.getItem(
+            "dsgt-portal-session-key"
+          )}`}
+          className={styles.Action}
+          target="_blank"
+          rel="noreferrer"
+        >
+          Export
+        </a>
+        <button
+          className={styles.Action}
+          onClick={() => {
+            setShowDisableMembersModal(true);
+          }}
+        >
+          Disable Members
+        </button>
+      </div>
       {loading ? (
         <div>loading...</div>
       ) : (
@@ -452,6 +471,18 @@ const PortalMembers: FC<PortalMembersProps> = () => {
             hideInitial
           />
         </FlexRow>
+      </Modal>
+      <Modal
+        open={showDisableMembersModal}
+        setOpen={setShowDisableMembersModal}
+        preset={ModalPreset.Change}
+        handleConfirmed={handleDisableMembersConfirmed}
+      >
+        <p>
+          Are you sure you would like to disable all member accounts?
+          <br />
+          (note: this will only disable accounts with the "member" role)
+        </p>
       </Modal>
     </div>
   );

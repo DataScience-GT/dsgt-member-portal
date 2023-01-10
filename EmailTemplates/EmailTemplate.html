@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <style type="text/css">
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .email {
+            display: flex;
+            width: 100%;
+            height: fit-content;
+
+            flex-direction: column;
+            background-color: #fff;
+            font-family: 'Outfit';
+        }
+
+        .header {
+            display: flex;
+            width: 100%;
+            height: 100px;
+
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 1em;
+            padding: 1em;
+            background: #020e23;
+        }
+
+        .header>img {
+            height: 100%;
+        }
+
+        .header>h1 {
+            font-size: 1.6em;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .content {
+            display: flex;
+            width: 100%;
+            height: fit-content;
+            padding: 1em;
+            color: #000;
+            font-size: 1em;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+            flex-direction: column;
+            gap: 0.5em;
+            overflow: hidden;
+        }
+
+        .content * {
+            position: relative;
+            max-width: 100%;
+        }
+
+        .footer {
+            display: flex;
+            position: relative;
+            width: 100%;
+
+            flex-direction: column;
+            gap: 0.2em;
+            justify-content: center;
+            align-items: center;
+            background: #020e23;
+            color: rgb(181, 181, 181);
+            padding: 1em;
+        }
+
+        p {
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .highlight {
+            width: 100%;
+            background: #ccc;
+            padding: 1em;
+        }
+    </style>
+    <div class="email">
+        <div class="header">
+            <img src="cid:dsgtlogo" />
+            <h1>Data Science @<br />Georgia Tech</h1>
+        </div>
+        <div class="content">
+            <p>Hello,</p>
+            <p>You have been invited to join DSGT's membership platform. Please click <a
+                    href="https://member.datasciencegt.org/shortregister" target="_blank">here</a> or use the following
+                link to sign up:</p>
+            <p class="highlight">https://member.datasciencegt.org/shortregister</p>
+            <p>Within 1-3 business days after registering, you will have access to send announcements to the members of
+                DSGT.
+                Through announcements, you can link forms (or anything else) in order to receive responses from
+                students. You will also have the option to send your announcement as an email to all members.
+            </p>
+        </div>
+        <div class="footer">
+            <a href="https://datasciencegt.org" target="_blank">DSGT</a>
+            <p>Made by the Technology Team</p>
+            <a href="mailto:john@datasciencegt.org">For help, email john@datasciencegt.org</a>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

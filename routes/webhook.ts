@@ -4,7 +4,7 @@ const router = express.Router();
 import { log, error } from "../Logger";
 
 import { BillingDetails } from "../interfaces/Stripe";
-import { createBillingDetails } from "../model";
+import { checkUserEmail, createBillingDetails, updateUser } from "../model";
 import { StatusError } from "../Classes/StatusError";
 
 const stripe = require("stripe");
@@ -34,6 +34,17 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
       //get the payment details of the customer
       let payment_details = paymentIntent.charges.data[0]
         .billing_details as BillingDetails;
+
+      // check if an account exists with email
+      let exists = await checkUserEmail(payment_details.email);
+      if (!exists && payment_details.email) {
+        // console.log(`no account exists with email: ${payment_details.email}`);
+      } else {
+        // console.log(`account with email ${payment_details.email} exists`);
+        // console.log(`re-enabling account`);
+        // reenable the account
+        await updateUser({ email: payment_details.email, enabled: true });
+      }
       //add the payment data to the db
       await createBillingDetails(payment_details);
       break;

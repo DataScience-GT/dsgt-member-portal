@@ -6,11 +6,17 @@ export type EmailOptions = {
   subject?: string;
   text?: string;
   html?: string;
-  attachments?: any[];
+  attachments?: Attachment[];
   cc?: string | string[];
   bcc?: string | string[];
   next: NextFunction;
   callback?: () => void;
+};
+
+export type Attachment = {
+  filename: string;
+  path: string;
+  cid?: string;
 };
 
 export const sendEmail = ({
@@ -45,6 +51,7 @@ export const sendEmail = ({
       html: html, // html body
       bcc: bcc,
       cc: cc,
+      attachments: attachments,
     })
     .then((info: any) => {
       if (callback) {

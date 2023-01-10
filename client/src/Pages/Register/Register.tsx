@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import {
   checkBillingDetailsExists,
   registerUser,
@@ -126,7 +126,10 @@ const Register: FC<RegisterProps> = () => {
   };
 
   const handleChange_gtemail = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9@.+_\- ]/g, "");
+    e.currentTarget.value = e.currentTarget.value.replace(
+      /[^a-zA-Z0-9@.+_\- ]/g,
+      ""
+    );
     setGtemail(e.currentTarget.value);
     // console.log(e.currentTarget.value);
   };
@@ -134,7 +137,10 @@ const Register: FC<RegisterProps> = () => {
   const handleChange_personalemail = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
-    e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Z0-9@.+_\- ]/g, "");
+    e.currentTarget.value = e.currentTarget.value.replace(
+      /[^a-zA-Z0-9@.+_\- ]/g,
+      ""
+    );
     setPersonalEmail(e.currentTarget.value);
     // console.log(e.currentTarget.value);
   };
@@ -842,8 +848,16 @@ const Register: FC<RegisterProps> = () => {
                 <FlexColumn width="100%">
                   <h1 className={styles.Major}>Thank You!</h1>
                   <h2 className={styles.Minor}>
-                    Please enter the email associated with the payment you just
-                    made:
+                    If you already have an account from a previous semster,
+                    simply sign back in.
+                  </h2>
+                  <Link to="/login" className={styles.Action}>
+                    Login
+                  </Link>
+                  <div className={styles.Divider}></div>
+                  <h2 className={styles.Minor}>
+                    If you need an account, please enter the email associated
+                    with the payment you just made:
                   </h2>
                   <InputField
                     type="email"
@@ -2399,6 +2413,12 @@ const Register: FC<RegisterProps> = () => {
               </h2>
               <p className={styles.Mini}>
                 Make sure you know what being a member entails BEFORE paying.
+              </p>
+              <div className={styles.Divider}></div>
+              <p className={styles.Mini}>
+                IMPORTANT: Make sure you remember the email that you use on
+                Stripe, this is the email your account will be linked to. If you
+                already have an existing account, use the same email as before.
               </p>
               <a
                 className={styles.Link}
