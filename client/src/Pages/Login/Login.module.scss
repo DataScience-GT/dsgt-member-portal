@@ -159,3 +159,17 @@
     margin: 0;
   }
 }
+
+
+.Alert {
+  display: block;
+  position: relative;
+  width: 100%;
+  background-color: rgba(197, 109, 109, 0.479);
+  padding: 1em;
+  margin-bottom: 1em;
+}
+
+.LinkText {
+  color: inherit;
+}
