@@ -35,7 +35,8 @@ const Login: FC<LoginProps> = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
-    await attemptLogin( // Updated to catch search params
+    await attemptLogin(
+      // Updated to catch search params
       email,
       password,
       searchParams.get("re") ?? undefined
@@ -50,6 +51,17 @@ const Login: FC<LoginProps> = () => {
         <div style={{ width: "100%", maxWidth: "500px" }}>
           <form onSubmit={handleSubmit}>
             <FlexColumn width="100%">
+              <div className={styles.Alert}>
+                All existing accounts have been disabled for the Spring 2023
+                semester. After paying the dues, your account will automatically
+                be re-enabled. Make sure to use the email associated with your
+                previous account on Stripe. Click{" "}
+                <a className={styles.LinkText} href="/register">
+                  here
+                </a>{" "}
+                to pay dues. For help, please email{" "}
+                <a className={styles.LinkText} href="mailto:John@dataciencet.org">John@datasciencegt.org</a>.
+              </div>
               <h1 className={styles.Major}>Login</h1>
               <InputField
                 type="email"
