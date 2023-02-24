@@ -87,12 +87,25 @@ router.post(
         //   next,
         //   (info: any) => {}
         // );
-        sendEmail({
-          bcc: verifiedEmails,
-          subject: "DSGT Announcement",
-          html: emailToSend,
-          next,
-        });
+        // can only bcc 100 emails at a time
+        let emailsToSend = [];
+        for (let i = 0; i < verifiedEmails.length; i += 100) {
+          emailsToSend.push(verifiedEmails.slice(i, i + 100));
+        }
+        for (let i = 0; i < emailsToSend.length; i++) {
+          await sendEmail({
+            bcc: emailsToSend[i],
+            subject: "DSGT Announcement",
+            html: emailToSend,
+            next,
+          });
+        }
+        // sendEmail({
+        //   bcc: verifiedEmails,
+        //   subject: "DSGT Announcement",
+        //   html: emailToSend,
+        //   next,
+        // });
       }
 
       //create announcements
