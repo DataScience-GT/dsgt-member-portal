@@ -63,17 +63,7 @@ router.post(
 
       let verifiedEmails: string[] = [];
 
-      //create announcements
-      await insertAnnouncement(
-        message,
-        res.locals.session.user_id,
-        sendToEmail,
-        verifiedEmails && verifiedEmails.length
-          ? JSON.stringify(verifiedEmails)
-          : undefined,
-        link_url,
-        link_text
-      );
+      
 
       if (sendToEmail) {
         verifiedEmails = await getAllMembersWithEmailOn();
@@ -104,6 +94,18 @@ router.post(
           next,
         });
       }
+
+      //create announcements
+      await insertAnnouncement(
+        message,
+        res.locals.session.user_id,
+        sendToEmail,
+        verifiedEmails && verifiedEmails.length
+          ? JSON.stringify(verifiedEmails)
+          : undefined,
+        link_url,
+        link_text
+      );
 
       res.json({ ok: 1 });
     } catch (e) {
