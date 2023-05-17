@@ -158,7 +158,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
 
   return (
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
-      <h1 className={styles.Major}>Announcements</h1>
+      <h1 className={styles.Major}>Announcements In Test</h1>
       <h2 className={styles.Minor}>Send Announcement</h2>
       <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
         <>

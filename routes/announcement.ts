@@ -10,6 +10,7 @@ import RateLimit from "../middleware/RateLimiting";
 import {
   deleteAnnouncement,
   getAllMembersWithEmailOn,
+  getAllExecMembersWithEmailOn,
   getAnnouncements,
   insertAnnouncement,
   validateSession,
@@ -47,6 +48,7 @@ router.post(
   ValidateSession("body", "professor"),
   RateLimit(20, 1000 * 60 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
+    
     let message = req.body.announcement;
     let sendToEmail = req.body.sendToEmail;
 
@@ -60,10 +62,10 @@ router.post(
       return;
     }
 
-    let verifiedEmails: string[] = [];
+    let verifiedExecEmails: string[] = [];
 
     if (sendToEmail) {
-      verifiedEmails = await getAllMembersWithEmailOn();
+      verifiedExecEmails = await getAllExecMembersWithEmailOn();
 
       let email_msg = message;
       if (link_url && link_text) {
@@ -85,7 +87,7 @@ router.post(
       //   (info: any) => {}
       // );
       sendEmail({
-        bcc: verifiedEmails,
+        bcc: verifiedExecEmails,
         subject: "DSGT Announcement",
         html: emailToSend,
         next,
@@ -97,8 +99,8 @@ router.post(
       message,
       res.locals.session.user_id,
       sendToEmail,
-      verifiedEmails && verifiedEmails.length
-        ? JSON.stringify(verifiedEmails)
+      verifiedExecEmails && verifiedExecEmails.length
+        ? JSON.stringify(verifiedExecEmails)
         : undefined,
       link_url,
       link_text

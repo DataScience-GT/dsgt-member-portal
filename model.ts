@@ -997,6 +997,21 @@ export const getAllMembersWithEmailOn = async () => {
   }
 };
 
+/**
+ * Gets all members that are enabled and who have accepted email announcements.
+ */
+export const getAllExecMembersWithEmailOn = async () => {
+  let res = await db("user")
+    .select("email")
+    .where("role", "administrator")
+    .orWhere("role", "developer");
+  if (res && res.length) {
+    return res.map((e: any) => e.email);
+  } else {
+    return [];
+  }
+};
+
 // ------------------------------ teams ------------------------------
 
 export const getTeams = async (count?: number) => {
