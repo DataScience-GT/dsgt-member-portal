@@ -49,7 +49,6 @@ function getErrorMessage(error: unknown) {
 //-------------------- all db operations ---------------------
 //------------------------------------------------------------
 
-
 // ---------------------- user ----------------------
 
 export type Sort = {
@@ -174,20 +173,35 @@ export const updateUser = async ({
 }: User) => {
   //update each if defined
   if (fname) {
-    await db("user").update({ fname: fname }).where("email", email);
+    await db("user")
+      .update({ fname: fname })
+      .where("email", email)
+      .orWhere("gtemail", email);
   }
   if (lname) {
-    await db("user").update({ lname: lname }).where("email", email);
+    await db("user")
+      .update({ lname: lname })
+      .where("email", email)
+      .orWhere("gtemail", email);
   }
   if (password) {
     let hash = md5(password);
-    await db("user").update({ password: hash }).where("email", email);
+    await db("user")
+      .update({ password: hash })
+      .where("email", email)
+      .orWhere("gtemail", email);
   }
   if (role) {
-    await db("user").update({ role: role }).where("email", email);
+    await db("user")
+      .update({ role: role })
+      .where("email", email)
+      .orWhere("gtemail", email);
   }
   if (enabled !== undefined) {
-    await db("user").update({ enabled: enabled }).where("email", email);
+    await db("user")
+      .update({ enabled: enabled })
+      .where("email", email)
+      .orWhere("gtemail", email);
   }
 };
 
@@ -285,13 +299,12 @@ export const deleteUser = async (email: string) => {
   await db("user").where("email", email).del();
 };
 
-
 /**
  * disables all users with the "member" role (all base users)
  */
 export const disableAllMembers = async () => {
   await db("user").update({ enabled: false }).where("role", "member");
-}
+};
 
 // ------------------- session -------------------
 

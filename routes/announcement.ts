@@ -48,65 +48,83 @@ router.post(
   ValidateSession("body", "professor"),
   RateLimit(20, 1000 * 60 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    
-    let message = req.body.announcement;
-    let sendToEmail = req.body.sendToEmail;
+    try {
+      let message = req.body.announcement;
+      let sendToEmail = req.body.sendToEmail;
 
-    let link_url = req.body.linkUrl;
-    let link_text = req.body.linkText;
+      let link_url = req.body.linkUrl;
+      let link_text = req.body.linkText;
 
-    // let verifiedEmails = req.body.verifiedEmails;
-    if (!message) {
-      // Missing fields
-      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
-      return;
-    }
-
-    let verifiedExecEmails: string[] = [];
-
-    if (sendToEmail) {
-      verifiedExecEmails = await getAllExecMembersWithEmailOn();
-
-      let email_msg = message;
-      if (link_url && link_text) {
-        email_msg += `<p><a href="${link_url}">${link_text}</a></p>`;
-      } else if (link_url) {
-        email_msg += `<p><a href="${link_url}">${link_url}</a></p>`;
+      // let verifiedEmails = req.body.verifiedEmails;
+      if (!message) {
+        // Missing fields
+        next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+        return;
       }
-      // append who sent the email
-      email_msg += `<br/><p>Sent by ${res.locals.session.fname} ${res.locals.session.lname}</p>`;
 
-      // Email
-      let emailToSend = getAnnouncementEmailTemplate(email_msg);
-      // sendEmail(
-      //   verifiedEmails,
-      //   "DSGT Announcement",
-      //   null,
-      //   emailToSend,
-      //   next,
-      //   (info: any) => {}
-      // );
-      sendEmail({
-        bcc: verifiedExecEmails,
-        subject: "DSGT Announcement",
-        html: emailToSend,
-        next,
-      });
+      let verifiedEmails: string[] = [];
+
+      
+
+      if (sendToEmail) {
+        verifiedEmails = await getAllMembersWithEmailOn();
+
+        let email_msg = message;
+        if (link_url && link_text) {
+          email_msg += `<p><a href="${link_url}">${link_text}</a></p>`;
+        } else if (link_url) {
+          email_msg += `<p><a href="${link_url}">${link_url}</a></p>`;
+        }
+        // append who sent the email
+        email_msg += `<br/><p>Sent by ${res.locals.session.fname} ${res.locals.session.lname}</p>`;
+
+        // Email
+        let emailToSend = getAnnouncementEmailTemplate(email_msg);
+        // sendEmail(
+        //   verifiedEmails,
+        //   "DSGT Announcement",
+        //   null,
+        //   emailToSend,
+        //   next,
+        //   (info: any) => {}
+        // );
+        // can only bcc 100 emails at a time
+        let emailsToSend = [];
+        for (let i = 0; i < verifiedEmails.length; i += 100) {
+          emailsToSend.push(verifiedEmails.slice(i, i + 100));
+        }
+        for (let i = 0; i < emailsToSend.length; i++) {
+          await sendEmail({
+            bcc: emailsToSend[i],
+            subject: "DSGT Announcement",
+            html: emailToSend,
+            next,
+          });
+        }
+        // sendEmail({
+        //   bcc: verifiedEmails,
+        //   subject: "DSGT Announcement",
+        //   html: emailToSend,
+        //   next,
+        // });
+      }
+
+      //create announcements
+      await insertAnnouncement(
+        message,
+        res.locals.session.user_id,
+        sendToEmail,
+        verifiedEmails && verifiedEmails.length
+          ? JSON.stringify(verifiedEmails)
+          : undefined,
+        link_url,
+        link_text
+      );
+
+      res.json({ ok: 1 });
+    } catch (e) {
+      next(e);
     }
-
-    //create announcements
-    await insertAnnouncement(
-      message,
-      res.locals.session.user_id,
-      sendToEmail,
-      verifiedExecEmails && verifiedExecEmails.length
-        ? JSON.stringify(verifiedExecEmails)
-        : undefined,
-      link_url,
-      link_text
-    );
-
-    res.json({ ok: 1 });
   }
 );
 

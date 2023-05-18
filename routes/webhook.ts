@@ -36,7 +36,7 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
         .billing_details as BillingDetails;
 
       // check if an account exists with email
-      let exists = await checkUserEmail(payment_details.email);
+      let exists = await checkUserEmail(payment_details.email, false);
       if (!exists && payment_details.email) {
         // console.log(`no account exists with email: ${payment_details.email}`);
       } else {
