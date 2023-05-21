@@ -32,15 +32,23 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
           <Routes>
             <Route path="/*" element={<PortalHome />} />
             <Route path="/settings/*" element={<PortalSettings />} />
-            <Route path="/forms/*" element={<PortalForms role={role} />} />
+            {compareUserRoles(role || "guest", "professor") != 0 ? (
+              <Route path="/forms/*" element={<PortalForms role={role} />} />
+            ) : (
+              ""
+            )}
             <Route path="/account/*" element={<PortalAccount />} />
-            <Route path="/teams/*" element={<PortalTeams role={role} />} />
+            {compareUserRoles(role || "guest", "professor") != 0 ? (
+              <Route path="/teams/*" element={<PortalTeams role={role} />} />
+            ) : (
+              ""
+            )}
             {compareUserRoles(role || "guest", "moderator") >= 0 ? (
               <Route path="/members/*" element={<PortalMembers />} />
             ) : (
               ""
             )}
-            {compareUserRoles(role || "guest", "moderator") >= 0 ? (
+            {compareUserRoles(role || "guest", "professor") >= 0 ? (
               <Route path="/announce/*" element={<PortalAnnounce />} />
             ) : (
               ""

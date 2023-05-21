@@ -8,10 +8,13 @@ import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalAnnounce.module.scss";
+import { compareUserRoles } from "../../Scripts/RoleManagement";
 
-interface PortalAnnounceProps {}
+interface PortalAnnounceProps {
+  role?: string;
+}
+const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }: PortalAnnounceProps) => {
 
-const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   // New announcement
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -158,9 +161,99 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
 
   return (
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
-      <h1 className={styles.Major}>Announcements</h1>
-      <h2 className={styles.Minor}>Send Announcement</h2>
-      <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
+      {compareUserRoles(localStorage.getItem("dsgt-portal-role")?.toString() || "guest", "professor") == 0 ? (
+        <>
+        <h1 className={styles.Major}>Research Postings</h1>
+        <h2 className={styles.Minor}>Send Research Posting</h2>
+        <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
+        <>
+          <Form
+            onSubmit={handleSubmit}
+            submitPlaceholder="Create"
+            width="40%"
+            minWidth="300px"
+          >
+            <textarea
+              className={styles.TextBox}
+              placeholder="Type your research posting here..."
+              onChange={handleChange}
+            ></textarea>
+            <ErrorText>{error}</ErrorText>
+            <SuccessText>{success}</SuccessText>
+            <InputField
+              type={"url"}
+              name="link"
+              placeholder="Link URL"
+              onChange={(e) => {
+                setLinkUrl(e.currentTarget.value);
+              }}
+            />
+            <InputField
+              type={"text"}
+              name="link-text"
+              placeholder="Link Text"
+              onChange={(e) => setLinkText(e.currentTarget.value)}
+            />
+            <div>
+              <input
+                type="checkbox"
+                id="sendEmail"
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSendEmail(e.currentTarget.checked);
+                  console.log(e.currentTarget.checked);
+                }}
+                name="sendEmail"
+              />
+              <label
+                className={styles.Minor}
+                htmlFor="sendEmail"
+                style={{ padding: "0 0 0 0.5em" }}
+              >
+                Send email?
+              </label>
+            </div>
+          </Form>
+          <div className={styles.SideBySide}>
+            <FlexColumn gap="20px">
+              <h1 className={styles.Minor}>
+                Here's what your posting will look like to members:
+              </h1>
+              <Announcement
+                when={new Date()}
+                from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+                link_text={linkText}
+                link_url={linkUrl}
+              >
+                {message || "No post yet"}
+              </Announcement>
+            </FlexColumn>
+            <Modal
+            open={showSendModal}
+            setOpen={setShowSendModal}
+            preset={ModalPreset.Confirm}
+            handleConfirmed={handleSendModalConfirm}
+          >
+            Are you sure you would like to send the following posting?
+            <span className={styles.AnnConfirm}>
+              <Announcement
+                when={new Date()}
+                from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+                link_text={linkText}
+                link_url={linkUrl}
+              >
+                {message || "No post yet"}
+              </Announcement>
+            </span>
+          </Modal>
+          </div>
+        </>
+      </FlexRow>
+        </>
+      ) : (
+        <>
+        <h1 className={styles.Major}>Announcements</h1>
+        <h2 className={styles.Minor}>Send Announcement</h2>
+        <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
         <>
           <Form
             onSubmit={handleSubmit}
@@ -244,7 +337,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         </span>
       </Modal>
 
-      <h2 className={styles.Minor}>Existing Announcements</h2>
+      <h2 className={styles.Minor}>Existing Posts</h2>
       <ErrorText>{error2}</ErrorText>
       <SuccessText>{success2}</SuccessText>
       {loading ? (
@@ -283,6 +376,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       >
         Are you sure you would like to delete this announcement?
       </Modal>
+        </>
+      )}
     </div>
   );
 };

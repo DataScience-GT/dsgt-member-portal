@@ -104,6 +104,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         <h1>DSGT</h1>
       </div>
       <div className={styles.SidebarItems}>
+
         <SidebarItem
           onClick={handleClick}
           imgsrc={home_icon}
@@ -114,22 +115,30 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           Home
         </SidebarItem>
 
-        <SidebarItem
-          onClick={handleClick}
-          imgsrc={forms_icon}
-          open={open}
-          path="/portal/forms"
-        >
-          Forms
-        </SidebarItem>
-        <SidebarItem
+        {compareUserRoles(role || "guest", "professor") != 0 ? (
+           <SidebarItem
+           onClick={handleClick}
+           imgsrc={forms_icon}
+           open={open}
+           path="/portal/forms"
+            >
+            Forms
+            </SidebarItem>
+        ) : (
+          ""
+        )}
+
+        {compareUserRoles(role || "guest", "professor") != 0 ? (
+          <SidebarItem
           onClick={handleClick}
           imgsrc={teams_icon}
           open={open}
-          path="/portal/teams"
-        >
+          path="/portal/teams">
           Teams
-        </SidebarItem>
+          </SidebarItem>
+        ) : (
+          ""
+        )}
 
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
@@ -143,6 +152,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
+
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
@@ -155,6 +165,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
+        
         {compareUserRoles(role || "guest", "professor") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
@@ -167,6 +178,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
+
         {compareUserRoles(role || "guest", "moderator") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
@@ -179,6 +191,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
+
         {compareUserRoles(role || "guest", "administrator") >= 0 ? (
           <SidebarItem
             onClick={handleClick}
@@ -191,6 +204,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         ) : (
           ""
         )}
+
         <SidebarItem
           onClick={handleClick}
           imgsrc={account_icon}
@@ -199,6 +213,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         >
           Account
         </SidebarItem>
+
         <SidebarItem
           onClick={handleClick}
           imgsrc={settings_icon}
@@ -207,6 +222,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         >
           Settings
         </SidebarItem>
+        
       </div>
       <div className={styles.User}>
         <h1 className={styles.Fname}>
