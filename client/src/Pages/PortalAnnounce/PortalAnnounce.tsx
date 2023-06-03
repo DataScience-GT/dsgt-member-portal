@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useEffect, useState } from "react";
+import React, { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import Announcement from "../../components/Announcement/Announcement";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import Form from "../../components/Form/Form";
@@ -8,11 +8,16 @@ import SuccessText from "../../components/SuccessText/SuccessText";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalAnnounce.module.scss";
+import { compareUserRoles } from "../../Scripts/RoleManagement";
 
-interface PortalAnnounceProps {}
 
-const PortalAnnounce: FC<PortalAnnounceProps> = () => {
-  // New announcement
+interface PortalAnnounceProps {
+  role?: string;
+}
+
+const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
+
+  // new announcement
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [message, setMessage] = useState("");
@@ -20,10 +25,10 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const [sendEmail, setSendEmail] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [linkText, setLinkText] = useState("");
-  // const [verifiedEmails, setVerifiedEmails] = useState([]);
 
-  // Existing announcements
-  const [loading, setLoading] = useState(true);
+  // existing announcements
+  const [loading, setLoading] = useState(true);  
+  const [yourAnnouncements, setYourAnnouncements] = useState([]);
   const [announcements, setAnnouncements] = useState([]);
   const [showDelModal, setShowDelModal] = useState(false);
   const [currentAnnouncementId, setCurrentAnnouncementId] = useState(-1);
@@ -53,10 +58,6 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     setMessage(e.currentTarget.value);
   };
 
-  // const collectAllVerifiedEmails = async () => {
-  //
-  // }
-
   /**
    * Added priority with sendEmail boolean. Thus, confirmation of announcement
    * can distinguish whether to send email or not.
@@ -64,9 +65,6 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
   const handleSendModalConfirm = async () => {
     setSuccess("");
     setError("");
-    // if (sendEmail) {
-    //   await getUsersWithVerifiedEmail();
-    // }
     await fetch("/api/announcement/create", {
       method: "POST",
       headers: {
@@ -127,9 +125,8 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
     });
   };
 
-  // Get all announcements
+  // get all announcements
   useEffect(() => {
-    // Get all announcements
     const getAnnouncements = async () => {
       await fetch(
         `/api/announcement/get?session_id=${localStorage.getItem(
@@ -147,7 +144,10 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         if (!json.ok && json.error) {
           console.error(json.error);
         } else {
-          // Use data
+          // use data
+          const filteredData = json.data.filter
+              ((item: { fname: string | null; }) => item.fname === localStorage.getItem('dsgt-portal-fname'));
+          setYourAnnouncements(filteredData);
           setAnnouncements(json.data);
         }
         setLoading(false);
@@ -158,8 +158,17 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
 
   return (
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
-      <h1 className={styles.Major}>Announcements</h1>
-      <h2 className={styles.Minor}>Send Announcement</h2>
+      {compareUserRoles(role || "guest", "professor") == 0 ? (
+        <>
+        <h1 className={styles.Major}>Research Postings</h1>
+        <h2 className={styles.Minor}>Create Research Posting</h2>
+        </>
+      ) : (
+        <>
+        <h1 className={styles.Major}>Announcements</h1>
+        <h2 className={styles.Minor}>Send Announcement</h2>
+        </>
+      )}
       <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
         <>
           <Form
@@ -168,11 +177,23 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
             width="40%"
             minWidth="300px"
           >
+          {compareUserRoles(role || "guest", "professor") == 0 ? (
+            <>
+            <textarea
+              className={styles.TextBox}
+              placeholder="Type your research announcement here..."
+              onChange={handleChange}
+            ></textarea>
+            </>
+          ) : (
+            <>
             <textarea
               className={styles.TextBox}
               placeholder="Type your announcement message here..."
               onChange={handleChange}
             ></textarea>
+            </>
+          )}
             <ErrorText>{error}</ErrorText>
             <SuccessText>{success}</SuccessText>
             <InputField
@@ -191,6 +212,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
             />
             <div>
               <input
+                className={styles.CheckBox}
                 type="checkbox"
                 id="sendEmail"
                 onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -210,9 +232,15 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
           </Form>
           <div className={styles.SideBySide}>
             <FlexColumn gap="20px">
-              <h1 className={styles.Minor}>
-                Here's what your announcement will look like to members:
-              </h1>
+            {compareUserRoles(role || "guest", "professor") == 0 ? (
+              <>
+              <h1 className={styles.Minor}>Here's what your research posting will look like to members:</h1>
+              </>
+            ) : (
+              <>
+              <h1 className={styles.Minor}>Here's what your announcement will look like to members:</h1>
+              </>
+            )}
               <Announcement
                 when={new Date()}
                 from={localStorage.getItem("dsgt-portal-fname")?.toString()}
@@ -231,50 +259,104 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
         preset={ModalPreset.Confirm}
         handleConfirmed={handleSendModalConfirm}
       >
-        Are you sure you would like to send the following announcement?
-        <span className={styles.AnnConfirm}>
-          <Announcement
-            when={new Date()}
-            from={localStorage.getItem("dsgt-portal-fname")?.toString()}
-            link_text={linkText}
-            link_url={linkUrl}
-          >
-            {message || "No message"}
-          </Announcement>
-        </span>
-      </Modal>
-
-      <h2 className={styles.Minor}>Existing Announcements</h2>
+      {compareUserRoles(role || "guest", "professor") == 0 ? (
+        <>Are you sure you would like to send the following research announcement?
+        </>
+      ) : (
+        <>Are you sure you would like to send the following announcement?
+        </>
+      )}
+      {sendEmail ? (
+       <> An email WILL be sent to all active members.</>
+      ) : (
+      <> An email will NOT be sent to all active members.</>
+      )}
+      <span className={styles.AnnConfirm}>
+        <Announcement
+          when={new Date()}
+          from={localStorage.getItem("dsgt-portal-fname")?.toString()}
+          link_text={linkText}
+          link_url={linkUrl}
+        >
+        {message || "No message"}
+        </Announcement>
+      </span>
+    </Modal>
+    
+    {compareUserRoles(role || "guest", "administrator") >= 0 ? (
+      <>
+      <h2 className={styles.Minor}>Active Posts</h2>
       <ErrorText>{error2}</ErrorText>
       <SuccessText>{success2}</SuccessText>
       {loading ? (
-        <div>loading...</div>
-      ) : (
-        <FlexColumn>
-          {announcements.length <= 0
-            ? "No announcements found."
-            : announcements.map((a, i) => {
-                return (
-                  <Announcement
-                    key={i}
-                    when={new Date(a["created_at"])}
-                    from={`${a["fname"]} ${a["lname"]}`}
-                    id={a["ann_id"]}
-                    deletable={true}
-                    link_url={a["link_url"]}
-                    link_text={a["link_text"]}
-                    onDelete={(announcement_id?: number) => {
-                      setShowDelModal(true);
-                      if (announcement_id)
-                        setCurrentAnnouncementId(announcement_id);
-                    }}
-                  >
-                    {a["message"]}
-                  </Announcement>
-                );
-              })}
-        </FlexColumn>
-      )}
+          <div>loading...</div>
+        ) : (
+          <FlexColumn>
+            {announcements.length <= 0
+                ? "No announcements found."
+                : announcements.map((a, i) => {
+                      return (
+                        <Announcement
+                          key={i}
+                          when={new Date(a["created_at"])}
+                          from={`${a["fname"]} ${a["lname"]}`}
+                          id={a["ann_id"]}
+                          deletable={true}
+                          link_url={a["link_url"]}
+                          link_text={a["link_text"]}
+                          view_count={a["view_count"]}
+                          onDelete={(announcement_id?: number) => {
+                            setShowDelModal(true);
+                            if (announcement_id)
+                              setCurrentAnnouncementId(announcement_id);
+                          }}
+                        >
+                          {a["message"]}
+                        </Announcement>
+                      );
+                  })
+              }
+            </FlexColumn>
+          )}
+      </>
+    ) : (
+      <>
+      <h2 className={styles.Minor}>Your Active Posts</h2>
+      <ErrorText>{error2}</ErrorText>
+      <SuccessText>{success2}</SuccessText>
+      {loading ? (
+          <div>loading...</div>
+        ) : (
+          <FlexColumn>
+            {announcements.length <= 0
+                ? "No announcements found."
+                : yourAnnouncements.map((a, i) => {
+                      return (
+                        <Announcement
+                          key={i}
+                          when={new Date(a["created_at"])}
+                          from={`${a["fname"]} ${a["lname"]}`}
+                          id={a["ann_id"]}
+                          deletable={true}
+                          link_url={a["link_url"]}
+                          link_text={a["link_text"]}
+                          view_count={a["view_count"]}
+                          onDelete={(announcement_id?: number) => {
+                            setShowDelModal(true);
+                            if (announcement_id)
+                              setCurrentAnnouncementId(announcement_id);
+                          }}
+                        >
+                          {a["message"]}
+                        </Announcement>
+                      );
+                  })
+              }
+            </FlexColumn>
+          )}
+      </>
+    )}
+
       <Modal
         open={showDelModal}
         setOpen={setShowDelModal}
@@ -283,7 +365,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = () => {
       >
         Are you sure you would like to delete this announcement?
       </Modal>
-    </div>
+  </div>
   );
 };
 

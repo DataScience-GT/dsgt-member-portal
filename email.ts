@@ -1,5 +1,13 @@
 const nodemailer = require("nodemailer");
+// const dkim = require('nodemailer-dkim');
+
 import { NextFunction } from "express";
+
+// const dkimOptions = {
+//   domainName: 'example.com',
+//   keySelector: 'selector1',
+//   privateKey: ''
+// }
 
 export type EmailOptions = {
   to?: string;

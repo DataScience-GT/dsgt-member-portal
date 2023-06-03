@@ -412,10 +412,9 @@ export const getAnnouncements = async (count?: number) => {
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
-        // "announcement.email_sent",
-        // "announcement.email_sent_to",
         "announcement.link_url",
         "announcement.link_text",
+        "announcement.view_count",
         "user.fname",
         "user.lname"
       )
@@ -428,10 +427,9 @@ export const getAnnouncements = async (count?: number) => {
         "announcement.ann_id",
         "announcement.message",
         "announcement.created_at",
-        // "announcement.email_sent",
-        // "announcement.email_sent_to",
         "announcement.link_url",
         "announcement.link_text",
+        "announcement.view_count",
         "user.fname",
         "user.lname"
       )
@@ -440,7 +438,17 @@ export const getAnnouncements = async (count?: number) => {
 };
 
 /**
- * Creates a new announcement
+ * Updates view count for announcement with announcement_id by 1
+ * @param announcement_id the id of the announcement
+ */
+export const updateAnnouncementViews = async (announcementIds: number[]) => {
+  await db("announcement")
+    .whereIn("ann_id", announcementIds)
+    .increment("view_count", 1);
+};
+
+/**
+ * Updates announcement view. View count defaults to 0
  * @param message {string} message
  * @param user_id {number} the user's (who wrote the announcement) id
  */
@@ -460,6 +468,7 @@ export const insertAnnouncement = async (
       email_sent_to,
       link_url,
       link_text,
+      // view count defaults to 0
     })
     .into("announcement");
 };
@@ -1003,6 +1012,21 @@ export const getAllMembersWithEmailOn = async () => {
     .orWhere((builder: any) => {
       builder.whereNull("email_consent").andWhere({ enabled: true });
     });
+  if (res && res.length) {
+    return res.map((e: any) => e.email);
+  } else {
+    return [];
+  }
+};
+
+/**
+ * Gets all members that are enabled and who have accepted email announcements.
+ */
+export const getAllExecMembersWithEmailOn = async () => {
+  let res = await db("user")
+    .select("email")
+    .where("role", "administrator")
+    .orWhere("role", "developer");
   if (res && res.length) {
     return res.map((e: any) => e.email);
   } else {

@@ -10,9 +10,11 @@ import RateLimit from "../middleware/RateLimiting";
 import {
   deleteAnnouncement,
   getAllMembersWithEmailOn,
+  getAllExecMembersWithEmailOn,
   getAnnouncements,
   insertAnnouncement,
   validateSession,
+  updateAnnouncementViews,
 } from "../model";
 import { compareUserRoles } from "../RoleManagement";
 import { checkSessionValid } from "../SessionManagement";
@@ -29,15 +31,28 @@ router.get(
   ValidateSession("query"),
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    // Parse number of announcements
+
     let count = req.query.count?.toString();
+    let counts_as_view = req.query.counts_as_view?.toString();
+    let counts_bool = JSON.parse(counts_as_view || 'false');
+    let ans = await getAnnouncements();
 
     if (count) {
-      let ans = await getAnnouncements(parseInt(count));
-      res.json({ ok: 1, data: ans });
-    } else {
-      let ans = await getAnnouncements();
-      res.json({ ok: 1, data: ans });
+      ans = await getAnnouncements(parseInt(count));
+    }
+    res.json({ ok: 1, data: ans });
+
+    if (counts_bool) {
+      let announcementIds: number[] = [];
+      for (const announcement of ans) {
+        announcementIds.push(announcement.ann_id);
+      }
+      try {
+        await updateAnnouncementViews(announcementIds);
+      } catch (error) {
+        // Handle error
+        next(error);
+      }
     }
   }
 );
@@ -54,7 +69,6 @@ router.post(
       let link_url = req.body.linkUrl;
       let link_text = req.body.linkText;
 
-      // let verifiedEmails = req.body.verifiedEmails;
       if (!message) {
         // Missing fields
         next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
@@ -126,6 +140,34 @@ router.post(
     }
   }
 );
+
+// router.post(
+//   "/update",
+//   ValidateSession("body"),
+//   RateLimit(1000, 1000 * 60 * 60),
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     let session_id = req.body.session_id;
+//     let announcements = req.body.list_announcements;
+//     if (!session_id || !announcements) {
+//       // Missing list of announcements
+//       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+//       return;
+//     }
+
+//     let announcementIds: number[] = [];
+//     for (const announcement of announcements) {
+//       announcementIds.push(announcement.ann_id);
+//     }
+
+//     try {
+//       await updateAnnouncementViews(announcementIds);
+//       res.json({ ok: 1 });
+//     } catch (error) {
+//       // Handle error
+//       next(error);
+//     }
+//   }
+// );
 
 router.delete(
   "/remove",

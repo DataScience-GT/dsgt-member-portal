@@ -5,12 +5,19 @@ import EventCard from "../../components/EventCard/EventCard";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalHome.module.scss";
+import { compareUserRoles } from "../../Scripts/RoleManagement";
 
-interface PortalHomeProps {}
+interface PortalHomeProps {
+  role?: string;
+}
 
-const PortalHome: FC<PortalHomeProps> = () => {
+setInterval(() => {
+  sessionStorage.setItem('counts_as_view', 'true');
+}, 60 * 60 * 1000); // 1 hour in milliseconds
+
+const PortalHome: FC<PortalHomeProps> = ({ role }: PortalHomeProps) => {
+
   const [messages, setMessages] = useState([
-    //"Hello, {name}.",    - keeping this message in causes the welcome message in the home page to flash.
     "Welcome back, {name}.",
   ]);
   const [secondaryMessage, setSecondaryMessage] = useState("");
@@ -27,35 +34,26 @@ const PortalHome: FC<PortalHomeProps> = () => {
   };
 
   useEffect(() => {
+
     const now = new Date();
     const utc = new Date(now.getTime() + now.getTimezoneOffset() * 60 * 1000);
     const offset = -300;
     const est = new Date(utc.getTime() + offset * 60 * 1000);
     const hours = est.getHours();
 
-    /* The following if-block causes the welcome message to flash upon reload but is meant to alter the message depending on the time of day. 
-    if (hours >= 0 && hours < 8) {
-      //0-8
-      addWelcomeMessage("Good Morning, {name}.");
-      setSecondaryMessage("Up early or staying up late?");
-    } else if (hours >= 8 && hours < 12) {
-      //8-12
-      addWelcomeMessage("Good Morning, {name}.");
-    } else if (hours >= 12 && hours < 15) {
-      //12-5
-      addWelcomeMessage("Good Afternoon, {name}.");
-    } else if (hours >= 15 && hours < 24) {
-      //15-24
-      addWelcomeMessage("Good Evening, {name}.");
+    if (!sessionStorage.getItem('counts_as_view')) {
+      sessionStorage.setItem('counts_as_view', 'true');
     }
-*/
+    const counts_as_view: string | null = sessionStorage.getItem('counts_as_view');
 
-    //get last ~5 announcements
-    const getAnnouncements = async () => {
+    // get last 1-10 announcements and increment views as needed
+    const getAnnouncements = async (counts_as_view: boolean) => {
+      console.log(role || "guest");
       await fetch(
-        `/api/announcement/get?count=10&session_id=${localStorage.getItem(
-          "dsgt-portal-session-key"
-        )}`,
+        `/api/announcement/get?count=10
+          &counts_as_view=${counts_as_view}
+          &session_id=${localStorage.getItem(
+            "dsgt-portal-session-key")}`,
         {
           method: "GET",
           headers: {
@@ -68,15 +66,20 @@ const PortalHome: FC<PortalHomeProps> = () => {
         if (!json.ok && json.error) {
           console.error(json.error);
         } else {
-          //use data
           setAnnouncements(json.data);
+          if (counts_as_view) {
+            console.log('Updated view count on all announcements!');
+            sessionStorage.setItem('counts_as_view', 'false');
+          } else {
+            console.log('Did not update view count');
+          }
         }
         setAnnLoading(false);
-      });
+      })
     };
-    getAnnouncements();
+    getAnnouncements(JSON.parse(counts_as_view || 'false'));
 
-    //get upcoming events
+    // get upcoming events
     const getEventDataUpcoming = async () => {
       await getEvents(
         3,
@@ -89,7 +92,7 @@ const PortalHome: FC<PortalHomeProps> = () => {
     };
     getEventDataUpcoming();
 
-    //get ongoing events
+    // get ongoing events
     const getEventDataOngoing = async () => {
       await getEvents(
         3,
@@ -172,26 +175,32 @@ const PortalHome: FC<PortalHomeProps> = () => {
           </div>
         </div>
         <div className={styles.Announcements}>
-          <div className={styles.Minor}>Announcements</div>
+          {compareUserRoles(role || "guest", "professor") == 0 ? (
+            <div className={styles.Minor}>Announcements & Research</div>
+          ) : (
+            <div className={styles.Minor}>Announcements & Research Opportunities</div>
+          )}
           <FlexColumn>
-            {annLoading
-              ? "loading..."
-              : announcements.length <= 0
-              ? "No announcements found."
-              : announcements.map((a, i) => {
-                  return (
-                    <Announcement
-                      key={i}
-                      when={new Date(a["created_at"])}
-                      from={`${a["fname"]} ${a["lname"]}`}
-                      id={a["ann_id"]}
-                      link_url={a["link_url"]}
-                      link_text={a["link_text"]}
-                    >
-                      {a["message"]}
-                    </Announcement>
-                  );
-                })}
+                {annLoading
+                  ? "loading..."
+                  : announcements.length <= 0
+                  ? "No announcements found."
+                  : announcements.map((a, i) => {
+                    return (
+                          <Announcement
+                            key={i}
+                            when={new Date(a["created_at"])}
+                            from={`${a["fname"]} ${a["lname"]}`}
+                            id={a["ann_id"]}
+                            view_count={a["view_count"]}
+                            link_url={a["link_url"]}
+                            link_text={a["link_text"]}
+                            role={role}
+                            >
+                            {a["message"]}
+                          </Announcement>
+                    );
+                  })}
           </FlexColumn>
         </div>
       </FlexRow>
