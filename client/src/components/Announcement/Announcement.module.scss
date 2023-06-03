@@ -2,7 +2,7 @@
   display: block;
   // border-bottom: 1px solid var(--borderColor);
   padding-bottom: 5px;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
 
   &:hover {
     // background: var(--hover);
@@ -16,12 +16,26 @@
 }
 
 .Content {
-  width: calc(100% - 3em);
+  width: calc(60%);
 }
 
 .Title {
   font-size: 1.3em;
   font-weight: 500;
+}
+
+.ViewNumber {
+  padding-left: 0.7em;
+  padding-right: 0.7em;
+  padding-bottom: 0.4em;
+  padding-top: 0.4em;
+
+  border-radius: 10px;
+  margin-top: 0em;
+
+  font-size: 1.1em;
+  font-weight: 400;
+  background-color: rgb(78, 78, 78);
 }
 
 .Date {
@@ -34,11 +48,27 @@
   text-transform: capitalize;
 }
 
+.ViewCount {
+
+  height: 4em;
+  width: 4em;
+
+  padding-bottom: 0em;
+  border-radius: 10px;
+
+  .View {
+    height: 100%;
+    width: 100%;
+    filter: var(--svgFilter);
+  }
+}
+
 .TrashContainer {
-  height: 2em;
-  width: 2em;
+  height: 2.5em;
+  width: 2.5em;
 
   padding: 0.25em;
+  margin-right: 1em;
   cursor: pointer;
   border-radius: 10px;
 

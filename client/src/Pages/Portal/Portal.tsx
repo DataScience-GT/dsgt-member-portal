@@ -30,7 +30,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
         <Sidebar role={role} />
         <div className={styles.PortalBody}>
           <Routes>
-            <Route path="/*" element={<PortalHome />} />
+            <Route path="/*" element={<PortalHome role={role} />} />
             <Route path="/settings/*" element={<PortalSettings />} />
             {compareUserRoles(role || "guest", "professor") != 0 ? (
               <Route path="/forms/*" element={<PortalForms role={role} />} />
@@ -49,7 +49,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
               ""
             )}
             {compareUserRoles(role || "guest", "professor") >= 0 ? (
-              <Route path="/announce/*" element={<PortalAnnounce />} />
+              <Route path="/announce/*" element={<PortalAnnounce role={role} />} />
             ) : (
               ""
             )}
