@@ -9,6 +9,7 @@ import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import styles from "./PortalAnnounce.module.scss";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
+import trash_icon from "../../assets/icons/trash.svg";
 
 
 interface PortalAnnounceProps {
@@ -32,6 +33,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
   const [announcements, setAnnouncements] = useState([]);
   const [showDelModal, setShowDelModal] = useState(false);
   const [currentAnnouncementId, setCurrentAnnouncementId] = useState(-1);
+  // const [currentAnnouncement, setCurrentAnnouncement] = useState(announcements[0]);
   const [error2, setError2] = useState("");
   const [success2, setSuccess2] = useState("");
 
@@ -57,6 +59,16 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
   };
+
+  /**
+   * Sets current annnouncement based on announcement ID. Used for del modal.
+   */
+  // const handleAnnIDChange = () => {
+  //   if (announcements.length > 0) {
+  //     const announcement = announcements.find((item: { id: number | null; }) => item.id === currentAnnouncementId);
+  //     setCurrentAnnouncement(announcement);
+  //   }
+  // }
 
   /**
    * Added priority with sendEmail boolean. Thus, confirmation of announcement
@@ -159,15 +171,11 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
   return (
     <div className={styles.PortalAnnounce} data-testid="PortalAnnounce">
       {compareUserRoles(role || "guest", "professor") == 0 ? (
-        <>
-        <h1 className={styles.Major}>Research Postings</h1>
-        <h2 className={styles.Minor}>Create Research Posting</h2>
-        </>
+        <><h1 className={styles.Major}>Research Postings</h1>
+        <h2 className={styles.Minor}>Create Research Posting</h2></>
       ) : (
-        <>
-        <h1 className={styles.Major}>Announcements</h1>
-        <h2 className={styles.Minor}>Send Announcement</h2>
-        </>
+        <><h1 className={styles.Major}>Announcements</h1>
+        <h2 className={styles.Minor}>Send Announcement</h2></>
       )}
       <FlexRow gap="5em" wrap="wrap-reverse" align="flex-start">
         <>
@@ -222,7 +230,7 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
                 name="sendEmail"
               />
               <label
-                className={styles.Minor}
+                className={styles.CheckBox}
                 htmlFor="sendEmail"
                 style={{ padding: "0 0 0 0.5em" }}
               >
@@ -233,21 +241,16 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
           <div className={styles.SideBySide}>
             <FlexColumn gap="20px">
             {compareUserRoles(role || "guest", "professor") == 0 ? (
-              <>
-              <h1 className={styles.Minor}>Here's what your research posting will look like to members:</h1>
-              </>
+              <><h1 className={styles.Minor}>Here's what your research posting will look like to members:</h1></>
             ) : (
-              <>
-              <h1 className={styles.Minor}>Here's what your announcement will look like to members:</h1>
-              </>
+              <><h1 className={styles.Minor}>Here's what your announcement will look like to members:</h1></>
             )}
               <Announcement
                 when={new Date()}
                 from={localStorage.getItem("dsgt-portal-fname")?.toString()}
                 link_text={linkText}
                 link_url={linkUrl}
-              >
-                {message || "No message"}
+              >{message || "No message"}
               </Announcement>
             </FlexColumn>
           </div>
@@ -259,18 +262,18 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
         preset={ModalPreset.Confirm}
         handleConfirmed={handleSendModalConfirm}
       >
-      {compareUserRoles(role || "guest", "professor") == 0 ? (
-        <>Are you sure you would like to send the following research announcement?
-        </>
-      ) : (
-        <>Are you sure you would like to send the following announcement?
-        </>
-      )}
-      {sendEmail ? (
-       <> An email WILL be sent to all active members.</>
-      ) : (
-      <> An email will NOT be sent to all active members.</>
-      )}
+      <div className={styles.Warning}>
+        {compareUserRoles(role || "guest", "professor") == 0 ? (
+          <>Are you sure you would like to send the following research announcement?</>
+        ) : (
+          <>Are you sure you would like to send the following announcement?</>
+        )}
+        {sendEmail ? (
+        <> An email WILL be sent to all active members.</>
+        ) : (
+        <> An email will NOT be sent to all active members.</>
+        )}
+      </div>
       <span className={styles.AnnConfirm}>
         <Announcement
           when={new Date()}
@@ -289,34 +292,70 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
       <ErrorText>{error2}</ErrorText>
       <SuccessText>{success2}</SuccessText>
       {loading ? (
-          <div>loading...</div>
+          <div>Loading...</div>
         ) : (
-          <FlexColumn>
-            {announcements.length <= 0
-                ? "No announcements found."
-                : announcements.map((a, i) => {
-                      return (
-                        <Announcement
-                          key={i}
-                          when={new Date(a["created_at"])}
-                          from={`${a["fname"]} ${a["lname"]}`}
-                          id={a["ann_id"]}
-                          deletable={true}
-                          link_url={a["link_url"]}
-                          link_text={a["link_text"]}
-                          view_count={a["view_count"]}
-                          onDelete={(announcement_id?: number) => {
-                            setShowDelModal(true);
-                            if (announcement_id)
-                              setCurrentAnnouncementId(announcement_id);
-                          }}
-                        >
-                          {a["message"]}
-                        </Announcement>
-                      );
-                  })
-              }
-            </FlexColumn>
+          
+          <div className={styles.TableContainer}>
+          <table className={styles.Table}>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>From</th>
+                <th>Announcement</th>
+                <th>Links</th>
+                <th>View Count</th>
+                <th>Delete?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {announcements.length <= 0 ? (
+                <tr>
+                  <td colSpan={6}>No announcements found.</td>
+                </tr>
+              ) : (
+                announcements.map((a, i) => {
+                  return (
+                    <tr className={styles.Table} key={i}>
+                      <td>{new Date(a["created_at"]).toLocaleDateString()}</td>
+                      <td className={styles.ExpandedColumn}>{`${a["fname"]} ${a["lname"]}`}</td>
+                      <td>{a["message"]}</td>
+                      <td>
+                        {a["link_url"] && (
+                          <a 
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.AnnouncementButton}
+                            href={a["link_url"]}>
+                            {a["link_text"] || "Learn More"}
+                          </a>
+                        )}
+                        {}
+                      </td>
+
+                      <td className={styles.ExpandedColumn}>
+                        {a["view_count"]} views
+                      </td>
+
+                      <td>
+                        {(
+                            <button className={styles.DeleteButton}
+                              onClick={() => {
+                                setShowDelModal(true);
+                                setCurrentAnnouncementId(a["ann_id"]);
+                              }}
+                            >
+                              Delete
+                            </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+          </div>
+
           )}
       </>
     ) : (
@@ -325,34 +364,68 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
       <ErrorText>{error2}</ErrorText>
       <SuccessText>{success2}</SuccessText>
       {loading ? (
-          <div>loading...</div>
+          <div>Loading...</div>
         ) : (
-          <FlexColumn>
-            {announcements.length <= 0
-                ? "No announcements found."
-                : yourAnnouncements.map((a, i) => {
-                      return (
-                        <Announcement
-                          key={i}
-                          when={new Date(a["created_at"])}
-                          from={`${a["fname"]} ${a["lname"]}`}
-                          id={a["ann_id"]}
-                          deletable={true}
-                          link_url={a["link_url"]}
-                          link_text={a["link_text"]}
-                          view_count={a["view_count"]}
-                          onDelete={(announcement_id?: number) => {
-                            setShowDelModal(true);
-                            if (announcement_id)
-                              setCurrentAnnouncementId(announcement_id);
-                          }}
-                        >
-                          {a["message"]}
-                        </Announcement>
-                      );
-                  })
-              }
-            </FlexColumn>
+          <div className={styles.TableContainer}>
+          <table className={styles.Table}>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>From</th>
+                <th>Announcement</th>
+                <th>Links</th>
+                <th>View Count</th>
+                <th>Delete?</th>
+              </tr>
+            </thead>
+            <tbody>
+              {yourAnnouncements.length <= 0 ? (
+                <tr>
+                  <td colSpan={6}>No announcements found.</td>
+                </tr>
+              ) : (
+                yourAnnouncements.map((a, i) => {
+                  return (
+                    <tr className={styles.Table} key={i}>
+                      <td>{new Date(a["created_at"]).toLocaleDateString()}</td>
+                      <td className={styles.ExpandedColumn}>{`${a["fname"]} ${a["lname"]}`}</td>
+                      <td>{a["message"]}</td>
+                      <td>
+                        {a["link_url"] && (
+                          <a 
+                            target="_blank"
+                            rel="noreferrer"
+                            className={styles.AnnouncementButton}
+                            href={a["link_url"]}>
+                            {a["link_text"] || "Learn More"}
+                          </a>
+                        )}
+                        {}
+                      </td>
+
+                      <td className={styles.ExpandedColumn}>
+                        {a["view_count"]} views
+                      </td>
+
+                      <td>
+                        {(
+                            <button className={styles.DeleteButton}
+                              onClick={() => {
+                                setShowDelModal(true);
+                                setCurrentAnnouncementId(a["ann_id"]);
+                              }}
+                            >
+                              Delete
+                            </button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
+            </tbody>
+          </table>
+          </div>
           )}
       </>
     )}
@@ -363,7 +436,11 @@ const PortalAnnounce: FC<PortalAnnounceProps> = ({ role }) => {
         preset={ModalPreset.Confirm}
         handleConfirmed={handleDelModalConfirm}
       >
-        Are you sure you would like to delete this announcement?
+      <div className={styles.Warning}>
+        Are you sure you would like to delete the announcement with announcement id {currentAnnouncementId}? 
+        It cannot be obtained again.
+      </div>
+
       </Modal>
   </div>
   );

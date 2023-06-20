@@ -7,7 +7,7 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("billing_details").insert({ email: "test@test.com" });
     if (await checkUserEmail("test@test.com")) {
       await knex("user")
-        .update({ role: "developer" })
+        .update({ role: "member" })
         .where({ email: "test@test.com" });
     }
   }

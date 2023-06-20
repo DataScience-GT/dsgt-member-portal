@@ -65,24 +65,18 @@ router.post(
     try {
       let message = req.body.announcement;
       let sendToEmail = req.body.sendToEmail;
-
       let link_url = req.body.linkUrl;
       let link_text = req.body.linkText;
-
       if (!message) {
-        // Missing fields
         next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
         return;
       }
-
       let verifiedEmails: string[] = [];
-
-      
 
       if (sendToEmail) {
         verifiedEmails = await getAllMembersWithEmailOn();
-
         let email_msg = message;
+
         if (link_url && link_text) {
           email_msg += `<p><a href="${link_url}">${link_text}</a></p>`;
         } else if (link_url) {
@@ -91,38 +85,30 @@ router.post(
         // append who sent the email
         email_msg += `<br/><p>Sent by ${res.locals.session.fname} ${res.locals.session.lname}</p>`;
 
-        // Email
+        // email
         let emailToSend = getAnnouncementEmailTemplate(email_msg);
-        // sendEmail(
-        //   verifiedEmails,
-        //   "DSGT Announcement",
-        //   null,
-        //   emailToSend,
-        //   next,
-        //   (info: any) => {}
-        // );
-        // can only bcc 100 emails at a time
+
         let emailsToSend = [];
         for (let i = 0; i < verifiedEmails.length; i += 100) {
           emailsToSend.push(verifiedEmails.slice(i, i + 100));
         }
+
         for (let i = 0; i < emailsToSend.length; i++) {
-          await sendEmail({
-            bcc: emailsToSend[i],
-            subject: "DSGT Announcement",
-            html: emailToSend,
-            next,
-          });
+          try {
+            await sendEmail({
+              bcc: emailsToSend[i],
+              subject: "DSGT Announcement",
+              html: emailToSend,
+              next,
+            });
+          } catch (error) {
+            console.error("Email sending failed:", error);
+            return res.status(500).json({ message: "Failed to send email" });
+          }
         }
-        // sendEmail({
-        //   bcc: verifiedEmails,
-        //   subject: "DSGT Announcement",
-        //   html: emailToSend,
-        //   next,
-        // });
       }
 
-      //create announcements
+      // create announcements
       await insertAnnouncement(
         message,
         res.locals.session.user_id,
