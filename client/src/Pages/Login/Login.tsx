@@ -52,15 +52,19 @@ const Login: FC<LoginProps> = () => {
           <form onSubmit={handleSubmit}>
             <FlexColumn width="100%">
               <div className={styles.Alert}>
-                All existing accounts have been disabled for the Spring 2023
-                semester. After paying the dues, your account will automatically
-                be re-enabled. Make sure to use the email associated with your
-                previous account on Stripe. Click{" "}
+              Accepting new members for the Fall 2023 semester! After paying 
+              the dues, your account will automatically be activated.
+              Make sure to use the email associated with your previous account 
+              on Stripe. Click{" "}
                 <a className={styles.LinkText} href="/register">
                   here
-                </a>{" "}
-                to pay dues. For help, please email{" "}
-                <a className={styles.LinkText} href="mailto:John@dataciencet.org">John@datasciencegt.org</a>.
+                </a>{" "} 
+              to pay dues. For help, please email {" "}
+              <a 
+                className={styles.LinkText} 
+                href="mailto:vmiranda6@gatech.edu">vmiranda6@gatech.edu
+              </a>.
+              Welcome to the DSGT Family 😄
               </div>
               <h1 className={styles.Major}>Login</h1>
               <InputField
