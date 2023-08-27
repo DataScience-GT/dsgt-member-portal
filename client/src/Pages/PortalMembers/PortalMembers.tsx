@@ -405,10 +405,11 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                   <td className={styles.Role}>{member["role"]}</td>
                   <td
                     className={`${styles.Enabled} ${
-                      member["enabled"] ? styles._Enabled : styles._Disabled
+                      member["enabled"] == 1 || member["enabled"] == 2 ? 
+                      styles._Enabled : styles._Disabled
                     }`}
                   >
-                    {member["enabled"] ? "yes" : "no"}
+                    {member["enabled"] == 1 || member["enabled"] == 2 ? "yes" : "no"}
                   </td>
                   <td className={`${styles.LastLoggedOn}`}>
                     {handleGetLastLoggedOn(member)}

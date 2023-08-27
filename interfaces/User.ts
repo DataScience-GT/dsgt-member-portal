@@ -4,7 +4,7 @@ export interface User {
   fname?: string;
   lname?: string;
   password?: string;
-  enabled?: boolean;
+  enabled?: number;
   role?: string;
   created_at?: Date;
 }
@@ -42,6 +42,7 @@ export interface RegisterUser {
   interests: string;
   hearAbout: string;
   emailConsent: string | boolean;
+  paymentAmount: number
 }
 
 export interface LoginUser {

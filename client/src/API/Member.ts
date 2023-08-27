@@ -32,7 +32,7 @@ export type result_getMembers = {
   lname: string;
   email: string;
   role: string;
-  enabled: boolean;
+  enabled: number,
   last_logged_on: string;
 };
 

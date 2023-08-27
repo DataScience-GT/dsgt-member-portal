@@ -123,6 +123,7 @@ router.post(
       interests: req.body.interests,
       hearAbout: req.body.hearAbout,
       emailConsent: req.body.emailConsent,
+      paymentAmount: req.body.paymentAmount,
     };
     let short_register = req.body.short;
     if (short_register) {
@@ -146,7 +147,8 @@ router.post(
         u.experience &&
         u.interests &&
         u.hearAbout &&
-        u.emailConsent
+        u.emailConsent &&
+        u.paymentAmount
       )
     ) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
@@ -164,7 +166,7 @@ router.post(
       return;
     } else {
       let x = await registerUser(u, next);
-      //login success -- generate session key
+      // login success -- generate session key
       let sessionKey = generateSessionKey(32);
       await createSession({ user_id: x, session_id: sessionKey });
       res.json({ ok: 1, session_key: sessionKey, role: "member" });
