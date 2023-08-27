@@ -6,7 +6,7 @@ import cross_icon from "../../assets/icons/cross-small-skinny.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 
 interface MemberActionMenuProps {
-  enabled?: boolean;
+  enabled?: number;
   onAnything?: () => void;
   onEnableDisable?: () => void;
   onChangeRole?: () => void;

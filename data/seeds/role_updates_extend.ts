@@ -9,7 +9,8 @@ export async function seed(knex: Knex): Promise<void> {
         await knex("user")
           .update({ role: "professor" })
           .where({ email: "dsgttestprof@gmail.com" });
-      }
+    }
+    await knex("billing_details").insert({ email: "vmiranda6@gatech.edu"});
     // await knex("billing_details").insert({ email: "dsgttestemail@gmail.com"});
     // await knex("billing_details").insert({ email: "ssaraf33@gatech.edu"});
     // await knex("billing_details").insert({ email: "rgudla3@gatech.edu"});

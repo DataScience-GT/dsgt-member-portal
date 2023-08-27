@@ -115,19 +115,21 @@ export const getUserLastLoggedOn = async (user_id: number) => {
  */
 export const registerUser = async (user: RegisterUser, next: NextFunction) => {
   try {
-    //add the user to the database
+    // add the user to the database
     let uuid = crypto.randomBytes(24).toString("hex");
     while (await checkUUIDExists(uuid)) {
-      //regenerate new uuid until unique
+      // regenerate new uuid until unique
       uuid = crypto.randomBytes(24).toString("hex");
     }
     let hash = md5(user.password);
+    let accountStatus = user.paymentAmount == 1500 ? 1 : 2;
     await db
       .insert({
         email: user.email,
         fname: user.fname,
         lname: user.lname,
         password: hash,
+        enabled: accountStatus,
         uuid: uuid,
         major: user.major,
         minor: user.minor,
@@ -171,7 +173,7 @@ export const updateUser = async ({
   enabled,
   role,
 }: User) => {
-  //update each if defined
+  // update each if defined
   if (fname) {
     await db("user")
       .update({ fname: fname })
@@ -303,7 +305,7 @@ export const deleteUser = async (email: string) => {
  * disables all users with the "member" role (all base users)
  */
 export const disableAllMembers = async () => {
-  await db("user").update({ enabled: false }).where("role", "member");
+  await db("user").decrement("enabled", 1).where("role", "member");
 };
 
 // ------------------- session -------------------
@@ -629,15 +631,6 @@ export const checkBillingDetailsExists = async (email: string) => {
  * @param billing_details the billing details returned from the stripe webhook
  */
 export const createBillingDetails = async (billing_details: BillingDetails) => {
-  // table.string("city");
-  // table.string("country");
-  // table.string("line1");
-  // table.string("line2");
-  // table.string("postal_code");
-  // table.string("state");
-  // table.string("email");
-  // table.string("name");
-  // table.string("phone");
   if (billing_details.address) {
     await db("billing_details").insert({
       city: billing_details.address.city,
@@ -649,12 +642,14 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
       email: billing_details.email,
       name: billing_details.name,
       phone: billing_details.phone,
+      payment_details: billing_details.payment_amount
     });
   } else {
     await db("billing_details").insert({
       email: billing_details.email,
       name: billing_details.name,
       phone: billing_details.phone,
+      payment_details: billing_details.payment_amount
     });
   }
 };

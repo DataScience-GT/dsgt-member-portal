@@ -28,24 +28,26 @@ router.post("/", async (req: Request, res: Response, next: NextFunction) => {
   switch (event.type) {
     case "payment_intent.succeeded":
       const paymentIntent = event.data.object;
-      // Then define and call a function to handle the event payment_intent.succeeded
-      //   console.log("payment succeeded");
       log(`stripe webhook: payment succeeded`);
-      //get the payment details of the customer
+
+      // get payment details & amount
       let payment_details = paymentIntent.charges.data[0]
         .billing_details as BillingDetails;
+      let payment_amount = paymentIntent.charges.data[0].amount;
+      payment_details.payment_amount = payment_amount;
 
-      // check if an account exists with email
-      let exists = await checkUserEmail(payment_details.email, false);
-      if (!exists && payment_details.email) {
-        // console.log(`no account exists with email: ${payment_details.email}`);
-      } else {
-        // console.log(`account with email ${payment_details.email} exists`);
-        // console.log(`re-enabling account`);
-        // reenable the account
-        await updateUser({ email: payment_details.email, enabled: true });
+      let accountExists = await checkUserEmail(payment_details.email, false);
+
+      switch (payment_amount) {
+        case 1500:
+          if (accountExists) {
+            await updateUser({ email: payment_details.email, enabled: 1 });
+          }
+        case 2500: 
+          if (accountExists) {
+            await updateUser({ email: payment_details.email, enabled: 2 });
+          }
       }
-      //add the payment data to the db
       await createBillingDetails(payment_details);
       break;
     // ... handle other event types

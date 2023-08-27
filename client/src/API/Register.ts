@@ -12,6 +12,7 @@ export type result_billingDetails = {
       email: string;
       name: string;
       phone: string;
+      payment_amount: number
       created_at: string;
     };
     account: boolean;
@@ -36,7 +37,7 @@ export const checkBillingDetailsExists = async (
     if (!json.ok && json.error) {
       throw new Error(json.error);
     } else {
-      //return the billing data
+      // return the billing data
       callback(json);
     }
   });
@@ -63,6 +64,7 @@ export type result_register = {
 // location
 // experience
 // interests
+// payment amount
 export const registerUser = async (
   email: string,
   fname: string,
@@ -81,6 +83,7 @@ export const registerUser = async (
   interests: string[] | string,
   hearAbout: string,
   emailConsent: string | boolean,
+  paymentAmount: number,
   callback: (data: result_register) => void
 ) => {
   await fetch("/api/user/register", {
@@ -107,13 +110,13 @@ export const registerUser = async (
       interests: interests,
       hearAbout: hearAbout,
       emailConsent: emailConsent,
+      paymentAmount: paymentAmount
     }),
   }).then(async (res) => {
     const json = await res.json();
     if (!json.ok && json.error) {
       throw new Error(json.error);
     } else {
-      //return the resulting data
       callback(json);
     }
   });

@@ -10,4 +10,5 @@ export interface BillingDetails {
   email: string;
   name?: string;
   phone?: string;
+  payment_amount?: number;
 }

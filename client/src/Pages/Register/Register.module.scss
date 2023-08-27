@@ -26,6 +26,14 @@
   width: 100%;
 }
 
+.Mini2 {
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: rgba(255, 255, 255, 0.9);
+  width: 100%;
+}
+
 .Link {
   color: inherit;
   background: var(--background);
@@ -36,8 +44,22 @@
   border-radius: 10px;
   transition: var(--animDuration) background ease;
   margin: 10px 0;
+  text-decoration: none;
   &:hover {
     background: var(--hover);
+  }
+}
+
+.Link2 {
+  color: inherit;
+  background: var(--background);
+  color: var(--foreground);
+  padding: 0.5em;
+  padding-top: 0.4em;
+  transition: var(--animDuration) background ease;
+  margin: 10px 0;
+  &:hover {
+    cursor: pointer;
   }
 }
 

@@ -25,57 +25,51 @@ const passwordHelperLines = [
 ];
 
 const Register: FC<RegisterProps> = () => {
-  //generic states (used for most/all forms)
+  // generic states (used for most/all forms)
+
   const [searchParams, setSearchParams] = useSearchParams();
   const payment_status = searchParams.get("payment_status");
   const [loading, setLoading] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
   const [screen, setScreen] = useState(0);
   const [error, setError] = useState("");
+
   //--------------- ---------------
   //--------------- First Form (Payment mail) ---------------
   const [paymentEmail, setPaymentEmail] = useState("");
+  const [paymentAmount, setPaymentAmount] = useState(1500);
+
   const handleChange_paymentemail = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9@.+_\- ]/g, "");
     setPaymentEmail(e.target.value);
   };
-  //handle form submission
+  // handle form submission
   const handleFormSubmitEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     setError("");
     setLoading(true);
     e.preventDefault();
-    //check if billing data found
+    // check if billing data found
     await checkBillingDetailsExists(
       paymentEmail,
       (result: result_billingDetails) => {
-        // console.log(data);
-        // check for completion
         let nextPage = 0;
         if (result.data.account) {
-          //account already exists
           setError("An account with this email has already been created.");
           return;
-          // window.location.href = "/portal";
-          // nextPage = 1;
-          // if (result.data.projects) {
-          //   nextPage = 3;
-          //   if (result.data.bootcamp) {
-          //     nextPage = 5;
-          //   }
-          // }
         }
+        setPaymentAmount(result.data.billing_details.payment_amount);
         setEmailVerified(true);
         setScreen(nextPage);
       }
     )
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    .catch((err) => {
+      setError(err.message);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
   };
 
   //--------------- Second Form (Personal/Academic info) ---------------
@@ -395,7 +389,7 @@ const Register: FC<RegisterProps> = () => {
       return;
     }
 
-    //attempt to register account
+    // attempt to register account
     await registerUser(
       paymentEmail,
       fname,
@@ -414,6 +408,7 @@ const Register: FC<RegisterProps> = () => {
       JSON.stringify(interests),
       hearAbout,
       emailConsent,
+      paymentAmount,
       (data: result_register) => {
         //callback function
         if (data.ok) {
@@ -2424,10 +2419,16 @@ const Register: FC<RegisterProps> = () => {
                 className={styles.Link}
                 href="https://buy.stripe.com/aEUbKAeO80T19GgcMP"
               >
-                Pay through Stripe →
+                Pay semesterly dues on Stripe ($15/sem) →
               </a>
               <a
                 className={styles.Link}
+                href="https://buy.stripe.com/fZe8yo8pK45d7y85kq"
+              >
+                Pay annual dues on Stripe ($25/year) →
+              </a>
+              <a
+                className={styles.Link2}
                 href="/register?payment_status=completed"
               >
                 Already Paid? Continue Registration →
