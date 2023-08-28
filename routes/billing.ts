@@ -57,7 +57,7 @@ router.post(
     res.json({
       ok: 1,
       data: {
-        biling_details: billing_details,
+        billing_details: billing_details,
         account: account_exists,
         projects: form_projects_exists,
         bootcamp: form_bootcamp_exists,
