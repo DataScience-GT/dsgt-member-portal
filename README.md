@@ -2,9 +2,9 @@
 ## Description
  The membership portal for Data Science at Georgia Tech (DSGT), started in 2022. The portal is used to manage the members in the club and comes with many features such as a registration form, stripe payment verification webhook, member management, SMTP email sending, event check-ins, and more!
 ## Authors
-This portal was made by [@JohnRamberger](https://github.com/JohnRamberger) and is maintained/updated by the DSGT Technology Team. 
+This portal was made by [@JohnRamberger in 2022](https://github.com/JohnRamberger) and [@VicenteMiranda in 2023](https://github.com/vicente6j) and is maintained/updated by the DSGT Technology Team. 
 
-Interested in joining the Tech Team? Reach out to [John](mailto:John@datasciencegt.org)
+Interested in joining the Tech Team? Reach out to [Vicente](mailto:vmiranda6@gatech.edu)
 
 ## Frameworks
 Frontend: React.js written in Typescript.
