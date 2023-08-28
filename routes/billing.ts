@@ -49,7 +49,7 @@ router.post(
       return;
     }
     //check wether forms have been filled in
-    let billing_data = await getBillingDetails(email);
+    let billing_details = await getBillingDetails(email);
     let account_exists = await checkUserEmail(email);
     let form_projects_exists = await checkFormProjectsExists(email);
     let form_bootcamp_exists = await checkFormBootcampExists(email);
@@ -57,7 +57,7 @@ router.post(
     res.json({
       ok: 1,
       data: {
-        billing_data: billing_data,
+        biling_details: billing_details,
         account: account_exists,
         projects: form_projects_exists,
         bootcamp: form_bootcamp_exists,
