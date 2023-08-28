@@ -649,14 +649,14 @@ export const createBillingDetails = async (billing_details: BillingDetails) => {
       email: billing_details.email,
       name: billing_details.name,
       phone: billing_details.phone,
-      payment_details: billing_details.payment_amount
+      payment_amount: billing_details.payment_amount
     });
   } else {
     await db("billing_details").insert({
       email: billing_details.email,
       name: billing_details.name,
       phone: billing_details.phone,
-      payment_details: billing_details.payment_amount
+      payment_amount: billing_details.payment_amount
     });
   }
 };
