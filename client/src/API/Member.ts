@@ -58,9 +58,9 @@ export const getMembers = async (
   });
 };
 
-export const changeMemberEnableDisable = async (
+export const changeMemberAccountStatus = async (
   user_email: string,
-  user_enabled: boolean,
+  user_enabled: number,
   callback?: () => void
 ) => {
   await fetch("/api/user/update", {

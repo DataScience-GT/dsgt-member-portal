@@ -59,7 +59,7 @@ const MemberActionMenu: FC<MemberActionMenuProps> = ({
               }
             }}
           >
-            {enabled ? "Disable" : "Enable"}
+            {enabled == 1 || enabled == 2 ? "Disable" : "Enable"}
           </p>
           <p
             className={styles.Action}
