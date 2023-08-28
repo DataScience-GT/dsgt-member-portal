@@ -27,6 +27,7 @@ import {
   getUserLastLoggedOn,
   getAllMembers,
   disableAllMembers,
+  decrementMembers,
 } from "../model";
 import { RegisterUser, LoginUser, User } from "../interfaces/User";
 import { compareUserRoles, Role } from "../RoleManagement";
@@ -192,7 +193,7 @@ router.post(
       next(new StatusError("An account with that email does not exist.", 404));
     } else {
       //check if account enabled
-      if (!(await getUserEnabled(u.email))) {
+      if (await getUserEnabled(u.email) == 0) {
         //disabled
         next(new StatusError("This account has been disabled.", 401));
         return;
@@ -436,9 +437,24 @@ router.post(
   ValidateSession("body", Role.Administrator),
   async (req: Request, res: Response, next: NextFunction) => {
     // disable all users who have the member role.
-    // This is used to disable all members when the semester ends
+    // This is used to disable all members PERMANENTLY
     try {
       await disableAllMembers();
+      res.json({ ok: 1 });
+    } catch (e) {
+      next(e);
+    }
+  }
+);
+
+router.post(
+  "/decrementmembers",
+  ValidateSession("body", Role.Administrator),
+  async (req: Request, res: Response, next: NextFunction) => {
+    // decrement all users enabled value by 1. 
+    // this is used every semester to update vals
+    try {
+      await decrementMembers();
       res.json({ ok: 1 });
     } catch (e) {
       next(e);

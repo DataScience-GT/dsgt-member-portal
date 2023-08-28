@@ -279,7 +279,7 @@ export const changeUserPassword = async (
  * gets whether a user account in enabled or not.
  * @Note pair with checkUserEmail() to make sure the email exists first.
  * @param email user's email
- * @returns enabled: boolean, or false if the email doesn't exist.
+ * @returns enabled: NUMBER, 0 if it doesn't exist
  */
 export const getUserEnabled = async (email: string) => {
   let res = await db("user")
@@ -287,7 +287,7 @@ export const getUserEnabled = async (email: string) => {
     .where("email", email)
     .orWhere("gtemail", email);
   if (!res.length) {
-    return false;
+    return 0;
   } else {
     return res[0].enabled;
   }
@@ -304,8 +304,15 @@ export const deleteUser = async (email: string) => {
 /**
  * disables all users with the "member" role (all base users)
  */
-export const disableAllMembers = async () => {
+export const decrementMembers = async () => {
   await db("user").decrement("enabled", 1).where("role", "member");
+};
+
+/**
+ * disables all users with the "member" role (all base users)
+ */
+export const disableAllMembers = async () => {
+  await db("user").update({ enabled: 0 }).where("role", "member");
 };
 
 // ------------------- session -------------------

@@ -22,12 +22,12 @@ import { Role } from "../../Scripts/RoleManagement";
 import InputDropdown from "../../components/InputDropdown/InputDropdown";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 import {
-  changeMemberEnableDisable,
+  changeMemberAccountStatus,
   changeMemberRole,
   getMembers,
   result_getMembers,
 } from "../../API/Member";
-import { disableMembers } from "../../API/User";
+import { decrementMembers, disableMembers } from "../../API/User";
 
 interface PortalMembersProps {}
 
@@ -44,8 +44,14 @@ const PortalMembers: FC<PortalMembersProps> = () => {
       window.location.reload();
     });
   };
+  const handleDecrementMembersConfirmed = async () => {
+    await decrementMembers(() => {
+      window.location.reload();
+    });
+  };
 
   const [showDisableModal, setShowDisableModal] = useState(false);
+  const [showDecrementMembersModal, setShowDecrementMembersModal] = useState(false);
   const [showChangeRoleModal, setShowChangeRoleModal] = useState(false);
   const [currentUser, setCurrentUser] = useState({
     user_id: -1,
@@ -54,7 +60,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
     lname: "",
     role: "",
   });
-  const [enable, setEnable] = useState(false);
+  const [enable, setEnable] = useState(0);
   const [newRole, setNewRole] = useState<Role>();
 
   // let saved_sort = localStorage.getItem("dsgt-portal-member-sorts");
@@ -73,7 +79,7 @@ const PortalMembers: FC<PortalMembersProps> = () => {
   );
 
   const handleDisableConfirmed = async () => {
-    await changeMemberEnableDisable(currentUser.email, enable, () => {
+    await changeMemberAccountStatus(currentUser.email, enable, () => {
       window.location.reload();
     }).catch((err) => {
       setError(err.message);
@@ -274,7 +280,15 @@ const PortalMembers: FC<PortalMembersProps> = () => {
             setShowDisableMembersModal(true);
           }}
         >
-          Disable Members
+          Disable All Members
+        </button>
+        <button
+          className={styles.Action}
+          onClick={() => {
+            setShowDecrementMembersModal(true);
+          }}
+        >
+          Decrement Member Status
         </button>
       </div>
       {loading ? (
@@ -427,7 +441,11 @@ const PortalMembers: FC<PortalMembersProps> = () => {
                         });
                       }}
                       onEnableDisable={() => {
-                        setEnable(!member.enabled);
+                        if (member.enabled == 1 || member.enabled == 2) {
+                          setEnable(0);
+                        } else {
+                          setEnable(1);
+                        }
                         setShowDisableModal(true);
                       }}
                       onChangeRole={() => {
@@ -447,11 +465,11 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         preset={ModalPreset.Confirm}
         handleConfirmed={handleDisableConfirmed}
       >
-        Are you sure you would like to {enable ? "enable " : "disable "}
+        Are you sure you would like to {enable == 1 || enable == 2 ? "enable " : "disable "}
         <span className={styles.ModalHighlight}>
           {currentUser.fname} {currentUser.lname}
         </span>
-        's account?
+        's account? If you are enabling it, it will be set to 6 months.
       </Modal>
       <Modal
         open={showChangeRoleModal}
@@ -482,9 +500,22 @@ const PortalMembers: FC<PortalMembersProps> = () => {
         handleConfirmed={handleDisableMembersConfirmed}
       >
         <p>
-          Are you sure you would like to disable all member accounts?
+          Are you sure you would like to disable all member accounts? This will set
+          all account statuses to 0.
           <br />
           (note: this will only disable accounts with the "member" role)
+        </p>
+      </Modal>
+      <Modal
+        open={showDecrementMembersModal}
+        setOpen={setShowDecrementMembersModal}
+        preset={ModalPreset.Change}
+        handleConfirmed={handleDecrementMembersConfirmed}
+      >
+        <p>
+          Are you sure you would like to decrement all member account statuses?
+          <br />
+          (note: this will only decrement accounts with the "member" role)
         </p>
       </Modal>
     </div>
