@@ -42,7 +42,7 @@ export interface RegisterUser {
   interests: string;
   hearAbout: string;
   emailConsent: string | boolean;
-  paymentAmount: number
+  paymentAmount: number;
 }
 
 export interface LoginUser {

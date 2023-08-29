@@ -1,7 +1,7 @@
 export type result_billingDetails = {
   ok: number;
   data: {
-    billing_details: {
+    billing_details: [{
       details_id: number;
       city: string;
       country: string;
@@ -12,14 +12,29 @@ export type result_billingDetails = {
       email: string;
       name: string;
       phone: string;
-      payment_amount: number
+      payment_amount: number;
       created_at: string;
-    };
+    }];
     account: boolean;
     projects: boolean;
     bootcamp: boolean;
   };
 };
+
+export type billingDetails = {
+  details_id: number;
+  city: string;
+  country: string;
+  line1: string;
+  line2: string;
+  postal_code: string;
+  state: string;
+  email: string;
+  name: string;
+  phone: string;
+  payment_amount: number;
+  created_at: string;
+}
 
 export const checkBillingDetailsExists = async (
   email: string,
