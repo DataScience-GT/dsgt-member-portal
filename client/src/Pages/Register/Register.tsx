@@ -2410,14 +2410,21 @@ const Register: FC<RegisterProps> = () => {
                 In order to become a registered member of DSGT, you first need
                 to pay the membership dues.
               </h2>
-              <p className={styles.Mini}>
-                Make sure you know what being a member entails BEFORE paying.
-              </p>
               <div className={styles.Divider}></div>
               <p className={styles.Mini}>
-                IMPORTANT: Make sure you remember the email that you use on
-                Stripe, this is the email your account will be linked to. If you
-                already have an existing account, use the same email as before.
+                Accepting new members for the Fall 2023 semester! After paying 
+                the dues, your account will automatically be activated.
+                Make sure to use the email associated with your previous account 
+                on Stripe. Click{" "}
+                  <a className={styles.LinkText} href="/register">
+                    here
+                  </a>{" "} 
+                to pay dues. For help, please email {" "}
+                <a 
+                  className={styles.LinkText} 
+                  href="mailto:vmiranda6@gatech.edu">vmiranda6@gatech.edu
+                </a>.
+                Welcome to the DSGT Family!
               </p>
               <a
                 className={styles.Link}
