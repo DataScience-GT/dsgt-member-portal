@@ -5,6 +5,7 @@ import {
   registerUser,
   result_billingDetails,
   result_register,
+  billingDetails
 } from "../../API/Register";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
@@ -59,7 +60,9 @@ const Register: FC<RegisterProps> = () => {
           setError("An account with this email has already been created.");
           return;
         }
-        setPaymentAmount(result.data.billing_details.payment_amount);
+        setPaymentAmount(result.data.billing_details[0].payment_amount);
+        // console.log(result.data.billing_details[0]);
+        // console.log(result.data.billing_details[0].payment_amount);
         setEmailVerified(true);
         setScreen(nextPage);
       }
@@ -355,6 +358,7 @@ const Register: FC<RegisterProps> = () => {
   const handleFormSubmitRegister = async (
     e: React.FormEvent<HTMLFormElement>
   ) => {
+    console.log(paymentAmount);
     setError("");
     // setLoading(true);
     e.preventDefault();
