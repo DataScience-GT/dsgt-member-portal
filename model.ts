@@ -14,6 +14,7 @@ import { Feedback } from "./interfaces/Feedback";
 import { Team, TeamMember } from "./interfaces/Team";
 import { ListFormat } from "typescript";
 import { sendEmail } from "./email";
+import { ProjectAppInfo } from "./interfaces/ProjectApp";
 
 const crypto = require("crypto");
 
@@ -1149,3 +1150,27 @@ export const getUserDemographics = async () => {
 
   return retVal;
 };
+
+/**
+ * attempts to insert prjoect application info into db
+ * @param projectApp project application object
+ */
+
+export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
+  const newRelatedFields = projectApp.relatedFields.concat(projectApp.relatedFieldOther)
+      .replaceAll("Other-Option", "");
+  const newDesiredSkills = projectApp.skillsDesired.concat(projectApp.skillDesiredOther)
+      .replaceAll("Other-Option2", "");
+
+  await db.insert({
+    project_name: projectApp.projectName,
+    project_location: projectApp.projectLocation,
+    related_fields: newRelatedFields,
+    project_description: projectApp.projectDescription,
+    num_students: projectApp.numStudentsDesired,
+    term_length: projectApp.termLength,
+    compensation_hour: projectApp.compensationHour,
+    start_date: projectApp.startDate,
+    desired_skills: newDesiredSkills
+  }).into("project_apps");
+}

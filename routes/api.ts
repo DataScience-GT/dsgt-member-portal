@@ -58,6 +58,10 @@ router.use("/file", file);
 import statistics from "./statistics";
 router.use("/statistics", statistics);
 
+//setup /api/projectapp
+import projects from "./projects";
+router.use("/projects", projects);
+
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("welcome to the api!");
 });
