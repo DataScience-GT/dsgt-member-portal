@@ -1157,10 +1157,10 @@ export const getUserDemographics = async () => {
  */
 
 export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
-  const newRelatedFields = projectApp.relatedFields.concat(projectApp.relatedFieldOther)
-      .replaceAll("Other-Option", "");
-  const newDesiredSkills = projectApp.skillsDesired.concat(projectApp.skillDesiredOther)
-      .replaceAll("Other-Option2", "");
+  const newRelatedFields = projectApp.relatedFields.concat(", " + projectApp.relatedFieldOther)
+      .replaceAll("Other-Option", "").replaceAll("-option", "");
+  const newDesiredSkills = projectApp.skillsDesired.concat(", " + projectApp.skillDesiredOther)
+      .replaceAll("Other-Option2", "").replaceAll("-option", "");
 
   await db.insert({
     project_name: projectApp.projectName,
