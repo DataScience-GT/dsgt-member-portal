@@ -6,7 +6,7 @@ export async function up(knex: Knex): Promise<void> {
         .createTable("project_apps", function (table) {
             table.increments("project_inc").primary();
             table.string("project_name", 255).unique();
-            table.string("contact_email", 255);
+            table.string("project_location", 255);
             table.string("related_fields", 1000);
             table.string("project_description", 1000);
             table.integer("num_students").defaultTo(0);
