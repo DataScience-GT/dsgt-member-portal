@@ -1,6 +1,8 @@
 export interface ProjectAppInfo {
     projectName: string;
     projectLocation: string;
+    projectHosts: string;
+    projectContactEmail: string;
     relatedFields: string;
     relatedFieldOther: string;
     projectDescription: string;

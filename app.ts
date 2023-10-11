@@ -8,7 +8,19 @@ const app = express();
 app.use("/api/webhook", express.raw({ type: "*/*" }));
 app.use(express.json({ limit: "50mb" }));
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+  "http://localhost:3002"
+]
 
+const corsOptions = {
+  origin: allowedOrigins,
+  optionsSuccessStatus: 200,
+}
+
+const cors = require("cors");
+app.use(cors(corsOptions));
 
 //setup logger
 // import { log, warning, error } from "./Logger";

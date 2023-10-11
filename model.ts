@@ -1155,22 +1155,27 @@ export const getUserDemographics = async () => {
  * attempts to insert prjoect application info into db
  * @param projectApp project application object
  */
-
 export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
-  const newRelatedFields = projectApp.relatedFields.concat(", " + projectApp.relatedFieldOther)
-      .replaceAll("Other-Option", "").replaceAll("-option", "");
-  const newDesiredSkills = projectApp.skillsDesired.concat(", " + projectApp.skillDesiredOther)
-      .replaceAll("Other-Option2", "").replaceAll("-option", "");
+  let newRelatedFields = projectApp.relatedFields.replaceAll(", Other-Option", "").replaceAll("-Option", "");
+  if (projectApp.relatedFieldOther) {
+    newRelatedFields = newRelatedFields.concat(", " + projectApp.relatedFieldOther);
+  }
+  let newSkills = projectApp.skillsDesired.replaceAll(", Other-Option2", "").replaceAll("-Option", "");;
+  if (projectApp.skillDesiredOther) {
+    newSkills = newSkills.concat(", " + projectApp.skillDesiredOther);
+  }
 
   await db.insert({
     project_name: projectApp.projectName,
     project_location: projectApp.projectLocation,
+    project_hosts: projectApp.projectHosts,
+    contact_email: projectApp.projectContactEmail,
     related_fields: newRelatedFields,
     project_description: projectApp.projectDescription,
     num_students: projectApp.numStudentsDesired,
     term_length: projectApp.termLength,
     compensation_hour: projectApp.compensationHour,
     start_date: projectApp.startDate,
-    desired_skills: newDesiredSkills
+    desired_skills: newSkills,
   }).into("project_apps");
 }
