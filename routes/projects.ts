@@ -8,12 +8,14 @@ const router = express.Router();
 
 router.post(
     "/create",
-    RateLimit(20, 1000 * 60 * 60),
+    RateLimit(100, 1000 * 60 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
 
         let p: ProjectAppInfo = {
             projectName: req.body.projectName,
             projectLocation: req.body.projectLocation,
+            projectHosts: req.body.projectHosts,
+            projectContactEmail: req.body.projectContactEmail,
             relatedFields: req.body.relatedFields,
             relatedFieldOther: req.body.relatedFieldOther,
             projectDescription: req.body.projectDescription,
@@ -28,7 +30,7 @@ router.post(
         if (!(
             p.projectName && p.projectLocation && p.relatedFields && p.projectDescription
             && p.numStudentsDesired && p.termLength && p.compensationHour && p.startDate
-            && p.skillsDesired
+            && p.skillsDesired && p.projectHosts && p.projectContactEmail
         )) {
             next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
         }
