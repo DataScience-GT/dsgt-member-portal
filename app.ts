@@ -12,7 +12,8 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "http://localhost:3002",
-  "https://datasciencegt.org"
+  "https://datasciencegt.org",
+  "https://datasciencegt.org/#/projects"
 ]
 
 const corsOptions = {
