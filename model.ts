@@ -1092,6 +1092,12 @@ export const getUserIdFromEmail = async (email: string) => {
   }
 };
 
+/**
+ * Counts the distinct number of majors, years or genders of students
+ * @param list the list of majors, years, or genders, etc of students
+ * @returns the distinct number of people
+ */
+
 const getDistinctCount = async (list: object[]) => {
   const map = new Map();
   list.forEach((element: any) => {
