@@ -1091,6 +1091,7 @@ export const getUserIdFromEmail = async (email: string) => {
     return -1;
   }
 };
+
 const getDistinctCount = async (list: object[]) => {
   const map = new Map();
   list.forEach((element: any) => {
