@@ -68,6 +68,12 @@ type result_getUsers = {
   last_logged_on?: string;
 };
 
+/**
+ * Gets a list of all the users from the database "user" table. 
+ * An optional sorts argument can be passed to the function to get a list of users sorted in a specific order.
+ * @param sorts optional argument used to sort the users
+ * @returns Returns a list of users of the type result_getUsers
+ */
 export const getUsers = (sorts?: Sort[] | Sort): result_getUsers[] => {
   if (sorts) {
     return db
@@ -97,6 +103,13 @@ export const getUsers = (sorts?: Sort[] | Sort): result_getUsers[] => {
   }
 };
 
+/**
+ * Gets the last logged in time of a specific user.
+ * It sorts all the sessions of a user in descending order and returns a single
+ * record by limiting the response to 1.
+ * @param user_id id of the user whose last logged on time we want
+ * @returns the date and time of the last login of the user.
+ */
 export const getUserLastLoggedOn = async (user_id: number) => {
   let res = await db
     .select("created_at")
