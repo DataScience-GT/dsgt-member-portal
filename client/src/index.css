@@ -62,7 +62,7 @@ code {
   --svgFilter: invert(47%) sepia(31%) saturate(720%) hue-rotate(138deg)
     brightness(88%) contrast(91%);
 }
-.CafeCoffeeTheme {
+.Cafe {
   --background: #ffceb4; 
   --foreground: #6e463f; 
   --borderColor: #4a372d; 
