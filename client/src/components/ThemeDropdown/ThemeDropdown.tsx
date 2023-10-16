@@ -21,6 +21,7 @@ const ThemeDropdown: FC<ThemeDropdownProps> = () => {
         <option value={Theme.Dark}>{Theme.Dark}</option>
         <option value={Theme.Black}>{Theme.Black}</option>
         <option value={Theme.Bubblegum}>{Theme.Bubblegum}</option>
+        <option value={Theme.Cafe}>{Theme.Cafe}</option>
       </select>
     </div>
   );
