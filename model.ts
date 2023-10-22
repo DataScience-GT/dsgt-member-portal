@@ -839,9 +839,9 @@ export const createForm = async (f: Form) => {
 };
 
 /**
- * gets specified number of records by asc creation date
+ * gets specified count ofrecords by asc creation date
  * @param count the number of records to retrive 
- * @returns database
+ * @returns database list of records sorted by creation date
  */
 export const getForms = async (count?: number) => {
   return db("forms")
