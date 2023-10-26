@@ -839,8 +839,8 @@ export const createForm = async (f: Form) => {
 };
 
 /**
- * gets specified count ofrecords by asc creation date
- * @param count the number of records to retrive 
+ * gets specified count of records by asc creation date
+ * @param count the number of records to get
  * @returns database list of records sorted by creation date
  */
 export const getForms = async (count?: number) => {
@@ -893,6 +893,11 @@ export const getFeedback = async (
 
 // ---------------------------- checkin ----------------------------
 
+/**
+ * checks whether an event exists
+ * @param event_id the identifier of the event to check
+ * @returns boolean "true" if event exists; otherwise, "false"
+ */
 export const checkinEventExists = async (event_id: number) => {
   let res = await db("checkin_event").count("*").where({ event_id });
   if (res && res.length) {
