@@ -1062,6 +1062,11 @@ export const checkTeamIdExists = async (team_id: number) => {
   return res[0].count > 0;
 };
 
+/**
+ * Gets a team from their ID number
+ * @param team_id the team's ID number
+ * @returns team with specified team_id
+ */
 export const getTeam = async (team_id: number) => {
   return (await db("teams").select("*").where({ team_id })) as Team[];
 };
@@ -1082,7 +1087,7 @@ export const updateTeam = async (
 /**
  * Gets a user from their ID number
  * @param user_id the user's ID number
- * @returns user with user_id
+ * @returns user with specified id
  */
 export const getUserFromId = async (user_id: number) => {
   return (await db("user")
