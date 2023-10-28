@@ -69,6 +69,9 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
     }
   };
 
+  /**
+   * This toggles the side bar to be open or closed
+   */
   const toggleOpen = () => {
     if (open) {
       setOpen(false);
