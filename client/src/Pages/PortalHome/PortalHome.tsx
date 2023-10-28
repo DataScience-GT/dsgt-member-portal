@@ -48,7 +48,6 @@ const PortalHome: FC<PortalHomeProps> = ({ role }: PortalHomeProps) => {
 
     // get last 1-10 announcements and increment views as needed
     const getAnnouncements = async (counts_as_view: boolean) => {
-      console.log(role || "guest");
       await fetch(
         `/api/announcement/get?count=10
           &counts_as_view=${counts_as_view}
