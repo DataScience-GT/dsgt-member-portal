@@ -971,10 +971,10 @@ export const checkInUser = async (
 };
 
 /**
- * checks whether a user has been checked in for the event
+ * checks whether a user has been checked in
  * @param event_id the id for the event
- * @param user_id the id for the user
- * @returns boolean
+ * @param user_id the user's id
+ * @returns boolean true if checked in; otherwise, false
  */
 export const isUserCheckedIn = async (event_id: number, user_id: number) => {
   let res = await db("checkin_user").count("*").where({ event_id, user_id });
@@ -1082,7 +1082,7 @@ export const updateTeam = async (
 /**
  * Gets a user from their ID number
  * @param user_id the user's ID number
- * @returns user with specified user_id
+ * @returns user with user_id
  */
 export const getUserFromId = async (user_id: number) => {
   return (await db("user")
