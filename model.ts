@@ -974,7 +974,7 @@ export const checkInUser = async (
  * checks whether a user has been checked in
  * @param event_id the id for the event
  * @param user_id the user's id
- * @returns boolean true if checked in; otherwise, false
+ * @returns boolean true or false
  */
 export const isUserCheckedIn = async (event_id: number, user_id: number) => {
   let res = await db("checkin_user").count("*").where({ event_id, user_id });
