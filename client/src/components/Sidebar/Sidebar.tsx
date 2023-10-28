@@ -6,9 +6,7 @@ import { Theme, ThemeContext } from "../../Context/ThemeContext";
 
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 
-//import all icons
 import right_arrow_icon from "../../assets/icons/angle-right.svg";
-
 import home_icon from "../../assets/icons/home.svg";
 import settings_icon from "../../assets/icons/settings.svg";
 import teams_icon from "../../assets/icons/users-alt.svg";
@@ -19,8 +17,8 @@ import events_icon from "../../assets/icons/calendars.svg";
 import forms_icon from "../../assets/icons/form.svg";
 import feedback_icon from "../../assets/icons/comments-question.svg";
 import checkin_icon from "../../assets/icons/calendar-check.svg";
-
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
+import DSGT from "../../assets/branding/favicon-32x32.png";
 
 interface SidebarProps {
   role?: string;
@@ -28,7 +26,7 @@ interface SidebarProps {
 
 const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
   const { theme, setTheme } = useContext(ThemeContext);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     let current_path = window.location.pathname;
@@ -59,8 +57,7 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
       let x = document.querySelector(`div[data-active=true]`);
       x?.removeAttribute("data-active");
       e.currentTarget.setAttribute("data-active", "true");
-      //close the sidebar
-      setOpen(false);
+      setOpen(true);
 
       //old
       //href
@@ -101,7 +98,12 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
         />
       </div>
       <div className={styles.Header}>
-        <h1>DSGT</h1>
+        <h1 className={styles.HeaderMajor}>DSGT</h1>
+        {open ? (
+          <img src={DSGT} alt="DSGT-logo"/>
+        ) : (
+          ""
+        )}
       </div>
       <div className={styles.SidebarItems}>
 

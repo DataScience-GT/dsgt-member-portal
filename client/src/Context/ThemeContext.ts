@@ -5,6 +5,7 @@ export enum Theme {
   Dark = "Dark",
   Black = "Black",
   Bubblegum = "Bubblegum",
+  Cafe = "Cafe",
 }
 
 export type ThemeContextType = {
