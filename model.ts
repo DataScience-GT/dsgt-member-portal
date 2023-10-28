@@ -1079,6 +1079,11 @@ export const updateTeam = async (
   await db("teams").update({ name, description, members }).where({ team_id });
 };
 
+/**
+ * Gets a user from their ID number
+ * @param user_id the user's ID number
+ * @returns user with specified user_id
+ */
 export const getUserFromId = async (user_id: number) => {
   return (await db("user")
     .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
