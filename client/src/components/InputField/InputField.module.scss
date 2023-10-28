@@ -120,13 +120,10 @@
   height: 52px;
   width: auto;
   margin: 1em 0;
+  
   > input {
-    // background: rgb(32 163 158);
-    // background: $fill;
-    // background: var(--foreground);
-    background: none;
-    // color: #fff;
-    color: var(--foreground);
+    background: rgb(32 163 158);
+    color: #fff;
     border: 2px solid var(--borderColor);
     font-size: 1.2em;
     float: right;
@@ -136,7 +133,7 @@
     width: 100%;
     padding: 10px 20px;
 
-    border-radius: 500px;
+    border-radius: 10px;
     transition: 0.3s all ease;
     cursor: pointer;
 
