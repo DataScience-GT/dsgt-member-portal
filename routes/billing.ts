@@ -71,6 +71,7 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     let session_id = req.body.session_id;
     let user_email = req.body.user_email;
+    let payment_amount = parseInt(req.body.payment_amount) ?? 1500;
     if (!(user_email && session_id)) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       return;
@@ -82,6 +83,7 @@ router.post(
       if (compareUserRoles(valid.role, "administrator") >= 0) {
         let payment_details: BillingDetails = {
           email: user_email,
+          payment_amount: payment_amount,
         };
         //add the payment data to the db
         await createBillingDetails(payment_details);

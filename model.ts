@@ -851,6 +851,11 @@ export const createForm = async (f: Form) => {
   });
 };
 
+/**
+ * gets specified count of records by asc creation date
+ * @param count the number of records to get
+ * @returns database list of records sorted by creation date
+ */
 export const getForms = async (count?: number) => {
   return db("forms")
     .select("*")
@@ -901,6 +906,11 @@ export const getFeedback = async (
 
 // ---------------------------- checkin ----------------------------
 
+/**
+ * checks whether an event exists
+ * @param event_id the identifier of the event to check
+ * @returns boolean "true" if event exists; otherwise, "false"
+ */
 export const checkinEventExists = async (event_id: number) => {
   let res = await db("checkin_event").count("*").where({ event_id });
   if (res && res.length) {
@@ -974,10 +984,10 @@ export const checkInUser = async (
 };
 
 /**
- * checks whether a user has been checked in for the event
+ * checks whether a user has been checked in
  * @param event_id the id for the event
- * @param user_id the id for the user
- * @returns boolean
+ * @param user_id the user's id
+ * @returns boolean true or false
  */
 export const isUserCheckedIn = async (event_id: number, user_id: number) => {
   let res = await db("checkin_user").count("*").where({ event_id, user_id });
@@ -1065,6 +1075,11 @@ export const checkTeamIdExists = async (team_id: number) => {
   return res[0].count > 0;
 };
 
+/**
+ * Gets a team from their ID number
+ * @param team_id the team's ID number
+ * @returns team with specified team_id
+ */
 export const getTeam = async (team_id: number) => {
   return (await db("teams").select("*").where({ team_id })) as Team[];
 };
@@ -1082,6 +1097,11 @@ export const updateTeam = async (
   await db("teams").update({ name, description, members }).where({ team_id });
 };
 
+/**
+ * Gets a user from their ID number
+ * @param user_id the user's ID number
+ * @returns user with specified id
+ */
 export const getUserFromId = async (user_id: number) => {
   return (await db("user")
     .select("user_inc as user_id", "fname", "lname", "email", "gtemail")
@@ -1171,8 +1191,10 @@ export const getUserDemographics = async () => {
   return retVal;
 };
 
+// ------------------------------ Project ------------------------------
+
 /**
- * attempts to insert prjoect application info into db
+ * attempts to insert project application info into db
  * @param projectApp project application object
  */
 export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
@@ -1199,3 +1221,20 @@ export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
     desired_skills: newSkills,
   }).into("project_apps");
 }
+
+
+/**
+ * Gets a list of all the projects from the database "project_apps" table. 
+ * @returns Returns a list of projects
+ */
+ export const getProjects = async () => {
+  return (await db.select("*").from("project_apps"));
+  };
+
+/**
+ * Removes a project from the database
+ * @param project_name Name of project to delete
+ */
+ export const deleteProject = async (project_name: string) => {
+  await db("project_apps").where("project_name", project_name).del();
+};

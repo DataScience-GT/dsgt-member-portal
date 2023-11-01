@@ -51,7 +51,7 @@ const Login: FC<LoginProps> = () => {
         <div style={{ width: "100%", maxWidth: "500px" }}>
           <form onSubmit={handleSubmit}>
             <FlexColumn width="100%">
-              <div className={styles.Alert}>
+              {/* <div className={styles.Alert}>
               Accepting new members for the Fall 2023 semester! After paying 
               the dues, your account will automatically be activated.
               Make sure to use the email associated with your previous account 
@@ -65,8 +65,8 @@ const Login: FC<LoginProps> = () => {
                 href="mailto:vmiranda6@gatech.edu">vmiranda6@gatech.edu
               </a>.
               Welcome to the DSGT Family 😄
-              </div>
-              <h1 className={styles.Major}>Login</h1>
+              </div> */}
+              <h1 className={styles.Major}>DSGT Login</h1>
               <InputField
                 type="email"
                 placeholder="Email"
@@ -95,7 +95,7 @@ const Login: FC<LoginProps> = () => {
                         : ""
                     }`}
                   >
-                    forgot password?
+                    Forgot password?
                   </a>
                 </FlexRow>
               </div>
