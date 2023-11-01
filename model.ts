@@ -1191,8 +1191,10 @@ export const getUserDemographics = async () => {
   return retVal;
 };
 
+// ------------------------------ Project ------------------------------
+
 /**
- * attempts to insert prjoect application info into db
+ * attempts to insert project application info into db
  * @param projectApp project application object
  */
 export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
@@ -1219,3 +1221,20 @@ export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
     desired_skills: newSkills,
   }).into("project_apps");
 }
+
+
+/**
+ * Gets a list of all the projects from the database "project_apps" table. 
+ * @returns Returns a list of projects
+ */
+ export const getProjects = async () => {
+  return (await db.select("*").from("project_apps"));
+  };
+
+/**
+ * Removes a project from the database
+ * @param project_name Name of project to delete
+ */
+ export const deleteProject = async (project_name: string) => {
+  await db("project_apps").where("project_name", project_name).del();
+};
