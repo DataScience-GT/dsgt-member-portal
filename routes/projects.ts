@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import { ProjectAppInfo } from "../interfaces/ProjectApp";
-import { submitProjectAppInfo } from "../model";
+import { submitProjectAppInfo, getProjects, deleteProject } from "../model";
 import RateLimit from "../middleware/RateLimiting";
 
 const router = express.Router();
@@ -39,6 +39,59 @@ router.post(
         res.json({ ok: 1 });
     }
 )
+
+router.get(
+    "/get/all",
+    async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const projectList = await getProjects();
+            res.json({projects: projectList});
+        } catch (err) {
+            next(err);
+        }
+    }
+)
+
+router.get(
+    '/get/:projectName',
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const projectName = req.params.projectName;
+        const projectList = await getProjects();
+  
+        const project = projectList.find((project) => project.project_name === projectName);
+  
+        if (project) {
+          res.status(200).json({ project });
+        } else {
+          res.status(404).json({ message: `Project '${projectName}' not found` });
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
+
+router.delete(
+    '/delete/:projectName', 
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const projectName = req.params.projectName;
+  
+        const projectList = await getProjects();
+        const projectExists = projectList.some((project) => project.project_name === projectName);
+  
+        if (projectExists) {
+          await deleteProject(projectName);
+          res.status(200).json({ message: `Project '${projectName}' has been deleted.` });
+        } else {
+          res.status(404).json({ message: `Project '${projectName}' not found.` });
+        }
+      } catch (err) {
+        next(err);
+      }
+    }
+  );
 
 module.exports = router;
 export default router;
