@@ -40,6 +40,9 @@ router.post(
     }
 )
 
+/**
+ * Get all projects in postgres database
+ */
 router.get(
     "/get/all",
     async (req: Request, res: Response, next: NextFunction) => {
@@ -52,6 +55,11 @@ router.get(
     }
 )
 
+/**
+ * Get a singular project by name in postgres database
+ * 
+ * Throw a 404 if project not found
+ */
 router.get(
     '/get/:projectName',
     async (req: Request, res: Response, next: NextFunction) => {
@@ -70,6 +78,11 @@ router.get(
     }
   );
   
+/**
+ * Delete a singular project by name in postgres database
+ * 
+ * Throw a 404 if project not found
+ */
 router.delete(
     '/delete/:projectName', 
     async (req: Request, res: Response, next: NextFunction) => {
