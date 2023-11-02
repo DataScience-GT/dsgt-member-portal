@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import { ProjectAppInfo } from "../interfaces/ProjectApp";
-import { submitProjectAppInfo, getProjects, deleteProject } from "../model";
+import { submitProjectAppInfo, getProjects, getProject, deleteProject} from "../model";
 import RateLimit from "../middleware/RateLimiting";
 
 const router = express.Router();
@@ -57,32 +57,27 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const projectName = req.params.projectName;
-        const projectList = await getProjects();
-  
-        const project = projectList.find((project) => project.project_name === projectName);
+        const project = await getProject(projectName);
   
         if (project) {
-          res.status(200).json({ project });
+          res.json({ project });
         } else {
-          res.status(404).json({ message: `Project '${projectName}' not found` });
+          res.status(404).json({ message: `Project '${projectName}' not found.` });
         }
       } catch (err) {
         next(err);
       }
     }
   );
-
+  
 router.delete(
     '/delete/:projectName', 
     async (req: Request, res: Response, next: NextFunction) => {
       try {
         const projectName = req.params.projectName;
+        const deletedCount = await deleteProject(projectName);
   
-        const projectList = await getProjects();
-        const projectExists = projectList.some((project) => project.project_name === projectName);
-  
-        if (projectExists) {
-          await deleteProject(projectName);
+        if (deletedCount === 1) {
           res.status(200).json({ message: `Project '${projectName}' has been deleted.` });
         } else {
           res.status(404).json({ message: `Project '${projectName}' not found.` });

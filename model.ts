@@ -1232,9 +1232,24 @@ export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
   };
 
 /**
+ * Gets a project from the database "project_apps" table.
+ * @param project_name Name of project to get
+ */
+export const getProject = async (project_name: string) => {
+  const project = await db("project_apps").select("*").where("project_name", project_name);
+
+  if (project.length === 0) {
+    return null;
+  } else {
+    return project[0];
+  }
+}
+
+/**
  * Removes a project from the database
  * @param project_name Name of project to delete
  */
- export const deleteProject = async (project_name: string) => {
-  await db("project_apps").where("project_name", project_name).del();
+export const deleteProject = async (project_name: string) => {
+  const result = await db("project_apps").where("project_name", project_name).del();
+  return result;
 };
