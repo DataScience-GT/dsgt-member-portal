@@ -19,6 +19,7 @@ import feedback_icon from "../../assets/icons/comments-question.svg";
 import checkin_icon from "../../assets/icons/calendar-check.svg";
 import logout_icon from "../../assets/icons/sign-out-alt.svg";
 import DSGT from "../../assets/branding/favicon-32x32.png";
+import projects_icon from "../../assets/icons/projects.svg";
 
 interface SidebarProps {
   role?: string;
@@ -118,6 +119,15 @@ const Sidebar: FC<SidebarProps> = ({ role }: SidebarProps) => {
           active
         >
           Home
+        </SidebarItem>
+
+        <SidebarItem
+          onClick={handleClick}
+          imgsrc={projects_icon}
+          open={open}
+          path="/portal/projectapps"
+        >
+          Project Postings
         </SidebarItem>
 
         {compareUserRoles(role || "guest", "professor") != 0 ? (

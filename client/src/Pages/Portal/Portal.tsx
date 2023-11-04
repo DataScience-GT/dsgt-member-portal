@@ -17,6 +17,7 @@ import FeedbackButton from "../../components/FeedbackButton/FeedbackButton";
 import PortalFeedback from "../PortalFeedback/PortalFeedback";
 import PortalCheckin from "../PortalCheckin/PortalCheckin";
 import PortalTeams from "../PortalTeams/PortalTeams";
+import PortalProjects from "../PortalProjects/PortalProjects";
 
 interface PortalProps {
   role?: string;
@@ -32,6 +33,7 @@ const Portal: FC<PortalProps> = ({ role }: PortalProps) => {
           <Routes>
             <Route path="/*" element={<PortalHome role={role} />} />
             <Route path="/settings/*" element={<PortalSettings />} />
+            <Route path="/projectapps/*" element={<PortalProjects role={role}/>} />
             {compareUserRoles(role || "guest", "professor") != 0 ? (
               <Route path="/forms/*" element={<PortalForms role={role} />} />
             ) : (

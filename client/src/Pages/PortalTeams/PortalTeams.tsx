@@ -75,7 +75,7 @@ const PortalTeams: FC<PortalTeamsProps> = ({ role }) => {
           element={
             <>
               <FlexColumn>
-                <h2 className={portal_styles.Minor}>Your Teams</h2>
+                <h2 className={portal_styles.Minor}>My Teams</h2>
                 <FlexRow gap="1em" padding="1em 0">
                   {myTeams && myTeams.length
                     ? myTeams?.map((t, i) => (
