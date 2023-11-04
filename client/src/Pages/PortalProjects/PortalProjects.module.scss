@@ -18,3 +18,28 @@
     font-weight: 500;
     // margin-bottom: 1em;
 }
+
+.Cards {
+    /* Define the styles for the .Cards class here */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    // add more here
+}
+
+.ProjectCard {
+    /* Styles for the individual project card */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 5 px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1em;
+    margin: 0.5em;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
+

@@ -35,7 +35,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({role}: PortalProjectsProps) =>
                     <h2 className={styles.Minor}>Apply to Active Research Projects</h2>
                     <FlexColumn padding="1em 0 0 0">
                         <h2 className={styles.Mini}>Existing Projects</h2>
-                        <div className={styles.Cards}>
+                        <div className={`${styles.Cards} ${styles.ProjectCard}`}>
                         {/* {loading
                             ? "Loading..."
                             : projects.length <= 0
