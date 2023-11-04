@@ -8,6 +8,7 @@ import {
     result_getProjects
 } from "../../API/Projects";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import ProjectCard from "../../components/ProjectCard/ProjectCard";
 
 interface PortalProjectsProps {
     role?: string;
@@ -35,29 +36,29 @@ const PortalProjects: FC<PortalProjectsProps> = ({role}: PortalProjectsProps) =>
                     <h2 className={styles.Minor}>Apply to Active Research Projects</h2>
                     <FlexColumn padding="1em 0 0 0">
                         <h2 className={styles.Mini}>Existing Projects</h2>
-                        <div className={`${styles.Cards} ${styles.ProjectCard}`}>
-                        {/* {loading
-                            ? "Loading..."
-                            : projects.length <= 0
-                            ? "No projects found."
-                            : projects.map((e, i) => {
-                                return (
-                                <ProjectCard
-                                    key={i}
-                                    name={e.name}
-                                    location={e.location}
-                                    imageSRC={e.imageData}
-                                    shortDescription={e.shortDescription}
-                                    longDescription={e.longDescription}
-                                    startDate={e.startDate}
-                                    startTime={e.startTime}
-                                    endDate={e.endDate}
-                                    endTime={e.endTime}
-                                    link={e.link}
-                                    deletable
-                                ></ProjectCard>
-                                );
-                            })} */}
+                        <div className={styles.Cards}>
+                            {loading
+                                ? "Loading..."
+                                : projects.length <= 0
+                                ? "No projects found."
+                                : projects.map((e, i) => {
+                                    return (
+                                    <ProjectCard
+                                        key={i}
+                                        pname={e.pname}
+                                        plocation={e.plocation}
+                                        relatedFields={e.relatedFields}
+                                        pdescription={e.pdescription}
+                                        numStudents={e.numStudents}
+                                        termLength={e.termLength}
+                                        compensationHour={e.compensationHour}
+                                        startDate={e.startDate}
+                                        desiredSkills={e.desiredSkills}
+                                        phosts={e.phosts}
+                                        contactEmail={e.contactEmail}
+                                    ></ProjectCard>
+                                    );
+                                })}
                         </div>
                     </FlexColumn>
                 </div>

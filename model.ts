@@ -1227,9 +1227,9 @@ export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
  * Gets a list of all the projects from the database "project_apps" table. 
  * @returns Returns a list of projects
  */
- export const getProjects = async () => {
+export const getProjects = async () => {
   return (await db.select("*").from("project_apps"));
-  };
+};
 
 /**
  * Gets a project from the database "project_apps" table.
