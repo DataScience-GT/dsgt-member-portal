@@ -44,11 +44,14 @@ router.post(
  * Get all projects in postgres database
  */
 router.get(
-    "/get",
+    "/getter",
     RateLimit(100, 1000 * 60 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const projectList = await getProjects();
+            if (projectList.length == 0) {
+                next(console.error);
+            }
             res.json({ok: 1, data: projectList});
         } catch (err) {
             next(err);

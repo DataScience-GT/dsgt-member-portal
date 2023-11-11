@@ -19,9 +19,9 @@ export const getProjects = async (
     count?: number,
     callback?: (result: result_getProjects[]) => void
 ) => {
-    let url = "/api/projects/get";
+    let url = `/api/projects/get?session_id=${localStorage.getItem("dsgt-portal-session-key")}$`;
     if (count) {
-        url = `/api/projects/get?count=${count}`;
+        url += ``
     }
     await fetch(url, {
         method: "get",
