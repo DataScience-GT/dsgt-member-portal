@@ -5,7 +5,7 @@ import FlexRow from "../../layout/FlexRow/FlexRow";
 
 import {
     getProjects,
-    result_getProjects
+    result_projects
 } from "../../API/Projects";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
@@ -15,18 +15,18 @@ interface PortalProjectsProps {
 }
 
 const PortalProjects: FC<PortalProjectsProps> = ({role}: PortalProjectsProps) => {
-    const [projects, setProjects] = useState<result_getProjects[]>([]);
+    const [projects, setProjects] = useState<result_projects[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const getAllProjects = async () => {
-            await getProjects(undefined, (result: result_getProjects[]) => {
-                setLoading(false);
-                setProjects(result);
-            }).catch(console.error);
-        }
-        getAllProjects();
-    });
+        getProjects(undefined, (data) => {
+            setProjects(data);
+            setLoading(false);
+            console.log(projects);
+        }).catch((err) => {
+            console.error(err);
+        });
+    }, []);
 
     return (
         <div className={styles.PortalProjects} data-testid="PortalProjects">
@@ -41,21 +41,22 @@ const PortalProjects: FC<PortalProjectsProps> = ({role}: PortalProjectsProps) =>
                                 ? "Loading..."
                                 : projects.length <= 0
                                 ? "No projects found."
-                                : projects.map((e, i) => {
+                                : projects.map((p, i) => {
                                     return (
                                     <ProjectCard
                                         key={i}
-                                        pname={e.pname}
-                                        plocation={e.plocation}
-                                        relatedFields={e.relatedFields}
-                                        pdescription={e.pdescription}
-                                        numStudents={e.numStudents}
-                                        termLength={e.termLength}
-                                        compensationHour={e.compensationHour}
-                                        startDate={e.startDate}
-                                        desiredSkills={e.desiredSkills}
-                                        phosts={e.phosts}
-                                        contactEmail={e.contactEmail}
+                                        pname={p.project_name}
+                                        plocation={p.project_location}
+                                        relatedFields={p.related_fields}
+                                        pdescription={p.project_description}
+                                        numStudents={p.num_students}
+                                        termLength={p.term_length}
+                                        compensationHour={p.compensation_hour}
+                                        startDate={p.start_date}
+                                        desiredSkills={p.desired_skills}
+                                        phosts={p.project_hosts}
+                                        contactEmail={p.contact_email}
+                                        deletable={true}
                                     ></ProjectCard>
                                     );
                                 })}
