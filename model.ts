@@ -1253,3 +1253,34 @@ export const deleteProject = async (project_name: string) => {
   const result = await db("project_apps").where("project_name", project_name).del();
   return result;
 };
+
+/**
+ * Updates project info based on project_inc
+ * @param project_inc project_id
+ * @param project_name updated name of project
+ * @param project_location updated location of project
+ * @param project_description updated project description
+ * @param num_students updated number of students
+ * @param term_length updated term length
+ * @param compensation_hour updated compensation per hour
+ * @param start_date updated start date
+ * @param desired_skills updated desired skills
+ * @param project_hosts updated project hosts
+ * @param contact_email updated contact email
+ */
+export const updateProject = async (
+  project_inc: number,
+  project_name?: string,
+  project_location?: string,
+  project_description?: string,
+  num_students?: number,
+  term_length?: string,
+  compensation_hour?: number,
+  start_date?: string,
+  desired_skills?: string,
+  project_hosts?: string,
+  contact_email?: string
+) => {
+  await db("project_apps").update({ project_name, project_location, project_description, 
+    num_students, term_length, compensation_hour, start_date, desired_skills, project_hosts, contact_email}).where({ project_inc });
+};

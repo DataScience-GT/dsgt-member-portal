@@ -88,16 +88,20 @@ router.get(
  * Throw a 404 if project not found
  */
 router.delete(
-    '/delete/:projectName', 
+    '/remove', 
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const projectName = req.params.projectName;
+        let projectName = req.body.projectName;
+        if (!projectName) {
+          next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+          return;
+        }
         const deletedCount = await deleteProject(projectName);
   
         if (deletedCount === 1) {
-          res.status(200).json({ message: `Project '${projectName}' has been deleted.` });
+          res.status(204).send();
         } else {
-          res.status(404).json({ message: `Project '${projectName}' not found.` });
+          res.status(404).json({message: `Project '${projectName}' not found.`})
         }
       } catch (err) {
         next(err);
