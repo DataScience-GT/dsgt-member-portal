@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import styles from "./ProjectCard.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import InputField from "../InputField/InputField";
 
 interface ProjectCardProps {
     // The name of the project
@@ -47,8 +48,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
             {deletable ? (
-                <div className={styles.DeleteButton}>
-                    <img src={trash_icon} alt="click to delete" />
+                <div className={styles.TrashContainer}>
+                    <img className={styles.Trash} src={trash_icon} alt="click to delete" />
                 </div>
             ) : (
                 ""
@@ -65,8 +66,11 @@ const ProjectCard: FC<ProjectCardProps> = ({
                     <p>Start date: {startDate}</p>
                     <p>Desired skills: {desiredSkills}</p>
                     <p>Hosts: {phosts}</p>
-                    <p>Contact Email: {contactEmail}</p>
+                    <p>Contact email: {contactEmail}</p>
                 </FlexColumn>
+            </div>
+            <div className={styles.Submit}>
+                <InputField type={"submit"} placeholder="Apply" width="auto" />
             </div>
         </div>
     )

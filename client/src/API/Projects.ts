@@ -1,27 +1,27 @@
 import { Role } from "../Scripts/RoleManagement";
 
-export type result_getProjects = {
-    pid: number;
-    pname: string;
-    plocation: string;
-    relatedFields: string;
-    pdescription: string;
-    numStudents: string;
-    termLength: string;
-    compensationHour: number;
-    startDate: string;
-    desiredSkills: string;
-    phosts: boolean;
-    contactEmail: string;
+export type result_projects = {
+    project_inc: number;
+    project_name: string;
+    project_location: string;
+    related_fields: string;
+    project_description: string;
+    num_students: string;
+    term_length: string;
+    compensation_hour: number;
+    start_date: string;
+    desired_skills: string;
+    project_hosts: boolean;
+    contact_email: string;
 };
 
 export const getProjects = async (
     count?: number,
-    callback?: (result: result_getProjects[]) => void
+    callback?: (result: result_projects[]) => void
 ) => {
-    let url = "/api/projects/get";
+    let url = `/api/projects/get?session_id=${localStorage.getItem("dsgt-portal-session-key")}`
     if (count) {
-        url = `/api/projects/get?count=${count}`;
+        url += `&count=${count}`
     }
     await fetch(url, {
         method: "get",
@@ -40,3 +40,27 @@ export const getProjects = async (
         }
     });
 };
+
+export const deleteProject = async (
+    project_id: number,
+    callback?: () => void
+) => {
+    await fetch('/api/projects/delete', {
+        method: "DELETE",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+        },
+        body: JSON.stringify({
+            session_id: localStorage.getItem("dsgt-portal-session-key"),
+            project_id: project_id
+        }),
+    }).then(async (res) => {
+        const json = await res.json();
+        if (!json.ok && json.error) {
+            throw new Error(json.error);
+        } else if (callback) {
+            callback();
+        }
+    })
+}

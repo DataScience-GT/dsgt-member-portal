@@ -3,12 +3,13 @@ import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import { ProjectAppInfo } from "../interfaces/ProjectApp";
 import { submitProjectAppInfo, getProjects, getProject, deleteProject} from "../model";
 import RateLimit from "../middleware/RateLimiting";
+import ValidateSession from "../middleware/CheckSessionMiddleware";
 
 const router = express.Router();
 
 router.post(
     "/create",
-    RateLimit(100, 1000 * 60 * 60),
+    RateLimit(20, 1000 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
 
         let p: ProjectAppInfo = {
@@ -40,15 +41,16 @@ router.post(
     }
 )
 
-/**
- * Get all projects in postgres database
- */
 router.get(
     "/get",
-    RateLimit(100, 1000 * 60 * 60),
+    ValidateSession("query"),
+    RateLimit(20, 1000 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
         try {
             const projectList = await getProjects();
+            if (projectList.length == 0) {
+                next(console.error);
+            }
             res.json({ok: 1, data: projectList});
         } catch (err) {
             next(err);
@@ -85,16 +87,21 @@ router.get(
  * Throw a 404 if project not found
  */
 router.delete(
-    '/delete/:projectName', 
+    '/delete', 
+    ValidateSession("body", "professor"),
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-        const projectName = req.params.projectName;
+        let projectName = req.body.projectName;
+        if (!projectName) {
+          next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+          return;
+        }
         const deletedCount = await deleteProject(projectName);
   
         if (deletedCount === 1) {
-          res.status(200).json({ message: `Project '${projectName}' has been deleted.` });
+          res.status(204).send();
         } else {
-          res.status(404).json({ message: `Project '${projectName}' not found.` });
+          res.status(404).json({message: `Project '${projectName}' not found.`})
         }
       } catch (err) {
         next(err);
