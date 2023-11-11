@@ -1,5 +1,12 @@
 .ProjectCard {
     display: flex;
     position: relative;
-    
+    /* Styles for the individual project card */
+    background-color: #00ff2f;
+    border: 1px solid #e0e0e0;
+    border-radius: 5 px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1em;
+    margin: 0.5em;
+    flex-direction: column;
 }

@@ -4,17 +4,29 @@ import trash_icon from "../../assets/icons/trash.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 
 interface ProjectCardProps {
+    // The name of the project
     pname: string;
+    // The project location
     plocation: string;
+    // The related fields associated with the project
     relatedFields: string;
+    // The project description
     pdescription: string;
+    // The number of students wanted
     numStudents: string;
+    // The length of the project term
     termLength: string;
+    // The hourly compensation
     compensationHour: number;
+    // The project start date
     startDate: string;
+    // The desired skills associated with the project
     desiredSkills: string;
+    // The project hosts
     phosts: boolean;
+    // The professor contact email
     contactEmail: string;
+    // Deletable aspect of the project
     deletable?: boolean;
 }
 
@@ -53,6 +65,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
                     <p>Start date: {startDate}</p>
                     <p>Desired skills: {desiredSkills}</p>
                     <p>Hosts: {phosts}</p>
+                    <p>Contact Email: {contactEmail}</p>
                 </FlexColumn>
             </div>
         </div>
