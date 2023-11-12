@@ -41,18 +41,19 @@ const ProjectCard: FC<ProjectCardProps> = ({
             ) : (
                 ""
             )}
-            <div className={styles.Content}>
+            <div className={`${styles.Content} ${styles.InfoBox}`}>
                 <FlexColumn>
                     <h1 className={styles.Major}>{pname}</h1>
-                    <p>Location: {plocation}</p>
-                    <p>Related fields: {relatedFields}</p>
-                    <p>Description: {pdescription}</p>
-                    <p>Number of openings: {numStudents}</p>
-                    <p>Term length: {termLength}</p>
-                    <p>Hourly compensation: {compensationHour}</p>
-                    <p>Start date: {startDate}</p>
-                    <p>Desired skills: {desiredSkills}</p>
-                    <p>Hosts: {phosts}</p>
+                    <p className={styles.ProjectInfo}>Location: {plocation}</p>
+                    <p className={styles.ProjectInfo}>Related fields: {relatedFields}</p>
+                    <p className={styles.ProjectInfo}>Description: {pdescription}</p>
+                    <p className={styles.ProjectInfo}>Number of openings: {numStudents}</p>
+                    <p className={styles.ProjectInfo}>Term length: {termLength}</p>
+                    <p className={styles.ProjectInfo}>Hourly compensation: {compensationHour}</p>
+                    <p className={styles.ProjectInfo}> Start date: {startDate}</p>
+                    <p className={styles.ProjectInfo}>Desired skills: {desiredSkills}</p>
+                    <p className={styles.ProjectInfo}>Hosts: {phosts}</p>
+                    <a href="https://poloclub.github.io/" className={styles.Apply}>Apply here!</a>
                 </FlexColumn>
             </div>
         </div>

@@ -1,5 +1,25 @@
 .ProjectCard {
     display: flex;
     position: relative;
-    
+}
+
+
+.InfoBox {
+    border: 5px solid white;
+    padding: 10px;
+    margin-top: 20px;
+}
+
+.ProjectInfo {
+    font-size: 13px;
+    padding: 5px;
+
+}
+
+.Apply {
+    margin-top: 10px;
+    margin-left: 5px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
 }
