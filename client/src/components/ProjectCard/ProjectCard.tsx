@@ -2,19 +2,32 @@ import React, { FC } from "react";
 import styles from "./ProjectCard.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
+import InputField from "../InputField/InputField";
 
 interface ProjectCardProps {
+    // The name of the project
     pname: string;
+    // The project location
     plocation: string;
+    // The related fields associated with the project
     relatedFields: string;
+    // The project description
     pdescription: string;
+    // The number of students wanted
     numStudents: string;
+    // The length of the project term
     termLength: string;
+    // The hourly compensation
     compensationHour: number;
+    // The project start date
     startDate: string;
+    // The desired skills associated with the project
     desiredSkills: string;
+    // The project hosts
     phosts: boolean;
+    // The professor contact email
     contactEmail: string;
+    // Deletable aspect of the project
     deletable?: boolean;
 }
 
@@ -35,8 +48,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
             {deletable ? (
-                <div className={styles.DeleteButton}>
-                    <img src={trash_icon} alt="click to delete" />
+                <div className={styles.TrashContainer}>
+                    <img className={styles.Trash} src={trash_icon} alt="click to delete" />
                 </div>
             ) : (
                 ""
@@ -53,8 +66,12 @@ const ProjectCard: FC<ProjectCardProps> = ({
                     <p className={styles.ProjectInfo}> Start date: {startDate}</p>
                     <p className={styles.ProjectInfo}>Desired skills: {desiredSkills}</p>
                     <p className={styles.ProjectInfo}>Hosts: {phosts}</p>
+                    <p>Contact email: {contactEmail}</p>
                     <a href="https://poloclub.github.io/" className={styles.Apply}>Apply here!</a>
                 </FlexColumn>
+            </div>
+            <div className={styles.Submit}>
+                <InputField type={"submit"} placeholder="Apply" width="auto" />
             </div>
         </div>
     )

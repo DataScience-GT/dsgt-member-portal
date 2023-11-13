@@ -22,4 +22,35 @@
     color: white;
     font-weight: bold;
     text-decoration: none;
+
+    /* Styles for the individual project card */
+    background-color: #00ff2f;
+    border: 1px solid #e0e0e0;
+    border-radius: 5 px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1em;
+    margin: 0.5em;
+    flex-direction: column;
+}
+
+.TrashContainer {
+    height: 2.5em;
+    width: 2.5em;
+
+    padding: 0.25em;
+    margin-right: 1em;
+    cursor: pointer;
+    border-radius: 10px;
+
+    .Trash {
+        height: 100%;
+        width: 100%;
+        filter: var(--svgFilter);
+        margin-right: 1em;
+    }
+
+    &:hover {
+        background: var(--hover);
+    }
+
 }
