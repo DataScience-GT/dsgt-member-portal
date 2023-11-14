@@ -64,3 +64,31 @@ export const deleteProject = async (
         }
     })
 }
+
+export const updateProject = async (
+    project_id: number,
+    field_to_update: string,
+    updated_field: string,
+    callback?: () => void
+) => {
+    await fetch('/api/projects/update', {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`
+        },
+        body: JSON.stringify({
+            session_id: localStorage.getItem("dsgt-portal-session-key"),
+            project_id: project_id,
+            field_to_update: field_to_update,
+            updated_field: updated_field
+        }),
+    }).then(async (res) => {
+        const json = await res.json();
+        if (!json.ok && json.error) {
+            throw new Error(json.error);
+        } else if (callback) {
+            callback();
+        }
+    })
+}

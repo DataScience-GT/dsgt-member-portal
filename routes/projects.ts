@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import { ProjectAppInfo } from "../interfaces/ProjectApp";
-import { submitProjectAppInfo, getProjects, getProject, deleteProject } from "../model";
+import { submitProjectAppInfo, getProjects, getProject, deleteProject, updateProject } from "../model";
 import RateLimit from "../middleware/RateLimiting";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
 
@@ -10,8 +10,23 @@ const router = express.Router();
 //api/projects/create
 //Key - Content-Key
 //Value - application/json
+
+/**
+ * Welcome to the API :)
+ */
+router.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.send("welcome to the projects api!");
+  }
+)
+
+/**
+ * Creates a project application
+ * @param {ProjectAppInfo} p a collection of attributes for a ProjectAppInfo object
+ */
 router.post(
-  "/create",
+  '/create',
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
 
@@ -44,13 +59,38 @@ router.post(
   }
 )
 
+/**
+ * Updates a project by project id
+ * @param {string} field_to_update field to update
+ * @param {string} updated_field updated field
+ */
+router.post(
+  '/update',
+  ValidateSession("body", "professor"),
+  RateLimit(20, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let project_id = req.body.project_id;
+    let field_to_update = req.body.field_to_update;
+    let updated_field = req.body.updated_field;
+    if (!project_id) {
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+      return;
+    }
+    await updateProject(project_id, field_to_update, updated_field);
+    res.json({ ok: 1 });
+  }
+)
+
+/**
+ * Fetches all projects from the db
+ */
 router.get(
-  "/get",
+  '/get',
   ValidateSession("query"),
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const projectList = await getProjects();
+      let projectList = await getProjects();
       if (projectList.length == 0) {
         next(console.error);
       }
@@ -62,55 +102,29 @@ router.get(
 )
 
 /**
- * Get a singular project by name in postgres database
- * 
- * Throw a 404 if project not found
- */
-router.get(
-  '/get/:projectName',
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const projectName = req.params.projectName;
-      const project = await getProject(projectName);
-
-      if (project) {
-        res.json({ project });
-      } else {
-        res.status(404).json({ message: `Project '${projectName}' not found.` });
-      }
-    } catch (err) {
-      next(err);
-    }
-  }
-);
-
-/**
- * Delete a singular project by name in postgres database
- * 
- * Throw a 404 if project not found
+ * Deletes a project based on the project_id
+ * @param {string} session_id requesting user's session_id
+ * @param {string} project_Id id of project to delete
  */
 router.delete(
   '/delete',
   ValidateSession("body", "professor"),
+  RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      let projectName = req.body.projectName;
-      if (!projectName) {
-        next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
-        return;
-      }
-      const deletedCount = await deleteProject(projectName);
+    let project_id = req.body.project_id;
+    if (!project_id) {
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+      return;
+    }
+    const deletedCount = await deleteProject(project_id);
 
-      if (deletedCount === 1) {
-        res.status(204).send();
-      } else {
-        res.status(404).json({ message: `Project '${projectName}' not found.` })
-      }
-    } catch (err) {
-      next(err);
+    if (deletedCount === 1) {
+      res.json({ ok: 1 });
+    } else {
+      res.status(404).json({ message: `project with project ID '${project_id}' not found.` });
     }
   }
-);
+)
 
 module.exports = router;
 export default router;
