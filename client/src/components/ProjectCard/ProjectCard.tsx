@@ -3,6 +3,7 @@ import styles from "./ProjectCard.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import InputField from "../InputField/InputField";
+import FlexRow from "../../layout/FlexRow/FlexRow";
 
 interface ProjectCardProps {
     // The name of the project
@@ -10,25 +11,27 @@ interface ProjectCardProps {
     // The project location
     plocation: string;
     // The related fields associated with the project
-    relatedFields: string;
+    relatedFields?: string;
     // The project description
-    pdescription: string;
+    pdescription?: string;
     // The number of students wanted
-    numStudents: string;
+    numStudents?: string;
     // The length of the project term
-    termLength: string;
+    termLength?: string;
     // The hourly compensation
-    compensationHour: number;
+    compensationHour?: number;
     // The project start date
-    startDate: string;
+    startDate?: string;
     // The desired skills associated with the project
-    desiredSkills: string;
+    desiredSkills?: string;
     // The project hosts
-    phosts: boolean;
+    phosts?: string;
     // The professor contact email
-    contactEmail: string;
+    contactEmail?: string;
     // Deletable aspect of the project
     deletable?: boolean;
+    onDelete?: (project_id: number) => void;
+    role?: string;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -43,7 +46,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
     desiredSkills,
     phosts,
     contactEmail,
-    deletable
+    deletable,
+    onDelete,
 }: ProjectCardProps) => {
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
@@ -54,24 +58,55 @@ const ProjectCard: FC<ProjectCardProps> = ({
             ) : (
                 ""
             )}
-            <div className={`${styles.Content} ${styles.InfoBox}`}>
-                <FlexColumn>
+            <div className={styles.ProjectCardInfo}>
+                <FlexColumn padding="1em" gap="0.5em">
                     <h1 className={styles.Major}>{pname}</h1>
-                    <p className={styles.ProjectInfo}>Location: {plocation}</p>
-                    <p className={styles.ProjectInfo}>Related fields: {relatedFields}</p>
-                    <p className={styles.ProjectInfo}>Description: {pdescription}</p>
-                    <p className={styles.ProjectInfo}>Number of openings: {numStudents}</p>
-                    <p className={styles.ProjectInfo}>Term length: {termLength}</p>
-                    <p className={styles.ProjectInfo}>Hourly compensation: {compensationHour}</p>
-                    <p className={styles.ProjectInfo}> Start date: {startDate}</p>
-                    <p className={styles.ProjectInfo}>Desired skills: {desiredSkills}</p>
-                    <p className={styles.ProjectInfo}>Hosts: {phosts}</p>
-                    <p>Contact email: {contactEmail}</p>
-                    <a href="https://poloclub.github.io/" className={styles.Apply}>Apply here!</a>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Start date</span> 
+                        {startDate}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Description</span> 
+                        {pdescription}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Length of project</span> 
+                        {termLength}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Hourly compensation</span> 
+                        {compensationHour}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Location</span> 
+                        {plocation}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Number of openings</span> 
+                        {numStudents}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Related fields</span> 
+                        {relatedFields}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Desired skills</span> 
+                        {desiredSkills}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Project hosts</span> 
+                        {phosts}
+                    </p>
+                    <p className={styles.ProjectInfo}> 
+                        <span className={styles.Span}>Contact email</span> 
+                        {contactEmail}
+                    </p>
                 </FlexColumn>
             </div>
-            <div className={styles.Submit}>
-                <InputField type={"submit"} placeholder="Apply" width="auto" />
+            <div className={styles.ProjectCardApp}>
+                <div className={styles.Submit}>
+                    <InputField type={"submit"} placeholder="Apply" width="auto" />
+                </div>
             </div>
         </div>
     )

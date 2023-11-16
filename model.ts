@@ -1256,7 +1256,9 @@ export const deleteProject = async (project_id: number) => {
 
 /**
  * Updates project info based on project_inc
- * 
+ * @param project_id id of project to update
+ * @param field_to_update field to update
+ * @param updated_field updated field
  */
 export const updateProject = async (project_id: number, field_to_update: string, updated_field: string | number) => {
   await db("project_apps").update({ [field_to_update]: updated_field }).where("project_inc", project_id);

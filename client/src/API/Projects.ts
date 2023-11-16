@@ -11,9 +11,14 @@ export type result_projects = {
     compensation_hour: number;
     start_date: string;
     desired_skills: string;
-    project_hosts: boolean;
+    project_hosts: string;
     contact_email: string;
 };
+
+/*
+ * NOTE: createProject function currently hosted on DSGT website
+ * link to repo: https://github.com/DataScience-GT/dsgt-website-2024
+ */
 
 export const getProjects = async (
     count?: number,

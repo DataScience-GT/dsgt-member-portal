@@ -1,19 +1,46 @@
-.ProjectCard {
+.ProjectCardInfo {
     display: flex;
     position: relative;
+    height: 24em;
+    width: 20em;
+    border: 2px solid var(--borderColor);
+
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    border-radius: 1em;
+    overflow: scroll;
+
+    transition: var(--animDuration) all ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        .DeleteButton {
+            background: var(--hover);
+            filter: opacity(80%);
+            display: flex;
+        }
+    }
 }
 
-
-.InfoBox {
-    border: 5px solid white;
-    padding: 10px;
-    margin-top: 20px;
+.Major {
+    margin-bottom: 0.5em;
 }
 
 .ProjectInfo {
-    font-size: 13px;
-    padding: 5px;
+    display: block;
+    position: relative;
+    height: fit-content;
+    width: 100%;
 
+    font-size: 1.1em;
+    font-weight: 300;
+}
+
+.Span {
+    font-weight: 700;
+    font-size: 1em;
+    margin-right: 0.8em;
 }
 
 .Apply {

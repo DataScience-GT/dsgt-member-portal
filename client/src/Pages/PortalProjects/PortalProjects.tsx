@@ -56,7 +56,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                                                 desiredSkills={p.desired_skills}
                                                 phosts={p.project_hosts}
                                                 contactEmail={p.contact_email}
-                                                deletable={true}
+                                                deletable={false}
                                             ></ProjectCard>
                                         );
                                     })}
