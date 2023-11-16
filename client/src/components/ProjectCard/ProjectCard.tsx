@@ -6,35 +6,27 @@ import InputField from "../InputField/InputField";
 import FlexRow from "../../layout/FlexRow/FlexRow";
 
 interface ProjectCardProps {
-    // The name of the project
-    pname: string;
-    // The project location
-    plocation: string;
-    // The related fields associated with the project
+    pid: number | undefined;
+    pname: string | undefined;
+    plocation: string | undefined;
     relatedFields?: string;
-    // The project description
     pdescription?: string;
-    // The number of students wanted
     numStudents?: string;
-    // The length of the project term
     termLength?: string;
-    // The hourly compensation
     compensationHour?: number;
-    // The project start date
     startDate?: string;
-    // The desired skills associated with the project
     desiredSkills?: string;
-    // The project hosts
     phosts?: string;
-    // The professor contact email
     contactEmail?: string;
-    // Deletable aspect of the project
     deletable?: boolean;
-    onDelete?: (project_id: number) => void;
+    applyable?: boolean;
     role?: string;
+    onDelete?: (project_id: number) => void;
+    onApply?: (project_id: number) => void;
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
+    pid,
     pname,
     plocation,
     relatedFields,
@@ -47,8 +39,11 @@ const ProjectCard: FC<ProjectCardProps> = ({
     phosts,
     contactEmail,
     deletable,
+    applyable,
     onDelete,
+    onApply,
 }: ProjectCardProps) => {
+
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
             {deletable ? (
@@ -60,7 +55,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
             )}
             <div className={styles.ProjectCardInfo}>
                 <FlexColumn padding="1em" gap="0.5em">
-                    <h1 className={styles.Major}>{pname}</h1>
+                    <h3 className={styles.Major}>{pname}</h3>
                     <p className={styles.ProjectInfo}> 
                         <span className={styles.Span}>Start date</span> 
                         {startDate}
@@ -103,11 +98,21 @@ const ProjectCard: FC<ProjectCardProps> = ({
                     </p>
                 </FlexColumn>
             </div>
-            <div className={styles.ProjectCardApp}>
-                <div className={styles.Submit}>
-                    <InputField type={"submit"} placeholder="Apply" width="auto" />
+            {applyable ? (
+                <div className={styles.ProjectCardApp}>
+                    <div className={styles.Submit}>
+                        <InputField type="submit" placeholder="Apply" width="auto" 
+                            onClick={() => {
+                                if (pid && onApply) {
+                                    onApply(pid);
+                                }
+                            }} 
+                        />
+                    </div>
                 </div>
-            </div>
+            ) : (
+                ""
+            )}
         </div>
     )
 }
