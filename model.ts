@@ -14,7 +14,7 @@ import { Feedback } from "./interfaces/Feedback";
 import { Team, TeamMember } from "./interfaces/Team";
 import { ListFormat } from "typescript";
 import { sendEmail } from "./email";
-import { ProjectAppInfo } from "./interfaces/ProjectApp";
+import { ProjectAppInfo, UserProjectApp } from "./interfaces/ProjectApp";
 
 const crypto = require("crypto");
 
@@ -1262,4 +1262,22 @@ export const deleteProject = async (project_id: number) => {
  */
 export const updateProject = async (project_id: number, field_to_update: string, updated_field: string | number) => {
   await db("project_apps").update({ [field_to_update]: updated_field }).where("project_inc", project_id);
+};
+
+// ------------------------------ Project Applications ------------------------------
+
+/**
+ * Adds a user application to the database.
+ * @param {UserProjectApp} u (mandatory) The user application object being created
+ */
+ export const createApplication = async (u: UserProjectApp) => {
+  await db("userProjectApps").insert({        // Might have to change
+    project_id: u.project_id,
+    user_id: u.user_id,
+    short_answer_1: u.short_answer_1,
+    short_answer_2: u.short_answer_2,
+    long_answer: u.long_answer,
+    phone_number: u.phone_number,
+    email: u.email
+  });
 };
