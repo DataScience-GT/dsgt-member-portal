@@ -16,10 +16,8 @@ export interface ProjectAppInfo {
 
 export interface UserProjectApp {
     project_id: number;
-    user_id: number;
-    short_answer_1?: string;
-    short_answer_2?: string;
-    long_answer?: string;
-    phone_number: number;
-    email: string;
+    user_id: string;
+    saq_response_1?: string;
+    saq_response_2?: string;
+    user_goals?: string;
 }

@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import RateLimit from "../middleware/RateLimiting";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
-import { createApplication } from "../model";
+import { createApplication, checkIfUserAppliedToProject } from "../model";
 import { UserProjectApp } from "../interfaces/ProjectApp";
 
 const router = express.Router();
@@ -26,26 +26,32 @@ router.post(
     '/create',
     RateLimit(20, 1000 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
-
-        let u: UserProjectApp = {
+        try {
+          let u: UserProjectApp = {
           project_id: req.body.project_id,
           user_id: req.body.user_id,
-          short_answer_1: req.body.short_answer_1,
-          short_answer_2: req.body.short_answer_2,
-          long_answer: req.body.long_answer,
-          phone_number: req.body.phone_number,
-          email: req.body.email
+          saq_response_1: req.body.saq_response_1,
+          saq_response_2: req.body.saq_response_2,
+          user_goals: req.body.user_goals
         }
-        
+
         if (!(
-          u.project_id && u.user_id && u.phone_number && u.email
+          u.project_id && u.user_id
         )) {
           next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
         }
 
+        let result = await checkIfUserAppliedToProject(u.project_id, u.user_id)
+        if (result[0].duplicateCount != 0) {
+          res.status(409).json({ error: `User has already applied to the project` });
+        }
+        
         await createApplication(u);
         res.json({ ok: 1 });
+      } catch(err) {
+        next(err);
       }
+    }
 )
 
 module.exports = router;
