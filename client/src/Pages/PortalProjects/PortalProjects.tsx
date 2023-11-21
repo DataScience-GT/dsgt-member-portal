@@ -81,20 +81,33 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                                 setPhoneNum(parseInt(e.currentTarget.value));
                             }}
                         />
+                        <p className={styles.Question}>What are your primary technical skills? </p>
                         <InputField
-                            type={"phone"}
-                            name="phone"
-                            placeholder="Phone number"
+                            type={"text"}
+                            name="saq1"
+                            placeholder="Enter here"
                             onChange={(e) => {
-                                setPhoneNum(parseInt(e.currentTarget.value));
+                                setSaq1(e.currentTarget.value);
                             }}
                         />
+
+                        <p className={styles.Question}>How much time can you commit per week to this project?</p>
                         <InputField
-                            type={"phone"}
-                            name="phone"
-                            placeholder="Phone number"
+                            type={"text"}
+                            name="saq2"
+                            placeholder="Enter here"
                             onChange={(e) => {
-                                setPhoneNum(parseInt(e.currentTarget.value));
+                                setSaq2(e.currentTarget.value);
+                            }}
+                        />
+
+                        <p className={styles.Question}>What do you hope to gain out of this project?</p>
+                        <InputField
+                            type={"text"}
+                            name="saq3"
+                            placeholder="Enter here"
+                            onChange={(e) => {
+                                setSaq3(e.currentTarget.value);
                             }}
                         />
                     </FlexColumn>
