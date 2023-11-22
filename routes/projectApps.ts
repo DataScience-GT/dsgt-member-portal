@@ -20,7 +20,7 @@ router.get(
     async (req: Request, res: Response, next: NextFunction) => {
       res.send("welcome to the project applications api!");
     }
-  )
+)
 
 router.post(
     '/create',
@@ -36,6 +36,8 @@ router.post(
           phone_number: req.body.phone_number,
           email: req.body.email
         }
+
+        console.log(u);
         
         if (!(
           u.project_id && u.user_id && u.phone_number && u.email

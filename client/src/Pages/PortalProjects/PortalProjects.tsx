@@ -40,7 +40,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
         if (projectWithCurrentId) {
             setSelectedProject(projectWithCurrentId);
         }
-    }, [projects, selectedProjectId]);
+    }, [selectedProjectId]);
 
     const handleApplyModalConfirm = async () => {
 
@@ -74,7 +74,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                     ></ProjectCard>
                     <FlexColumn>
                         <InputField
-                            type={"phone"}
+                            type={"SAQ1"}
                             name="phone"
                             placeholder="Phone number"
                             onChange={(e) => {
@@ -82,7 +82,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                             }}
                         />
                         <InputField
-                            type={"phone"}
+                            type={"SAQ2"}
                             name="phone"
                             placeholder="Phone number"
                             onChange={(e) => {

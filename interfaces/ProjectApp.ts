@@ -16,10 +16,10 @@ export interface ProjectAppInfo {
 
 export interface UserProjectApp {
     project_id: number;
-    user_id: number;
+    user_id: string;
     short_answer_1?: string;
     short_answer_2?: string;
     long_answer?: string;
-    phone_number: number;
-    email: string;
+    phone_number?: number;
+    email?: string;
 }

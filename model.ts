@@ -1271,13 +1271,11 @@ export const updateProject = async (project_id: number, field_to_update: string,
  * @param {UserProjectApp} u (mandatory) The user application object being created
  */
  export const createApplication = async (u: UserProjectApp) => {
-  await db("userProjectApps").insert({        // Might have to change
-    project_id: u.project_id,
+  await db("user_project_app").insert({
     user_id: u.user_id,
-    short_answer_1: u.short_answer_1,
-    short_answer_2: u.short_answer_2,
-    long_answer: u.long_answer,
-    phone_number: u.phone_number,
-    email: u.email
+    project_id: u.project_id,
+    saq_response_1: u.short_answer_1,
+    saq_response_2: u.short_answer_2,
+    user_goals: u.long_answer,
   });
 };
