@@ -60,9 +60,8 @@ const InputField: FC<InputFieldProps> = ({
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
-          className={`${helper !== undefined ? styles._hasHelper : ""} ${
-            validIndication ? styles.validIndicater : ""
-          }`}
+          className={`${helper !== undefined ? styles._hasHelper : ""} ${validIndication ? styles.validIndicater : ""
+            }`}
           type={passwordOpen ? "text" : "password"}
           placeholder=" "
           name={name || placeholder?.replaceAll(" ", "")}
@@ -98,9 +97,8 @@ const InputField: FC<InputFieldProps> = ({
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
-          className={`${helper !== undefined ? styles._hasHelper : ""} ${
-            validIndication ? styles.validIndicater : ""
-          }`}
+          className={`${helper !== undefined ? styles._hasHelper : ""} ${validIndication ? styles.validIndicater : ""
+            }`}
           type={type}
           placeholder=" "
           name={name || placeholder?.replaceAll(" ", "")}

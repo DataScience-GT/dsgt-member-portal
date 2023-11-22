@@ -1271,11 +1271,20 @@ export const updateProject = async (project_id: number, field_to_update: string,
  * @param {UserProjectApp} u (mandatory) The user application object being created
  */
  export const createApplication = async (u: UserProjectApp) => {
-  await db("user_project_app").insert({
-    user_id: u.user_id,
+  const result = await db("user_project_app").insert({
     project_id: u.project_id,
-    saq_response_1: u.short_answer_1,
-    saq_response_2: u.short_answer_2,
-    user_goals: u.long_answer,
+    user_id: u.user_id,
+    saq_response_1: u.saq_response_1,
+    saq_response_2: u.saq_response_2,
+    user_goals: u.user_goals
   });
+  return result
 };
+
+
+export const checkIfUserAppliedToProject = async(project_id: number, user_id: string) => {
+  return (await db("user_project_app").count('user_project_app_id as duplicateCount').where({
+    user_id: user_id,
+    project_id: project_id,
+  }))
+}
