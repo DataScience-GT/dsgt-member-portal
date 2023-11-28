@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
-import { ProjectAppInfo } from "../interfaces/ProjectApp";
-import { submitProjectAppInfo, getProjects, getProject, deleteProject, updateProject } from "../model";
+import { ProjectInfo } from "../interfaces/ProjectApp";
+import { submitProjectInfo, getProjects, deleteProject, updateProject } from "../model";
 import RateLimit from "../middleware/RateLimiting";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
 
@@ -23,21 +23,22 @@ router.get(
 
 /**
  * Creates a project application
- * @param {ProjectAppInfo} p a collection of attributes for a ProjectAppInfo object
+ * @param {ProjectInfo} p a collection of attributes for a ProjectAppInfo object
  */
 router.post(
   '/create',
   RateLimit(20, 1000 * 60),
   async (req: Request, res: Response, next: NextFunction) => {
 
-    let p: ProjectAppInfo = {
-      projectName: req.body.projectName,
-      projectLocation: req.body.projectLocation,
-      projectHosts: req.body.projectHosts,
-      projectContactEmail: req.body.projectContactEmail,
+    let p: ProjectInfo = {
+      name: req.body.projectName,
+      location: req.body.projectLocation,
+      hosts: req.body.projectHosts,
+      contactEmail: req.body.projectContactEmail,
       relatedFields: req.body.relatedFields,
       relatedFieldOther: req.body.relatedFieldOther,
-      projectDescription: req.body.projectDescription,
+      imgData: req.body.imgData,
+      description: req.body.projectDescription,
       numStudentsDesired: req.body.numStudentsDesired,
       termLength: req.body.termLength,
       compensationHour: req.body.compensationHour,
@@ -47,14 +48,14 @@ router.post(
     }
 
     if (!(
-      p.projectName && p.projectLocation && p.relatedFields && p.projectDescription
+      p.name && p.location && p.relatedFields && p.description
       && p.numStudentsDesired && p.termLength && p.compensationHour && p.startDate
-      && p.skillsDesired && p.projectHosts && p.projectContactEmail
+      && p.skillsDesired && p.hosts && p.contactEmail
     )) {
       next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
     }
 
-    await submitProjectAppInfo(p);
+    await submitProjectInfo(p);
     res.json({ ok: 1 });
   }
 )
@@ -91,9 +92,6 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let projectList = await getProjects();
-      if (projectList.length == 0) {
-        next(console.error);
-      }
       res.json({ ok: 1, data: projectList });
     } catch (err) {
       next(err);

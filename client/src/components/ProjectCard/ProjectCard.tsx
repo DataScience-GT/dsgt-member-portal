@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./ProjectCard.module.scss";
 import trash_icon from "../../assets/icons/trash.svg";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
@@ -17,6 +17,7 @@ interface ProjectCardProps {
     startDate?: string;
     desiredSkills?: string;
     phosts?: string;
+    imgData?: string;
     contactEmail?: string;
     deletable?: boolean;
     applyable?: boolean;
@@ -37,12 +38,15 @@ const ProjectCard: FC<ProjectCardProps> = ({
     startDate,
     desiredSkills,
     phosts,
+    imgData,
     contactEmail,
     deletable,
     applyable,
     onDelete,
     onApply,
 }: ProjectCardProps) => {
+
+    const [shouldComponentRender, setShouldComponentRender] = useState(false);
 
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
@@ -54,49 +58,55 @@ const ProjectCard: FC<ProjectCardProps> = ({
                 ""
             )}
             <div className={styles.ProjectCardInfo}>
-                <FlexColumn padding="1em" gap="0.5em">
-                    <h3 className={styles.Major}>{pname}</h3>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Start date</span> 
-                        {startDate}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Description</span> 
-                        {pdescription}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Length of project</span> 
-                        {termLength}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Hourly compensation</span> 
-                        {compensationHour}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Location</span> 
-                        {plocation}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Number of openings</span> 
-                        {numStudents}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Related fields</span> 
-                        {relatedFields}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Desired skills</span> 
-                        {desiredSkills}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Project hosts</span> 
-                        {phosts}
-                    </p>
-                    <p className={styles.ProjectInfo}> 
-                        <span className={styles.Span}>Contact email</span> 
-                        {contactEmail}
-                    </p>
-                </FlexColumn>
+                <FlexRow>
+                    <div
+                        className={`${styles.Image}`}
+                        style={{ backgroundImage: `url(${imgData})` }}
+                    ></div>
+                    <FlexColumn padding="1em" gap="0.5em">
+                        <h3 className={styles.Major}>{pname}</h3>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Start date</span> 
+                            {startDate}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Description</span> 
+                            {pdescription}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Length of project</span> 
+                            {termLength}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Hourly compensation</span> 
+                            {compensationHour}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Location</span> 
+                            {plocation}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Number of openings</span> 
+                            {numStudents}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Related fields</span> 
+                            {relatedFields}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Desired skills</span> 
+                            {desiredSkills}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Project hosts</span> 
+                            {phosts}
+                        </p>
+                        <p className={styles.ProjectInfo}> 
+                            <span className={styles.Span}>Contact email</span> 
+                            {contactEmail}
+                        </p>
+                    </FlexColumn>
+                </FlexRow>
             </div>
             {applyable ? (
                 <div className={styles.ProjectCardApp}>

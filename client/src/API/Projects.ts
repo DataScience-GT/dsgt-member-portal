@@ -1,6 +1,6 @@
 import { Role } from "../Scripts/RoleManagement";
 
-export type result_projects = {
+export type Project = {
     project_inc: number;
     project_name: string;
     project_location: string;
@@ -12,6 +12,7 @@ export type result_projects = {
     start_date: string;
     desired_skills: string;
     project_hosts: string;
+    image_data: string;
     contact_email: string;
 };
 
@@ -19,10 +20,9 @@ export type result_projects = {
  * NOTE: createProject function currently hosted on DSGT website
  * link to repo: https://github.com/DataScience-GT/dsgt-website-2024
  */
-
 export const getProjects = async (
     count?: number,
-    callback?: (result: result_projects[]) => void
+    callback?: (result: Project[]) => void
 ) => {
     let url = `/api/projects/get?session_id=${localStorage.getItem("dsgt-portal-session-key")}`
     if (count) {

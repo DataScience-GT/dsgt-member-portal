@@ -16,6 +16,7 @@ interface ModalProps {
   preset?: ModalPreset;
   setConfirmed?: Dispatch<SetStateAction<boolean>>;
   handleConfirmed?: () => void;
+  opacity?: string;
 }
 
 const Modal: FC<ModalProps> = ({
@@ -25,6 +26,7 @@ const Modal: FC<ModalProps> = ({
   preset,
   setConfirmed,
   handleConfirmed,
+  opacity
 }: ModalProps) => {
   const closeModal = () => {
     if (setOpen !== undefined) setOpen(false);
