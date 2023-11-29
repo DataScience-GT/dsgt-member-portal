@@ -1225,7 +1225,7 @@ export const submitProjectInfo = async (p: ProjectInfo) => {
 
 
 /**
- * Gets a list of all the projects from the database "project_apps" table. 
+ * Gets a list of all the projects from the database "projects" table. 
  * @returns Returns a list of projects
  */
 export const getProjects = async () => {
@@ -1233,7 +1233,7 @@ export const getProjects = async () => {
 };
 
 /**
- * Gets a project from the database "project_apps" table.
+ * Gets a project from the database "projects" table.
  * @param project_id id of project to delete
  */
 export const getProject = async (project_id: number) => {
@@ -1267,25 +1267,49 @@ export const updateProject = async (project_id: number, field_to_update: string,
 
 // ------------------------------ Project Applications ------------------------------
 
-// /**
-//  * Adds a user application to the database.
-//  * @param {ProjectApp} u (mandatory) The user application object being created
-//  */
-//  export const createApplication = async (u: ProjectApp) => {
-//   const result = await db("user_project_app").insert({
-//     project_id: u.project_id,
-//     user_id: u.user_id,
-//     saq_response_1: u.saq_response_1,
-//     saq_response_2: u.saq_response_2,
-//     user_goals: u.user_goals
-//   });
-//   return result
-// };
+/**
+ * Adds a user application to the database.
+ * @param {ProjectApp} u (mandatory) The user application object being created
+ */
+ export const createProjectApplication = async (u: ProjectApp) => {
+  await db.insert({
+    project_id: u.projectId,
+    user_id: u.user_id,
+    preferred_phone: u.preferredPhone,
+    preferred_email: u.preferredEmail,
+    linkedin: u.linkedin,
+    resume: u.resume,
+    technical_skills: u.technicalSkills,
+    motivations: u.motivations,
+    team_fit: u.teamFit,
+    availability: u.availability,
+  }).into("project_apps");
+};
 
+export const checkIfUserAppliedToProject = async(project_id: number, user_id: number) => {
+  const count = await db("project_apps").
+    where({
+      project_id: project_id,
+      user_id: user_id
+    })
+    .count("app_id as count")
+    .first()
+  return count.count > 0;
+}
 
-// export const checkIfUserAppliedToProject = async(project_id: number, user_id: string) => {
-//   return (await db("user_project_app").count('user_project_app_id as duplicateCount').where({
-//     user_id: user_id,
-//     project_id: project_id,
-//   }))
-// }
+/**
+ * Removes a project from the database
+ * @param project_id id of project to delete
+ */
+export const deleteProjectApp = async (app_id: number) => {
+  const result = await db("project_apps").where("app_id", app_id).del();
+  return result;
+};
+
+/**
+ * Gets a list of all the project apps from the database "project_apps" table. 
+ * @returns Returns a list of projects
+ */
+export const getProjectApplications = async () => {
+  return await db.select("*").from("project_apps").orderBy("app_id", "desc");
+};

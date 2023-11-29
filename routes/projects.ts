@@ -83,7 +83,7 @@ router.post(
 )
 
 /**
- * Fetches all projects from the db
+ * Fetches all projects from the db.
  */
 router.get(
   '/get',

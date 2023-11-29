@@ -7,7 +7,7 @@ import {
     getProjects,
     Project
 } from "../../API/Projects";
-import { submitProjectApplication } from "../../API/ProjectApps";
+import { getProjectApps, ProjectApp, submitProjectApplication } from "../../API/ProjectApps";
 import FlexColumn from "../../layout/FlexColumn/FlexColumn";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import Modal, { ModalPreset } from "../../components/Modal/Modal";
@@ -20,6 +20,7 @@ interface PortalProjectsProps {
 const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) => {
 
     const [projects, setProjects] = useState<Project[]>([]);
+    const [projectApps, setProjectApps] = useState<ProjectApp[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedProjectId, setSelectedProjectId] = useState(-1);
     const [selectedProject, setSelectedProject] = useState<Project>();
@@ -28,13 +29,13 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
     const [technicalSkills, setTechnicalSkills] = useState("");
     const [motivation, setMotivation] = useState("");
     const [teamFit, setTeamFit] = useState("");
-    const [phoneNum, setPhoneNum] = useState(-1);
+    const [phoneNum, setPhoneNum] = useState("");
     const [email, setEmail] = useState("");
     const [linkedin, setLinkedIn] = useState("");
     const [resume, setResume] = useState("");
     const [availability, setAvailability] = useState("");
 
-    const [succuss, setSuccess] = useState("");
+    const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
 
     useEffect(() => {
@@ -44,9 +45,15 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
         }).catch((err) => {
             console.error(err);
         });
-        const projectWithCurrentId = projects.find(project => project.project_inc === selectedProjectId);
-        if (projectWithCurrentId) {
-            setSelectedProject(projectWithCurrentId);
+        getProjectApps(undefined, (data) => {
+            setProjectApps(data);
+            console.log(data);
+        }).catch((err) => {
+            console.error(err);
+        });
+        const currProject = projects.find(project => project.project_inc === selectedProjectId);
+        if (currProject) {
+            setSelectedProject(currProject);
         }
     }, [selectedProjectId]);
 
@@ -106,7 +113,7 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                             name="phone"
                             placeholder="Preferred phone #"
                             onChange={(e) => {
-                                setPhoneNum(parseInt(e.currentTarget.value));
+                                setPhoneNum(e.currentTarget.value);
                             }}
                             bgcolor="#fff"
                             color="#000"
@@ -187,6 +194,14 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                     <h1 className={styles.Major}>Research Postings</h1>
                     <h2 className={styles.Minor}>Apply to Active Research Projects</h2>
                     <FlexColumn padding="1em 0 0 0">
+                        <h2 className={styles.Mini}>Projects You've Applied To</h2>
+                        <div className={styles.MyProjects}>
+                            { projectApps.map((a, i) => {
+                                return (
+                                    <p>{a.project_id}</p>
+                                )
+                            })}
+                        </div>
                         <h2 className={styles.Mini}>Existing Projects</h2>
                         <div className={styles.Cards}>
                             {loading
@@ -225,6 +240,8 @@ const PortalProjects: FC<PortalProjectsProps> = ({ role }: PortalProjectsProps) 
                                     })
                             }
                         </div>
+                        <p className={styles.Success}>{success}</p>
+                        <p className={styles.Error}>{error}</p>
                     </FlexColumn>
                 </div>
             </FlexRow>

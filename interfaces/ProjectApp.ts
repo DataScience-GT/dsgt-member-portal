@@ -17,8 +17,8 @@ export interface ProjectInfo {
 
 export interface ProjectApp {
     projectId: number,
-    uuid: string,
-    preferredPhone: number,
+    user_id: number,
+    preferredPhone: string,
     preferredEmail: string,
     linkedin: string,
     resume: string,

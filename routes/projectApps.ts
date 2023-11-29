@@ -2,15 +2,12 @@ import express, { Request, Response, NextFunction } from "express";
 import { ErrorPreset, StatusErrorPreset } from "../Classes/StatusError";
 import RateLimit from "../middleware/RateLimiting";
 import ValidateSession from "../middleware/CheckSessionMiddleware";
-import { createApplication, checkIfUserAppliedToProject } from "../model";
 import { ProjectApp } from "../interfaces/ProjectApp";
+import { checkIfUserAppliedToProject, createProjectApplication, 
+  deleteProjectApp,
+  getProjectApplications } from "../model";
 
 const router = express.Router();
-
-
-//api/projects/create
-//Key - Content-Key
-//Value - application/json
 
 /**
  * Welcome to the API :)
@@ -24,12 +21,13 @@ router.get(
 
 router.post(
     '/create',
+    ValidateSession("body"),
     RateLimit(20, 1000 * 60),
     async (req: Request, res: Response, next: NextFunction) => {
 
       let u: ProjectApp = {
         projectId: req.body.projectId,
-        uuid: res.locals.session.user_id,
+        user_id: res.locals.session.user_id,
         preferredPhone: req.body.preferredPhone,
         preferredEmail: req.body.preferredEmail,
         linkedin: req.body.linkedin,
@@ -41,20 +39,62 @@ router.post(
       }
 
       if (!(
-        u.projectId && u.uuid && u.preferredEmail && u.preferredPhone && u.linkedin
+        u.projectId && u.user_id && u.preferredEmail && u.preferredPhone && u.linkedin
         && u.resume && u.technicalSkills && u.motivations && u.teamFit && u.availability
       )) {
         next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
       }
 
-      let result = await checkIfUserAppliedToProject(u.projectId, u.uuid);
-      if (result[0].duplicateCount != 0) {
-        res.status(409).json({ error: `User has already applied to the project` });
+      let hasApplied = await checkIfUserAppliedToProject(u.projectId, u.user_id);
+      if (hasApplied) {
+        next(new StatusErrorPreset(ErrorPreset.NoPermission));
       }
-        
-      await createApplication(u);
+
+      await createProjectApplication(u);
       res.json({ ok: 1 });
     }
+)
+
+/**
+ * Deletes a project application based on the app_id
+ * @param {string} session_id requesting user's session_id
+ * @param {string} app_id id of project to delete
+ */
+router.delete(
+  '/delete',
+  ValidateSession("body"),
+  RateLimit(20, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    let app_id = req.body.app_id;
+    if (!app_id) {
+      next(new StatusErrorPreset(ErrorPreset.MissingRequiredFields));
+      return;
+    }
+    const deletedCount = await deleteProjectApp(app_id);
+
+    if (deletedCount === 1) {
+      res.json({ ok: 1 });
+    } else {
+      res.status(404).json({ message: `project with app ID '${app_id}' not found.` });
+    }
+  }
+)
+
+/**
+ * Fetches all project apps from the db.
+ */
+router.get(
+  '/get',
+  ValidateSession("query"),
+  RateLimit(20, 1000 * 60),
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      let projectAppList = await getProjectApplications();
+      res.json({ ok: 1, data: projectAppList });
+    } catch (err) {
+      next(err);
+    }
+  }
 )
 
 module.exports = router;
