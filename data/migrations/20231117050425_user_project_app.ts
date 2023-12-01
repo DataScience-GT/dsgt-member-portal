@@ -10,11 +10,10 @@ export async function up(knex: Knex): Promise<void> {
         table.string("project_id").unique();
         table.string("saq_response_1", 1500);
         table.string("saq_response_2", 1500);
-        table.string("user_goals");
+        table.string("user_goals", 1500);
         table.timestamp("submitted_at").defaultTo(knex.fn.now());
-      });
+    });
 }
-
 
 export async function down(knex: Knex): Promise<void> {
     return knex.schema.dropTableIfExists("user_project_app");

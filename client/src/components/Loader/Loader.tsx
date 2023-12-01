@@ -1,6 +1,6 @@
 import React, { FC, useContext } from "react";
 import styles from "./Loader.module.scss";
-import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import { Theme, ThemeContext } from "../../context/ThemeContext";
 
 interface LoaderProps {
   width?: string;

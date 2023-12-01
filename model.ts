@@ -14,7 +14,7 @@ import { Feedback } from "./interfaces/Feedback";
 import { Team, TeamMember } from "./interfaces/Team";
 import { ListFormat } from "typescript";
 import { sendEmail } from "./email";
-import { ProjectAppInfo, UserProjectApp } from "./interfaces/ProjectApp";
+import { ProjectApp, ProjectInfo } from "./interfaces/ProjectApp";
 
 const crypto = require("crypto");
 
@@ -1195,48 +1195,49 @@ export const getUserDemographics = async () => {
 
 /**
  * attempts to insert project application info into db
- * @param projectApp project application object
+ * @param p project application object
  */
-export const submitProjectAppInfo = async (projectApp: ProjectAppInfo) => {
-  let newRelatedFields = projectApp.relatedFields.replaceAll(", Other-Option", "").replaceAll("-Option", "");
-  if (projectApp.relatedFieldOther) {
-    newRelatedFields = newRelatedFields.concat(", " + projectApp.relatedFieldOther);
+export const submitProjectInfo = async (p: ProjectInfo) => {
+  let newFields = p.relatedFields;
+  if (p.relatedFieldOther) {
+    newFields = newFields.concat(", " + p.relatedFieldOther);
   }
-  let newSkills = projectApp.skillsDesired.replaceAll(", Other-Option2", "").replaceAll("-Option", "");;
-  if (projectApp.skillDesiredOther) {
-    newSkills = newSkills.concat(", " + projectApp.skillDesiredOther);
+  let newSkills = p.skillsDesired;
+  if (p.skillDesiredOther) {
+    newSkills = newSkills.concat(", " + p.skillDesiredOther);
   }
 
   await db.insert({
-    project_name: projectApp.projectName,
-    project_location: projectApp.projectLocation,
-    project_hosts: projectApp.projectHosts,
-    contact_email: projectApp.projectContactEmail,
-    related_fields: newRelatedFields,
-    project_description: projectApp.projectDescription,
-    num_students: projectApp.numStudentsDesired,
-    term_length: projectApp.termLength,
-    compensation_hour: projectApp.compensationHour,
-    start_date: projectApp.startDate,
+    project_name: p.name,
+    project_location: p.location,
+    project_hosts: p.hosts,
+    contact_email: p.contactEmail,
+    related_fields: newFields,
+    project_description: p.description,
+    num_students: p.numStudentsDesired,
+    term_length: p.termLength,
+    compensation_hour: p.compensationHour,
+    start_date: p.startDate,
     desired_skills: newSkills,
-  }).into("project_apps");
+    image_data: p.imgData
+  }).into("projects");
 }
 
 
 /**
- * Gets a list of all the projects from the database "project_apps" table. 
+ * Gets a list of all the projects from the database "projects" table. 
  * @returns Returns a list of projects
  */
 export const getProjects = async () => {
-  return await db.select("*").from("project_apps").orderBy("project_inc", "desc");
+  return await db.select("*").from("projects").orderBy("project_inc", "desc");
 };
 
 /**
- * Gets a project from the database "project_apps" table.
+ * Gets a project from the database "projects" table.
  * @param project_id id of project to delete
  */
 export const getProject = async (project_id: number) => {
-  const project = await db("project_apps").select("*").where("project_inc", project_id);
+  const project = await db("projects").select("*").where("project_inc", project_id);
 
   if (project.length === 0) {
     return null;
@@ -1250,7 +1251,7 @@ export const getProject = async (project_id: number) => {
  * @param project_id id of project to delete
  */
 export const deleteProject = async (project_id: number) => {
-  const result = await db("project_apps").where("project_inc", project_id).del();
+  const result = await db("projects").where("project_inc", project_id).del();
   return result;
 };
 
@@ -1261,30 +1262,54 @@ export const deleteProject = async (project_id: number) => {
  * @param updated_field updated field
  */
 export const updateProject = async (project_id: number, field_to_update: string, updated_field: string | number) => {
-  await db("project_apps").update({ [field_to_update]: updated_field }).where("project_inc", project_id);
+  await db("projects").update({ [field_to_update]: updated_field }).where("project_inc", project_id);
 };
 
 // ------------------------------ Project Applications ------------------------------
 
 /**
  * Adds a user application to the database.
- * @param {UserProjectApp} u (mandatory) The user application object being created
+ * @param {ProjectApp} u (mandatory) The user application object being created
  */
- export const createApplication = async (u: UserProjectApp) => {
-  const result = await db("user_project_app").insert({
-    project_id: u.project_id,
+ export const createProjectApplication = async (u: ProjectApp) => {
+  await db.insert({
+    project_id: u.projectId,
     user_id: u.user_id,
-    saq_response_1: u.saq_response_1,
-    saq_response_2: u.saq_response_2,
-    user_goals: u.user_goals
-  });
-  return result
+    preferred_phone: u.preferredPhone,
+    preferred_email: u.preferredEmail,
+    linkedin: u.linkedin,
+    resume: u.resume,
+    technical_skills: u.technicalSkills,
+    motivations: u.motivations,
+    team_fit: u.teamFit,
+    availability: u.availability,
+  }).into("project_apps");
 };
 
-
-export const checkIfUserAppliedToProject = async(project_id: number, user_id: string) => {
-  return (await db("user_project_app").count('user_project_app_id as duplicateCount').where({
-    user_id: user_id,
-    project_id: project_id,
-  }))
+export const checkIfUserAppliedToProject = async(project_id: number, user_id: number) => {
+  const count = await db("project_apps").
+    where({
+      project_id: project_id,
+      user_id: user_id
+    })
+    .count("app_id as count")
+    .first()
+  return count.count > 0;
 }
+
+/**
+ * Removes a project from the database
+ * @param project_id id of project to delete
+ */
+export const deleteProjectApp = async (app_id: number) => {
+  const result = await db("project_apps").where("app_id", app_id).del();
+  return result;
+};
+
+/**
+ * Gets a list of all the project apps from the database "project_apps" table. 
+ * @returns Returns a list of projects
+ */
+export const getProjectApplications = async () => {
+  return await db.select("*").from("project_apps").orderBy("app_id", "desc");
+};

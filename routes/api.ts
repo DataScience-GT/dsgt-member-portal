@@ -64,7 +64,7 @@ router.use("/projects", projects);
 
 //setup /api/projectapps
 import projectApps from "./projectApps"
-router.use("/projectapps", projectApps);
+router.use("/projectApps", projectApps);
 
 router.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.status(200).send("welcome to the api!");

@@ -13,6 +13,9 @@ interface InputFieldProps {
   helper?: React.ReactNode;
   validIndication?: boolean;
   originalValue?: string;
+  color?: string;
+  bgcolor?: string;
+  fontweight?: string;
 }
 
 const InputField: FC<InputFieldProps> = ({
@@ -27,6 +30,9 @@ const InputField: FC<InputFieldProps> = ({
   helper,
   validIndication,
   originalValue,
+  color,
+  bgcolor,
+  fontweight
 }: InputFieldProps) => {
   const [passwordOpen, setPasswordOpen] = useState(false);
   if (type === "submit") {
@@ -34,7 +40,7 @@ const InputField: FC<InputFieldProps> = ({
       <div
         className={styles.InputFieldSubmit}
         data-testid="InputField"
-        style={{ width: width || "300px" }}
+        style={{ width: width || "300px", fontWeight: fontweight || "500"}}
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
@@ -56,7 +62,7 @@ const InputField: FC<InputFieldProps> = ({
       <div
         className={`${styles.InputField} ${styles.PasswordInputField}`}
         data-testid="InputField"
-        style={{ width: width || "300px" }}
+        style={{ width: width || "300px", color: color || "var(--foreground)", fontWeight: fontweight || "500" }}
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
@@ -69,6 +75,7 @@ const InputField: FC<InputFieldProps> = ({
           required={required || true}
           onChange={onChange}
           pattern={pattern}
+          style={{background: bgcolor || "var(--background)", color: color || "var(--foreground)"}}
         />
         <label htmlFor={placeholder}>
           {placeholder}
@@ -93,12 +100,11 @@ const InputField: FC<InputFieldProps> = ({
       <div
         className={styles.InputField}
         data-testid="InputField"
-        style={{ width: width || "300px" }}
+        style={{ width: width || "300px", color: color || "var(--foreground)", fontWeight: fontweight || "500"}}
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
-          className={`${helper !== undefined ? styles._hasHelper : ""} ${validIndication ? styles.validIndicater : ""
-            }`}
+          className={`${helper !== undefined ? styles._hasHelper : ""} ${validIndication ? styles.validIndicater : ""}`}
           type={type}
           placeholder=" "
           name={name || placeholder?.replaceAll(" ", "")}
@@ -108,6 +114,7 @@ const InputField: FC<InputFieldProps> = ({
           pattern={pattern}
           data-original-value={originalValue}
           value={originalValue}
+          style={{background: bgcolor || "var(--background)"}}
         />
         <label htmlFor={name || placeholder?.replaceAll(" ", "")}>
           {placeholder}

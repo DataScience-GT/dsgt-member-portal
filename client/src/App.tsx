@@ -6,7 +6,7 @@ import {
   BrowserRouter as Router,
   useParams,
 } from "react-router-dom";
-import { Theme, ThemeContext } from "./Context/ThemeContext";
+import { Theme, ThemeContext } from "./context/ThemeContext";
 
 import { getRoleValue, Role } from "./Scripts/RoleManagement";
 

@@ -30,6 +30,13 @@
     font-weight: 500;
 }
 
+.Image {
+    > img {
+      height: 100%;
+      width: auto;
+    }
+  }
+
 .ProjectInfo {
     display: block;
     position: relative;

@@ -1,7 +1,7 @@
 import React, { FC, useContext } from "react";
 import styles from "./ThemeDropdown.module.scss";
 
-import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import { Theme, ThemeContext } from "../../context/ThemeContext";
 
 interface ThemeDropdownProps {}
 

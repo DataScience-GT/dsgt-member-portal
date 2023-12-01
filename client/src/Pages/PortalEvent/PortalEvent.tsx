@@ -33,7 +33,6 @@ const PortalEvent: FC<PortalEventProps> = () => {
   const [shortDescription, setShortDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
   const [link, setLink] = useState("");
-  // const [imgFile, setImgFile] = useState<File>();
 
   //stuff for events on bottom half of page
   const [loading, setLoading] = useState(true);

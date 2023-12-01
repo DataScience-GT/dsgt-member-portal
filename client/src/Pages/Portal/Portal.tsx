@@ -6,7 +6,7 @@ import PortalHome from "../PortalHome/PortalHome";
 import PortalSettings from "../PortalSettings/PortalSettings";
 import styles from "./Portal.module.scss";
 
-import { ThemeContext } from "../../Context/ThemeContext";
+import { ThemeContext } from "../../context/ThemeContext";
 import PortalMembers from "../PortalMembers/PortalMembers";
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 import PortalAnnounce from "../PortalAnnounce/PortalAnnounce";

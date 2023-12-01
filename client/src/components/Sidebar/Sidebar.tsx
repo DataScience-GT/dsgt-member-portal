@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from "react";
 import SidebarItem from "../SidebarItem/SidebarItem";
 import styles from "./Sidebar.module.scss";
 
-import { Theme, ThemeContext } from "../../Context/ThemeContext";
+import { Theme, ThemeContext } from "../../context/ThemeContext";
 
 import { compareUserRoles } from "../../Scripts/RoleManagement";
 

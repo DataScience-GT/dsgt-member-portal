@@ -75,6 +75,7 @@ const Login: FC<LoginProps> = () => {
               />
               <InputField
                 type="password"
+                color="#fff"
                 placeholder="Password"
                 onChange={handleChange_password}
                 width="100%"
