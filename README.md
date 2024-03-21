@@ -7,26 +7,24 @@ This portal was made by [@JohnRamberger in 2022](https://github.com/JohnRamberge
 Interested in joining the Tech Team? Reach out to [Vicente](mailto:vmiranda6@gatech.edu)
 
 ## Frameworks
-Frontend: React.js written in Typescript.
-
-Backend: Express.js written in Typescript, data using PostgreSQL.
-
-Hosted through Heroku.
+Frontend: React.js written in Typescript, SASS.
+Backend: Express.js written in Typescript, data using PostgreSQL and Knex.js.
+Hosted on Heroku.
 
 ## Api Documentation
 - Production: https://member.datasciencegt.org/docs
 - Development (might need  to change port): http://localhost:3000/docs
 
 # Quick Start (Already Setup)
+Note that you should always verify an instance of Postgres is running (otherwise npm run dev will throw ECONREFUSED even if it looks like things are running properly). If Postgres isn't in the background, you'll just see the letters D-S-G-T upon starting with `npm run start`.
 1. Open 2 consoles in the root folder
-2. Run `npm install && npm run dev` in console 1.
+2. Run `npm run dev` in console 1.
     - This will install any new dependencies and start the backend.
-3. Run `cd client && npm install && npm run start`.
+3. Run `cd client && npm run start`.
     - This will navigate to the client, install any new dependencies, and start the frontend.
 
 If you only want the backend, only start the backend. 
-
-If you only want the frontend, only start the frontend (but most of the frontend requires the backed).
+If you only want the frontend, only start the frontend (but 99% of the frontend requires the backed).
 
 ## Making an Account
 When booting up the portal locally for the first time, you may notice that you don't have a way to log in (The data on the production server is not the same as the data on your local server). Since we require all members to have paid their dues, we get account info from Stripe. To bypass this, you can simulate a Stripe payment through Postman. 
