@@ -5,7 +5,7 @@ import {
   registerUser,
   result_billingDetails,
   result_register,
-  billingDetails
+  billingDetails,
 } from "../../API/Register";
 import ErrorText from "../../components/ErrorText/ErrorText";
 import InputField from "../../components/InputField/InputField";
@@ -67,12 +67,12 @@ const Register: FC<RegisterProps> = () => {
         setScreen(nextPage);
       }
     )
-    .catch((err) => {
-      setError(err.message);
-    })
-    .finally(() => {
-      setLoading(false);
-    });
+      .catch((err) => {
+        setError(err.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   //--------------- Second Form (Personal/Academic info) ---------------
@@ -2412,19 +2412,21 @@ const Register: FC<RegisterProps> = () => {
               </h2>
               <div className={styles.Divider}></div>
               <p className={styles.Mini}>
-                Accepting new members for the Fall 2023 semester! After paying 
-                the dues, your account will automatically be activated.
-                Make sure to use the email associated with your previous account 
-                on Stripe. Click{" "}
-                  <a className={styles.LinkText} href="/register">
-                    here
-                  </a>{" "} 
-                to pay dues. For help, please email {" "}
-                <a 
-                  className={styles.LinkText} 
-                  href="mailto:vmiranda6@gatech.edu">vmiranda6@gatech.edu
-                </a>.
-                Welcome to the DSGT Family!
+                Accepting new members for the Fall 2024 semester! After paying
+                the dues, your account will automatically be activated. Make
+                sure to use the email associated with your previous account on
+                Stripe. Click{" "}
+                <a className={styles.LinkText} href="/register">
+                  here
+                </a>{" "}
+                to pay dues. For help, please email{" "}
+                <a
+                  className={styles.LinkText}
+                  href="mailto:lvivekan3@gatech.edu"
+                >
+                  lvivekan3@gatech.edu
+                </a>
+                . Welcome to the DSGT Family!
               </p>
               <a
                 className={styles.Link}
