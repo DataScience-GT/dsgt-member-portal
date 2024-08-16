@@ -52,7 +52,7 @@ const Login: FC<LoginProps> = () => {
           <form onSubmit={handleSubmit}>
             <FlexColumn width="100%">
               {/* <div className={styles.Alert}>
-              Accepting new members for the Fall 2023 semester! After paying 
+              Accepting new members for the Fall 2024 semester! After paying 
               the dues, your account will automatically be activated.
               Make sure to use the email associated with your previous account 
               on Stripe. Click{" "}
@@ -62,7 +62,7 @@ const Login: FC<LoginProps> = () => {
               to pay dues. For help, please email {" "}
               <a 
                 className={styles.LinkText} 
-                href="mailto:vmiranda6@gatech.edu">vmiranda6@gatech.edu
+                href="mailto:lvivekan3@gatech.edu">lvivekan3@gatech.edu
               </a>.
               Welcome to the DSGT Family 😄
               </div> */}
