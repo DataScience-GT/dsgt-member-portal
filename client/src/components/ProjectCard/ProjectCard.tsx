@@ -50,13 +50,6 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
     return (
         <div className={styles.ProjectCard} data-testid="ProjectCard">
-            {deletable ? (
-                <div className={styles.TrashContainer}>
-                    <img className={styles.Trash} src={trash_icon} alt="click to delete" />
-                </div>
-            ) : (
-                ""
-            )}
             <div className={styles.ProjectCardInfo}>
                 <FlexRow>
                     <div
@@ -64,7 +57,20 @@ const ProjectCard: FC<ProjectCardProps> = ({
                         style={{ backgroundImage: `url(${imgData})` }}
                     ></div>
                     <FlexColumn padding="1em" gap="0.5em">
-                        <h3 className={styles.Major}>{pname}</h3>
+                        <FlexRow>
+                            {deletable ? (
+                                <div className={styles.TrashContainer} onClick={() => {
+                                    if (pid && onDelete) {
+                                    onDelete(pid);
+                                    }
+                                }}>
+                                    <img className={styles.Trash} src={trash_icon} alt="click to delete" />
+                                </div>
+                            ) : (
+                                ""
+                            )}
+                            <h3 className={styles.Major}>{pname}</h3>
+                        </FlexRow>
                         <p className={styles.ProjectInfo}> 
                             <span className={styles.Span}>Start date</span> 
                             {startDate}

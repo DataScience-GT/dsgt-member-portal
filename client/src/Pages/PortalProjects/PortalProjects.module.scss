@@ -55,7 +55,13 @@
     display: flex;
     flex-wrap: wrap;
     gap: 1em;
-    margin-top: 1em;
+}
+
+.ApplyCards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    margin-bottom: 1em;
 }
 
 .ProjectCard {

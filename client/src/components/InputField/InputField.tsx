@@ -104,7 +104,6 @@ const InputField: FC<InputFieldProps> = ({
       >
         <input
           id={name || placeholder?.replaceAll(" ", "")}
-          className={`${helper !== undefined ? styles._hasHelper : ""} ${validIndication ? styles.validIndicater : ""}`}
           type={type}
           placeholder=" "
           name={name || placeholder?.replaceAll(" ", "")}

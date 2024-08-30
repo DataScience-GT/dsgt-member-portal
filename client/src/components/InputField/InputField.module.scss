@@ -47,6 +47,7 @@
     outline-offset: 2px;
     font-size: 1em;
     font-weight: 500;
+    color: var(--foregroundColor);
     &:not(:placeholder-shown) ~ label,
     &:focus ~ label {
       top: -1.15em;

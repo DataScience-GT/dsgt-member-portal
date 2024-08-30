@@ -1286,6 +1286,10 @@ export const updateProject = async (project_id: number, field_to_update: string,
   }).into("project_apps");
 };
 
+export const getProjectFromId = async (project_id: number) => {
+  return await db.select("*").from("projects").where("project_inc", project_id);
+}
+
 export const checkIfUserAppliedToProject = async(project_id: number, user_id: number) => {
   const count = await db("project_apps").
     where({
@@ -1313,3 +1317,18 @@ export const deleteProjectApp = async (app_id: number) => {
 export const getProjectApplications = async () => {
   return await db.select("*").from("project_apps").orderBy("app_id", "desc");
 };
+
+export const getProjectsFromApps = async (projectAppList: ProjectApp[]) => {
+  const arr = [];
+  for (const projectApp of projectAppList) {
+    try {
+      let project = await db.select("*").from("projects").where("project_inc", projectApp.projectId).first();
+      if (project) {
+        arr.push(project);
+      }
+    } catch (error) {
+      console.error(`Error fetching project for project_inc ${projectApp.projectId}`);
+    }
+  }
+  return arr;
+}

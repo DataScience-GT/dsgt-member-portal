@@ -5,7 +5,8 @@ import ValidateSession from "../middleware/CheckSessionMiddleware";
 import { ProjectApp } from "../interfaces/ProjectApp";
 import { checkIfUserAppliedToProject, createProjectApplication, 
   deleteProjectApp,
-  getProjectApplications } from "../model";
+  getProjectApplications,
+  getProjectsFromApps } from "../model";
 
 const router = express.Router();
 
@@ -90,7 +91,8 @@ router.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       let projectAppList = await getProjectApplications();
-      res.json({ ok: 1, data: projectAppList });
+      let projectsFromApps = await getProjectsFromApps(projectAppList);
+      res.json({ ok: 1, data: { apps: projectAppList, projects: projectsFromApps } });
     } catch (err) {
       next(err);
     }

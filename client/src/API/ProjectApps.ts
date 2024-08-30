@@ -1,3 +1,5 @@
+import { Project } from "./Projects";
+
 export type ProjectApp = {
     app_id: number;
     project_id: number;
@@ -62,7 +64,8 @@ export const submitProjectApplication = async (
 
 export const getProjectApps = async (
     count?: number,
-    callback?: (result: ProjectApp[]) => void
+    callback1?: (result: ProjectApp[]) => void,
+    callback2?: (result: Project[]) => void
 ) => {
     let url = `/api/projectapps/get?session_id=${localStorage.getItem("dsgt-portal-session-key")}`
     if (count) {
@@ -79,8 +82,11 @@ export const getProjectApps = async (
         if (!json.ok && json.error) {
             throw new Error(json.error);
         } else {
-            if (callback) {
-                callback(json.data);
+            if (callback1) {
+                callback1(json.data.apps);
+            }
+            if (callback2) {
+                callback2(json.data.projects);
             }
         }
     });
