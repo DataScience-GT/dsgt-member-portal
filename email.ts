@@ -1,13 +1,5 @@
 const nodemailer = require("nodemailer");
-// const dkim = require('nodemailer-dkim');
-
 import { NextFunction } from "express";
-
-// const dkimOptions = {
-//   domainName: 'example.com',
-//   keySelector: 'selector1',
-//   privateKey: ''
-// }
 
 export type EmailOptions = {
   to?: string;
@@ -39,20 +31,18 @@ export const sendEmail = ({
   callback,
 }: EmailOptions) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
+    service: "gmail",
     auth: {
-      user: process.env.SMTP_EMAIL_EMAIL,
-      pass: process.env.SMTP_EMAIL_PASSWORD,
+      user: "membership@datasciencegt.org", // Your Gmail address
+      pass: "pocc lsum rneu dusu", // Your app password
     },
   });
-  // if (Array.isArray(to)) {
-  //   to = to.join(", ");
-  // }
+
   transporter.verify().then().catch(next);
+
   transporter
     .sendMail({
-      from: `"${process.env.SMTP_EMAIL_USERNAME}" <membership@datasciencegt.org>`, // sender address
+      from: `"DSGT" <membership@datasciencegt.org>`, // sender address
       to: to, // list of receivers
       subject: subject, // Subject line
       text: text, // plain text body
@@ -62,6 +52,7 @@ export const sendEmail = ({
       attachments: attachments,
     })
     .then((info: any) => {
+      // console.log(`Email sent from "DSGT" <membership@datasciencegt.org>`); // sender address
       if (callback) {
         callback();
       }
